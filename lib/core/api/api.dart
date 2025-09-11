@@ -1,43 +1,57 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
+import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:nim2book_mobile_flutter/core/models/requests/requests.dart';
-import 'package:talker_dio_logger/talker_dio_logger.dart';
 import 'package:nim2book_mobile_flutter/core/models/responses/responses.dart';
-import 'package:talker_flutter/talker_flutter.dart';
+import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
 
 class ApiClient {
-  static const String _accessTokenKey = 'access_token';
-  static const String _refreshTokenKey = 'refresh_token';
-  final _tokenStorage = const FlutterSecureStorage();
+  final _tokenService = GetIt.I.get<TokenService>();
+  final _logger = Logger();
 
   late final Dio _dio;
 
-  String? _accessToken;
-  String? _refreshToken;
   bool _isRefreshing = false;
   final List<RequestOptions> _pendingRequests = [];
 
-  ApiClient(String baseUrl) {
-    _dio = Dio(BaseOptions(baseUrl: baseUrl));
+  ApiClient() {
+    _dio = Dio(BaseOptions(baseUrl: GetIt.I.get<Env>().apiBaseUrl));
 
-    // Инициализируем токены из хранилища
-    _initializeTokens();
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          _logger.i('Request: ${options.method} ${options.path}');
+          handler.next(options);
+        },
+        onResponse: (response, handler) {
+          _logger.i(
+            'Response [statusCode: ${response.statusCode}], path: ${response.requestOptions.path}, data: ${response.data}',
+          );
+          handler.next(response);
+        },
+        onError: (error, handler) {
+          _logger.e(
+            'Error [statusCode: ${error.response?.statusCode}], path: ${error.requestOptions.path}, errorData: ${error.response?.data}',
+          );
+          handler.next(error);
+        },
+      ),
+    );
 
-    _dio.interceptors.add(TalkerDioLogger(talker: GetIt.I.get<Talker>()));
     // Add auth interceptor
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
-          if (_accessToken != null) {
-            options.headers['Authorization'] = 'Bearer $_accessToken';
-          }
+          options.headers['Authorization'] =
+              'Bearer ${_tokenService.accessToken}';
           handler.next(options);
         },
         onError: (error, handler) async {
-          if (error.response?.statusCode == 401 && _refreshToken != null) {
+          if (error.response?.statusCode == 401 &&
+              _tokenService.refreshToken != null) {
             // Если уже идет процесс обновления токена, добавляем запрос в очередь
             if (_isRefreshing) {
               _pendingRequests.add(error.requestOptions);
@@ -48,29 +62,23 @@ class ApiClient {
 
             try {
               // Обновляем токен
-              final refreshResponse = await _refreshTokens();
-              await _setTokens(
-                refreshResponse.accessToken,
-                refreshResponse.refreshToken,
-              );
+              await _refreshTokens();
 
-              // Повторяем оригинальный запрос с новым токеном
               error.requestOptions.headers['Authorization'] =
-                  'Bearer $_accessToken';
+                  'Bearer ${_tokenService.accessToken}';
               final response = await _dio.fetch(error.requestOptions);
 
               // Обрабатываем отложенные запросы
               for (final pendingRequest in _pendingRequests) {
                 pendingRequest.headers['Authorization'] =
-                    'Bearer $_accessToken';
+                    'Bearer ${_tokenService.accessToken}';
                 _dio.fetch(pendingRequest);
               }
               _pendingRequests.clear();
 
               handler.resolve(response);
             } catch (refreshError) {
-              // Если обновление токена не удалось, очищаем токены
-              await _clearTokens();
+              await _tokenService.clearTokens();
               _pendingRequests.clear();
               handler.next(error);
             } finally {
@@ -84,61 +92,49 @@ class ApiClient {
     );
   }
 
-  // Методы для работы с безопасным хранилищем
-  Future<void> _initializeTokens() async {
-    _accessToken = await _tokenStorage.read(key: _accessTokenKey);
-    _refreshToken = await _tokenStorage.read(key: _refreshTokenKey);
-  }
-
-  Future<void> _setTokens(String accessToken, String refreshToken) async {
-    _accessToken = accessToken;
-    _refreshToken = refreshToken;
-    await Future.wait([
-      _tokenStorage.write(key: _accessTokenKey, value: accessToken),
-      _tokenStorage.write(key: _refreshTokenKey, value: refreshToken),
-    ]);
-  }
-
-  Future<void> _clearTokens() async {
-    _accessToken = null;
-    _refreshToken = null;
-    await Future.wait([
-      _tokenStorage.delete(key: _accessTokenKey),
-      _tokenStorage.delete(key: _refreshTokenKey),
-    ]);
-  }
-
-  Future<RefreshResponse> _refreshTokens() async {
-    if (_refreshToken == null) {
+  Future<void> _refreshTokens() async {
+    if (_tokenService.refreshToken == null) {
       throw DioException(
         requestOptions: RequestOptions(path: ''),
         error: 'No refresh token available',
       );
     }
 
-    final request = RefreshRequest(refreshToken: _refreshToken!);
-    final response = await _dio.post('/api/v1/auth/refresh', data: request.toJson());
-    return RefreshResponse.fromJson(response.data);
+    final data = await _refresh(
+      RefreshRequest(refreshToken: _tokenService.refreshToken!),
+    );
+    await _tokenService.setTokens(data.accessToken, data.refreshToken);
   }
 
   // Auth endpoints
   Future<LoginResponse> login(LoginRequest request) async {
-    final response = await _dio.post('/api/v1/auth/login', data: request.toJson());
+    final response = await _dio.post(
+      '/api/v1/auth/login',
+      data: request.toJson(),
+    );
     final loginResponse = LoginResponse.fromJson(response.data);
 
-    // Сохраняем токены после успешного логина
-    await _setTokens(loginResponse.accessToken, loginResponse.refreshToken);
+    await _tokenService.setTokens(
+      loginResponse.accessToken,
+      loginResponse.refreshToken,
+    );
 
     return loginResponse;
   }
 
   Future<RegisterResponse> register(RegisterRequest request) async {
-    final response = await _dio.post('/api/v1/auth/register', data: request.toJson());
+    final response = await _dio.post(
+      '/api/v1/auth/register',
+      data: request.toJson(),
+    );
     return RegisterResponse.fromJson(response.data);
   }
 
-  Future<RefreshResponse> refresh(RefreshRequest request) async {
-    final response = await _dio.post('/api/v1/auth/refresh', data: request.toJson());
+  Future<RefreshResponse> _refresh(RefreshRequest request) async {
+    final response = await _dio.post(
+      '/api/v1/auth/refresh',
+      data: request.toJson(),
+    );
     return RefreshResponse.fromJson(response.data);
   }
 
@@ -147,7 +143,7 @@ class ApiClient {
     final logoutResponse = LogoutResponse.fromJson(response.data);
 
     // Очищаем токены после logout
-    await _clearTokens();
+    await _tokenService.clearTokens();
 
     return logoutResponse;
   }
@@ -170,7 +166,10 @@ class ApiClient {
       if (title != null) 'title': title,
     };
 
-    final response = await _dio.get('/api/v1/book', queryParameters: queryParams);
+    final response = await _dio.get(
+      '/api/v1/book',
+      queryParameters: queryParams,
+    );
     return GetBooksResponse.fromJson(response.data);
   }
 

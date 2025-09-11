@@ -10,6 +10,8 @@ class DictionaryScreen extends StatefulWidget {
 class _DictionaryScreenState extends State<DictionaryScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Scaffold(
+      body: SafeArea(child: Center(child: Text('Dictionary Screen'))),
+    );
   }
 }
