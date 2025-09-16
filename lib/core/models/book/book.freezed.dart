@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Book {
 
- String get id; String get title; String get author; List<String> get chapterPaths;
+ String get id; String get title; String get author; List<String> get chapterPaths; String? get cover;
 /// Create a copy of Book
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $BookCopyWith<Book> get copyWith => _$BookCopyWithImpl<Book>(this as Book, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Book&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.author, author) || other.author == author)&&const DeepCollectionEquality().equals(other.chapterPaths, chapterPaths));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Book&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.author, author) || other.author == author)&&const DeepCollectionEquality().equals(other.chapterPaths, chapterPaths)&&(identical(other.cover, cover) || other.cover == cover));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,author,const DeepCollectionEquality().hash(chapterPaths));
+int get hashCode => Object.hash(runtimeType,id,title,author,const DeepCollectionEquality().hash(chapterPaths),cover);
 
 @override
 String toString() {
-  return 'Book(id: $id, title: $title, author: $author, chapterPaths: $chapterPaths)';
+  return 'Book(id: $id, title: $title, author: $author, chapterPaths: $chapterPaths, cover: $cover)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $BookCopyWith<$Res>  {
   factory $BookCopyWith(Book value, $Res Function(Book) _then) = _$BookCopyWithImpl;
 @useResult
 $Res call({
- String id, String title, String author, List<String> chapterPaths
+ String id, String title, String author, List<String> chapterPaths, String? cover
 });
 
 
@@ -65,13 +65,14 @@ class _$BookCopyWithImpl<$Res>
 
 /// Create a copy of Book
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? author = null,Object? chapterPaths = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? author = null,Object? chapterPaths = null,Object? cover = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,author: null == author ? _self.author : author // ignore: cast_nullable_to_non_nullable
 as String,chapterPaths: null == chapterPaths ? _self.chapterPaths : chapterPaths // ignore: cast_nullable_to_non_nullable
-as List<String>,
+as List<String>,cover: freezed == cover ? _self.cover : cover // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -156,10 +157,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String author,  List<String> chapterPaths)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String author,  List<String> chapterPaths,  String? cover)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Book() when $default != null:
-return $default(_that.id,_that.title,_that.author,_that.chapterPaths);case _:
+return $default(_that.id,_that.title,_that.author,_that.chapterPaths,_that.cover);case _:
   return orElse();
 
 }
@@ -177,10 +178,10 @@ return $default(_that.id,_that.title,_that.author,_that.chapterPaths);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String author,  List<String> chapterPaths)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String author,  List<String> chapterPaths,  String? cover)  $default,) {final _that = this;
 switch (_that) {
 case _Book():
-return $default(_that.id,_that.title,_that.author,_that.chapterPaths);case _:
+return $default(_that.id,_that.title,_that.author,_that.chapterPaths,_that.cover);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +198,10 @@ return $default(_that.id,_that.title,_that.author,_that.chapterPaths);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String author,  List<String> chapterPaths)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String author,  List<String> chapterPaths,  String? cover)?  $default,) {final _that = this;
 switch (_that) {
 case _Book() when $default != null:
-return $default(_that.id,_that.title,_that.author,_that.chapterPaths);case _:
+return $default(_that.id,_that.title,_that.author,_that.chapterPaths,_that.cover);case _:
   return null;
 
 }
@@ -212,7 +213,7 @@ return $default(_that.id,_that.title,_that.author,_that.chapterPaths);case _:
 @JsonSerializable()
 
 class _Book implements Book {
-  const _Book({required this.id, required this.title, required this.author, required final  List<String> chapterPaths}): _chapterPaths = chapterPaths;
+  const _Book({required this.id, required this.title, required this.author, required final  List<String> chapterPaths, required this.cover}): _chapterPaths = chapterPaths;
   factory _Book.fromJson(Map<String, dynamic> json) => _$BookFromJson(json);
 
 @override final  String id;
@@ -225,6 +226,7 @@ class _Book implements Book {
   return EqualUnmodifiableListView(_chapterPaths);
 }
 
+@override final  String? cover;
 
 /// Create a copy of Book
 /// with the given fields replaced by the non-null parameter values.
@@ -239,16 +241,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Book&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.author, author) || other.author == author)&&const DeepCollectionEquality().equals(other._chapterPaths, _chapterPaths));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Book&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.author, author) || other.author == author)&&const DeepCollectionEquality().equals(other._chapterPaths, _chapterPaths)&&(identical(other.cover, cover) || other.cover == cover));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,author,const DeepCollectionEquality().hash(_chapterPaths));
+int get hashCode => Object.hash(runtimeType,id,title,author,const DeepCollectionEquality().hash(_chapterPaths),cover);
 
 @override
 String toString() {
-  return 'Book(id: $id, title: $title, author: $author, chapterPaths: $chapterPaths)';
+  return 'Book(id: $id, title: $title, author: $author, chapterPaths: $chapterPaths, cover: $cover)';
 }
 
 
@@ -259,7 +261,7 @@ abstract mixin class _$BookCopyWith<$Res> implements $BookCopyWith<$Res> {
   factory _$BookCopyWith(_Book value, $Res Function(_Book) _then) = __$BookCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String title, String author, List<String> chapterPaths
+ String id, String title, String author, List<String> chapterPaths, String? cover
 });
 
 
@@ -276,13 +278,14 @@ class __$BookCopyWithImpl<$Res>
 
 /// Create a copy of Book
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? author = null,Object? chapterPaths = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? author = null,Object? chapterPaths = null,Object? cover = freezed,}) {
   return _then(_Book(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,author: null == author ? _self.author : author // ignore: cast_nullable_to_non_nullable
 as String,chapterPaths: null == chapterPaths ? _self._chapterPaths : chapterPaths // ignore: cast_nullable_to_non_nullable
-as List<String>,
+as List<String>,cover: freezed == cover ? _self.cover : cover // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

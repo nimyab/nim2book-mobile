@@ -28,8 +28,8 @@ void main() async {
   final apiClient = ApiClient();
   GetIt.I.registerSingleton(apiClient);
 
-  final asyncPreferences = SharedPreferencesAsync();
-  GetIt.I.registerSingletonAsync(() async => asyncPreferences);
+  final sharedPreferences = await SharedPreferences.getInstance();
+  GetIt.I.registerSingleton(sharedPreferences);
 
   runApp(const Nim2BookApp());
 }

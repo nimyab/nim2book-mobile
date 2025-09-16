@@ -31,10 +31,12 @@ class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
         ? null
         : currentChapter.content[selectedParagraphIndex].aw[selectedWordIndex];
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: SizedBox(
-        height: 25,
+    return SizedBox(
+      height: 30,
+      child: Container(
+        color: Color.fromARGB(255, 205, 204, 197),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        alignment: Alignment.bottomRight,
         child: ListView.builder(
           controller: _scrollController,
           scrollDirection: Axis.horizontal,
@@ -43,32 +45,55 @@ class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
             final paragraph = currentChapter.content[index];
 
             if (index == selectedParagraphIndex && selectedWordNode != null) {
+              final selectedWordKey = GlobalKey();
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                final selectedWordContext = selectedWordKey.currentContext;
+                if (selectedWordContext != null) {
+                  Scrollable.ensureVisible(
+                    selectedWordContext,
+                    duration: Duration(milliseconds: 300),
+                    alignment: 0.5,
+                    curve: Curves.easeInOut,
+                  );
+                }
+              });
+
               return RichText(
                 text: TextSpan(
                   children: [
                     TextSpan(
                       text: paragraph.tp.substring(0, selectedWordNode.itw[0]),
-                      style: DefaultTextStyle.of(context).style,
+                      style: DefaultTextStyle.of(
+                        context,
+                      ).style.copyWith(fontSize: 20),
                     ),
-                    TextSpan(
-                      text: paragraph.tp.substring(
-                        selectedWordNode.itw[0],
-                        selectedWordNode.itw[1],
-                      ),
-                      style: const TextStyle(
-                        backgroundColor: Colors.yellow,
-                        color: Colors.black,
+                    WidgetSpan(
+                      child: Container(
+                        key: selectedWordKey,
+                        child: Text(
+                          paragraph.tp.substring(
+                            selectedWordNode.itw[0],
+                            selectedWordNode.itw[1],
+                          ),
+                          style: TextStyle(
+                            fontSize: 20,
+                            backgroundColor: Colors.yellow,
+                          ),
+                        ),
                       ),
                     ),
+
                     TextSpan(
                       text: paragraph.tp.substring(selectedWordNode.itw[1]),
-                      style: DefaultTextStyle.of(context).style,
+                      style: DefaultTextStyle.of(
+                        context,
+                      ).style.copyWith(fontSize: 20),
                     ),
                   ],
                 ),
               );
             } else {
-              return Text(paragraph.tp);
+              return Text(paragraph.tp, style: TextStyle(fontSize: 20));
             }
           },
         ),

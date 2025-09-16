@@ -13,6 +13,7 @@ _Book _$BookFromJson(Map<String, dynamic> json) => _Book(
   chapterPaths: (json['chapterPaths'] as List<dynamic>)
       .map((e) => e as String)
       .toList(),
+  cover: json['cover'] as String?,
 );
 
 Map<String, dynamic> _$BookToJson(_Book instance) => <String, dynamic>{
@@ -20,4 +21,5 @@ Map<String, dynamic> _$BookToJson(_Book instance) => <String, dynamic>{
   'title': instance.title,
   'author': instance.author,
   'chapterPaths': instance.chapterPaths,
+  'cover': instance.cover,
 };

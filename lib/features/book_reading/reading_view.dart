@@ -24,11 +24,45 @@ class _ReadingViewState extends State<ReadingView> {
         Expanded(
           child: ListView.builder(
             itemCount: currentChapter.content.length,
-            itemBuilder: (context, index) {
-              final paragraph = currentChapter.content[index];
+            itemBuilder: (context, paragraphIndex) {
+              final paragraph = currentChapter.content[paragraphIndex];
+
+              List<Widget> words = [];
+              for (
+                var wordIndex = 0;
+                wordIndex < paragraph.aw.length;
+                wordIndex++
+              ) {
+                final alignWord = paragraph.aw[wordIndex];
+                // разделяю параграф на слова, чтобы можно было на каждое слово сделать кнопку для отображения перевода
+                final originalWord = paragraph.op
+                    .substring(alignWord.iow[0], alignWord.iow[1])
+                    .trim();
+
+                words.add(
+                  GestureDetector(
+                    onTap: () {
+                      readingContext.selectWord(paragraphIndex, wordIndex);
+                    },
+                    child: Container(
+                      margin: (wordIndex == 0)
+                          ? EdgeInsets.only(left: 20)
+                          : null,
+                      color:
+                          (readingContext.selectedParagraphIndex ==
+                                  paragraphIndex &&
+                              readingContext.selectedWordIndex == wordIndex)
+                          ? Colors.yellow
+                          : null,
+                      child: Text(originalWord, style: TextStyle(fontSize: 20)),
+                    ),
+                  ),
+                );
+              }
+
               return Padding(
-                padding: EdgeInsetsGeometry.directional(start: 20),
-                child: Text(paragraph.op),
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                child: Wrap(spacing: 10, children: words),
               );
             },
           ),

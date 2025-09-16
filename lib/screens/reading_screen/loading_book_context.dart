@@ -14,7 +14,7 @@ class LoadingBookContext with ChangeNotifier {
   final _apiClient = GetIt.I.get<ApiClient>();
   bool _isLoading = false;
   double _progress = 0.0;
-  final _asyncPreferences = GetIt.I.get<SharedPreferencesAsync>();
+  final _sharedPreferences = GetIt.I.get<SharedPreferences>();
 
   Book? get book => _book;
   List<ChapterAlignNode> get chapters => _chapters;
@@ -34,7 +34,7 @@ class LoadingBookContext with ChangeNotifier {
 
       final chapterCount = responseBook.book.chapterPaths.length;
       for (var i = 0; i < chapterCount; i++) {
-        final cachedContent = await _asyncPreferences.getString(
+        final cachedContent = _sharedPreferences.getString(
           'book_chapter_${bookId}_$i',
         );
         if (cachedContent != null) {
@@ -52,7 +52,7 @@ class LoadingBookContext with ChangeNotifier {
         _chapters.add(chapter);
         _progress = (i + 1) / chapterCount;
 
-        _asyncPreferences.setString(
+        _sharedPreferences.setString(
           'book_chapter_${bookId}_$i',
           jsonEncode(chapter.toJson()),
         );

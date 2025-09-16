@@ -4,7 +4,7 @@ import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ReadingContext with ChangeNotifier {
-  final _asyncPreferences = GetIt.I.get<SharedPreferencesAsync>();
+  final _sharedPreferences = GetIt.I.get<SharedPreferences>();
   final List<ChapterAlignNode> _chapters;
   final String _bookId;
   int _currentChapterIndex = 0;
@@ -22,10 +22,8 @@ class ReadingContext with ChangeNotifier {
     required String bookId,
     required List<ChapterAlignNode> chapters,
   }) : _chapters = chapters,
-       _bookId = bookId;
-
-  Future<void> initial() async {
-    final currentChapterIndex = await _asyncPreferences.getInt(
+       _bookId = bookId {
+    final currentChapterIndex = _sharedPreferences.getInt(
       'current_chapter_$_bookId',
     );
     if (currentChapterIndex != null) {
@@ -37,14 +35,14 @@ class ReadingContext with ChangeNotifier {
   Future<void> goToChapter(int index) async {
     if (index < 0 || index >= _chapters.length) return;
     _currentChapterIndex = index;
-    await _asyncPreferences.setInt('current_chapter_$_bookId', index);
+    _sharedPreferences.setInt('current_chapter_$_bookId', index);
     notifyListeners();
   }
 
   Future<void> goToNextChapter() async {
     if (_currentChapterIndex < _chapters.length - 1) {
       _currentChapterIndex++;
-      await _asyncPreferences.setInt(
+      _sharedPreferences.setInt(
         'current_chapter_$_bookId',
         _currentChapterIndex,
       );
@@ -55,7 +53,7 @@ class ReadingContext with ChangeNotifier {
   Future<void> goToPreviousChapter() async {
     if (_currentChapterIndex > 0) {
       _currentChapterIndex--;
-      await _asyncPreferences.setInt(
+      _sharedPreferences.setInt(
         'current_chapter_$_bookId',
         _currentChapterIndex,
       );
