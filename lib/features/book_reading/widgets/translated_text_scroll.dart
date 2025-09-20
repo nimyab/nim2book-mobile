@@ -1,22 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:nim2book_mobile_flutter/screens/reading_screen/reading_context.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/contexts/reading_context.dart';
 import 'package:provider/provider.dart';
 
-class TranslatedTextScroll extends StatefulWidget {
+class TranslatedTextScroll extends StatelessWidget {
   const TranslatedTextScroll({super.key});
-
-  @override
-  State<TranslatedTextScroll> createState() => _TranslatedTextScrollState();
-}
-
-class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
-  final _scrollController = ScrollController();
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +24,9 @@ class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
         color: Color.fromARGB(255, 205, 204, 197),
         padding: const EdgeInsets.symmetric(horizontal: 10),
         alignment: Alignment.bottomRight,
-        child: ListView.builder(
-          controller: _scrollController,
+        child: ListView.separated(
+          separatorBuilder: (context, index) => SizedBox(width: 10),
+          cacheExtent: double.infinity,
           scrollDirection: Axis.horizontal,
           itemCount: currentChapter.content.length,
           itemBuilder: (context, index) {
@@ -61,12 +49,13 @@ class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
               return RichText(
                 text: TextSpan(
                   children: [
-                    TextSpan(
-                      text: paragraph.tp.substring(0, selectedWordNode.itw[0]),
-                      style: DefaultTextStyle.of(
-                        context,
-                      ).style.copyWith(fontSize: 20),
+                    WidgetSpan(
+                      child: Text(
+                        paragraph.tp.substring(0, selectedWordNode.itw[0]),
+                        style: TextStyle(fontSize: 20),
+                      ),
                     ),
+
                     WidgetSpan(
                       child: Container(
                         key: selectedWordKey,
@@ -83,11 +72,11 @@ class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
                       ),
                     ),
 
-                    TextSpan(
-                      text: paragraph.tp.substring(selectedWordNode.itw[1]),
-                      style: DefaultTextStyle.of(
-                        context,
-                      ).style.copyWith(fontSize: 20),
+                    WidgetSpan(
+                      child: Text(
+                        paragraph.tp.substring(selectedWordNode.itw[1]),
+                        style: TextStyle(fontSize: 20),
+                      ),
                     ),
                   ],
                 ),
