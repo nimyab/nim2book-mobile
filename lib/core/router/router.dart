@@ -4,6 +4,7 @@ import 'package:nim2book_mobile_flutter/screens/book_screen/book_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/books_screen/books_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/dictionary_screen/dictionary_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/login_screen/login_screen.dart';
+import 'package:nim2book_mobile_flutter/screens/my_books_screen/my_books_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/reading_screen/reading_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/register_screen/register_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/settings_screen/settings_screen.dart';
@@ -12,7 +13,7 @@ import 'package:nim2book_mobile_flutter/widgets/main_scaffold.dart';
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final router = GoRouter(
-  initialLocation: '/books',
+  initialLocation: '/my-books',
   navigatorKey: _rootNavigatorKey,
   routes: [
     GoRoute(
@@ -31,6 +32,15 @@ final router = GoRouter(
         return MainScaffold(navigationShell: navigationShell);
       },
       branches: [
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/my-books',
+              name: 'my-books',
+              builder: (context, state) => const MyBooksScreen(),
+            ),
+          ],
+        ),
         StatefulShellBranch(
           routes: [
             GoRoute(

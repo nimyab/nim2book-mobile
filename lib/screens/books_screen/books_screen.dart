@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/books_context.dart';
+import 'package:nim2book_mobile_flutter/widgets/book_card.dart';
 import 'package:provider/provider.dart';
 
 class BooksScreen extends StatefulWidget {
@@ -14,34 +15,29 @@ class _BooksScreenState extends State<BooksScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Books Screen')),
+      appBar: AppBar(title: const Text('Books')),
       body: Consumer<BooksContext>(
         builder: (context, value, child) {
           final books = value.allBooks;
 
-          return Center(
-            child: books.isEmpty
-                ? const CircularProgressIndicator()
-                : Column(
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: books.length,
-                          itemBuilder: (context, index) {
-                            final book = books[index];
-                            return ListTile(
-                              title: Text(book.title),
-                              subtitle: Text(book.author),
-                              onTap: () {
-                                context.push('/reading/${book.id}');
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                    ],
+          return books.isEmpty
+              ? Center(child: const CircularProgressIndicator())
+              : Padding(
+                  padding: const EdgeInsetsGeometry.symmetric(vertical: 10),
+                  child: ListView.separated(
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 15),
+                    itemCount: books.length,
+                    itemBuilder: (context, index) {
+                      final book = books[index];
+                      return BookCard(
+                        key: ValueKey(book.id),
+                        book: book,
+                        onTap: () => context.push('/book/${book.id}'),
+                      );
+                    },
                   ),
-          );
+                );
         },
       ),
     );

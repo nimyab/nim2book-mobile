@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/contexts/reading_context.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
 import 'package:provider/provider.dart';
 
 class SelectChapterButtons extends StatelessWidget {
@@ -7,7 +7,7 @@ class SelectChapterButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final readingContext = context.watch<ReadingContext>();
+    final readingContext = context.watch<BookReadingContext>();
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

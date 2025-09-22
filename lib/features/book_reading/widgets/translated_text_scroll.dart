@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/contexts/reading_context.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
 import 'package:provider/provider.dart';
 
 class TranslatedTextScroll extends StatelessWidget {
@@ -7,8 +7,9 @@ class TranslatedTextScroll extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final readingContext = context.watch<ReadingContext>();
+    final readingContext = context.watch<BookReadingContext>();
 
+    final currentChapterIndex = readingContext.currentChapterIndex;
     final selectedParagraphIndex = readingContext.selectedParagraphIndex;
     final selectedWordIndex = readingContext.selectedWordIndex;
     final currentChapter = readingContext.currentChapter;
@@ -21,6 +22,7 @@ class TranslatedTextScroll extends StatelessWidget {
     return SizedBox(
       height: 30,
       child: Container(
+        key: ValueKey('translated_chapter_$currentChapterIndex'),
         color: Color.fromARGB(255, 205, 204, 197),
         padding: const EdgeInsets.symmetric(horizontal: 10),
         alignment: Alignment.bottomRight,
@@ -34,6 +36,7 @@ class TranslatedTextScroll extends StatelessWidget {
 
             if (index == selectedParagraphIndex && selectedWordNode != null) {
               final selectedWordKey = GlobalKey();
+
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 final selectedWordContext = selectedWordKey.currentContext;
                 if (selectedWordContext != null) {

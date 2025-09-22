@@ -6,6 +6,7 @@ import 'package:nim2book_mobile_flutter/core/contexts/books_context.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/router/router.dart';
+import 'package:nim2book_mobile_flutter/core/services/book_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,14 +23,17 @@ void main() async {
     Logger.level = Level.info;
   }
 
+  final sharedPreferences = await SharedPreferences.getInstance();
+  GetIt.I.registerSingleton(sharedPreferences);
+
   final tokenService = await TokenService.init();
   GetIt.I.registerSingleton(tokenService);
 
   final apiClient = ApiClient();
   GetIt.I.registerSingleton(apiClient);
 
-  final sharedPreferences = await SharedPreferences.getInstance();
-  GetIt.I.registerSingleton(sharedPreferences);
+  final bookService = BookService();
+  GetIt.I.registerSingleton(bookService);
 
   runApp(const Nim2BookApp());
 }

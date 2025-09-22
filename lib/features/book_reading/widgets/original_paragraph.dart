@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/contexts/reading_context.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
 
 class OriginalParagraph extends StatefulWidget {
   final List<WordItem> paragraph;
@@ -72,6 +72,6 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(key: ValueKey(widget.paragraphIndex), children: _words);
+    return Wrap(children: _words);
   }
 }

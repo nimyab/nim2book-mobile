@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/contexts/reading_context.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/original_text_scroll.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/select_chapter_buttons.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/translated_text_scroll.dart';
@@ -46,13 +46,13 @@ class _BookReadingState extends State<BookReading> {
       );
     }
 
-    return ChangeNotifierProxyProvider<LoadingBookContext, ReadingContext>(
-      create: (context) => ReadingContext(bookId: book.id, chapters: []),
+    return ChangeNotifierProxyProvider<LoadingBookContext, BookReadingContext>(
+      create: (context) => BookReadingContext(bookId: book.id, chapters: []),
       update: (context, value, previous) =>
-          ReadingContext(bookId: book.id, chapters: value.chapters),
+          BookReadingContext(bookId: book.id, chapters: value.chapters),
       child: Scaffold(
         appBar: AppBar(title: Text(book.title)),
-        body: Column(
+        body: const Column(
           children: [
             TranslatedTextScroll(),
             Expanded(child: OriginalTextScroll()),

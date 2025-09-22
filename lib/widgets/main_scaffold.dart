@@ -24,6 +24,10 @@ class MainScaffold extends StatelessWidget {
       bottomNavigationBar: NavigationBar(
         selectedIndex: navigationShell.currentIndex,
         destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.my_library_books),
+            label: 'Мои книги',
+          ),
           NavigationDestination(icon: Icon(Icons.book), label: 'Книги'),
           NavigationDestination(icon: Icon(Icons.translate), label: 'Словарь'),
           NavigationDestination(icon: Icon(Icons.settings), label: 'Настройки'),

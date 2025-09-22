@@ -11,7 +11,7 @@ class WordItem {
   WordItem({required this.wordText, this.paragraphIndex, this.wordIndex});
 }
 
-class ReadingContext with ChangeNotifier {
+class BookReadingContext with ChangeNotifier {
   final _sharedPreferences = GetIt.I.get<SharedPreferences>();
   final List<ChapterAlignNode> _chapters;
   late final List<List<List<WordItem>>> _convertedChapters;
@@ -30,7 +30,7 @@ class ReadingContext with ChangeNotifier {
   int get currentChapterIndex => _currentChapterIndex;
   int get totalChapters => _chapters.length;
 
-  ReadingContext({
+  BookReadingContext({
     required String bookId,
     required List<ChapterAlignNode> chapters,
   }) : _chapters = chapters,
@@ -65,10 +65,10 @@ class ReadingContext with ChangeNotifier {
       // удаляем дубликаты оригинальных слов в параграфе
       List<WordAlignNode> alignWordNodes = [];
       for (var alignWord in paragraph.aw) {
-        if (alignWordNodes.where((e) {
+        if (!alignWordNodes.any((e) {
           return e.iow.first == alignWord.iow.first &&
               e.iow.last == alignWord.iow.last;
-        }).isEmpty) {
+        })) {
           alignWordNodes.add(alignWord);
         }
       }
