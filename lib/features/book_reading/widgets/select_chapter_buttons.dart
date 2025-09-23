@@ -14,19 +14,15 @@ class SelectChapterButtons extends StatelessWidget {
       spacing: 20,
       children: [
         if (readingContext.currentChapterIndex > 0)
-          ElevatedButton(
-            onPressed: () {
-              readingContext.goToPreviousChapter();
-            },
-            child: const Text('prev'),
+          IconButton.filledTonal(
+            onPressed: () => readingContext.goToPreviousChapter(),
+            icon: const Icon(Icons.arrow_back),
           ),
         if (readingContext.currentChapterIndex <
             readingContext.totalChapters - 1)
-          ElevatedButton(
-            onPressed: () async {
-              await readingContext.goToNextChapter();
-            },
-            child: const Text('next'),
+          IconButton.filledTonal(
+            onPressed: () => readingContext.goToNextChapter(),
+            icon: const Icon(Icons.arrow_forward),
           ),
       ],
     );

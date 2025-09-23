@@ -11,24 +11,36 @@ class WordItem {
   WordItem({required this.wordText, this.paragraphIndex, this.wordIndex});
 }
 
+String currentChapterKey(String bookId) => 'current_chapter_$bookId';
+
+String chapterProgressKey(String bookId) => 'chapter_progress_$bookId';
+
 class BookReadingContext with ChangeNotifier {
   final _sharedPreferences = GetIt.I.get<SharedPreferences>();
+
   final List<ChapterAlignNode> _chapters;
-  late final List<List<List<WordItem>>> _convertedChapters;
-  final String _bookId;
-  int _currentChapterIndex = 0;
-
-  int _selectedParagraphIndex = -1;
-  int _selectedWordIndex = -1;
-  int get selectedWordIndex => _selectedWordIndex;
-  int get selectedParagraphIndex => _selectedParagraphIndex;
-
   ChapterAlignNode get currentChapter => _chapters[_currentChapterIndex];
+  int get totalChapters => _chapters.length;
+
+  // список глав, нужно для удобного отображения оригинального текста
   // массив параграфов, где каждый параграф это массив слов и промежуточных строк
+  late final List<List<List<WordItem>>> _convertedChapters;
   List<List<WordItem>> get currentConvertedChapter =>
       _convertedChapters[_currentChapterIndex];
+
+  final String _bookId;
+
+  int _currentChapterIndex = 0;
   int get currentChapterIndex => _currentChapterIndex;
-  int get totalChapters => _chapters.length;
+
+  int _selectedParagraphIndex = -1;
+  int get selectedParagraphIndex => _selectedParagraphIndex;
+
+  int _selectedWordIndex = -1;
+  int get selectedWordIndex => _selectedWordIndex;
+
+  double _chapterProgress = 0.0;
+  double get chapterProgress => _chapterProgress;
 
   BookReadingContext({
     required String bookId,
@@ -36,15 +48,18 @@ class BookReadingContext with ChangeNotifier {
   }) : _chapters = chapters,
        _bookId = bookId {
     final currentChapterIndex = _sharedPreferences.getInt(
-      'current_chapter_$_bookId',
+      currentChapterKey(_bookId),
     );
-    if (currentChapterIndex != null) {
-      _currentChapterIndex = currentChapterIndex;
-    }
+    if (currentChapterIndex != null) _currentChapterIndex = currentChapterIndex;
 
     _convertedChapters = chapters.map((chapter) {
       return _getChapterItems(chapter);
     }).toList();
+
+    final savedProgress = _sharedPreferences.getDouble(
+      chapterProgressKey(_bookId),
+    );
+    if (savedProgress != null) _chapterProgress = savedProgress;
 
     notifyListeners();
   }
@@ -114,24 +129,27 @@ class BookReadingContext with ChangeNotifier {
     return chapterItems;
   }
 
-  Future<void> goToChapter(int index) async {
+  void goToChapter(int index) {
     if (index < 0 || index >= _chapters.length) return;
+
     _currentChapterIndex = index;
-    _sharedPreferences.setInt('current_chapter_$_bookId', index);
+    _sharedPreferences.setInt(currentChapterKey(_bookId), index);
+    // при смене главы сбрасываю прогресс прокрутки и выделение слова
+    setChapterProgress(0.0);
+    selectWord(-1, -1);
+
     notifyListeners();
   }
 
-  Future<void> goToNextChapter() async {
+  void goToNextChapter() {
     if (_currentChapterIndex < _chapters.length - 1) {
       goToChapter(_currentChapterIndex + 1);
-      selectWord(-1, -1);
     }
   }
 
-  Future<void> goToPreviousChapter() async {
+  void goToPreviousChapter() {
     if (_currentChapterIndex > 0) {
       goToChapter(_currentChapterIndex - 1);
-      selectWord(-1, -1);
     }
   }
 
@@ -139,5 +157,10 @@ class BookReadingContext with ChangeNotifier {
     _selectedParagraphIndex = paragraphIndex;
     _selectedWordIndex = wordIndex;
     notifyListeners();
+  }
+
+  void setChapterProgress(double progress) {
+    _chapterProgress = progress;
+    _sharedPreferences.setDouble(chapterProgressKey(_bookId), progress);
   }
 }

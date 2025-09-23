@@ -9,7 +9,6 @@ class TranslatedTextScroll extends StatelessWidget {
   Widget build(BuildContext context) {
     final readingContext = context.watch<BookReadingContext>();
 
-    final currentChapterIndex = readingContext.currentChapterIndex;
     final selectedParagraphIndex = readingContext.selectedParagraphIndex;
     final selectedWordIndex = readingContext.selectedWordIndex;
     final currentChapter = readingContext.currentChapter;
@@ -22,7 +21,6 @@ class TranslatedTextScroll extends StatelessWidget {
     return SizedBox(
       height: 30,
       child: Container(
-        key: ValueKey('translated_chapter_$currentChapterIndex'),
         color: Color.fromARGB(255, 205, 204, 197),
         padding: const EdgeInsets.symmetric(horizontal: 10),
         alignment: Alignment.bottomRight,

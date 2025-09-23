@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/original_text_scroll.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/widgets/select_chapter_buttons.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/translated_text_scroll.dart';
 import 'package:nim2book_mobile_flutter/screens/reading_screen/loading_book_context.dart';
 import 'package:nim2book_mobile_flutter/widgets/circular_progress_with_percentage.dart';
@@ -52,14 +51,16 @@ class _BookReadingState extends State<BookReading> {
           BookReadingContext(bookId: book.id, chapters: value.chapters),
       child: Scaffold(
         appBar: AppBar(title: Text(book.title)),
-        body: const Column(
-          children: [
-            TranslatedTextScroll(),
-            Expanded(child: OriginalTextScroll()),
-            SizedBox(height: 10),
-            SelectChapterButtons(),
-            SizedBox(height: 20),
-          ],
+        body: Consumer<BookReadingContext>(
+          builder: (context, readingContext, child) {
+            final index = readingContext.currentChapterIndex;
+            return Column(
+              children: [
+                TranslatedTextScroll(key: ValueKey(index)),
+                Expanded(child: OriginalTextScroll(key: ValueKey(index))),
+              ],
+            );
+          },
         ),
       ),
     );
