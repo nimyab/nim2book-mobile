@@ -6,10 +6,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LocaleService {
   static const String _localeKey = 'selected_locale';
 
-  final SharedPreferences _prefs = GetIt.I<SharedPreferences>();
+  final SharedPreferences _sharedPreferences = GetIt.I<SharedPreferences>();
 
   Locale? getSavedLocale() {
-    final localeCode = _prefs.getString(_localeKey);
+    final localeCode = _sharedPreferences.getString(_localeKey);
     if (localeCode != null) {
       return Locale(localeCode);
     }
@@ -17,7 +17,7 @@ class LocaleService {
   }
 
   Future<void> saveLocale(Locale locale) async {
-    await _prefs.setString(_localeKey, locale.languageCode);
+    await _sharedPreferences.setString(_localeKey, locale.languageCode);
   }
 
   Locale getDeviceLocale() {

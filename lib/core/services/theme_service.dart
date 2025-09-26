@@ -8,16 +8,16 @@ enum AppTheme { light, dark, system }
 class ThemeService {
   static const String _themeKey = 'app_theme';
 
-  final SharedPreferences _prefs = GetIt.I<SharedPreferences>();
+  final SharedPreferences _sharedPreferences = GetIt.I<SharedPreferences>();
 
   AppTheme get currentTheme {
-    final themeIndex = _prefs.getInt(_themeKey);
+    final themeIndex = _sharedPreferences.getInt(_themeKey);
     if (themeIndex == null) return AppTheme.system;
     return AppTheme.values[themeIndex];
   }
 
   Future<void> setTheme(AppTheme theme) async {
-    await _prefs.setInt(_themeKey, theme.index);
+    await _sharedPreferences.setInt(_themeKey, theme.index);
   }
 
   ThemeMode getThemeMode() {
