@@ -4,11 +4,14 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/auth_context.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/books_context.dart';
+import 'package:nim2book_mobile_flutter/core/contexts/theme_context.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/router/router.dart';
 import 'package:nim2book_mobile_flutter/core/services/book_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
+import 'package:nim2book_mobile_flutter/core/services/theme_service.dart';
+import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,6 +45,9 @@ void main() async {
   final bookService = BookService();
   GetIt.I.registerSingleton(bookService);
 
+  final themeService = ThemeService();
+  GetIt.I.registerSingleton(themeService);
+
   runApp(const Nim2BookApp());
 }
 
@@ -54,6 +60,7 @@ class Nim2BookApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthContext()),
         ChangeNotifierProvider(create: (_) => BooksContext()),
+        ChangeNotifierProvider(create: (_) => ThemeContext()),
       ],
       child: _AppInitializer(),
     );
@@ -72,11 +79,21 @@ class _AppInitializerState extends State<_AppInitializer> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AuthContext>().getUser();
       context.read<BooksContext>().initial();
+      context.read<ThemeContext>().initialize();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(routerConfig: router);
+    return Consumer<ThemeContext>(
+      builder: (context, themeContext, child) {
+        return MaterialApp.router(
+          routerConfig: router,
+          theme: AppThemes.lightTheme,
+          darkTheme: AppThemes.darkTheme,
+          themeMode: themeContext.themeMode,
+        );
+      },
+    );
   }
 }

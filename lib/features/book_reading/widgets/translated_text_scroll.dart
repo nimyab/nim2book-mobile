@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
 import 'package:provider/provider.dart';
 
@@ -8,6 +9,8 @@ class TranslatedTextScroll extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final readingContext = context.watch<BookReadingContext>();
+    final theme = Theme.of(context);
+    final scrollColors = theme.extension<TranslatedTextScrollColors>()!;
 
     final selectedParagraphIndex = readingContext.selectedParagraphIndex;
     final selectedWordIndex = readingContext.selectedWordIndex;
@@ -21,7 +24,7 @@ class TranslatedTextScroll extends StatelessWidget {
     return SizedBox(
       height: 30,
       child: Container(
-        color: Color.fromARGB(255, 205, 204, 197),
+        color: scrollColors.backgroundColor,
         padding: const EdgeInsets.symmetric(horizontal: 10),
         alignment: Alignment.bottomRight,
         child: ListView.separated(
@@ -67,7 +70,7 @@ class TranslatedTextScroll extends StatelessWidget {
                           ),
                           style: TextStyle(
                             fontSize: 20,
-                            backgroundColor: Colors.yellow,
+                            backgroundColor: scrollColors.highlightColor,
                           ),
                         ),
                       ),

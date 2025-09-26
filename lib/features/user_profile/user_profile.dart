@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/auth_context.dart';
 import 'package:nim2book_mobile_flutter/core/models/user/user.dart';
+import 'package:nim2book_mobile_flutter/widgets/theme_switcher.dart';
 import 'package:provider/provider.dart';
 
 class UserProfile extends StatelessWidget {
@@ -14,12 +15,30 @@ class UserProfile extends StatelessWidget {
     );
     final logout = context.read<AuthContext>().logout;
 
-    return Center(
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
       child: Column(
+        spacing: 16,
         children: [
-          const SizedBox(height: 20),
-          Text('Email: ${user?.email ?? 'Unknown'}'),
-          const SizedBox(height: 20),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: 16,
+                children: [
+                  Text(
+                    'Profile',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text('Email: ${user?.email ?? 'Unknown'}'),
+                ],
+              ),
+            ),
+          ),
+          const ThemeSwitcher(),
           ElevatedButton(
             onPressed: isAuthLoading
                 ? null
