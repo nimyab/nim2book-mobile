@@ -4,6 +4,7 @@ import 'package:nim2book_mobile_flutter/core/contexts/books_context.dart';
 import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
 import 'package:nim2book_mobile_flutter/core/services/book_service.dart';
+import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class BookScreen extends StatefulWidget {
@@ -38,6 +39,7 @@ class _BookScreenState extends State<BookScreen> {
   @override
   Widget build(BuildContext context) {
     final booksContext = context.watch<BooksContext>();
+    final l10n = AppLocalizations.of(context)!;
 
     final book = this.book;
     final isLoading = this.isLoading;
@@ -52,7 +54,7 @@ class _BookScreenState extends State<BookScreen> {
     if (book == null) {
       return Scaffold(
         appBar: AppBar(),
-        body: Center(child: Text('Book not found')),
+        body: Center(child: Text(l10n.bookNotFound)),
       );
     }
 
@@ -85,7 +87,7 @@ class _BookScreenState extends State<BookScreen> {
               textAlign: TextAlign.center,
             ),
             Text(
-              'Author: ${book.author}',
+              '${l10n.author}: ${book.author}',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
               textAlign: TextAlign.center,
             ),
@@ -94,10 +96,9 @@ class _BookScreenState extends State<BookScreen> {
               onPressed: isMyBook ? null : () => booksContext.addMyBook(book),
               icon: isMyBook ? Icon(Icons.check) : Icon(Icons.add),
               label: isMyBook
-                  ? Text('ADDED TO MY BOOKS')
-                  : Text('ADD TO MY BOOKS'),
+                  ? Text(l10n.addedToMyBooks)
+                  : Text(l10n.addToMyBooks),
             ),
-            // Add more book details here
           ],
         ),
       ),

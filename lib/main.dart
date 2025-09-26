@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/auth_context.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/books_context.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/theme_context.dart';
-import 'package:nim2book_mobile_flutter/core/api/api.dart';
+import 'package:nim2book_mobile_flutter/core/contexts/locale_context.dart';
 import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/router/router.dart';
 import 'package:nim2book_mobile_flutter/core/services/book_service.dart';
-import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/theme_service.dart';
+import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
+import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -61,6 +64,7 @@ class Nim2BookApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthContext()),
         ChangeNotifierProvider(create: (_) => BooksContext()),
         ChangeNotifierProvider(create: (_) => ThemeContext()),
+        ChangeNotifierProvider(create: (_) => LocaleContext()),
       ],
       child: _AppInitializer(),
     );
@@ -80,18 +84,27 @@ class _AppInitializerState extends State<_AppInitializer> {
       context.read<AuthContext>().getUser();
       context.read<BooksContext>().initial();
       context.read<ThemeContext>().initialize();
+      context.read<LocaleContext>().initialize();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeContext>(
-      builder: (context, themeContext, child) {
+    return Consumer2<ThemeContext, LocaleContext>(
+      builder: (context, themeContext, localeContext, child) {
         return MaterialApp.router(
           routerConfig: router,
           theme: AppThemes.lightTheme,
           darkTheme: AppThemes.darkTheme,
           themeMode: themeContext.themeMode,
+          locale: localeContext.currentLocale,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [Locale('en'), Locale('ru')],
         );
       },
     );

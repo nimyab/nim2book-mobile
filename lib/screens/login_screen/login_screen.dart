@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/web.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/auth_context.dart';
+import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -21,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final isAuthLoading = context.select<AuthContext, bool>(
       (value) => value.isLoading,
     );
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: SafeArea(
@@ -28,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Login', style: TextStyle(fontSize: 24)),
+              Text(l10n.login, style: TextStyle(fontSize: 24)),
               SizedBox(height: 60),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 32),
@@ -37,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     TextField(
                       decoration: InputDecoration(
-                        labelText: 'Email',
+                        labelText: l10n.email,
                         border: OutlineInputBorder(),
                       ),
                       controller: _emailController,
@@ -45,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     TextField(
                       decoration: InputDecoration(
-                        labelText: 'Password',
+                        labelText: l10n.password,
                         border: OutlineInputBorder(),
                       ),
                       obscureText: true,
@@ -71,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (context.mounted) {
                           if (!success) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Login failed')),
+                              SnackBar(content: Text(l10n.loginFailed)),
                             );
                             return;
                           }
@@ -82,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ? const CircularProgressIndicator(
                         padding: EdgeInsets.all(10),
                       )
-                    : const Text('LOGIN'),
+                    : Text(l10n.loginButton),
               ),
 
               TextButton(
@@ -93,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           context.go('/register');
                         }
                       },
-                child: const Text('No account? Register here'),
+                child: Text(l10n.noAccountRegisterHere),
               ),
             ],
           ),

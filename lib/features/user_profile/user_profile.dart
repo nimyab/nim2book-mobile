@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/auth_context.dart';
 import 'package:nim2book_mobile_flutter/core/models/user/user.dart';
+import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
+import 'package:nim2book_mobile_flutter/widgets/language_switcher.dart';
 import 'package:nim2book_mobile_flutter/widgets/theme_switcher.dart';
 import 'package:provider/provider.dart';
 
@@ -9,6 +11,7 @@ class UserProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final user = context.select<AuthContext, User?>((value) => value.user);
     final isAuthLoading = context.select<AuthContext, bool>(
       (value) => value.isLoading,
@@ -28,17 +31,18 @@ class UserProfile extends StatelessWidget {
                 spacing: 16,
                 children: [
                   Text(
-                    'Profile',
+                    l10n.profile,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text('Email: ${user?.email ?? 'Unknown'}'),
+                  Text('${l10n.email}: ${user?.email ?? 'Unknown'}'),
                 ],
               ),
             ),
           ),
           const ThemeSwitcher(),
+          const LanguageSwitcher(),
           ElevatedButton(
             onPressed: isAuthLoading
                 ? null
@@ -46,13 +50,13 @@ class UserProfile extends StatelessWidget {
                     final success = await logout();
                     if (!success && context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Logout failed')),
+                        SnackBar(content: Text('${l10n.logout} failed')),
                       );
                     }
                   },
             child: isAuthLoading
                 ? const CircularProgressIndicator(padding: EdgeInsets.all(10))
-                : const Text('Logout'),
+                : Text(l10n.logout),
           ),
         ],
       ),

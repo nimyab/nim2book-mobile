@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 class MainScaffold extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
@@ -19,18 +20,25 @@ class MainScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: navigationShell,
       bottomNavigationBar: NavigationBar(
         selectedIndex: navigationShell.currentIndex,
-        destinations: const [
+        destinations: [
           NavigationDestination(
             icon: Icon(Icons.my_library_books),
-            label: 'Мои книги',
+            label: l10n.myBooks,
           ),
-          NavigationDestination(icon: Icon(Icons.book), label: 'Книги'),
-          NavigationDestination(icon: Icon(Icons.translate), label: 'Словарь'),
-          NavigationDestination(icon: Icon(Icons.settings), label: 'Настройки'),
+          NavigationDestination(icon: Icon(Icons.book), label: l10n.books),
+          NavigationDestination(
+            icon: Icon(Icons.translate),
+            label: l10n.dictionary,
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.settings),
+            label: l10n.settings,
+          ),
         ],
         onDestinationSelected: _goBranch,
       ),

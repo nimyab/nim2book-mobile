@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum AppTheme {
-  light,
-  dark,
-  system,
-}
+enum AppTheme { light, dark, system }
 
 class ThemeService {
   static const String _themeKey = 'app_theme';
-  
+
   final SharedPreferences _prefs = GetIt.I<SharedPreferences>();
 
   AppTheme get currentTheme {
@@ -34,14 +31,14 @@ class ThemeService {
     }
   }
 
-  String getThemeName(AppTheme theme) {
+  String getThemeName(AppTheme theme, AppLocalizations l10n) {
     switch (theme) {
       case AppTheme.light:
-        return 'Light';
+        return l10n.light;
       case AppTheme.dark:
-        return 'Dark';
+        return l10n.dark;
       case AppTheme.system:
-        return 'System';
+        return l10n.system;
     }
   }
 }

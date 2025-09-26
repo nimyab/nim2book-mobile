@@ -1,0 +1,179 @@
+{
+  "@@locale": "ru",
+  "appTitle": "Nim2Book",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "login": "Войти",
+  "@login": {
+    "description": "Login button text"
+  },
+  "register": "Регистрация",
+  "@register": {
+    "description": "Register button text"
+  },
+  "email": "Электронная почта",
+  "@email": {
+    "description": "Email field label"
+  },
+  "password": "Пароль",
+  "@password": {
+    "description": "Password field label"
+  },
+  "confirmPassword": "Подтвердите пароль",
+  "@confirmPassword": {
+    "description": "Confirm password field label"
+  },
+  "firstName": "Имя",
+  "@firstName": {
+    "description": "First name field label"
+  },
+  "lastName": "Фамилия",
+  "@lastName": {
+    "description": "Last name field label"
+  },
+  "books": "Книги",
+  "@books": {
+    "description": "Books tab/screen title"
+  },
+  "myBooks": "Мои книги",
+  "@myBooks": {
+    "description": "My books tab/screen title"
+  },
+  "dictionary": "Словарь",
+  "@dictionary": {
+    "description": "Dictionary tab/screen title"
+  },
+  "settings": "Настройки",
+  "@settings": {
+    "description": "Settings tab/screen title"
+  },
+  "theme": "Тема",
+  "@theme": {
+    "description": "Theme setting label"
+  },
+  "language": "Язык",
+  "@language": {
+    "description": "Language setting label"
+  },
+  "light": "Светлая",
+  "@light": {
+    "description": "Light theme option"
+  },
+  "dark": "Тёмная",
+  "@dark": {
+    "description": "Dark theme option"
+  },
+  "system": "Системная",
+  "@system": {
+    "description": "System theme option"
+  },
+  "logout": "Выйти",
+  "@logout": {
+    "description": "Logout button text"
+  },
+  "search": "Поиск",
+  "@search": {
+    "description": "Search placeholder text"
+  },
+  "loading": "Загрузка...",
+  "@loading": {
+    "description": "Loading indicator text"
+  },
+  "error": "Ошибка",
+  "@error": {
+    "description": "Generic error message"
+  },
+  "retry": "Повторить",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "cancel": "Отмена",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "save": "Сохранить",
+  "@save": {
+    "description": "Save button text"
+  },
+  "delete": "Удалить",
+  "@delete": {
+    "description": "Delete button text"
+  },
+  "edit": "Редактировать",
+  "@edit": {
+    "description": "Edit button text"
+  },
+  "add": "Добавить",
+  "@add": {
+    "description": "Add button text"
+  },
+  "close": "Закрыть",
+  "@close": {
+    "description": "Close button text"
+  },
+  "readingProgress": "Прогресс чтения",
+  "@readingProgress": {
+    "description": "Reading progress label"
+  },
+  "chapter": "Глава",
+  "@chapter": {
+    "description": "Chapter label"
+  },
+  "page": "Страница",
+  "@page": {
+    "description": "Page label"
+  },
+  "loginFailed": "Ошибка входа",
+  "@loginFailed": {
+    "description": "Login failed error message"
+  },
+  "registrationFailed": "Ошибка регистрации",
+  "@registrationFailed": {
+    "description": "Registration failed error message"
+  },
+  "loginButton": "ВОЙТИ",
+  "@loginButton": {
+    "description": "Login button text (uppercase)"
+  },
+  "registerButton": "ЗАРЕГИСТРИРОВАТЬСЯ",
+  "@registerButton": {
+    "description": "Register button text (uppercase)"
+  },
+  "noAccountRegisterHere": "Нет аккаунта? Зарегистрируйтесь здесь",
+  "@noAccountRegisterHere": {
+    "description": "Link to register screen from login"
+  },
+  "alreadyHaveAccountLoginHere": "Уже есть аккаунт? Войдите здесь",
+  "@alreadyHaveAccountLoginHere": {
+    "description": "Link to login screen from register"
+  },
+  "pleaseLoginOrRegister": "Пожалуйста, войдите или зарегистрируйтесь",
+  "@pleaseLoginOrRegister": {
+    "description": "Message prompting user to authenticate"
+  },
+  "noBooksFound": "Книги не найдены",
+  "@noBooksFound": {
+    "description": "Message when no books are available"
+  },
+  "bookNotFound": "Книга не найдена",
+  "@bookNotFound": {
+    "description": "Error message when book is not found"
+  },
+  "author": "Автор",
+  "@author": {
+    "description": "Author label"
+  },
+  "addToMyBooks": "ДОБАВИТЬ В МОИ КНИГИ",
+  "@addToMyBooks": {
+    "description": "Button text to add book to user's library"
+  },
+  "addedToMyBooks": "ДОБАВЛЕНО В МОИ КНИГИ",
+  "@addedToMyBooks": {
+    "description": "Button text when book is already in user's library"
+  },
+  "profile": "Профиль",
+  "@profile": {
+    "description": "Profile screen title"
+  }
+}

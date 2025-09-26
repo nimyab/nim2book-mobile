@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/theme_context.dart';
 import 'package:nim2book_mobile_flutter/core/services/theme_service.dart';
+import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class ThemeSwitcher extends StatelessWidget {
@@ -8,6 +9,7 @@ class ThemeSwitcher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Consumer<ThemeContext>(
       builder: (context, themeContext, child) {
         return Card(
@@ -18,7 +20,7 @@ class ThemeSwitcher extends StatelessWidget {
               spacing: 16,
               children: [
                 Text(
-                  'Theme',
+                  l10n.theme,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -39,7 +41,7 @@ class ThemeSwitcher extends StatelessWidget {
                         children: [
                           Icon(_getThemeIcon(theme), size: 20),
                           const SizedBox(width: 8),
-                          Text(themeContext.getThemeName(theme)),
+                          Text(themeContext.getThemeName(theme, l10n)),
                         ],
                       ),
                     );
@@ -75,12 +77,15 @@ class ThemeSwitcherTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Consumer<ThemeContext>(
       builder: (context, themeContext, child) {
         return ListTile(
           leading: const Icon(Icons.palette),
           title: const Text('Theme'),
-          subtitle: Text(themeContext.getThemeName(themeContext.currentTheme)),
+          subtitle: Text(
+            themeContext.getThemeName(themeContext.currentTheme, l10n),
+          ),
           trailing: DropdownButton<AppTheme>(
             value: themeContext.currentTheme,
             underline: const SizedBox(),
@@ -92,7 +97,7 @@ class ThemeSwitcherTile extends StatelessWidget {
                   children: [
                     Icon(_getThemeIcon(theme), size: 16),
                     const SizedBox(width: 8),
-                    Text(themeContext.getThemeName(theme)),
+                    Text(themeContext.getThemeName(theme, l10n)),
                   ],
                 ),
               );

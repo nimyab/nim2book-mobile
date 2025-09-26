@@ -1,0 +1,179 @@
+{
+  "@@locale": "en",
+  "appTitle": "Nim2Book",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "login": "Login",
+  "@login": {
+    "description": "Login button text"
+  },
+  "register": "Register",
+  "@register": {
+    "description": "Register button text"
+  },
+  "email": "Email",
+  "@email": {
+    "description": "Email field label"
+  },
+  "password": "Password",
+  "@password": {
+    "description": "Password field label"
+  },
+  "confirmPassword": "Confirm Password",
+  "@confirmPassword": {
+    "description": "Confirm password field label"
+  },
+  "firstName": "First Name",
+  "@firstName": {
+    "description": "First name field label"
+  },
+  "lastName": "Last Name",
+  "@lastName": {
+    "description": "Last name field label"
+  },
+  "books": "Books",
+  "@books": {
+    "description": "Books tab/screen title"
+  },
+  "myBooks": "My Books",
+  "@myBooks": {
+    "description": "My books tab/screen title"
+  },
+  "dictionary": "Dictionary",
+  "@dictionary": {
+    "description": "Dictionary tab/screen title"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings tab/screen title"
+  },
+  "theme": "Theme",
+  "@theme": {
+    "description": "Theme setting label"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Language setting label"
+  },
+  "light": "Light",
+  "@light": {
+    "description": "Light theme option"
+  },
+  "dark": "Dark",
+  "@dark": {
+    "description": "Dark theme option"
+  },
+  "system": "System",
+  "@system": {
+    "description": "System theme option"
+  },
+  "logout": "Logout",
+  "@logout": {
+    "description": "Logout button text"
+  },
+  "search": "Search",
+  "@search": {
+    "description": "Search placeholder text"
+  },
+  "loading": "Loading...",
+  "@loading": {
+    "description": "Loading indicator text"
+  },
+  "error": "Error",
+  "@error": {
+    "description": "Generic error message"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Save button text"
+  },
+  "delete": "Delete",
+  "@delete": {
+    "description": "Delete button text"
+  },
+  "edit": "Edit",
+  "@edit": {
+    "description": "Edit button text"
+  },
+  "add": "Add",
+  "@add": {
+    "description": "Add button text"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Close button text"
+  },
+  "readingProgress": "Reading Progress",
+  "@readingProgress": {
+    "description": "Reading progress label"
+  },
+  "chapter": "Chapter",
+  "@chapter": {
+    "description": "Chapter label"
+  },
+  "page": "Page",
+  "@page": {
+    "description": "Page label"
+  },
+  "loginFailed": "Login failed",
+  "@loginFailed": {
+    "description": "Login failed error message"
+  },
+  "registrationFailed": "Registration failed",
+  "@registrationFailed": {
+    "description": "Registration failed error message"
+  },
+  "loginButton": "LOGIN",
+  "@loginButton": {
+    "description": "Login button text (uppercase)"
+  },
+  "registerButton": "REGISTER",
+  "@registerButton": {
+    "description": "Register button text (uppercase)"
+  },
+  "noAccountRegisterHere": "No account? Register here",
+  "@noAccountRegisterHere": {
+    "description": "Link to register screen from login"
+  },
+  "alreadyHaveAccountLoginHere": "Already have an account? Login here",
+  "@alreadyHaveAccountLoginHere": {
+    "description": "Link to login screen from register"
+  },
+  "pleaseLoginOrRegister": "Please login or register",
+  "@pleaseLoginOrRegister": {
+    "description": "Message prompting user to authenticate"
+  },
+  "noBooksFound": "No books found",
+  "@noBooksFound": {
+    "description": "Message when no books are available"
+  },
+  "bookNotFound": "Book not found",
+  "@bookNotFound": {
+    "description": "Error message when book is not found"
+  },
+  "author": "Author",
+  "@author": {
+    "description": "Author label"
+  },
+  "addToMyBooks": "ADD TO MY BOOKS",
+  "@addToMyBooks": {
+    "description": "Button text to add book to user's library"
+  },
+  "addedToMyBooks": "ADDED TO MY BOOKS",
+  "@addedToMyBooks": {
+    "description": "Button text when book is already in user's library"
+  },
+  "profile": "Profile",
+  "@profile": {
+    "description": "Profile screen title"
+  }
+}

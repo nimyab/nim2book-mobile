@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/books_context.dart';
+import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/widgets/book_card.dart';
 import 'package:provider/provider.dart';
 
@@ -15,11 +16,12 @@ class _MyBooksScreenState extends State<MyBooksScreen> {
   @override
   Widget build(BuildContext context) {
     final booksContext = context.watch<BooksContext>();
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('My Books')),
+      appBar: AppBar(title: Text(l10n.myBooks)),
       body: booksContext.myBooks.isEmpty
-          ? const Center(child: Text('No books found'))
+          ? Center(child: Text(l10n.noBooksFound))
           : Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: ListView.separated(

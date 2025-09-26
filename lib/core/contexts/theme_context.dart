@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/core/services/theme_service.dart';
+import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 class ThemeContext extends ChangeNotifier {
   final ThemeService _themeService = GetIt.I<ThemeService>();
@@ -22,7 +23,7 @@ class ThemeContext extends ChangeNotifier {
     notifyListeners();
   }
 
-  String getThemeName(AppTheme theme) {
-    return _themeService.getThemeName(theme);
+  String getThemeName(AppTheme theme, AppLocalizations l10n) {
+    return _themeService.getThemeName(theme, l10n);
   }
 }
