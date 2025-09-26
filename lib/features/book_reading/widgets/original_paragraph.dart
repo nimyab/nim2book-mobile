@@ -22,7 +22,7 @@ class OriginalParagraph extends StatefulWidget {
 }
 
 class _OriginalParagraphState extends State<OriginalParagraph> {
-  late List<Widget> _words;
+  final List<Widget> _words = [];
   final List<GlobalKey> _wordKeys = [];
 
   @override
@@ -43,7 +43,7 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
   }
 
   void _buildWords() {
-    _words = [];
+    _words.clear();
     _wordKeys.clear();
 
     for (var i = 0; i < widget.paragraph.length; i++) {
@@ -66,7 +66,7 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
     }
   }
 
-  void _handleTap(TapUpDetails details) {
+  void _handleTap(TapDownDetails details) {
     final RenderBox renderBox = context.findRenderObject() as RenderBox;
     final localPosition = renderBox.globalToLocal(details.globalPosition);
 
@@ -101,7 +101,7 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapUp: _handleTap,
+      onTapDown: _handleTap,
       child: Wrap(
         spacing: 10,
         alignment: WrapAlignment.spaceBetween,

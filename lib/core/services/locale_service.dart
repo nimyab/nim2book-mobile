@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:get_it/get_it.dart';
+import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocaleService {
@@ -22,12 +23,9 @@ class LocaleService {
 
   Locale getDeviceLocale() {
     final deviceLocale = PlatformDispatcher.instance.locale;
-    final supportedLanguages = ['en', 'ru'];
-
-    if (supportedLanguages.contains(deviceLocale.languageCode)) {
+    if (AppLocalizations.supportedLocales.contains(deviceLocale)) {
       return deviceLocale;
     }
-
     return const Locale('en');
   }
 
@@ -41,7 +39,7 @@ class LocaleService {
   }
 
   List<Locale> getSupportedLocales() {
-    return const [Locale('en'), Locale('ru')];
+    return AppLocalizations.supportedLocales;
   }
 
   String getLanguageName(Locale locale) {
