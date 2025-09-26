@@ -71,7 +71,7 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
           return const SelectChapterButtons();
         }
 
-        final paragraph = currentConvertedChapter[paragraphIndex];
+        final paragraphConverted = currentConvertedChapter[paragraphIndex];
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
@@ -79,7 +79,7 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
             key: ValueKey(
               'chapter_${currentChapterIndex}_paragraph_$paragraphIndex',
             ),
-            paragraph: paragraph,
+            paragraph: paragraphConverted,
             paragraphIndex: paragraphIndex,
             selectedParagraphIndex: readingContext.selectedParagraphIndex,
             selectedWordIndex: readingContext.selectedWordIndex,

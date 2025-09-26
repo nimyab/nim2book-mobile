@@ -65,7 +65,7 @@ class BookReadingContext with ChangeNotifier {
   }
 
   List<List<WordItem>> _getChapterItems(ChapterAlignNode chapter) {
-    // преобразую каждый оригинальный параграф главы в список слов и промежуточных строк
+    // преобразую каждый оригинальный параграф главы в список слов
     // для удобного отображения и выделения слов
     final chapterItems = <List<WordItem>>[];
 
@@ -76,35 +76,15 @@ class BookReadingContext with ChangeNotifier {
     ) {
       final paragraph = chapter.content[paragraphIndex];
       final originalParagraphAsStrings = <WordItem>[];
+      final alignWordNodes = paragraph.aw;
 
-      // удаляем дубликаты оригинальных слов в параграфе
-      List<WordAlignNode> alignWordNodes = [];
-      for (var alignWord in paragraph.aw) {
-        if (!alignWordNodes.any((e) {
-          return e.iow.first == alignWord.iow.first &&
-              e.iow.last == alignWord.iow.last;
-        })) {
-          alignWordNodes.add(alignWord);
-        }
-      }
-
-      var currentPosition = 0;
       for (var wordIndex = 0; wordIndex < alignWordNodes.length; wordIndex++) {
         final wordAlign = alignWordNodes[wordIndex];
         final startIndex = wordAlign.iow.first;
         final endIndex = wordAlign.iow.last;
 
-        if (startIndex > currentPosition) {
-          final betweenText = paragraph.op.substring(
-            currentPosition,
-            startIndex,
-          );
-          if (betweenText.isNotEmpty) {
-            originalParagraphAsStrings.add(WordItem(wordText: betweenText));
-          }
-        }
-
         final wordText = paragraph.op.substring(startIndex, endIndex);
+
         originalParagraphAsStrings.add(
           WordItem(
             wordText: wordText,
@@ -112,15 +92,6 @@ class BookReadingContext with ChangeNotifier {
             paragraphIndex: paragraphIndex,
           ),
         );
-
-        currentPosition = endIndex;
-      }
-
-      if (currentPosition < paragraph.op.length) {
-        final remainingText = paragraph.op.substring(currentPosition);
-        if (remainingText.isNotEmpty) {
-          originalParagraphAsStrings.add(WordItem(wordText: remainingText));
-        }
       }
 
       chapterItems.add(originalParagraphAsStrings);

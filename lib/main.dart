@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/auth_context.dart';
@@ -13,6 +14,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    await FlutterDisplayMode.setHighRefreshRate();
+  } catch (e) {
+    Logger().e('Failed to set high refresh rate: $e');
+  }
 
   final env = await Env.load();
   GetIt.I.registerSingleton(env);

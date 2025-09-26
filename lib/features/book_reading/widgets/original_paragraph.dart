@@ -61,7 +61,7 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
                 }
               : null,
           child: Container(
-            margin: (i == 0) ? EdgeInsets.only(left: 20) : null,
+            margin: (i == 0) ? EdgeInsets.only(left: 30) : null,
             color: isSelected ? Colors.yellow : null,
             child: Text(wordItem.wordText, style: TextStyle(fontSize: 20)),
           ),
@@ -72,6 +72,10 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(children: _words);
+    return Wrap(
+      spacing: 10,
+      alignment: WrapAlignment.spaceBetween,
+      children: _words,
+    );
   }
 }
