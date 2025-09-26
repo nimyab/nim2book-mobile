@@ -23,6 +23,7 @@ class OriginalParagraph extends StatefulWidget {
 
 class _OriginalParagraphState extends State<OriginalParagraph> {
   late List<Widget> _words;
+  final List<GlobalKey> _wordKeys = [];
 
   @override
   void initState() {
@@ -43,6 +44,7 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
 
   void _buildWords() {
     _words = [];
+    _wordKeys.clear();
 
     for (var i = 0; i < widget.paragraph.length; i++) {
       final wordItem = widget.paragraph[i];
@@ -50,32 +52,61 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
           (widget.selectedParagraphIndex == wordItem.paragraphIndex &&
           widget.selectedWordIndex == wordItem.wordIndex);
 
+      final wordKey = GlobalKey();
+      _wordKeys.add(wordKey);
+
       _words.add(
-        GestureDetector(
-          onTap: wordItem.paragraphIndex != null && wordItem.wordIndex != null
-              ? () {
-                  widget.selectWord(
-                    wordItem.paragraphIndex!,
-                    wordItem.wordIndex!,
-                  );
-                }
-              : null,
-          child: Container(
-            margin: (i == 0) ? EdgeInsets.only(left: 30) : null,
-            color: isSelected ? Colors.yellow : null,
-            child: Text(wordItem.wordText, style: TextStyle(fontSize: 20)),
-          ),
+        Container(
+          key: wordKey,
+          margin: (i == 0) ? const EdgeInsets.only(left: 30) : null,
+          color: isSelected ? Colors.yellow : null,
+          child: Text(wordItem.wordText, style: const TextStyle(fontSize: 20)),
         ),
       );
     }
   }
 
+  void _handleTap(TapUpDetails details) {
+    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+    final localPosition = renderBox.globalToLocal(details.globalPosition);
+
+    for (int i = 0; i < _wordKeys.length; i++) {
+      final wordKey = _wordKeys[i];
+      final wordRenderBox =
+          wordKey.currentContext?.findRenderObject() as RenderBox?;
+
+      if (wordRenderBox != null) {
+        final wordPosition = renderBox.globalToLocal(
+          wordRenderBox.localToGlobal(Offset.zero),
+        );
+        final wordSize = wordRenderBox.size;
+        final wordRect = Rect.fromLTWH(
+          wordPosition.dx,
+          wordPosition.dy,
+          wordSize.width,
+          wordSize.height,
+        );
+
+        if (wordRect.contains(localPosition)) {
+          final wordItem = widget.paragraph[i];
+          if (wordItem.paragraphIndex != null && wordItem.wordIndex != null) {
+            widget.selectWord(wordItem.paragraphIndex!, wordItem.wordIndex!);
+          }
+          break;
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 10,
-      alignment: WrapAlignment.spaceBetween,
-      children: _words,
+    return GestureDetector(
+      onTapUp: _handleTap,
+      child: Wrap(
+        spacing: 10,
+        alignment: WrapAlignment.spaceBetween,
+        children: _words,
+      ),
     );
   }
 }
