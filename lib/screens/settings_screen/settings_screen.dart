@@ -46,7 +46,7 @@ class SettingsScreen extends StatelessWidget {
                           ElevatedButton(
                             onPressed: isAuthLoading
                                 ? null
-                                : () => context.go('/login'),
+                                : () => context.push('/login'),
                             child: isAuthLoading
                                 ? const CircularProgressIndicator(
                                     padding: EdgeInsets.all(10),

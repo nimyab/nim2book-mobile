@@ -1,6 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/auth_context.dart';
@@ -13,12 +15,15 @@ import 'package:nim2book_mobile_flutter/core/services/book_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/theme_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
+import 'package:nim2book_mobile_flutter/firebase_options.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   try {
     await FlutterDisplayMode.setHighRefreshRate();
@@ -28,6 +33,11 @@ void main() async {
 
   final env = await Env.load();
   GetIt.I.registerSingleton(env);
+
+  await GoogleSignIn.instance.initialize(
+    clientId: env.googleClientId,
+    serverClientId: env.googleServerClientId,
+  );
 
   if (env.appEnv == AppEnv.dev) {
     Logger.level = Level.all;

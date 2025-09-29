@@ -20,6 +20,21 @@ Map<String, dynamic> _$LoginResponseToJson(_LoginResponse instance) =>
       'user': instance.user,
     };
 
+_GoogleLoginResponse _$GoogleLoginResponseFromJson(Map<String, dynamic> json) =>
+    _GoogleLoginResponse(
+      accessToken: json['accessToken'] as String,
+      refreshToken: json['refreshToken'] as String,
+      user: User.fromJson(json['user'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$GoogleLoginResponseToJson(
+  _GoogleLoginResponse instance,
+) => <String, dynamic>{
+  'accessToken': instance.accessToken,
+  'refreshToken': instance.refreshToken,
+  'user': instance.user,
+};
+
 _RegisterResponse _$RegisterResponseFromJson(Map<String, dynamic> json) =>
     _RegisterResponse(success: json['success'] as bool);
 
@@ -76,6 +91,14 @@ _TranslateBookResponse _$TranslateBookResponseFromJson(
 Map<String, dynamic> _$TranslateBookResponseToJson(
   _TranslateBookResponse instance,
 ) => <String, dynamic>{'book': instance.book, 'message': instance.message};
+
+_UpdateBookResponse _$UpdateBookResponseFromJson(Map<String, dynamic> json) =>
+    _UpdateBookResponse(
+      book: Book.fromJson(json['book'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$UpdateBookResponseToJson(_UpdateBookResponse instance) =>
+    <String, dynamic>{'book': instance.book};
 
 _LookupResponse _$LookupResponseFromJson(Map<String, dynamic> json) =>
     _LookupResponse(

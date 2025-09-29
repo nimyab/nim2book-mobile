@@ -15,6 +15,12 @@ _LoginRequest _$LoginRequestFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$LoginRequestToJson(_LoginRequest instance) =>
     <String, dynamic>{'email': instance.email, 'password': instance.password};
 
+_GoogleLoginRequest _$GoogleLoginRequestFromJson(Map<String, dynamic> json) =>
+    _GoogleLoginRequest(idToken: json['idToken'] as String);
+
+Map<String, dynamic> _$GoogleLoginRequestToJson(_GoogleLoginRequest instance) =>
+    <String, dynamic>{'idToken': instance.idToken};
+
 _RegisterRequest _$RegisterRequestFromJson(Map<String, dynamic> json) =>
     _RegisterRequest(
       email: json['email'] as String,

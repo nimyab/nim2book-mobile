@@ -11,8 +11,17 @@ abstract class LoginRequest with _$LoginRequest {
     required String password,
   }) = _LoginRequest;
 
-  factory LoginRequest.fromJson(Map<String, dynamic> json) => 
+  factory LoginRequest.fromJson(Map<String, dynamic> json) =>
       _$LoginRequestFromJson(json);
+}
+
+@freezed
+abstract class GoogleLoginRequest with _$GoogleLoginRequest {
+  const factory GoogleLoginRequest({required String idToken}) =
+      _GoogleLoginRequest;
+
+  factory GoogleLoginRequest.fromJson(Map<String, dynamic> json) =>
+      _$GoogleLoginRequestFromJson(json);
 }
 
 @freezed
@@ -22,17 +31,16 @@ abstract class RegisterRequest with _$RegisterRequest {
     required String password,
   }) = _RegisterRequest;
 
-  factory RegisterRequest.fromJson(Map<String, dynamic> json) => 
+  factory RegisterRequest.fromJson(Map<String, dynamic> json) =>
       _$RegisterRequestFromJson(json);
 }
 
 @freezed
 abstract class RefreshRequest with _$RefreshRequest {
-  const factory RefreshRequest({
-    required String refreshToken,
-  }) = _RefreshRequest;
+  const factory RefreshRequest({required String refreshToken}) =
+      _RefreshRequest;
 
-  factory RefreshRequest.fromJson(Map<String, dynamic> json) => 
+  factory RefreshRequest.fromJson(Map<String, dynamic> json) =>
       _$RefreshRequestFromJson(json);
 }
 
@@ -45,6 +53,6 @@ abstract class LookupRequest with _$LookupRequest {
     required String ui,
   }) = _LookupRequest;
 
-  factory LookupRequest.fromJson(Map<String, dynamic> json) => 
+  factory LookupRequest.fromJson(Map<String, dynamic> json) =>
       _$LookupRequestFromJson(json);
 }

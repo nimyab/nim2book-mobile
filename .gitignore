@@ -45,3 +45,11 @@ app.*.map.json
 /android/app/release
 
 .env
+
+# Firebase
+lib/firebase_options.dart
+firebase.json
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+firebase-debug.log
+

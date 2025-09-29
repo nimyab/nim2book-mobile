@@ -12,7 +12,7 @@ class AuthContext with ChangeNotifier {
 
   bool get isLoading => _isLoading;
   bool get isInitialized => _isInitialized;
-  
+
   set _internalIsLoading(bool value) {
     if (_isLoading != value) {
       _isLoading = value;
@@ -26,7 +26,7 @@ class AuthContext with ChangeNotifier {
 
   Future<bool> getUser() async {
     if (_isInitialized) return isAuthenticated;
-    
+
     try {
       _internalIsLoading = true;
       final response = await _apiClient.getMe();
@@ -34,7 +34,7 @@ class AuthContext with ChangeNotifier {
       _isInitialized = true;
       return true;
     } catch (e) {
-      _isInitialized = true;
+      _isInitialized = false;
       return false;
     } finally {
       _internalIsLoading = false;
@@ -46,6 +46,22 @@ class AuthContext with ChangeNotifier {
       _internalIsLoading = true;
       final response = await _apiClient.login(
         LoginRequest(email: email, password: password),
+      );
+      _user = response.user;
+      _isInitialized = true;
+      return true;
+    } catch (e) {
+      return false;
+    } finally {
+      _internalIsLoading = false;
+    }
+  }
+
+  Future<bool> googleLogin(String idToken) async {
+    try {
+      _internalIsLoading = true;
+      final response = await _apiClient.googleLogin(
+        GoogleLoginRequest(idToken: idToken),
       );
       _user = response.user;
       _isInitialized = true;

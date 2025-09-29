@@ -36,7 +36,9 @@ class UserProfile extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text('${l10n.email}: ${user?.email ?? 'Unknown'}'),
+                  Text(
+                    '${l10n.email}: ${user?.emailPasswordAccount?.email ?? user?.googleAccount?.email ?? 'N/A'}',
+                  ),
                 ],
               ),
             ),

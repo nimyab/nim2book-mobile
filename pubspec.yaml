@@ -48,6 +48,9 @@ dependencies:
   logger: ^2.6.1
   provider: ^6.1.5+1
   flutter_displaymode: ^0.6.0
+  firebase_core: ^4.1.1
+  google_sign_in: ^7.2.0
+  font_awesome_flutter: ^10.10.0
 
 dev_dependencies:
   flutter_test:

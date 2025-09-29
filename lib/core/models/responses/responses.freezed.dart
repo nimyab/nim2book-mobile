@@ -300,6 +300,293 @@ $UserCopyWith<$Res> get user {
 
 
 /// @nodoc
+mixin _$GoogleLoginResponse {
+
+ String get accessToken; String get refreshToken; User get user;
+/// Create a copy of GoogleLoginResponse
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$GoogleLoginResponseCopyWith<GoogleLoginResponse> get copyWith => _$GoogleLoginResponseCopyWithImpl<GoogleLoginResponse>(this as GoogleLoginResponse, _$identity);
+
+  /// Serializes this GoogleLoginResponse to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GoogleLoginResponse&&(identical(other.accessToken, accessToken) || other.accessToken == accessToken)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken)&&(identical(other.user, user) || other.user == user));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,accessToken,refreshToken,user);
+
+@override
+String toString() {
+  return 'GoogleLoginResponse(accessToken: $accessToken, refreshToken: $refreshToken, user: $user)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $GoogleLoginResponseCopyWith<$Res>  {
+  factory $GoogleLoginResponseCopyWith(GoogleLoginResponse value, $Res Function(GoogleLoginResponse) _then) = _$GoogleLoginResponseCopyWithImpl;
+@useResult
+$Res call({
+ String accessToken, String refreshToken, User user
+});
+
+
+$UserCopyWith<$Res> get user;
+
+}
+/// @nodoc
+class _$GoogleLoginResponseCopyWithImpl<$Res>
+    implements $GoogleLoginResponseCopyWith<$Res> {
+  _$GoogleLoginResponseCopyWithImpl(this._self, this._then);
+
+  final GoogleLoginResponse _self;
+  final $Res Function(GoogleLoginResponse) _then;
+
+/// Create a copy of GoogleLoginResponse
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? accessToken = null,Object? refreshToken = null,Object? user = null,}) {
+  return _then(_self.copyWith(
+accessToken: null == accessToken ? _self.accessToken : accessToken // ignore: cast_nullable_to_non_nullable
+as String,refreshToken: null == refreshToken ? _self.refreshToken : refreshToken // ignore: cast_nullable_to_non_nullable
+as String,user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
+as User,
+  ));
+}
+/// Create a copy of GoogleLoginResponse
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserCopyWith<$Res> get user {
+  
+  return $UserCopyWith<$Res>(_self.user, (value) {
+    return _then(_self.copyWith(user: value));
+  });
+}
+}
+
+
+/// Adds pattern-matching-related methods to [GoogleLoginResponse].
+extension GoogleLoginResponsePatterns on GoogleLoginResponse {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _GoogleLoginResponse value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _GoogleLoginResponse() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _GoogleLoginResponse value)  $default,){
+final _that = this;
+switch (_that) {
+case _GoogleLoginResponse():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _GoogleLoginResponse value)?  $default,){
+final _that = this;
+switch (_that) {
+case _GoogleLoginResponse() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String accessToken,  String refreshToken,  User user)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _GoogleLoginResponse() when $default != null:
+return $default(_that.accessToken,_that.refreshToken,_that.user);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String accessToken,  String refreshToken,  User user)  $default,) {final _that = this;
+switch (_that) {
+case _GoogleLoginResponse():
+return $default(_that.accessToken,_that.refreshToken,_that.user);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String accessToken,  String refreshToken,  User user)?  $default,) {final _that = this;
+switch (_that) {
+case _GoogleLoginResponse() when $default != null:
+return $default(_that.accessToken,_that.refreshToken,_that.user);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _GoogleLoginResponse implements GoogleLoginResponse {
+  const _GoogleLoginResponse({required this.accessToken, required this.refreshToken, required this.user});
+  factory _GoogleLoginResponse.fromJson(Map<String, dynamic> json) => _$GoogleLoginResponseFromJson(json);
+
+@override final  String accessToken;
+@override final  String refreshToken;
+@override final  User user;
+
+/// Create a copy of GoogleLoginResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$GoogleLoginResponseCopyWith<_GoogleLoginResponse> get copyWith => __$GoogleLoginResponseCopyWithImpl<_GoogleLoginResponse>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$GoogleLoginResponseToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GoogleLoginResponse&&(identical(other.accessToken, accessToken) || other.accessToken == accessToken)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken)&&(identical(other.user, user) || other.user == user));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,accessToken,refreshToken,user);
+
+@override
+String toString() {
+  return 'GoogleLoginResponse(accessToken: $accessToken, refreshToken: $refreshToken, user: $user)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$GoogleLoginResponseCopyWith<$Res> implements $GoogleLoginResponseCopyWith<$Res> {
+  factory _$GoogleLoginResponseCopyWith(_GoogleLoginResponse value, $Res Function(_GoogleLoginResponse) _then) = __$GoogleLoginResponseCopyWithImpl;
+@override @useResult
+$Res call({
+ String accessToken, String refreshToken, User user
+});
+
+
+@override $UserCopyWith<$Res> get user;
+
+}
+/// @nodoc
+class __$GoogleLoginResponseCopyWithImpl<$Res>
+    implements _$GoogleLoginResponseCopyWith<$Res> {
+  __$GoogleLoginResponseCopyWithImpl(this._self, this._then);
+
+  final _GoogleLoginResponse _self;
+  final $Res Function(_GoogleLoginResponse) _then;
+
+/// Create a copy of GoogleLoginResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? accessToken = null,Object? refreshToken = null,Object? user = null,}) {
+  return _then(_GoogleLoginResponse(
+accessToken: null == accessToken ? _self.accessToken : accessToken // ignore: cast_nullable_to_non_nullable
+as String,refreshToken: null == refreshToken ? _self.refreshToken : refreshToken // ignore: cast_nullable_to_non_nullable
+as String,user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
+as User,
+  ));
+}
+
+/// Create a copy of GoogleLoginResponse
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserCopyWith<$Res> get user {
+  
+  return $UserCopyWith<$Res>(_self.user, (value) {
+    return _then(_self.copyWith(user: value));
+  });
+}
+}
+
+
+/// @nodoc
 mixin _$RegisterResponse {
 
  bool get success;
@@ -2194,6 +2481,287 @@ as String,
 }
 
 /// Create a copy of TranslateBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$BookCopyWith<$Res> get book {
+  
+  return $BookCopyWith<$Res>(_self.book, (value) {
+    return _then(_self.copyWith(book: value));
+  });
+}
+}
+
+
+/// @nodoc
+mixin _$UpdateBookResponse {
+
+ Book get book;
+/// Create a copy of UpdateBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$UpdateBookResponseCopyWith<UpdateBookResponse> get copyWith => _$UpdateBookResponseCopyWithImpl<UpdateBookResponse>(this as UpdateBookResponse, _$identity);
+
+  /// Serializes this UpdateBookResponse to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UpdateBookResponse&&(identical(other.book, book) || other.book == book));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,book);
+
+@override
+String toString() {
+  return 'UpdateBookResponse(book: $book)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $UpdateBookResponseCopyWith<$Res>  {
+  factory $UpdateBookResponseCopyWith(UpdateBookResponse value, $Res Function(UpdateBookResponse) _then) = _$UpdateBookResponseCopyWithImpl;
+@useResult
+$Res call({
+ Book book
+});
+
+
+$BookCopyWith<$Res> get book;
+
+}
+/// @nodoc
+class _$UpdateBookResponseCopyWithImpl<$Res>
+    implements $UpdateBookResponseCopyWith<$Res> {
+  _$UpdateBookResponseCopyWithImpl(this._self, this._then);
+
+  final UpdateBookResponse _self;
+  final $Res Function(UpdateBookResponse) _then;
+
+/// Create a copy of UpdateBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? book = null,}) {
+  return _then(_self.copyWith(
+book: null == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
+as Book,
+  ));
+}
+/// Create a copy of UpdateBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$BookCopyWith<$Res> get book {
+  
+  return $BookCopyWith<$Res>(_self.book, (value) {
+    return _then(_self.copyWith(book: value));
+  });
+}
+}
+
+
+/// Adds pattern-matching-related methods to [UpdateBookResponse].
+extension UpdateBookResponsePatterns on UpdateBookResponse {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _UpdateBookResponse value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _UpdateBookResponse() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _UpdateBookResponse value)  $default,){
+final _that = this;
+switch (_that) {
+case _UpdateBookResponse():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _UpdateBookResponse value)?  $default,){
+final _that = this;
+switch (_that) {
+case _UpdateBookResponse() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Book book)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _UpdateBookResponse() when $default != null:
+return $default(_that.book);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Book book)  $default,) {final _that = this;
+switch (_that) {
+case _UpdateBookResponse():
+return $default(_that.book);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Book book)?  $default,) {final _that = this;
+switch (_that) {
+case _UpdateBookResponse() when $default != null:
+return $default(_that.book);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _UpdateBookResponse implements UpdateBookResponse {
+  const _UpdateBookResponse({required this.book});
+  factory _UpdateBookResponse.fromJson(Map<String, dynamic> json) => _$UpdateBookResponseFromJson(json);
+
+@override final  Book book;
+
+/// Create a copy of UpdateBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$UpdateBookResponseCopyWith<_UpdateBookResponse> get copyWith => __$UpdateBookResponseCopyWithImpl<_UpdateBookResponse>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$UpdateBookResponseToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdateBookResponse&&(identical(other.book, book) || other.book == book));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,book);
+
+@override
+String toString() {
+  return 'UpdateBookResponse(book: $book)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$UpdateBookResponseCopyWith<$Res> implements $UpdateBookResponseCopyWith<$Res> {
+  factory _$UpdateBookResponseCopyWith(_UpdateBookResponse value, $Res Function(_UpdateBookResponse) _then) = __$UpdateBookResponseCopyWithImpl;
+@override @useResult
+$Res call({
+ Book book
+});
+
+
+@override $BookCopyWith<$Res> get book;
+
+}
+/// @nodoc
+class __$UpdateBookResponseCopyWithImpl<$Res>
+    implements _$UpdateBookResponseCopyWith<$Res> {
+  __$UpdateBookResponseCopyWithImpl(this._self, this._then);
+
+  final _UpdateBookResponse _self;
+  final $Res Function(_UpdateBookResponse) _then;
+
+/// Create a copy of UpdateBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? book = null,}) {
+  return _then(_UpdateBookResponse(
+book: null == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
+as Book,
+  ));
+}
+
+/// Create a copy of UpdateBookResponse
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')

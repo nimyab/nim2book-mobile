@@ -121,6 +121,21 @@ class ApiClient {
     return loginResponse;
   }
 
+  Future<GoogleLoginResponse> googleLogin(GoogleLoginRequest request) async {
+    final response = await _dio.post(
+      '/api/v1/auth/google-login',
+      data: request.toJson(),
+    );
+    final googleLoginResponse = GoogleLoginResponse.fromJson(response.data);
+
+    await _tokenService.setTokens(
+      googleLoginResponse.accessToken,
+      googleLoginResponse.refreshToken,
+    );
+
+    return googleLoginResponse;
+  }
+
   Future<RegisterResponse> register(RegisterRequest request) async {
     final response = await _dio.post(
       '/api/v1/auth/register',
@@ -202,6 +217,31 @@ class ApiClient {
     return TranslateBookResponse.fromJson(response.data);
   }
 
+  Future<UpdateBookResponse> updateBook({
+    required String id,
+    String? title,
+    String? author,
+    File? cover,
+  }) async {
+    final formData = FormData();
+
+    if (title != null) formData.fields.add(MapEntry('title', title));
+    if (author != null) formData.fields.add(MapEntry('author', author));
+    if (cover != null) {
+      formData.files.add(
+        MapEntry('cover', await MultipartFile.fromFile(cover.path)),
+      );
+    }
+
+    final response = await _dio.put(
+      '/api/v1/book/$id',
+      data: formData,
+      options: Options(contentType: 'multipart/form-data'),
+    );
+
+    return UpdateBookResponse.fromJson(response.data);
+  }
+
   // Dictionary endpoints
   Future<LookupResponse> lookup(LookupRequest request) async {
     final response = await _dio.post(
@@ -209,5 +249,14 @@ class ApiClient {
       data: request.toJson(),
     );
     return LookupResponse.fromJson(response.data);
+  }
+
+  // File endpoints
+  Future<File> getPublicFile(String path) async {
+    final response = await _dio.get(
+      '/api/v1/file/public',
+      queryParameters: {'path': path},
+    );
+    return File(response.data);
   }
 }
