@@ -89,7 +89,7 @@ abstract class GetBookResponse with _$GetBookResponse {
 abstract class TranslateBookResponse with _$TranslateBookResponse {
   const factory TranslateBookResponse({
     required Book book,
-    required String message,
+    required String messageAboutTranslate,
   }) = _TranslateBookResponse;
 
   factory TranslateBookResponse.fromJson(Map<String, dynamic> json) =>
@@ -102,6 +102,25 @@ abstract class UpdateBookResponse with _$UpdateBookResponse {
 
   factory UpdateBookResponse.fromJson(Map<String, dynamic> json) =>
       _$UpdateBookResponseFromJson(json);
+}
+
+// FCM token responses
+@freezed
+abstract class AddFcmTokenResponse with _$AddFcmTokenResponse {
+  const factory AddFcmTokenResponse({required bool success}) =
+      _AddFcmTokenResponse;
+
+  factory AddFcmTokenResponse.fromJson(Map<String, dynamic> json) =>
+      _$AddFcmTokenResponseFromJson(json);
+}
+
+@freezed
+abstract class DeleteFcmTokenResponse with _$DeleteFcmTokenResponse {
+  const factory DeleteFcmTokenResponse({required bool success}) =
+      _DeleteFcmTokenResponse;
+
+  factory DeleteFcmTokenResponse.fromJson(Map<String, dynamic> json) =>
+      _$DeleteFcmTokenResponseFromJson(json);
 }
 
 // Dictionary response

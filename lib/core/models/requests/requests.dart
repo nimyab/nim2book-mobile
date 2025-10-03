@@ -44,6 +44,16 @@ abstract class RefreshRequest with _$RefreshRequest {
       _$RefreshRequestFromJson(json);
 }
 
+// FCM token requests
+@freezed
+abstract class AddFcmTokenRequest with _$AddFcmTokenRequest {
+  const factory AddFcmTokenRequest({required String fcmToken}) =
+      _AddFcmTokenRequest;
+
+  factory AddFcmTokenRequest.fromJson(Map<String, dynamic> json) =>
+      _$AddFcmTokenRequestFromJson(json);
+}
+
 // Dictionary request
 @freezed
 abstract class LookupRequest with _$LookupRequest {

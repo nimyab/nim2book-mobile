@@ -85,12 +85,15 @@ _TranslateBookResponse _$TranslateBookResponseFromJson(
   Map<String, dynamic> json,
 ) => _TranslateBookResponse(
   book: Book.fromJson(json['book'] as Map<String, dynamic>),
-  message: json['message'] as String,
+  messageAboutTranslate: json['messageAboutTranslate'] as String,
 );
 
 Map<String, dynamic> _$TranslateBookResponseToJson(
   _TranslateBookResponse instance,
-) => <String, dynamic>{'book': instance.book, 'message': instance.message};
+) => <String, dynamic>{
+  'book': instance.book,
+  'messageAboutTranslate': instance.messageAboutTranslate,
+};
 
 _UpdateBookResponse _$UpdateBookResponseFromJson(Map<String, dynamic> json) =>
     _UpdateBookResponse(
@@ -99,6 +102,21 @@ _UpdateBookResponse _$UpdateBookResponseFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$UpdateBookResponseToJson(_UpdateBookResponse instance) =>
     <String, dynamic>{'book': instance.book};
+
+_AddFcmTokenResponse _$AddFcmTokenResponseFromJson(Map<String, dynamic> json) =>
+    _AddFcmTokenResponse(success: json['success'] as bool);
+
+Map<String, dynamic> _$AddFcmTokenResponseToJson(
+  _AddFcmTokenResponse instance,
+) => <String, dynamic>{'success': instance.success};
+
+_DeleteFcmTokenResponse _$DeleteFcmTokenResponseFromJson(
+  Map<String, dynamic> json,
+) => _DeleteFcmTokenResponse(success: json['success'] as bool);
+
+Map<String, dynamic> _$DeleteFcmTokenResponseToJson(
+  _DeleteFcmTokenResponse instance,
+) => <String, dynamic>{'success': instance.success};
 
 _LookupResponse _$LookupResponseFromJson(Map<String, dynamic> json) =>
     _LookupResponse(

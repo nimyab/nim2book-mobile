@@ -36,6 +36,12 @@ _RefreshRequest _$RefreshRequestFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$RefreshRequestToJson(_RefreshRequest instance) =>
     <String, dynamic>{'refreshToken': instance.refreshToken};
 
+_AddFcmTokenRequest _$AddFcmTokenRequestFromJson(Map<String, dynamic> json) =>
+    _AddFcmTokenRequest(fcmToken: json['fcmToken'] as String);
+
+Map<String, dynamic> _$AddFcmTokenRequestToJson(_AddFcmTokenRequest instance) =>
+    <String, dynamic>{'fcmToken': instance.fcmToken};
+
 _LookupRequest _$LookupRequestFromJson(Map<String, dynamic> json) =>
     _LookupRequest(
       text: json['text'] as String,

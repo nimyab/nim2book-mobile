@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:get_it/get_it.dart';
@@ -12,6 +13,7 @@ import 'package:nim2book_mobile_flutter/core/contexts/locale_context.dart';
 import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/router/router.dart';
 import 'package:nim2book_mobile_flutter/core/services/book_service.dart';
+import 'package:nim2book_mobile_flutter/core/services/fmc_token_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/theme_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
@@ -24,6 +26,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await FirebaseMessaging.instance.requestPermission(provisional: true);
 
   try {
     await FlutterDisplayMode.setHighRefreshRate();
@@ -59,6 +63,9 @@ void main() async {
 
   final themeService = ThemeService();
   GetIt.I.registerSingleton(themeService);
+
+  final fcmTokenService = FcmTokenService();
+  GetIt.I.registerSingleton(fcmTokenService);
 
   runApp(const Nim2BookApp());
 }

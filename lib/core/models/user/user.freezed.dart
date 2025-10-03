@@ -556,7 +556,7 @@ as String,
 /// @nodoc
 mixin _$User {
 
- String get id; bool get isAdmin; GoogleAccount? get googleAccount; EmailPasswordAccount? get emailPasswordAccount;
+ String get id; bool get isAdmin; bool get isVIP; GoogleAccount? get googleAccount; EmailPasswordAccount? get emailPasswordAccount;
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -569,16 +569,16 @@ $UserCopyWith<User> get copyWith => _$UserCopyWithImpl<User>(this as User, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is User&&(identical(other.id, id) || other.id == id)&&(identical(other.isAdmin, isAdmin) || other.isAdmin == isAdmin)&&(identical(other.googleAccount, googleAccount) || other.googleAccount == googleAccount)&&(identical(other.emailPasswordAccount, emailPasswordAccount) || other.emailPasswordAccount == emailPasswordAccount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is User&&(identical(other.id, id) || other.id == id)&&(identical(other.isAdmin, isAdmin) || other.isAdmin == isAdmin)&&(identical(other.isVIP, isVIP) || other.isVIP == isVIP)&&(identical(other.googleAccount, googleAccount) || other.googleAccount == googleAccount)&&(identical(other.emailPasswordAccount, emailPasswordAccount) || other.emailPasswordAccount == emailPasswordAccount));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,isAdmin,googleAccount,emailPasswordAccount);
+int get hashCode => Object.hash(runtimeType,id,isAdmin,isVIP,googleAccount,emailPasswordAccount);
 
 @override
 String toString() {
-  return 'User(id: $id, isAdmin: $isAdmin, googleAccount: $googleAccount, emailPasswordAccount: $emailPasswordAccount)';
+  return 'User(id: $id, isAdmin: $isAdmin, isVIP: $isVIP, googleAccount: $googleAccount, emailPasswordAccount: $emailPasswordAccount)';
 }
 
 
@@ -589,7 +589,7 @@ abstract mixin class $UserCopyWith<$Res>  {
   factory $UserCopyWith(User value, $Res Function(User) _then) = _$UserCopyWithImpl;
 @useResult
 $Res call({
- String id, bool isAdmin, GoogleAccount? googleAccount, EmailPasswordAccount? emailPasswordAccount
+ String id, bool isAdmin, bool isVIP, GoogleAccount? googleAccount, EmailPasswordAccount? emailPasswordAccount
 });
 
 
@@ -606,10 +606,11 @@ class _$UserCopyWithImpl<$Res>
 
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? isAdmin = null,Object? googleAccount = freezed,Object? emailPasswordAccount = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? isAdmin = null,Object? isVIP = null,Object? googleAccount = freezed,Object? emailPasswordAccount = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,isAdmin: null == isAdmin ? _self.isAdmin : isAdmin // ignore: cast_nullable_to_non_nullable
+as bool,isVIP: null == isVIP ? _self.isVIP : isVIP // ignore: cast_nullable_to_non_nullable
 as bool,googleAccount: freezed == googleAccount ? _self.googleAccount : googleAccount // ignore: cast_nullable_to_non_nullable
 as GoogleAccount?,emailPasswordAccount: freezed == emailPasswordAccount ? _self.emailPasswordAccount : emailPasswordAccount // ignore: cast_nullable_to_non_nullable
 as EmailPasswordAccount?,
@@ -721,10 +722,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  bool isAdmin,  GoogleAccount? googleAccount,  EmailPasswordAccount? emailPasswordAccount)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  bool isAdmin,  bool isVIP,  GoogleAccount? googleAccount,  EmailPasswordAccount? emailPasswordAccount)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _User() when $default != null:
-return $default(_that.id,_that.isAdmin,_that.googleAccount,_that.emailPasswordAccount);case _:
+return $default(_that.id,_that.isAdmin,_that.isVIP,_that.googleAccount,_that.emailPasswordAccount);case _:
   return orElse();
 
 }
@@ -742,10 +743,10 @@ return $default(_that.id,_that.isAdmin,_that.googleAccount,_that.emailPasswordAc
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  bool isAdmin,  GoogleAccount? googleAccount,  EmailPasswordAccount? emailPasswordAccount)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  bool isAdmin,  bool isVIP,  GoogleAccount? googleAccount,  EmailPasswordAccount? emailPasswordAccount)  $default,) {final _that = this;
 switch (_that) {
 case _User():
-return $default(_that.id,_that.isAdmin,_that.googleAccount,_that.emailPasswordAccount);case _:
+return $default(_that.id,_that.isAdmin,_that.isVIP,_that.googleAccount,_that.emailPasswordAccount);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -762,10 +763,10 @@ return $default(_that.id,_that.isAdmin,_that.googleAccount,_that.emailPasswordAc
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  bool isAdmin,  GoogleAccount? googleAccount,  EmailPasswordAccount? emailPasswordAccount)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  bool isAdmin,  bool isVIP,  GoogleAccount? googleAccount,  EmailPasswordAccount? emailPasswordAccount)?  $default,) {final _that = this;
 switch (_that) {
 case _User() when $default != null:
-return $default(_that.id,_that.isAdmin,_that.googleAccount,_that.emailPasswordAccount);case _:
+return $default(_that.id,_that.isAdmin,_that.isVIP,_that.googleAccount,_that.emailPasswordAccount);case _:
   return null;
 
 }
@@ -777,11 +778,12 @@ return $default(_that.id,_that.isAdmin,_that.googleAccount,_that.emailPasswordAc
 @JsonSerializable()
 
 class _User implements User {
-  const _User({required this.id, required this.isAdmin, this.googleAccount, this.emailPasswordAccount});
+  const _User({required this.id, required this.isAdmin, required this.isVIP, this.googleAccount, this.emailPasswordAccount});
   factory _User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
 @override final  String id;
 @override final  bool isAdmin;
+@override final  bool isVIP;
 @override final  GoogleAccount? googleAccount;
 @override final  EmailPasswordAccount? emailPasswordAccount;
 
@@ -798,16 +800,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _User&&(identical(other.id, id) || other.id == id)&&(identical(other.isAdmin, isAdmin) || other.isAdmin == isAdmin)&&(identical(other.googleAccount, googleAccount) || other.googleAccount == googleAccount)&&(identical(other.emailPasswordAccount, emailPasswordAccount) || other.emailPasswordAccount == emailPasswordAccount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _User&&(identical(other.id, id) || other.id == id)&&(identical(other.isAdmin, isAdmin) || other.isAdmin == isAdmin)&&(identical(other.isVIP, isVIP) || other.isVIP == isVIP)&&(identical(other.googleAccount, googleAccount) || other.googleAccount == googleAccount)&&(identical(other.emailPasswordAccount, emailPasswordAccount) || other.emailPasswordAccount == emailPasswordAccount));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,isAdmin,googleAccount,emailPasswordAccount);
+int get hashCode => Object.hash(runtimeType,id,isAdmin,isVIP,googleAccount,emailPasswordAccount);
 
 @override
 String toString() {
-  return 'User(id: $id, isAdmin: $isAdmin, googleAccount: $googleAccount, emailPasswordAccount: $emailPasswordAccount)';
+  return 'User(id: $id, isAdmin: $isAdmin, isVIP: $isVIP, googleAccount: $googleAccount, emailPasswordAccount: $emailPasswordAccount)';
 }
 
 
@@ -818,7 +820,7 @@ abstract mixin class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   factory _$UserCopyWith(_User value, $Res Function(_User) _then) = __$UserCopyWithImpl;
 @override @useResult
 $Res call({
- String id, bool isAdmin, GoogleAccount? googleAccount, EmailPasswordAccount? emailPasswordAccount
+ String id, bool isAdmin, bool isVIP, GoogleAccount? googleAccount, EmailPasswordAccount? emailPasswordAccount
 });
 
 
@@ -835,10 +837,11 @@ class __$UserCopyWithImpl<$Res>
 
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? isAdmin = null,Object? googleAccount = freezed,Object? emailPasswordAccount = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? isAdmin = null,Object? isVIP = null,Object? googleAccount = freezed,Object? emailPasswordAccount = freezed,}) {
   return _then(_User(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,isAdmin: null == isAdmin ? _self.isAdmin : isAdmin // ignore: cast_nullable_to_non_nullable
+as bool,isVIP: null == isVIP ? _self.isVIP : isVIP // ignore: cast_nullable_to_non_nullable
 as bool,googleAccount: freezed == googleAccount ? _self.googleAccount : googleAccount // ignore: cast_nullable_to_non_nullable
 as GoogleAccount?,emailPasswordAccount: freezed == emailPasswordAccount ? _self.emailPasswordAccount : emailPasswordAccount // ignore: cast_nullable_to_non_nullable
 as EmailPasswordAccount?,

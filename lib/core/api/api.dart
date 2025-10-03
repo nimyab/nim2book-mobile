@@ -251,6 +251,23 @@ class ApiClient {
     return LookupResponse.fromJson(response.data);
   }
 
+  // FCM token endpoints
+  Future<AddFcmTokenResponse> addFcmToken(AddFcmTokenRequest request) async {
+    final response = await _dio.post(
+      '/api/v1/fcm-token/add',
+      data: request.toJson(),
+    );
+    return AddFcmTokenResponse.fromJson(response.data);
+  }
+
+  Future<DeleteFcmTokenResponse> deleteFcmToken(String token) async {
+    final response = await _dio.delete(
+      '/api/v1/fcm-token/delete',
+      queryParameters: {'token': token},
+    );
+    return DeleteFcmTokenResponse.fromJson(response.data);
+  }
+
   // File endpoints
   Future<File> getPublicFile(String path) async {
     final response = await _dio.get(

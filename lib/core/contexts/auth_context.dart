@@ -3,12 +3,14 @@ import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/models/requests/requests.dart';
 import 'package:nim2book_mobile_flutter/core/models/user/user.dart';
+import 'package:nim2book_mobile_flutter/core/services/fmc_token_service.dart';
 
 class AuthContext with ChangeNotifier {
   User? _user;
   bool _isLoading = false;
   bool _isInitialized = false;
   final _apiClient = GetIt.I.get<ApiClient>();
+  final _fcmTokenService = GetIt.I.get<FcmTokenService>();
 
   bool get isLoading => _isLoading;
   bool get isInitialized => _isInitialized;
@@ -23,6 +25,7 @@ class AuthContext with ChangeNotifier {
   User? get user => _user;
   bool get isAuthenticated => _user != null;
   bool get isAdmin => _user?.isAdmin ?? false;
+  bool get isVIP => _user?.isVIP ?? false;
 
   Future<bool> getUser() async {
     if (_isInitialized) return isAuthenticated;
@@ -48,6 +51,9 @@ class AuthContext with ChangeNotifier {
         LoginRequest(email: email, password: password),
       );
       _user = response.user;
+
+      _fcmTokenService.addFcmToken();
+
       _isInitialized = true;
       return true;
     } catch (e) {
@@ -64,6 +70,9 @@ class AuthContext with ChangeNotifier {
         GoogleLoginRequest(idToken: idToken),
       );
       _user = response.user;
+
+      _fcmTokenService.addFcmToken();
+
       _isInitialized = true;
       return true;
     } catch (e) {
@@ -78,6 +87,9 @@ class AuthContext with ChangeNotifier {
       _internalIsLoading = true;
       await _apiClient.logout();
       _user = null;
+
+      _fcmTokenService.deleteFcmToken();
+
       _isInitialized = true;
       return true;
     } catch (e) {

@@ -33,6 +33,7 @@ abstract class User with _$User {
   const factory User({
     required String id,
     required bool isAdmin,
+    required bool isVIP,
     GoogleAccount? googleAccount,
     EmailPasswordAccount? emailPasswordAccount,
   }) = _User;

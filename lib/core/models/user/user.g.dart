@@ -38,6 +38,7 @@ Map<String, dynamic> _$EmailPasswordAccountToJson(
 _User _$UserFromJson(Map<String, dynamic> json) => _User(
   id: json['id'] as String,
   isAdmin: json['isAdmin'] as bool,
+  isVIP: json['isVIP'] as bool,
   googleAccount: json['googleAccount'] == null
       ? null
       : GoogleAccount.fromJson(json['googleAccount'] as Map<String, dynamic>),
@@ -51,6 +52,7 @@ _User _$UserFromJson(Map<String, dynamic> json) => _User(
 Map<String, dynamic> _$UserToJson(_User instance) => <String, dynamic>{
   'id': instance.id,
   'isAdmin': instance.isAdmin,
+  'isVIP': instance.isVIP,
   'googleAccount': instance.googleAccount,
   'emailPasswordAccount': instance.emailPasswordAccount,
 };
