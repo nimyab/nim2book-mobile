@@ -53,3 +53,7 @@ android/app/google-services.json
 ios/Runner/GoogleService-Info.plist
 firebase-debug.log
 
+# Keystore files
+key.properties
+*.jks
+*.keystore
