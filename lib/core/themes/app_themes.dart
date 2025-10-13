@@ -76,22 +76,16 @@ class AppThemes {
 
 class TranslatedTextScrollColors
     extends ThemeExtension<TranslatedTextScrollColors> {
-  const TranslatedTextScrollColors({
-    required this.backgroundColor,
-    required this.highlightColor,
-  });
+  const TranslatedTextScrollColors({required this.backgroundColor});
 
   final Color backgroundColor;
-  final Color highlightColor;
 
   static const TranslatedTextScrollColors light = TranslatedTextScrollColors(
     backgroundColor: Color.fromARGB(255, 205, 204, 197),
-    highlightColor: Colors.yellow,
   );
 
   static const TranslatedTextScrollColors dark = TranslatedTextScrollColors(
     backgroundColor: Color.fromARGB(255, 66, 66, 66),
-    highlightColor: Color.fromARGB(255, 255, 193, 7),
   );
 
   @override
@@ -101,7 +95,6 @@ class TranslatedTextScrollColors
   }) {
     return TranslatedTextScrollColors(
       backgroundColor: backgroundColor ?? this.backgroundColor,
-      highlightColor: highlightColor ?? this.highlightColor,
     );
   }
 
@@ -112,7 +105,6 @@ class TranslatedTextScrollColors
     }
     return TranslatedTextScrollColors(
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t)!,
-      highlightColor: Color.lerp(highlightColor, other.highlightColor, t)!,
     );
   }
 }

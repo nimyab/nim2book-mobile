@@ -84,8 +84,10 @@ Map<String, dynamic> _$GetBookResponseToJson(_GetBookResponse instance) =>
 _TranslateBookResponse _$TranslateBookResponseFromJson(
   Map<String, dynamic> json,
 ) => _TranslateBookResponse(
-  book: Book.fromJson(json['book'] as Map<String, dynamic>),
-  messageAboutTranslate: json['messageAboutTranslate'] as String,
+  book: json['book'] == null
+      ? null
+      : Book.fromJson(json['book'] as Map<String, dynamic>),
+  messageAboutTranslate: json['messageAboutTranslate'] as String?,
 );
 
 Map<String, dynamic> _$TranslateBookResponseToJson(

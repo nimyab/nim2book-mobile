@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nim2book_mobile_flutter/core/contexts/auth_context.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/books_context.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/widgets/book_card.dart';
@@ -16,6 +17,7 @@ class _BooksScreenState extends State<BooksScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final authContext = context.watch<AuthContext>();
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.books)),
@@ -43,6 +45,21 @@ class _BooksScreenState extends State<BooksScreen> {
                 );
         },
       ),
+      floatingActionButton: authContext.isAuthenticated
+          ? FloatingActionButton(
+              onPressed: authContext.isVIP
+                  ? () => context.push('/add-book')
+                  : () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(l10n.addingBooksVipOnly)),
+                      );
+                    },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: const [Icon(Icons.add), Icon(Icons.book)],
+              ),
+            )
+          : null,
     );
   }
 }

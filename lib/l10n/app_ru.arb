@@ -175,5 +175,93 @@
   "profile": "Профиль",
   "@profile": {
     "description": "Profile screen title"
+  },
+  "translationNotFound": "Перевод не найден",
+  "@translationNotFound": {
+    "description": "Message when translation is not available"
+  },
+  "inDictionary": "В словаре",
+  "@inDictionary": {
+    "description": "Label indicating word is in dictionary"
+  },
+  "examples": "Примеры",
+  "@examples": {
+    "description": "Examples label in translation dialog"
+  },
+  "meanings": "Значения",
+  "@meanings": {
+    "description": "Meanings label in translation dialog"
+  },
+  "posNoun": "сущ.",
+  "@posNoun": {
+    "description": "Part of speech: noun"
+  },
+  "posAdjective": "прил.",
+  "@posAdjective": {
+    "description": "Part of speech: adjective"
+  },
+  "posVerb": "гл.",
+  "@posVerb": {
+    "description": "Part of speech: verb"
+  },
+  "posAdverb": "нареч.",
+  "@posAdverb": {
+    "description": "Part of speech: adverb"
+  },
+  "posParticiple": "прич.",
+  "@posParticiple": {
+    "description": "Part of speech: participle"
+  },
+  "posConjunction": "союз",
+  "@posConjunction": {
+    "description": "Part of speech: conjunction"
+  },
+  "posPreposition": "предл.",
+  "@posPreposition": {
+    "description": "Part of speech: preposition"
+  },
+  "posPronoun": "мест.",
+  "@posPronoun": {
+    "description": "Part of speech: pronoun"
+  },
+  "noSavedWords": "Нет сохраненных слов",
+  "@noSavedWords": {
+    "description": "Empty state message when dictionary has no saved words"
+  },
+  "addBook": "Добавить книгу",
+  "@addBook": {
+    "description": "Add book screen title"
+  },
+  "selectEpubFile": "Выберите файл EPUB для загрузки",
+  "@selectEpubFile": {
+    "description": "Instruction text to select EPUB file"
+  },
+  "tapToSelectFile": "Нажмите для выбора файла",
+  "@tapToSelectFile": {
+    "description": "Prompt to tap and select file"
+  },
+  "uploadBook": "Загрузить книгу",
+  "@uploadBook": {
+    "description": "Upload book button text"
+  },
+  "pleaseSelectFile": "Пожалуйста, выберите файл",
+  "@pleaseSelectFile": {
+    "description": "Error message when no file is selected"
+  },
+  "bookUploadedSuccessfully": "Книга успешно загружена",
+  "@bookUploadedSuccessfully": {
+    "description": "Success message after book upload"
+  },
+  "fileSelectionError": "Ошибка при выборе файла",
+  "@fileSelectionError": {
+    "description": "Error message when file selection fails"
+  },
+  "bookUploadError": "Ошибка при загрузке книги",
+  "@bookUploadError": {
+    "description": "Error message when book upload fails"
+  },
+  "addingBooksVipOnly": "Добавление книг доступно только VIP пользователям",
+  "@addingBooksVipOnly": {
+    "description": "Message shown to non-VIP users"
   }
 }

@@ -140,4 +140,71 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get profile => 'Профиль';
+
+  @override
+  String get translationNotFound => 'Перевод не найден';
+
+  @override
+  String get inDictionary => 'В словаре';
+
+  @override
+  String get examples => 'Примеры';
+
+  @override
+  String get meanings => 'Значения';
+
+  @override
+  String get posNoun => 'сущ.';
+
+  @override
+  String get posAdjective => 'прил.';
+
+  @override
+  String get posVerb => 'гл.';
+
+  @override
+  String get posAdverb => 'нареч.';
+
+  @override
+  String get posParticiple => 'прич.';
+
+  @override
+  String get posConjunction => 'союз';
+
+  @override
+  String get posPreposition => 'предл.';
+
+  @override
+  String get posPronoun => 'мест.';
+
+  @override
+  String get noSavedWords => 'Нет сохраненных слов';
+
+  @override
+  String get addBook => 'Добавить книгу';
+
+  @override
+  String get selectEpubFile => 'Выберите файл EPUB для загрузки';
+
+  @override
+  String get tapToSelectFile => 'Нажмите для выбора файла';
+
+  @override
+  String get uploadBook => 'Загрузить книгу';
+
+  @override
+  String get pleaseSelectFile => 'Пожалуйста, выберите файл';
+
+  @override
+  String get bookUploadedSuccessfully => 'Книга успешно загружена';
+
+  @override
+  String get fileSelectionError => 'Ошибка при выборе файла';
+
+  @override
+  String get bookUploadError => 'Ошибка при загрузке книги';
+
+  @override
+  String get addingBooksVipOnly =>
+      'Добавление книг доступно только VIP пользователям';
 }

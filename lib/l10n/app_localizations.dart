@@ -361,6 +361,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profile'**
   String get profile;
+
+  /// Message when translation is not available
+  ///
+  /// In en, this message translates to:
+  /// **'Translation not found'**
+  String get translationNotFound;
+
+  /// Label indicating word is in dictionary
+  ///
+  /// In en, this message translates to:
+  /// **'In dictionary'**
+  String get inDictionary;
+
+  /// Examples label in translation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Examples'**
+  String get examples;
+
+  /// Meanings label in translation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Meanings'**
+  String get meanings;
+
+  /// Part of speech: noun
+  ///
+  /// In en, this message translates to:
+  /// **'noun'**
+  String get posNoun;
+
+  /// Part of speech: adjective
+  ///
+  /// In en, this message translates to:
+  /// **'adj.'**
+  String get posAdjective;
+
+  /// Part of speech: verb
+  ///
+  /// In en, this message translates to:
+  /// **'verb'**
+  String get posVerb;
+
+  /// Part of speech: adverb
+  ///
+  /// In en, this message translates to:
+  /// **'adv.'**
+  String get posAdverb;
+
+  /// Part of speech: participle
+  ///
+  /// In en, this message translates to:
+  /// **'part.'**
+  String get posParticiple;
+
+  /// Part of speech: conjunction
+  ///
+  /// In en, this message translates to:
+  /// **'conj.'**
+  String get posConjunction;
+
+  /// Part of speech: preposition
+  ///
+  /// In en, this message translates to:
+  /// **'prep.'**
+  String get posPreposition;
+
+  /// Part of speech: pronoun
+  ///
+  /// In en, this message translates to:
+  /// **'pron.'**
+  String get posPronoun;
+
+  /// Empty state message when dictionary has no saved words
+  ///
+  /// In en, this message translates to:
+  /// **'No saved words'**
+  String get noSavedWords;
+
+  /// Add book screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Add Book'**
+  String get addBook;
+
+  /// Instruction text to select EPUB file
+  ///
+  /// In en, this message translates to:
+  /// **'Select an EPUB file to upload'**
+  String get selectEpubFile;
+
+  /// Prompt to tap and select file
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to select file'**
+  String get tapToSelectFile;
+
+  /// Upload book button text
+  ///
+  /// In en, this message translates to:
+  /// **'Upload Book'**
+  String get uploadBook;
+
+  /// Error message when no file is selected
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a file'**
+  String get pleaseSelectFile;
+
+  /// Success message after book upload
+  ///
+  /// In en, this message translates to:
+  /// **'Book uploaded successfully'**
+  String get bookUploadedSuccessfully;
+
+  /// Error message when file selection fails
+  ///
+  /// In en, this message translates to:
+  /// **'File selection error'**
+  String get fileSelectionError;
+
+  /// Error message when book upload fails
+  ///
+  /// In en, this message translates to:
+  /// **'Book upload error'**
+  String get bookUploadError;
+
+  /// Message shown to non-VIP users
+  ///
+  /// In en, this message translates to:
+  /// **'Adding books is available only to VIP users'**
+  String get addingBooksVipOnly;
 }
 
 class _AppLocalizationsDelegate

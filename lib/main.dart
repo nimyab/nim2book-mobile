@@ -8,11 +8,13 @@ import 'package:logger/logger.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/auth_context.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/books_context.dart';
+import 'package:nim2book_mobile_flutter/core/contexts/dictionary_context.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/theme_context.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/locale_context.dart';
 import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/router/router.dart';
 import 'package:nim2book_mobile_flutter/core/services/book_service.dart';
+import 'package:nim2book_mobile_flutter/core/services/dictionary_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/fmc_token_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/theme_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
@@ -67,6 +69,9 @@ void main() async {
   final fcmTokenService = FcmTokenService();
   GetIt.I.registerSingleton(fcmTokenService);
 
+  final dictService = DictionaryService();
+  GetIt.I.registerSingleton(dictService);
+
   runApp(const Nim2BookApp());
 }
 
@@ -81,6 +86,7 @@ class Nim2BookApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => BooksContext()),
         ChangeNotifierProvider(create: (_) => ThemeContext()),
         ChangeNotifierProvider(create: (_) => LocaleContext()),
+        ChangeNotifierProvider(create: (_) => DictionaryContext()),
       ],
       child: _AppInitializer(),
     );

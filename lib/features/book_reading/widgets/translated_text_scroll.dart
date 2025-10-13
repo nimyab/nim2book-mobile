@@ -70,7 +70,8 @@ class TranslatedTextScroll extends StatelessWidget {
                           ),
                           style: TextStyle(
                             fontSize: 20,
-                            backgroundColor: scrollColors.highlightColor,
+                            backgroundColor: Colors.yellow,
+                            color: Colors.black87,
                           ),
                         ),
                       ),

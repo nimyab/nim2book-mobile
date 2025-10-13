@@ -88,8 +88,8 @@ abstract class GetBookResponse with _$GetBookResponse {
 @freezed
 abstract class TranslateBookResponse with _$TranslateBookResponse {
   const factory TranslateBookResponse({
-    required Book book,
-    required String messageAboutTranslate,
+    Book? book,
+    String? messageAboutTranslate,
   }) = _TranslateBookResponse;
 
   factory TranslateBookResponse.fromJson(Map<String, dynamic> json) =>

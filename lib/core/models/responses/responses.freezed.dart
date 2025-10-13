@@ -2212,7 +2212,7 @@ $BookCopyWith<$Res> get book {
 /// @nodoc
 mixin _$TranslateBookResponse {
 
- Book get book; String get messageAboutTranslate;
+ Book? get book; String? get messageAboutTranslate;
 /// Create a copy of TranslateBookResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -2245,11 +2245,11 @@ abstract mixin class $TranslateBookResponseCopyWith<$Res>  {
   factory $TranslateBookResponseCopyWith(TranslateBookResponse value, $Res Function(TranslateBookResponse) _then) = _$TranslateBookResponseCopyWithImpl;
 @useResult
 $Res call({
- Book book, String messageAboutTranslate
+ Book? book, String? messageAboutTranslate
 });
 
 
-$BookCopyWith<$Res> get book;
+$BookCopyWith<$Res>? get book;
 
 }
 /// @nodoc
@@ -2262,20 +2262,23 @@ class _$TranslateBookResponseCopyWithImpl<$Res>
 
 /// Create a copy of TranslateBookResponse
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? book = null,Object? messageAboutTranslate = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? book = freezed,Object? messageAboutTranslate = freezed,}) {
   return _then(_self.copyWith(
-book: null == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
-as Book,messageAboutTranslate: null == messageAboutTranslate ? _self.messageAboutTranslate : messageAboutTranslate // ignore: cast_nullable_to_non_nullable
-as String,
+book: freezed == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
+as Book?,messageAboutTranslate: freezed == messageAboutTranslate ? _self.messageAboutTranslate : messageAboutTranslate // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 /// Create a copy of TranslateBookResponse
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$BookCopyWith<$Res> get book {
-  
-  return $BookCopyWith<$Res>(_self.book, (value) {
+$BookCopyWith<$Res>? get book {
+    if (_self.book == null) {
+    return null;
+  }
+
+  return $BookCopyWith<$Res>(_self.book!, (value) {
     return _then(_self.copyWith(book: value));
   });
 }
@@ -2360,7 +2363,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Book book,  String messageAboutTranslate)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Book? book,  String? messageAboutTranslate)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TranslateBookResponse() when $default != null:
 return $default(_that.book,_that.messageAboutTranslate);case _:
@@ -2381,7 +2384,7 @@ return $default(_that.book,_that.messageAboutTranslate);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Book book,  String messageAboutTranslate)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Book? book,  String? messageAboutTranslate)  $default,) {final _that = this;
 switch (_that) {
 case _TranslateBookResponse():
 return $default(_that.book,_that.messageAboutTranslate);case _:
@@ -2401,7 +2404,7 @@ return $default(_that.book,_that.messageAboutTranslate);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Book book,  String messageAboutTranslate)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Book? book,  String? messageAboutTranslate)?  $default,) {final _that = this;
 switch (_that) {
 case _TranslateBookResponse() when $default != null:
 return $default(_that.book,_that.messageAboutTranslate);case _:
@@ -2416,11 +2419,11 @@ return $default(_that.book,_that.messageAboutTranslate);case _:
 @JsonSerializable()
 
 class _TranslateBookResponse implements TranslateBookResponse {
-  const _TranslateBookResponse({required this.book, required this.messageAboutTranslate});
+  const _TranslateBookResponse({this.book, this.messageAboutTranslate});
   factory _TranslateBookResponse.fromJson(Map<String, dynamic> json) => _$TranslateBookResponseFromJson(json);
 
-@override final  Book book;
-@override final  String messageAboutTranslate;
+@override final  Book? book;
+@override final  String? messageAboutTranslate;
 
 /// Create a copy of TranslateBookResponse
 /// with the given fields replaced by the non-null parameter values.
@@ -2455,11 +2458,11 @@ abstract mixin class _$TranslateBookResponseCopyWith<$Res> implements $Translate
   factory _$TranslateBookResponseCopyWith(_TranslateBookResponse value, $Res Function(_TranslateBookResponse) _then) = __$TranslateBookResponseCopyWithImpl;
 @override @useResult
 $Res call({
- Book book, String messageAboutTranslate
+ Book? book, String? messageAboutTranslate
 });
 
 
-@override $BookCopyWith<$Res> get book;
+@override $BookCopyWith<$Res>? get book;
 
 }
 /// @nodoc
@@ -2472,11 +2475,11 @@ class __$TranslateBookResponseCopyWithImpl<$Res>
 
 /// Create a copy of TranslateBookResponse
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? book = null,Object? messageAboutTranslate = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? book = freezed,Object? messageAboutTranslate = freezed,}) {
   return _then(_TranslateBookResponse(
-book: null == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
-as Book,messageAboutTranslate: null == messageAboutTranslate ? _self.messageAboutTranslate : messageAboutTranslate // ignore: cast_nullable_to_non_nullable
-as String,
+book: freezed == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
+as Book?,messageAboutTranslate: freezed == messageAboutTranslate ? _self.messageAboutTranslate : messageAboutTranslate // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -2484,9 +2487,12 @@ as String,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$BookCopyWith<$Res> get book {
-  
-  return $BookCopyWith<$Res>(_self.book, (value) {
+$BookCopyWith<$Res>? get book {
+    if (_self.book == null) {
+    return null;
+  }
+
+  return $BookCopyWith<$Res>(_self.book!, (value) {
     return _then(_self.copyWith(book: value));
   });
 }

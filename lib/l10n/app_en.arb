@@ -175,5 +175,94 @@
   "profile": "Profile",
   "@profile": {
     "description": "Profile screen title"
+  },
+  "translationNotFound": "Translation not found",
+  "@translationNotFound": {
+    "description": "Message when translation is not available"
+  },
+  "inDictionary": "In dictionary",
+  "@inDictionary": {
+    "description": "Label indicating word is in dictionary"
+  },
+  "examples": "Examples",
+  "@examples": {
+    "description": "Examples label in translation dialog"
+  },
+  "meanings": "Meanings",
+  "@meanings": {
+    "description": "Meanings label in translation dialog"
+  },
+  "posNoun": "noun",
+  "@posNoun": {
+    "description": "Part of speech: noun"
+  },
+  "posAdjective": "adj.",
+  "@posAdjective": {
+    "description": "Part of speech: adjective"
+  },
+  "posVerb": "verb",
+  "@posVerb": {
+    "description": "Part of speech: verb"
+  },
+  "posAdverb": "adv.",
+  "@posAdverb": {
+    "description": "Part of speech: adverb"
+  },
+  "posParticiple": "part.",
+  "@posParticiple": {
+    "description": "Part of speech: participle"
+  },
+  "posConjunction": "conj.",
+  "@posConjunction": {
+    "description": "Part of speech: conjunction"
+  },
+  "posPreposition": "prep.",
+  "@posPreposition": {
+    "description": "Part of speech: preposition"
+  },
+  "posPronoun": "pron.",
+  "@posPronoun": {
+    "description": "Part of speech: pronoun"
+  },
+  "noSavedWords": "No saved words",
+  "@noSavedWords": {
+    "description": "Empty state message when dictionary has no saved words"
+  },
+  "addBook": "Add Book",
+  "@addBook": {
+    "description": "Add book screen title"
+  },
+  "selectEpubFile": "Select an EPUB file to upload",
+  "@selectEpubFile": {
+    "description": "Instruction text to select EPUB file"
+  },
+  "tapToSelectFile": "Tap to select file",
+  "@tapToSelectFile": {
+    "description": "Prompt to tap and select file"
+  },
+  "uploadBook": "Upload Book",
+  "@uploadBook": {
+    "description": "Upload book button text"
+  },
+  "pleaseSelectFile": "Please select a file",
+  "@pleaseSelectFile": {
+    "description": "Error message when no file is selected"
+  },
+  "bookUploadedSuccessfully": "Book uploaded successfully",
+  "@bookUploadedSuccessfully": {
+    "description": "Success message after book upload"
+  },
+  "fileSelectionError": "File selection error",
+  "@fileSelectionError": {
+    "description": "Error message when file selection fails"
+  },
+  "bookUploadError": "Book upload error",
+  "@bookUploadError": {
+    "description": "Error message when book upload fails"
+  },
+  "addingBooksVipOnly": "Adding books is available only to VIP users",
+  "@addingBooksVipOnly": {
+    "description": "Message shown to non-VIP users"
   }
 }
+

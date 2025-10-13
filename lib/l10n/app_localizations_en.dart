@@ -140,4 +140,71 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profile => 'Profile';
+
+  @override
+  String get translationNotFound => 'Translation not found';
+
+  @override
+  String get inDictionary => 'In dictionary';
+
+  @override
+  String get examples => 'Examples';
+
+  @override
+  String get meanings => 'Meanings';
+
+  @override
+  String get posNoun => 'noun';
+
+  @override
+  String get posAdjective => 'adj.';
+
+  @override
+  String get posVerb => 'verb';
+
+  @override
+  String get posAdverb => 'adv.';
+
+  @override
+  String get posParticiple => 'part.';
+
+  @override
+  String get posConjunction => 'conj.';
+
+  @override
+  String get posPreposition => 'prep.';
+
+  @override
+  String get posPronoun => 'pron.';
+
+  @override
+  String get noSavedWords => 'No saved words';
+
+  @override
+  String get addBook => 'Add Book';
+
+  @override
+  String get selectEpubFile => 'Select an EPUB file to upload';
+
+  @override
+  String get tapToSelectFile => 'Tap to select file';
+
+  @override
+  String get uploadBook => 'Upload Book';
+
+  @override
+  String get pleaseSelectFile => 'Please select a file';
+
+  @override
+  String get bookUploadedSuccessfully => 'Book uploaded successfully';
+
+  @override
+  String get fileSelectionError => 'File selection error';
+
+  @override
+  String get bookUploadError => 'Book upload error';
+
+  @override
+  String get addingBooksVipOnly =>
+      'Adding books is available only to VIP users';
 }

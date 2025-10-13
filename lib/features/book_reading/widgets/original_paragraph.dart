@@ -1,5 +1,7 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
+import 'package:nim2book_mobile_flutter/features/translated_dialog/translated_dialog.dart';
 
 class OriginalParagraph extends StatefulWidget {
   final List<WordItem> paragraph;
@@ -60,7 +62,13 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
           key: wordKey,
           margin: (i == 0) ? const EdgeInsets.only(left: 30) : null,
           color: isSelected ? Colors.yellow : null,
-          child: Text(wordItem.wordText, style: const TextStyle(fontSize: 20)),
+          child: Text(
+            wordItem.wordText,
+            style: TextStyle(
+              fontSize: 20,
+              color: isSelected ? Colors.black87 : null,
+            ),
+          ),
         ),
       );
     }
@@ -90,7 +98,19 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
         if (wordRect.contains(localPosition)) {
           final wordItem = widget.paragraph[i];
           if (wordItem.paragraphIndex != null && wordItem.wordIndex != null) {
-            widget.selectWord(wordItem.paragraphIndex!, wordItem.wordIndex!);
+            // если слово не выделено, то выделяем его
+            if (!(widget.selectedParagraphIndex == wordItem.paragraphIndex &&
+                widget.selectedWordIndex == wordItem.wordIndex)) {
+              widget.selectWord(wordItem.paragraphIndex!, wordItem.wordIndex!);
+            } else {
+              // иначе будем показывать перевод слова из словаря
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return TranslatedDialog(phrase: wordItem.wordText);
+                },
+              );
+            }
           }
           break;
         }

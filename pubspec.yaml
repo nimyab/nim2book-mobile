@@ -52,6 +52,8 @@ dependencies:
   google_sign_in: ^7.2.0
   font_awesome_flutter: ^10.10.0
   firebase_messaging: ^16.0.2
+  file_picker: ^8.1.6
+  flutter_native_splash: ^2.4.6
 
 dev_dependencies:
   flutter_test:
@@ -67,9 +69,23 @@ dev_dependencies:
   freezed: ^3.2.0
   json_serializable: ^6.11.0
   custom_lint: ^0.8.1
+  flutter_launcher_icons: ^0.14.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: 'assets/icon/icon.png'
+
+flutter_native_splash:
+  color: '#1c5227'
+  color_dark: '#1c5227'
+  image: assets/splash/splash_screen.png
+  android: true
+  ios: true
+  web: false
 
 # The following section is specific to Flutter packages.
 flutter:
