@@ -207,4 +207,55 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get addingBooksVipOnly =>
       'Adding books is available only to VIP users';
+
+  @override
+  String get learnWords => 'Learn Words';
+
+  @override
+  String get learning => 'Learning';
+
+  @override
+  String get showAnswer => 'Show Answer';
+
+  @override
+  String get nextWord => 'Next Word';
+
+  @override
+  String get previousWord => 'Previous Word';
+
+  @override
+  String get noWordsToLearn =>
+      'No words to learn. Add some words to your dictionary first!';
+
+  @override
+  String wordProgress(int current, int total) {
+    return 'Word $current of $total';
+  }
+
+  @override
+  String get examplesLabel => 'Examples:';
+
+  @override
+  String get noTranslationAvailable => 'No translation available';
+
+  @override
+  String get tapToTranslate => 'Tap to translate';
+
+  @override
+  String get swipeInstructions => 'Swipe left: Don\'t know • Swipe right: Know';
+
+  @override
+  String get knowLabel => 'KNOW';
+
+  @override
+  String get dontKnowLabel => 'DON\'T KNOW';
+
+  @override
+  String get translate => 'Translate';
+
+  @override
+  String get dontKnow => 'Don\'t Know';
+
+  @override
+  String get know => 'Know';
 }

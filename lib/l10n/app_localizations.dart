@@ -493,6 +493,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Adding books is available only to VIP users'**
   String get addingBooksVipOnly;
+
+  /// Button text to start learning words
+  ///
+  /// In en, this message translates to:
+  /// **'Learn Words'**
+  String get learnWords;
+
+  /// Learning screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Learning'**
+  String get learning;
+
+  /// Button text to reveal the translation
+  ///
+  /// In en, this message translates to:
+  /// **'Show Answer'**
+  String get showAnswer;
+
+  /// Button text to go to next word
+  ///
+  /// In en, this message translates to:
+  /// **'Next Word'**
+  String get nextWord;
+
+  /// Button text to go to previous word
+  ///
+  /// In en, this message translates to:
+  /// **'Previous Word'**
+  String get previousWord;
+
+  /// Message when there are no words in dictionary to learn
+  ///
+  /// In en, this message translates to:
+  /// **'No words to learn. Add some words to your dictionary first!'**
+  String get noWordsToLearn;
+
+  /// Progress indicator showing current word position
+  ///
+  /// In en, this message translates to:
+  /// **'Word {current} of {total}'**
+  String wordProgress(int current, int total);
+
+  /// Label for examples section in word definitions
+  ///
+  /// In en, this message translates to:
+  /// **'Examples:'**
+  String get examplesLabel;
+
+  /// Message when no translation is found for a word
+  ///
+  /// In en, this message translates to:
+  /// **'No translation available'**
+  String get noTranslationAvailable;
+
+  /// Instruction to tap card to show translation
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to translate'**
+  String get tapToTranslate;
+
+  /// Instructions for swiping cards in learning mode
+  ///
+  /// In en, this message translates to:
+  /// **'Swipe left: Don\'t know • Swipe right: Know'**
+  String get swipeInstructions;
+
+  /// Label for know action in learning mode (uppercase)
+  ///
+  /// In en, this message translates to:
+  /// **'KNOW'**
+  String get knowLabel;
+
+  /// Label for don't know action in learning mode (uppercase)
+  ///
+  /// In en, this message translates to:
+  /// **'DON\'T KNOW'**
+  String get dontKnowLabel;
+
+  /// Translate button text
+  ///
+  /// In en, this message translates to:
+  /// **'Translate'**
+  String get translate;
+
+  /// Don't know button text
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t Know'**
+  String get dontKnow;
+
+  /// Know button text
+  ///
+  /// In en, this message translates to:
+  /// **'Know'**
+  String get know;
 }
 
 class _AppLocalizationsDelegate

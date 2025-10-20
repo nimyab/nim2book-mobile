@@ -4,6 +4,7 @@ import 'package:nim2book_mobile_flutter/screens/add_book_screen/add_book_screen.
 import 'package:nim2book_mobile_flutter/screens/book_screen/book_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/books_screen/books_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/dictionary_screen/dictionary_screen.dart';
+import 'package:nim2book_mobile_flutter/screens/learning_screen/learning_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/login_screen/login_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/my_books_screen/my_books_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/reading_screen/reading_screen.dart';
@@ -94,6 +95,12 @@ final router = GoRouter(
       path: '/add-book',
       name: 'add-book',
       builder: (context, state) => const AddBookScreen(),
+    ),
+
+    GoRoute(
+      path: '/learning',
+      name: 'learning',
+      builder: (context, state) => const LearningScreen(),
     ),
   ],
 );

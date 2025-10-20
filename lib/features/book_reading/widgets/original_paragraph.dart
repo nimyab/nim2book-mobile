@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
 import 'package:nim2book_mobile_flutter/features/translated_dialog/translated_dialog.dart';
