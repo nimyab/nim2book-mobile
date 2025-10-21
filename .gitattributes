@@ -1,0 +1,26 @@
+*           text=auto eol=lf
+
+*.dart      text eol=lf linguist-language=Dart
+*.yaml      text eol=lf
+*.yml       text eol=lf
+*.md        text eol=lf
+*.sh        text eol=lf
+*.ps1       text eol=crlf
+*.bat       text eol=crlf
+
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.ico       binary
+*.pdf       binary
+*.ttf       binary
+*.otf       binary
+*.woff      binary
+*.woff2     binary
+*.mp3       binary
+*.mp4       binary
+*.zip       binary
+*.aab       binary
+*.jar       binary
+*.keystore  binary

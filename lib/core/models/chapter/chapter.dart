@@ -13,7 +13,7 @@ abstract class ChapterAlignNode with _$ChapterAlignNode {
     required List<ParagraphAlignNode> content,
   }) = _ChapterAlignNode;
 
-  factory ChapterAlignNode.fromJson(Map<String, dynamic> json) => 
+  factory ChapterAlignNode.fromJson(Map<String, dynamic> json) =>
       _$ChapterAlignNodeFromJson(json);
 }
 
@@ -25,7 +25,7 @@ abstract class ParagraphAlignNode with _$ParagraphAlignNode {
     required List<WordAlignNode> aw,
   }) = _ParagraphAlignNode;
 
-  factory ParagraphAlignNode.fromJson(Map<String, dynamic> json) => 
+  factory ParagraphAlignNode.fromJson(Map<String, dynamic> json) =>
       _$ParagraphAlignNodeFromJson(json);
 }
 
@@ -36,6 +36,6 @@ abstract class WordAlignNode with _$WordAlignNode {
     required List<int> itw,
   }) = _WordAlignNode;
 
-  factory WordAlignNode.fromJson(Map<String, dynamic> json) => 
+  factory WordAlignNode.fromJson(Map<String, dynamic> json) =>
       _$WordAlignNodeFromJson(json);
 }

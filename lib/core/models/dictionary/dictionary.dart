@@ -12,7 +12,7 @@ abstract class Definition with _$Definition {
     String? ts,
   }) = _Definition;
 
-  factory Definition.fromJson(Map<String, dynamic> json) => 
+  factory Definition.fromJson(Map<String, dynamic> json) =>
       _$DefinitionFromJson(json);
 }
 
@@ -25,35 +25,31 @@ abstract class Translation with _$Translation {
     List<Example>? ex,
   }) = _Translation;
 
-  factory Translation.fromJson(Map<String, dynamic> json) => 
+  factory Translation.fromJson(Map<String, dynamic> json) =>
       _$TranslationFromJson(json);
 }
 
 @freezed
 abstract class Mean with _$Mean {
-  const factory Mean({
-    required String text,
-  }) = _Mean;
+  const factory Mean({required String text}) = _Mean;
 
   factory Mean.fromJson(Map<String, dynamic> json) => _$MeanFromJson(json);
 }
 
 @freezed
 abstract class Example with _$Example {
-  const factory Example({
-    required String text,
-    List<ExampleTranslation>? tr,
-  }) = _Example;
+  const factory Example({required String text, List<ExampleTranslation>? tr}) =
+      _Example;
 
-  factory Example.fromJson(Map<String, dynamic> json) => _$ExampleFromJson(json);
+  factory Example.fromJson(Map<String, dynamic> json) =>
+      _$ExampleFromJson(json);
 }
 
 @freezed
 abstract class ExampleTranslation with _$ExampleTranslation {
-  const factory ExampleTranslation({
-    required String text,
-  }) = _ExampleTranslation;
+  const factory ExampleTranslation({required String text}) =
+      _ExampleTranslation;
 
-  factory ExampleTranslation.fromJson(Map<String, dynamic> json) => 
+  factory ExampleTranslation.fromJson(Map<String, dynamic> json) =>
       _$ExampleTranslationFromJson(json);
 }

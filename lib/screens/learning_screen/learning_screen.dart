@@ -25,7 +25,7 @@ class _LearningScreenState extends State<LearningScreen>
   double _scale = 1.0;
   bool _isDragging = false;
   bool _showTranslation = false;
-  
+
   // Track initial touch position for centered cursor behavior
   double _initialTouchX = 0.0;
 
@@ -240,7 +240,7 @@ class _LearningScreenState extends State<LearningScreen>
         // Calculate current cursor position relative to initial touch
         final currentTouchX = details.localPosition.dx;
         final touchDeltaX = currentTouchX - _initialTouchX;
-        
+
         // Set card position so cursor appears at center during horizontal movement
         _dragX = touchDeltaX;
         // Remove vertical movement - card only moves horizontally
@@ -345,23 +345,6 @@ class _LearningScreenState extends State<LearningScreen>
     });
   }
 
-  void _previousWord() {
-    final dictContext = context.read<DictionaryContext>();
-    final savedWords = dictContext.savedWords;
-    final words = savedWords.keys.toList();
-
-    setState(() {
-      _showTranslation =
-          false; // Reset translation when moving to previous word
-      if (_currentWordIndex > 0) {
-        _currentWordIndex--;
-      } else {
-        // Loop to the end
-        _currentWordIndex = words.length - 1;
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -401,10 +384,6 @@ class _LearningScreenState extends State<LearningScreen>
     final words = savedWords.keys.toList();
     final currentWord = words[_currentWordIndex];
     final currentDefinitions = savedWords[currentWord]!;
-    final primaryTranslation =
-        currentDefinitions.isNotEmpty && currentDefinitions.first.tr.isNotEmpty
-        ? currentDefinitions.first.tr.first.text
-        : l10n.noTranslationAvailable;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.learning), centerTitle: true),
@@ -485,9 +464,9 @@ class _LearningScreenState extends State<LearningScreen>
                         return Transform(
                           alignment: Alignment.center,
                           transform: Matrix4.identity()
-                            ..translate(finalX, finalY)
+                            ..translateByDouble(finalX, finalY, 0, 0)
                             ..rotateZ(finalRotation)
-                            ..scale(finalScale),
+                            ..scaleByDouble(finalScale, finalScale, 1.0, 0.0),
                           child: Stack(
                             children: [
                               // Background card (next card preview)
@@ -529,8 +508,12 @@ class _LearningScreenState extends State<LearningScreen>
                                         ? [
                                             BoxShadow(
                                               color: _dragX > 0
-                                                  ? Colors.green.withValues(alpha: 0.6)
-                                                  : Colors.red.withValues(alpha: 0.6),
+                                                  ? Colors.green.withValues(
+                                                      alpha: 0.6,
+                                                    )
+                                                  : Colors.red.withValues(
+                                                      alpha: 0.6,
+                                                    ),
                                               blurRadius: 20,
                                               spreadRadius: 5,
                                             ),
@@ -544,165 +527,168 @@ class _LearningScreenState extends State<LearningScreen>
                                       padding: const EdgeInsets.all(0),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(12),
-                                        color: theme.colorScheme.surfaceContainer,
+                                        color:
+                                            theme.colorScheme.surfaceContainer,
                                       ),
                                       child: Column(
-                                      children: [
-                                        // Main scrollable content
-                                        Expanded(
-                                          child: SingleChildScrollView(
-                                            child: Column(
-                                              children: [
-                                                // Top padding for centering when content is short
-                                                SizedBox(
-                                                  height: _showTranslation
-                                                      ? 8
-                                                      : 40,
-                                                ),
+                                        children: [
+                                          // Main scrollable content
+                                          Expanded(
+                                            child: SingleChildScrollView(
+                                              child: Column(
+                                                children: [
+                                                  // Top padding for centering when content is short
+                                                  SizedBox(
+                                                    height: _showTranslation
+                                                        ? 8
+                                                        : 40,
+                                                  ),
 
-                                                const SizedBox(height: 16),
-                                                Text(
-                                                  currentWord,
-                                                  style: theme
-                                                      .textTheme
-                                                      .headlineMedium
-                                                      ?.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: theme
-                                                            .colorScheme
-                                                            .onSurface,
-                                                      ),
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                                if (currentDefinitions
-                                                        .isNotEmpty &&
-                                                    currentDefinitions
-                                                            .first
-                                                            .ts !=
-                                                        null) ...[
-                                                  const SizedBox(height: 8),
+                                                  const SizedBox(height: 16),
                                                   Text(
-                                                    '[${currentDefinitions.first.ts}]',
+                                                    currentWord,
                                                     style: theme
                                                         .textTheme
-                                                        .bodyLarge
+                                                        .headlineMedium
                                                         ?.copyWith(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: theme
+                                                              .colorScheme
+                                                              .onSurface,
+                                                        ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  if (currentDefinitions
+                                                          .isNotEmpty &&
+                                                      currentDefinitions
+                                                              .first
+                                                              .ts !=
+                                                          null) ...[
+                                                    const SizedBox(height: 8),
+                                                    Text(
+                                                      '[${currentDefinitions.first.ts}]',
+                                                      style: theme
+                                                          .textTheme
+                                                          .bodyLarge
+                                                          ?.copyWith(
+                                                            color: theme
+                                                                .colorScheme
+                                                                .onPrimaryContainer
+                                                                .withValues(
+                                                                  alpha: 0.8,
+                                                                ),
+                                                            fontStyle: FontStyle
+                                                                .italic,
+                                                          ),
+                                                    ),
+                                                  ],
+
+                                                  // Translation section (only show if _showTranslation is true)
+                                                  if (_showTranslation) ...[
+                                                    const SizedBox(height: 24),
+                                                    Divider(
+                                                      color: theme
+                                                          .colorScheme
+                                                          .onPrimaryContainer
+                                                          .withValues(
+                                                            alpha: 0.3,
+                                                          ),
+                                                      thickness: 1,
+                                                    ),
+                                                    ...currentDefinitions.map(
+                                                      (definition) =>
+                                                          _buildDefinitionCard(
+                                                            context,
+                                                            definition,
+                                                            theme,
+                                                          ),
+                                                    ),
+                                                  ] else ...[
+                                                    // Show "Tap to translate" hint when translation is hidden
+                                                    const SizedBox(height: 80),
+                                                    Center(
+                                                      child: Container(
+                                                        padding:
+                                                            const EdgeInsets.symmetric(
+                                                              horizontal: 20,
+                                                              vertical: 12,
+                                                            ),
+                                                        decoration: BoxDecoration(
                                                           color: theme
                                                               .colorScheme
                                                               .onPrimaryContainer
                                                               .withValues(
-                                                                alpha: 0.8,
+                                                                alpha: 0.1,
                                                               ),
-                                                          fontStyle:
-                                                              FontStyle.italic,
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                25,
+                                                              ),
+                                                          border: Border.all(
+                                                            color: theme
+                                                                .colorScheme
+                                                                .onPrimaryContainer
+                                                                .withValues(
+                                                                  alpha: 0.3,
+                                                                ),
+                                                          ),
                                                         ),
-                                                  ),
-                                                ],
+                                                        child: Text(
+                                                          l10n.tapToTranslate,
+                                                          style: theme
+                                                              .textTheme
+                                                              .bodyMedium
+                                                              ?.copyWith(
+                                                                color: theme
+                                                                    .colorScheme
+                                                                    .onPrimaryContainer
+                                                                    .withValues(
+                                                                      alpha:
+                                                                          0.8,
+                                                                    ),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
 
-                                                // Translation section (only show if _showTranslation is true)
-                                                if (_showTranslation) ...[
-                                                  const SizedBox(height: 24),
-                                                  Divider(
+                                                  // Bottom padding to ensure content doesn't stick to bottom
+                                                  const SizedBox(height: 60),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+
+                                          // Bottom section with instruction (fixed at bottom)
+                                          Container(
+                                            padding: const EdgeInsets.only(
+                                              top: 8,
+                                              bottom: 8,
+                                            ),
+                                            child: Text(
+                                              _showTranslation
+                                                  ? l10n.swipeInstructions
+                                                  : l10n.tapToTranslate,
+                                              style: theme.textTheme.bodySmall
+                                                  ?.copyWith(
                                                     color: theme
                                                         .colorScheme
                                                         .onPrimaryContainer
-                                                        .withValues(alpha: 0.3),
-                                                    thickness: 1,
+                                                        .withValues(alpha: 0.6),
                                                   ),
-                                                  ...currentDefinitions.map(
-                                                    (definition) =>
-                                                        _buildDefinitionCard(
-                                                          context,
-                                                          definition,
-                                                          theme,
-                                                        ),
-                                                  ),
-                                                ] else ...[
-                                                  // Show "Tap to translate" hint when translation is hidden
-                                                  const SizedBox(height: 80),
-                                                  Center(
-                                                    child: Container(
-                                                      padding:
-                                                          const EdgeInsets.symmetric(
-                                                            horizontal: 20,
-                                                            vertical: 12,
-                                                          ),
-                                                      decoration: BoxDecoration(
-                                                        color: theme
-                                                            .colorScheme
-                                                            .onPrimaryContainer
-                                                            .withValues(
-                                                              alpha: 0.1,
-                                                            ),
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              25,
-                                                            ),
-                                                        border: Border.all(
-                                                          color: theme
-                                                              .colorScheme
-                                                              .onPrimaryContainer
-                                                              .withValues(
-                                                                alpha: 0.3,
-                                                              ),
-                                                        ),
-                                                      ),
-                                                      child: Text(
-                                                        l10n.tapToTranslate,
-                                                        style: theme
-                                                            .textTheme
-                                                            .bodyMedium
-                                                            ?.copyWith(
-                                                              color: theme
-                                                                  .colorScheme
-                                                                  .onPrimaryContainer
-                                                                  .withValues(
-                                                                    alpha: 0.8,
-                                                                  ),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                            ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-
-                                                // Bottom padding to ensure content doesn't stick to bottom
-                                                const SizedBox(height: 60),
-                                              ],
+                                              textAlign: TextAlign.center,
                                             ),
                                           ),
-                                        ),
-
-                                        // Bottom section with instruction (fixed at bottom)
-                                        Container(
-                                          padding: const EdgeInsets.only(
-                                            top: 8,
-                                            bottom: 8,
-                                          ),
-                                          child: Text(
-                                            _showTranslation
-                                                ? l10n.swipeInstructions
-                                                : l10n.tapToTranslate,
-                                            style: theme.textTheme.bodySmall
-                                                ?.copyWith(
-                                                  color: theme
-                                                      .colorScheme
-                                                      .onPrimaryContainer
-                                                      .withValues(alpha: 0.6),
-                                                ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ), // Close inner GestureDetector
-                            ),
-
+                                ), // Close inner GestureDetector
+                              ),
                             ],
                           ),
                         );
@@ -711,7 +697,6 @@ class _LearningScreenState extends State<LearningScreen>
                   ),
                 ),
               ), // Close outer GestureDetector
-
               // Control buttons
               Padding(
                 padding: const EdgeInsets.only(top: 16),
@@ -746,7 +731,8 @@ class _LearningScreenState extends State<LearningScreen>
                               icon: const Icon(Icons.close),
                               label: Text(l10n.dontKnow),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: theme.colorScheme.surfaceContainer,
+                                backgroundColor:
+                                    theme.colorScheme.surfaceContainer,
                                 foregroundColor: theme.colorScheme.error,
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 16,
@@ -762,7 +748,8 @@ class _LearningScreenState extends State<LearningScreen>
                               icon: const Icon(Icons.check),
                               label: Text(l10n.know),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: theme.colorScheme.surfaceContainer,
+                                backgroundColor:
+                                    theme.colorScheme.surfaceContainer,
                                 foregroundColor: theme.colorScheme.primary,
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 16,

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if command -v flutter >/dev/null 2>&1; then
+  echo "🧪 Запуск тестов (flutter test)..."
+  flutter test --reporter expanded
+elif command -v dart >/dev/null 2>&1; then
+  echo "🧪 Запуск тестов (dart test)..."
+  dart test
+else
+  echo "⚠️ Dart/Flutter не найден. Пропускаю тесты."
+fi
+
+echo "✅ pre-push завершён успешно"

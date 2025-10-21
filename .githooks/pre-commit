@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" || "$OSTYPE" == "cygwin" ]]; then
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../scripts" && pwd)"
+    POWERSHELL_SCRIPT="$SCRIPT_DIR/pre-commit-build.ps1"
+
+    if [[ -f "$POWERSHELL_SCRIPT" ]]; then
+        echo "🚀 Запуск PowerShell pre-commit скрипта..."
+        powershell.exe -ExecutionPolicy Bypass -File "$POWERSHELL_SCRIPT"
+        exit $?
+    else
+        echo "⚠️ PowerShell скрипт не найден: $POWERSHELL_SCRIPT"
+    fi
+fi
+
+if command -v dart >/dev/null 2>&1; then
+  echo "🔧 Проверка форматирования (dart format)..."
+  dart format --output=none --set-exit-if-changed .
+  echo "🔍 Статический анализ (flutter/dart analyze)..."
+  if command -v flutter >/dev/null 2>&1; then
+    flutter analyze
+  else
+    dart analyze
+  fi
+else
+  echo "⚠️ Dart/Flutter не найден. Пропускаю проверки."
+fi
+
+echo "✅ pre-commit завершён успешно"

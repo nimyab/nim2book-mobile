@@ -1,0 +1,46 @@
+name: ✨ Запрос фичи
+description: Предложите улучшение или новую возможность
+labels: [enhancement]
+title: "[FEATURE] краткое описание предложения"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Спасибо за идею! Помогите нам понять ценность и реализацию.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Связанная проблема
+      description: Какую проблему решает ваше предложение?
+      placeholder: Пользователю сложно...
+    validations:
+      required: false
+  - type: textarea
+    id: solution
+    attributes:
+      label: Предлагаемое решение
+      description: Опишите, как вы видите реализацию.
+      placeholder: Добавить кнопку..., изменить поведение...
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Альтернативы
+      description: Рассматривали ли вы другие способы?
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Дополнительный контекст
+      description: Скриншоты, макеты, ссылки и прочее.
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Подтверждения
+      options:
+        - label: Идея согласуется с целями проекта
+          required: true

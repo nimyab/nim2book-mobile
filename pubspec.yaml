@@ -1,8 +1,8 @@
 name: nim2book_mobile_flutter
-description: 'A new Flutter project.'
+description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -77,20 +77,20 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: 'assets/icon/icon.png'
+  image_path: "assets/icon/icon.png"
 
 flutter_native_splash:
-  color: '#1c5227'
-  color_dark: '#1c5227'
+  color: "#1c5227"
+  color_dark: "#1c5227"
   image: assets/splash/splash_screen.png
   android: true
   ios: true
 
   android_12:
     image: assets/splash/splash_screen.png
-    icon_background_color: '#1c5227'
+    icon_background_color: "#1c5227"
     image_dark: assets/splash/splash_screen.png
-    icon_background_color_dark: '#1c5227'
+    icon_background_color_dark: "#1c5227"
 
   web: false
 

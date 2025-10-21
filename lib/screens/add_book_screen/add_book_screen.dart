@@ -171,7 +171,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                   : () {
                       _uploadBook((book) {
                         context.read<BooksContext>().addMyBook(book);
-                        context.go('/my-books');  
+                        context.go('/my-books');
                       });
                     },
               style: FilledButton.styleFrom(
