@@ -263,6 +263,78 @@
   "addingBooksVipOnly": "Adding books is available only to VIP users",
   "@addingBooksVipOnly": {
     "description": "Message shown to non-VIP users"
+  },
+  "learnWords": "Learn Words",
+  "@learnWords": {
+    "description": "Button text to start learning words"
+  },
+  "learning": "Learning",
+  "@learning": {
+    "description": "Learning screen title"
+  },
+  "showAnswer": "Show Answer",
+  "@showAnswer": {
+    "description": "Button text to reveal the translation"
+  },
+  "nextWord": "Next Word",
+  "@nextWord": {
+    "description": "Button text to go to next word"
+  },
+  "previousWord": "Previous Word",
+  "@previousWord": {
+    "description": "Button text to go to previous word"
+  },
+  "noWordsToLearn": "No words to learn. Add some words to your dictionary first!",
+  "@noWordsToLearn": {
+    "description": "Message when there are no words in dictionary to learn"
+  },
+  "wordProgress": "Word {current} of {total}",
+  "@wordProgress": {
+    "description": "Progress indicator showing current word position",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "examplesLabel": "Examples:",
+  "@examplesLabel": {
+    "description": "Label for examples section in word definitions"
+  },
+  "noTranslationAvailable": "No translation available",
+  "@noTranslationAvailable": {
+    "description": "Message when no translation is found for a word"
+  },
+  "tapToTranslate": "Tap to translate",
+  "@tapToTranslate": {
+    "description": "Instruction to tap card to show translation"
+  },
+  "swipeInstructions": "Swipe left: Don't know • Swipe right: Know",
+  "@swipeInstructions": {
+    "description": "Instructions for swiping cards in learning mode"
+  },
+  "knowLabel": "KNOW",
+  "@knowLabel": {
+    "description": "Label for know action in learning mode (uppercase)"
+  },
+  "dontKnowLabel": "DON'T KNOW",
+  "@dontKnowLabel": {
+    "description": "Label for don't know action in learning mode (uppercase)"
+  },
+  "translate": "Translate",
+  "@translate": {
+    "description": "Translate button text"
+  },
+  "dontKnow": "Don't Know",
+  "@dontKnow": {
+    "description": "Don't know button text"
+  },
+  "know": "Know",
+  "@know": {
+    "description": "Know button text"
   }
 }
 

@@ -207,4 +207,55 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get addingBooksVipOnly =>
       'Добавление книг доступно только VIP пользователям';
+
+  @override
+  String get learnWords => 'Изучать слова';
+
+  @override
+  String get learning => 'Изучение';
+
+  @override
+  String get showAnswer => 'Показать ответ';
+
+  @override
+  String get nextWord => 'Следующее слово';
+
+  @override
+  String get previousWord => 'Предыдущее слово';
+
+  @override
+  String get noWordsToLearn =>
+      'Нет слов для изучения. Сначала добавьте слова в словарь!';
+
+  @override
+  String wordProgress(int current, int total) {
+    return 'Слово $current из $total';
+  }
+
+  @override
+  String get examplesLabel => 'Примеры:';
+
+  @override
+  String get noTranslationAvailable => 'Перевод недоступен';
+
+  @override
+  String get tapToTranslate => 'Нажмите для перевода';
+
+  @override
+  String get swipeInstructions => 'Свайп влево: Не знаю • Свайп вправо: Знаю';
+
+  @override
+  String get knowLabel => 'ЗНАЮ';
+
+  @override
+  String get dontKnowLabel => 'НЕ ЗНАЮ';
+
+  @override
+  String get translate => 'Перевести';
+
+  @override
+  String get dontKnow => 'Не знаю';
+
+  @override
+  String get know => 'Знаю';
 }
