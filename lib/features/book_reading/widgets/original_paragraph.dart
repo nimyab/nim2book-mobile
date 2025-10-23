@@ -124,6 +124,7 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
       child: Wrap(
         spacing: 10,
         alignment: WrapAlignment.spaceBetween,
+        runSpacing: 3,
         children: _words,
       ),
     );
