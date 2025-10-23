@@ -30,7 +30,6 @@ class DictionaryContext with ChangeNotifier {
     var savedWord = _savedWords[word];
     if (savedWord != null) return savedWord;
     savedWord = await _dictService.getWord(word);
-    if (savedWord != null) _savedWords[word] = savedWord;
     return savedWord;
   }
 
