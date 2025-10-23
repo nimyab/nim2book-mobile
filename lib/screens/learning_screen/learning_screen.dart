@@ -464,9 +464,9 @@ class _LearningScreenState extends State<LearningScreen>
                         return Transform(
                           alignment: Alignment.center,
                           transform: Matrix4.identity()
-                            ..translateByDouble(finalX, finalY, 0, 0)
+                            ..translateByDouble(finalX, finalY, 1.0, 1.0)
                             ..rotateZ(finalRotation)
-                            ..scaleByDouble(finalScale, finalScale, 1.0, 0.0),
+                            ..scaleByDouble(finalScale, finalScale, 1.0, 1.0),
                           child: Stack(
                             children: [
                               // Background card (next card preview)
