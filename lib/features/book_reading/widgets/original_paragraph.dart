@@ -23,110 +23,218 @@ class OriginalParagraph extends StatefulWidget {
 }
 
 class _OriginalParagraphState extends State<OriginalParagraph> {
-  final List<Widget> _words = [];
-  final List<GlobalKey> _wordKeys = [];
+  late String _paragraphText;
+  late List<_WordRange> _wordRanges;
 
   @override
   void initState() {
     super.initState();
-    _buildWords();
+    _computeTextData();
   }
 
   @override
   void didUpdateWidget(covariant OriginalParagraph oldWidget) {
     super.didUpdateWidget(oldWidget);
-
-    // пересоздаю слова если этот параграф был или выбран сейчас или был выбран раньше
-    if (widget.paragraphIndex == widget.selectedParagraphIndex ||
-        widget.paragraphIndex == oldWidget.selectedParagraphIndex) {
-      _buildWords();
+    if (oldWidget.paragraph != widget.paragraph) {
+      _computeTextData();
     }
   }
 
-  void _buildWords() {
-    _words.clear();
-    _wordKeys.clear();
+  void _computeTextData() {
+    final sb = StringBuffer();
+    final ranges = <_WordRange>[];
+    var cursor = 0;
 
     for (var i = 0; i < widget.paragraph.length; i++) {
-      final wordItem = widget.paragraph[i];
-      final isSelected =
-          (widget.selectedParagraphIndex == wordItem.paragraphIndex &&
-          widget.selectedWordIndex == wordItem.wordIndex);
-
-      final wordKey = GlobalKey();
-      _wordKeys.add(wordKey);
-
-      _words.add(
-        Container(
-          key: wordKey,
-          margin: (i == 0) ? const EdgeInsets.only(left: 30) : null,
-          color: isSelected ? Colors.yellow : null,
-          child: Text(
-            wordItem.wordText,
-            style: TextStyle(
-              fontSize: 20,
-              color: isSelected ? Colors.black87 : null,
-            ),
-          ),
-        ),
-      );
+      final word = widget.paragraph[i].wordText;
+      // Сохраняем диапазон символов для текущего слова
+      ranges.add(_WordRange(cursor, cursor + word.length));
+      sb.write(word);
+      cursor += word.length;
+      if (i != widget.paragraph.length - 1) {
+        sb.write(' ');
+        cursor += 1;
+      }
     }
+
+    _paragraphText = sb.toString();
+    _wordRanges = ranges;
   }
 
-  void _handleTap(TapDownDetails details) {
-    final RenderBox renderBox = context.findRenderObject() as RenderBox;
-    final localPosition = renderBox.globalToLocal(details.globalPosition);
-
-    for (int i = 0; i < _wordKeys.length; i++) {
-      final wordKey = _wordKeys[i];
-      final wordRenderBox =
-          wordKey.currentContext?.findRenderObject() as RenderBox?;
-
-      if (wordRenderBox != null) {
-        final wordPosition = renderBox.globalToLocal(
-          wordRenderBox.localToGlobal(Offset.zero),
+  void _handleWordTap(WordItem wordItem) {
+    if (wordItem.paragraphIndex != null && wordItem.wordIndex != null) {
+      if (!(widget.selectedParagraphIndex == wordItem.paragraphIndex &&
+          widget.selectedWordIndex == wordItem.wordIndex)) {
+        widget.selectWord(wordItem.paragraphIndex!, wordItem.wordIndex!);
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return TranslatedDialog(phrase: wordItem.wordText);
+          },
         );
-        final wordSize = wordRenderBox.size;
-        final wordRect = Rect.fromLTWH(
-          wordPosition.dx,
-          wordPosition.dy,
-          wordSize.width,
-          wordSize.height,
-        );
-
-        if (wordRect.contains(localPosition)) {
-          final wordItem = widget.paragraph[i];
-          if (wordItem.paragraphIndex != null && wordItem.wordIndex != null) {
-            // если слово не выделено, то выделяем его
-            if (!(widget.selectedParagraphIndex == wordItem.paragraphIndex &&
-                widget.selectedWordIndex == wordItem.wordIndex)) {
-              widget.selectWord(wordItem.paragraphIndex!, wordItem.wordIndex!);
-            } else {
-              // иначе будем показывать перевод слова из словаря
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return TranslatedDialog(phrase: wordItem.wordText);
-                },
-              );
-            }
-          }
-          break;
-        }
       }
     }
   }
 
+  // Возвращаем индекс слова по смещению в строке абзаца, используя предрасчитанные диапазоны `_wordRanges`.
+  int? _getWordIndexForTextOffset(int offset) {
+    for (var i = 0; i < _wordRanges.length; i++) {
+      final r = _wordRanges[i];
+      if (offset >= r.start && offset < r.end) return i;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: _handleTap,
-      child: Wrap(
-        spacing: 10,
-        alignment: WrapAlignment.spaceBetween,
-        runSpacing: 3,
-        children: _words,
-      ),
+    final style = TextStyle(
+      fontSize: 24,
+      height: 1.3,
+      color: Theme.of(context).textTheme.bodyLarge?.color,
     );
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final indentWidth = (style.fontSize ?? 24) * 1.5;
+        const indentCharCount = 1;
+
+        final textSpan = TextSpan(
+          children: [
+            WidgetSpan(child: SizedBox(width: indentWidth)),
+            TextSpan(text: _paragraphText, style: style),
+          ],
+        );
+
+        final tp = TextPainter(
+          text: textSpan,
+          textAlign: TextAlign.justify,
+          textDirection: TextDirection.ltr,
+        );
+
+        tp.setPlaceholderDimensions([
+          PlaceholderDimensions(
+            size: Size(
+              indentWidth,
+              (style.fontSize ?? 24) * (style.height ?? 1.0),
+            ),
+            alignment: PlaceholderAlignment.middle,
+            baseline: null,
+            baselineOffset: 0,
+          ),
+        ]);
+
+        tp.layout(maxWidth: constraints.maxWidth);
+
+        _WordRange? selectedRange;
+        if (widget.paragraphIndex == widget.selectedParagraphIndex &&
+            widget.selectedWordIndex >= 0 &&
+            widget.selectedWordIndex < _wordRanges.length) {
+          selectedRange = _wordRanges[widget.selectedWordIndex];
+        }
+
+        // Сдвигаем диапазон на символы отступа, чтобы подсветка совпадала.
+        final _WordRange? adjustedRange = selectedRange == null
+            ? null
+            : _WordRange(
+                selectedRange.start + indentCharCount,
+                selectedRange.end + indentCharCount,
+              );
+
+        return GestureDetector(
+          behavior: HitTestBehavior.deferToChild,
+          onTapDown: (details) {
+            final local = details.localPosition;
+            final dx = local.dx;
+            if (dx < 0) return;
+            // Получаем позицию в тексте с учетом отступа.
+            final pos = tp.getPositionForOffset(Offset(dx, local.dy));
+            final offset = pos.offset;
+
+            if (offset < indentCharCount) return;
+            final normalizedOffset = offset - indentCharCount;
+
+            // Проверяем границы и игнорируем пробелы между словами.
+            if (normalizedOffset < 0 ||
+                normalizedOffset >= _paragraphText.length) {
+              return;
+            }
+            if (_paragraphText[normalizedOffset] == ' ') return;
+
+            // По смещению ищем индекс слова и обрабатываем нажатие.
+            final wordIndex = _getWordIndexForTextOffset(normalizedOffset);
+            if (wordIndex != null) {
+              _handleWordTap(widget.paragraph[wordIndex]);
+            }
+          },
+          child: SizedBox(
+            width: double.infinity,
+            height: tp.height,
+            child: CustomPaint(
+              painter: _OriginalParagraphPainter(
+                textPainter: tp,
+                selectedRange: adjustedRange,
+                highlightColor: Colors.yellow,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _WordRange {
+  final int start;
+  final int end;
+  const _WordRange(this.start, this.end);
+}
+
+class _OriginalParagraphPainter extends CustomPainter {
+  final TextPainter textPainter;
+  final _WordRange? selectedRange;
+  final Color? highlightColor;
+
+  _OriginalParagraphPainter({
+    required this.textPainter,
+    this.selectedRange,
+    this.highlightColor,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.save();
+
+    if (selectedRange != null && highlightColor != null) {
+      final boxes = textPainter.getBoxesForSelection(
+        TextSelection(
+          baseOffset: selectedRange!.start,
+          extentOffset: selectedRange!.end,
+        ),
+      );
+      final paint = Paint()..color = highlightColor!;
+      for (final box in boxes) {
+        final rect = Rect.fromLTWH(
+          box.left,
+          box.top,
+          box.right - box.left,
+          box.bottom - box.top,
+        );
+        canvas.drawRect(rect, paint);
+      }
+    }
+
+    textPainter.paint(canvas, Offset.zero);
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(covariant _OriginalParagraphPainter oldDelegate) {
+    final rangeChanged =
+        (oldDelegate.selectedRange?.start != selectedRange?.start) ||
+        (oldDelegate.selectedRange?.end != selectedRange?.end);
+    return oldDelegate.textPainter.text != textPainter.text ||
+        rangeChanged ||
+        oldDelegate.highlightColor != highlightColor;
   }
 }
