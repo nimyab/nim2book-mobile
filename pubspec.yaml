@@ -54,6 +54,7 @@ dependencies:
   firebase_messaging: ^16.0.2
   file_picker: ^8.1.6
   flutter_native_splash: ^2.4.6
+  google_fonts: ^6.2.0
 
 dev_dependencies:
   flutter_test:

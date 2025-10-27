@@ -258,4 +258,54 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get know => 'Знаю';
+
+  @override
+  String get menu => 'Меню';
+
+  @override
+  String get bookTextSettings => 'Текст книги';
+
+  @override
+  String get font => 'Шрифт';
+
+  @override
+  String get reset => 'Сброс';
+
+  @override
+  String fontSizeValue(int size) {
+    return 'Размер шрифта: $size';
+  }
+
+  @override
+  String get backgroundColor => 'Цвет фона';
+
+  @override
+  String get textColor => 'Цвет текста';
+
+  @override
+  String lineHeightValue(String value) {
+    return 'Межстрочный интервал: $value';
+  }
+
+  @override
+  String sidePaddingPx(int px) {
+    return 'Отступ по краям: $px px';
+  }
+
+  @override
+  String firstLineIndentEm(String em) {
+    return 'Отступ начала абзаца: $em em';
+  }
+
+  @override
+  String paragraphSpacingPx(int px) {
+    return 'Отступ между абзацами: $px px';
+  }
+
+  @override
+  String get parallelTranslationHorizontalScroll =>
+      'Параллельный перевод (горизонтальный скролл)';
+
+  @override
+  String get resetPosition => 'Сброс положения';
 }

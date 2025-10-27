@@ -335,6 +335,84 @@
   "know": "Know",
   "@know": {
     "description": "Know button text"
+  },
+
+  "menu": "Menu",
+  "@menu": {
+    "description": "Overflow menu tooltip"
+  },
+  "bookTextSettings": "Book text",
+  "@bookTextSettings": {
+    "description": "Settings section title for book text"
+  },
+  "font": "Font",
+  "@font": {
+    "description": "Font label"
+  },
+  "reset": "Reset",
+  "@reset": {
+    "description": "Reset button text"
+  },
+  "fontSizeValue": "Font size: {size}",
+  "@fontSizeValue": {
+    "description": "Font size with current value",
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "backgroundColor": "Background color",
+  "@backgroundColor": {
+    "description": "Background color label"
+  },
+  "textColor": "Text color",
+  "@textColor": {
+    "description": "Text color label"
+  },
+  "lineHeightValue": "Line height: {value}",
+  "@lineHeightValue": {
+    "description": "Line height with current value",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "sidePaddingPx": "Side padding: {px} px",
+  "@sidePaddingPx": {
+    "description": "Side padding with current value in px",
+    "placeholders": {
+      "px": {
+        "type": "int"
+      }
+    }
+  },
+  "firstLineIndentEm": "First line indent: {em} em",
+  "@firstLineIndentEm": {
+    "description": "First line indent with current value in em",
+    "placeholders": {
+      "em": {
+        "type": "String"
+      }
+    }
+  },
+  "paragraphSpacingPx": "Paragraph spacing: {px} px",
+  "@paragraphSpacingPx": {
+    "description": "Paragraph spacing with current value in px",
+    "placeholders": {
+      "px": {
+        "type": "int"
+      }
+    }
+  },
+  "parallelTranslationHorizontalScroll": "Parallel translation (horizontal scroll)",
+  "@parallelTranslationHorizontalScroll": {
+    "description": "Parallel translation settings title"
+  },
+  "resetPosition": "Reset position",
+  "@resetPosition": {
+    "description": "Reset position button text"
   }
 }
 

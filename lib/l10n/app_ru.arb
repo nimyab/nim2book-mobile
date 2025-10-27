@@ -335,5 +335,83 @@
   "know": "Знаю",
   "@know": {
     "description": "Know button text"
+  },
+
+  "menu": "Меню",
+  "@menu": {
+    "description": "Overflow menu tooltip"
+  },
+  "bookTextSettings": "Текст книги",
+  "@bookTextSettings": {
+    "description": "Settings section title for book text"
+  },
+  "font": "Шрифт",
+  "@font": {
+    "description": "Font label"
+  },
+  "reset": "Сброс",
+  "@reset": {
+    "description": "Reset button text"
+  },
+  "fontSizeValue": "Размер шрифта: {size}",
+  "@fontSizeValue": {
+    "description": "Font size with current value",
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "backgroundColor": "Цвет фона",
+  "@backgroundColor": {
+    "description": "Background color label"
+  },
+  "textColor": "Цвет текста",
+  "@textColor": {
+    "description": "Text color label"
+  },
+  "lineHeightValue": "Межстрочный интервал: {value}",
+  "@lineHeightValue": {
+    "description": "Line height with current value",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "sidePaddingPx": "Отступ по краям: {px} px",
+  "@sidePaddingPx": {
+    "description": "Side padding with current value in px",
+    "placeholders": {
+      "px": {
+        "type": "int"
+      }
+    }
+  },
+  "firstLineIndentEm": "Отступ начала абзаца: {em} em",
+  "@firstLineIndentEm": {
+    "description": "First line indent with current value in em",
+    "placeholders": {
+      "em": {
+        "type": "String"
+      }
+    }
+  },
+  "paragraphSpacingPx": "Отступ между абзацами: {px} px",
+  "@paragraphSpacingPx": {
+    "description": "Paragraph spacing with current value in px",
+    "placeholders": {
+      "px": {
+        "type": "int"
+      }
+    }
+  },
+  "parallelTranslationHorizontalScroll": "Параллельный перевод (горизонтальный скролл)",
+  "@parallelTranslationHorizontalScroll": {
+    "description": "Parallel translation settings title"
+  },
+  "resetPosition": "Сброс положения",
+  "@resetPosition": {
+    "description": "Reset position button text"
   }
 }

@@ -258,4 +258,54 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get know => 'Know';
+
+  @override
+  String get menu => 'Menu';
+
+  @override
+  String get bookTextSettings => 'Book text';
+
+  @override
+  String get font => 'Font';
+
+  @override
+  String get reset => 'Reset';
+
+  @override
+  String fontSizeValue(int size) {
+    return 'Font size: $size';
+  }
+
+  @override
+  String get backgroundColor => 'Background color';
+
+  @override
+  String get textColor => 'Text color';
+
+  @override
+  String lineHeightValue(String value) {
+    return 'Line height: $value';
+  }
+
+  @override
+  String sidePaddingPx(int px) {
+    return 'Side padding: $px px';
+  }
+
+  @override
+  String firstLineIndentEm(String em) {
+    return 'First line indent: $em em';
+  }
+
+  @override
+  String paragraphSpacingPx(int px) {
+    return 'Paragraph spacing: $px px';
+  }
+
+  @override
+  String get parallelTranslationHorizontalScroll =>
+      'Parallel translation (horizontal scroll)';
+
+  @override
+  String get resetPosition => 'Reset position';
 }

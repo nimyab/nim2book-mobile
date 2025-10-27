@@ -589,6 +589,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Know'**
   String get know;
+
+  /// Overflow menu tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get menu;
+
+  /// Settings section title for book text
+  ///
+  /// In en, this message translates to:
+  /// **'Book text'**
+  String get bookTextSettings;
+
+  /// Font label
+  ///
+  /// In en, this message translates to:
+  /// **'Font'**
+  String get font;
+
+  /// Reset button text
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get reset;
+
+  /// Font size with current value
+  ///
+  /// In en, this message translates to:
+  /// **'Font size: {size}'**
+  String fontSizeValue(int size);
+
+  /// Background color label
+  ///
+  /// In en, this message translates to:
+  /// **'Background color'**
+  String get backgroundColor;
+
+  /// Text color label
+  ///
+  /// In en, this message translates to:
+  /// **'Text color'**
+  String get textColor;
+
+  /// Line height with current value
+  ///
+  /// In en, this message translates to:
+  /// **'Line height: {value}'**
+  String lineHeightValue(String value);
+
+  /// Side padding with current value in px
+  ///
+  /// In en, this message translates to:
+  /// **'Side padding: {px} px'**
+  String sidePaddingPx(int px);
+
+  /// First line indent with current value in em
+  ///
+  /// In en, this message translates to:
+  /// **'First line indent: {em} em'**
+  String firstLineIndentEm(String em);
+
+  /// Paragraph spacing with current value in px
+  ///
+  /// In en, this message translates to:
+  /// **'Paragraph spacing: {px} px'**
+  String paragraphSpacingPx(int px);
+
+  /// Parallel translation settings title
+  ///
+  /// In en, this message translates to:
+  /// **'Parallel translation (horizontal scroll)'**
+  String get parallelTranslationHorizontalScroll;
+
+  /// Reset position button text
+  ///
+  /// In en, this message translates to:
+  /// **'Reset position'**
+  String get resetPosition;
 }
 
 class _AppLocalizationsDelegate

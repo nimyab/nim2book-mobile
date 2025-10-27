@@ -7,9 +7,26 @@ import 'package:nim2book_mobile_flutter/features/book_reading/widgets/select_cha
 import 'package:provider/provider.dart';
 
 class OriginalTextScroll extends StatefulWidget {
-  const OriginalTextScroll({super.key, this.translatedScrollController});
+  const OriginalTextScroll({
+    super.key,
+    this.translatedScrollController,
+    this.fontFamily,
+    this.fontSize,
+    this.textColor,
+    this.lineHeight,
+    this.sidePadding,
+    this.firstLineIndentEm,
+    this.paragraphSpacing,
+  });
 
   final ScrollController? translatedScrollController;
+  final String? fontFamily;
+  final double? fontSize;
+  final Color? textColor;
+  final double? lineHeight;
+  final double? sidePadding;
+  final double? firstLineIndentEm;
+  final double? paragraphSpacing;
 
   @override
   State<OriginalTextScroll> createState() => _OriginalTextScrollState();
@@ -105,7 +122,10 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
           final paragraphConverted = currentConvertedChapter[paragraphIndex];
 
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+            padding: EdgeInsets.symmetric(
+              horizontal: widget.sidePadding ?? 10,
+              vertical: widget.paragraphSpacing ?? 7,
+            ),
             child: OriginalParagraph(
               key: ValueKey(
                 'chapter_${currentChapterIndex}_paragraph_$paragraphIndex',
@@ -115,6 +135,11 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
               selectedParagraphIndex: readingContext.selectedParagraphIndex,
               selectedWordIndex: readingContext.selectedWordIndex,
               selectWord: readingContext.selectWord,
+              fontFamily: widget.fontFamily,
+              fontSize: widget.fontSize,
+              textColor: widget.textColor,
+              lineHeight: widget.lineHeight,
+              firstLineIndentEm: widget.firstLineIndentEm,
             ),
           );
         },
