@@ -22,11 +22,8 @@ class BookReadingContext with ChangeNotifier {
   ChapterAlignNode get currentChapter => _chapters[_currentChapterIndex];
   int get totalChapters => _chapters.length;
 
-  // список глав, нужно для удобного отображения оригинального текста
-  // массив параграфов, где каждый параграф это массив слов и промежуточных строк
-  late final List<List<List<WordItem>>> _convertedChapters;
-  List<List<WordItem>> get currentConvertedChapter =>
-      _convertedChapters[_currentChapterIndex];
+  // Количество параграфов в текущей главе
+  int get currentParagraphCount => currentChapter.content.length;
 
   final String _bookId;
 
@@ -52,10 +49,6 @@ class BookReadingContext with ChangeNotifier {
     );
     if (currentChapterIndex != null) _currentChapterIndex = currentChapterIndex;
 
-    _convertedChapters = chapters.map((chapter) {
-      return _getChapterItems(chapter);
-    }).toList();
-
     final savedProgress = _sharedPreferences.getDouble(
       chapterProgressKey(_bookId),
     );
@@ -64,40 +57,34 @@ class BookReadingContext with ChangeNotifier {
     notifyListeners();
   }
 
-  List<List<WordItem>> _getChapterItems(ChapterAlignNode chapter) {
-    // преобразую каждый оригинальный параграф главы в список слов
-    // для удобного отображения и выделения слов
-    final chapterItems = <List<WordItem>>[];
-
-    for (
-      var paragraphIndex = 0;
-      paragraphIndex < chapter.content.length;
-      paragraphIndex++
-    ) {
-      final paragraph = chapter.content[paragraphIndex];
-      final originalParagraphAsStrings = <WordItem>[];
-      final alignWordNodes = paragraph.aw;
-
-      for (var wordIndex = 0; wordIndex < alignWordNodes.length; wordIndex++) {
-        final wordAlign = alignWordNodes[wordIndex];
-        final startIndex = wordAlign.iow.first;
-        final endIndex = wordAlign.iow.last;
-
-        final wordText = paragraph.op.substring(startIndex, endIndex);
-
-        originalParagraphAsStrings.add(
-          WordItem(
-            wordText: wordText,
-            wordIndex: wordIndex,
-            paragraphIndex: paragraphIndex,
-          ),
-        );
-      }
-
-      chapterItems.add(originalParagraphAsStrings);
+  // Возвращает список слов для указанного параграфа текущей главы.
+  // Каждый вызов создает новые элементы, избегая общей предвычисленной структуры.
+  List<WordItem> getParagraphItems(int paragraphIndex) {
+    if (paragraphIndex < 0 || paragraphIndex >= currentChapter.content.length) {
+      return const [];
     }
 
-    return chapterItems;
+    final paragraph = currentChapter.content[paragraphIndex];
+    final alignWordNodes = paragraph.aw;
+    final items = <WordItem>[];
+
+    for (var wordIndex = 0; wordIndex < alignWordNodes.length; wordIndex++) {
+      final wordAlign = alignWordNodes[wordIndex];
+      final startIndex = wordAlign.iow.first;
+      final endIndex = wordAlign.iow.last;
+
+      final wordText = paragraph.op.substring(startIndex, endIndex);
+
+      items.add(
+        WordItem(
+          wordText: wordText,
+          wordIndex: wordIndex,
+          paragraphIndex: paragraphIndex,
+        ),
+      );
+    }
+
+    return items;
   }
 
   void goToChapter(int index) {

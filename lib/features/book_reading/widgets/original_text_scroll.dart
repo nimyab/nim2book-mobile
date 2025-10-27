@@ -77,7 +77,7 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
   @override
   Widget build(BuildContext context) {
     final readingContext = context.watch<BookReadingContext>();
-    final currentConvertedChapter = readingContext.currentConvertedChapter;
+    final paragraphCount = readingContext.currentParagraphCount;
     final currentChapterIndex = readingContext.currentChapterIndex;
 
     return GestureDetector(
@@ -113,13 +113,15 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
         padding: const EdgeInsets.only(bottom: 20),
         cacheExtent: 2000,
         controller: _scrollController,
-        itemCount: currentConvertedChapter.length + 1,
+        itemCount: paragraphCount + 1,
         itemBuilder: (context, paragraphIndex) {
-          if (paragraphIndex == currentConvertedChapter.length) {
+          if (paragraphIndex == paragraphCount) {
             return const SelectChapterButtons();
           }
 
-          final paragraphConverted = currentConvertedChapter[paragraphIndex];
+          final paragraphConverted = readingContext.getParagraphItems(
+            paragraphIndex,
+          );
 
           return Padding(
             padding: EdgeInsets.symmetric(
