@@ -14,12 +14,21 @@ class BookReading extends StatefulWidget {
 }
 
 class _BookReadingState extends State<BookReading> {
+  late final ScrollController _translatedController;
+
   @override
   void initState() {
     super.initState();
+    _translatedController = ScrollController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<LoadingBookContext>().getBookData();
     });
+  }
+
+  @override
+  void dispose() {
+    _translatedController.dispose();
+    super.dispose();
   }
 
   @override
@@ -56,8 +65,16 @@ class _BookReadingState extends State<BookReading> {
             final index = readingContext.currentChapterIndex;
             return Column(
               children: [
-                TranslatedTextScroll(key: ValueKey(index)),
-                Expanded(child: OriginalTextScroll(key: ValueKey(index))),
+                TranslatedTextScroll(
+                  key: ValueKey(index),
+                  controller: _translatedController,
+                ),
+                Expanded(
+                  child: OriginalTextScroll(
+                    key: ValueKey(index),
+                    translatedScrollController: _translatedController,
+                  ),
+                ),
               ],
             );
           },

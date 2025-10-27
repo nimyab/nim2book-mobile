@@ -4,7 +4,9 @@ import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_read
 import 'package:provider/provider.dart';
 
 class TranslatedTextScroll extends StatelessWidget {
-  const TranslatedTextScroll({super.key});
+  const TranslatedTextScroll({super.key, this.controller});
+
+  final ScrollController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,7 @@ class TranslatedTextScroll extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10),
         alignment: Alignment.bottomRight,
         child: ListView.separated(
+          controller: controller,
           separatorBuilder: (context, index) => SizedBox(width: 10),
           cacheExtent: double.infinity,
           scrollDirection: Axis.horizontal,

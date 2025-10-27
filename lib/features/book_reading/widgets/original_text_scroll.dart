@@ -7,7 +7,9 @@ import 'package:nim2book_mobile_flutter/features/book_reading/widgets/select_cha
 import 'package:provider/provider.dart';
 
 class OriginalTextScroll extends StatefulWidget {
-  const OriginalTextScroll({super.key});
+  const OriginalTextScroll({super.key, this.translatedScrollController});
+
+  final ScrollController? translatedScrollController;
 
   @override
   State<OriginalTextScroll> createState() => _OriginalTextScrollState();
@@ -61,32 +63,62 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
     final currentConvertedChapter = readingContext.currentConvertedChapter;
     final currentChapterIndex = readingContext.currentChapterIndex;
 
-    return ListView.builder(
-      padding: const EdgeInsets.only(bottom: 20),
-      cacheExtent: 2000,
-      controller: _scrollController,
-      itemCount: currentConvertedChapter.length + 1,
-      itemBuilder: (context, paragraphIndex) {
-        if (paragraphIndex == currentConvertedChapter.length) {
-          return const SelectChapterButtons();
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onHorizontalDragUpdate: (details) {
+        final controller = widget.translatedScrollController;
+        if (controller != null && controller.hasClients) {
+          final maxExtent = controller.position.maxScrollExtent;
+          final newOffset = (controller.offset - details.delta.dx).clamp(
+            0.0,
+            maxExtent,
+          );
+          controller.jumpTo(newOffset);
         }
-
-        final paragraphConverted = currentConvertedChapter[paragraphIndex];
-
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-          child: OriginalParagraph(
-            key: ValueKey(
-              'chapter_${currentChapterIndex}_paragraph_$paragraphIndex',
-            ),
-            paragraph: paragraphConverted,
-            paragraphIndex: paragraphIndex,
-            selectedParagraphIndex: readingContext.selectedParagraphIndex,
-            selectedWordIndex: readingContext.selectedWordIndex,
-            selectWord: readingContext.selectWord,
-          ),
-        );
       },
+      onHorizontalDragEnd: (details) {
+        final controller = widget.translatedScrollController;
+        if (controller != null && controller.hasClients) {
+          final vx = details.velocity.pixelsPerSecond.dx;
+          final maxExtent = controller.position.maxScrollExtent;
+          final target = (controller.offset - vx * 0.20).clamp(0.0, maxExtent);
+          final int durationMs = (200 + vx.abs() * 1.0)
+              .clamp(0.0, 500.0)
+              .toInt();
+          controller.animateTo(
+            target,
+            duration: Duration(milliseconds: durationMs),
+            curve: Curves.decelerate,
+          );
+        }
+      },
+      child: ListView.builder(
+        padding: const EdgeInsets.only(bottom: 20),
+        cacheExtent: 2000,
+        controller: _scrollController,
+        itemCount: currentConvertedChapter.length + 1,
+        itemBuilder: (context, paragraphIndex) {
+          if (paragraphIndex == currentConvertedChapter.length) {
+            return const SelectChapterButtons();
+          }
+
+          final paragraphConverted = currentConvertedChapter[paragraphIndex];
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+            child: OriginalParagraph(
+              key: ValueKey(
+                'chapter_${currentChapterIndex}_paragraph_$paragraphIndex',
+              ),
+              paragraph: paragraphConverted,
+              paragraphIndex: paragraphIndex,
+              selectedParagraphIndex: readingContext.selectedParagraphIndex,
+              selectedWordIndex: readingContext.selectedWordIndex,
+              selectWord: readingContext.selectWord,
+            ),
+          );
+        },
+      ),
     );
   }
 }
