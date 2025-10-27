@@ -59,7 +59,44 @@ class _BookReadingState extends State<BookReading> {
       update: (context, value, previous) =>
           BookReadingContext(bookId: book.id, chapters: value.chapters),
       child: Scaffold(
-        appBar: AppBar(title: Text(book.title)),
+        appBar: AppBar(
+          centerTitle: false,
+          toolbarHeight: 64,
+          title: Consumer<BookReadingContext>(
+            builder: (context, readingContext, _) {
+              final theme = Theme.of(context);
+              final percent = readingContext.totalChapters == 0
+                  ? 0
+                  : (((readingContext.currentChapterIndex + 1) /
+                                readingContext.totalChapters) *
+                            100)
+                        .round();
+              final chapterTitle =
+                  readingContext.currentChapter.translatedTitle.isNotEmpty
+                  ? readingContext.currentChapter.translatedTitle
+                  : readingContext.currentChapter.title;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    book.title,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                  Text(
+                    '$percent% - $chapterTitle',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
         body: Consumer<BookReadingContext>(
           builder: (context, readingContext, child) {
             final index = readingContext.currentChapterIndex;
