@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
+import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
 import 'package:nim2book_mobile_flutter/features/translated_dialog/translated_dialog.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -99,6 +100,7 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
 
   @override
   Widget build(BuildContext context) {
+    final readingColors = Theme.of(context).extension<BookReadingColors>()!;
     final baseStyle = TextStyle(
       fontSize: widget.fontSize ?? 24,
       height: widget.lineHeight ?? 1.3,
@@ -197,7 +199,7 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
               painter: _OriginalParagraphPainter(
                 textPainter: tp,
                 selectedRange: adjustedRange,
-                highlightColor: Colors.yellow,
+                highlightColor: readingColors.highlightBackgroundColor,
               ),
             ),
           ),

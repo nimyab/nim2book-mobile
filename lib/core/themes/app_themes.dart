@@ -33,7 +33,7 @@ class AppThemes {
           vertical: 12,
         ),
       ),
-      extensions: [TranslatedTextScrollColors.light],
+      extensions: [TranslatedTextScrollColors.light, BookReadingColors.light],
     );
   }
 
@@ -69,7 +69,7 @@ class AppThemes {
           vertical: 12,
         ),
       ),
-      extensions: [TranslatedTextScrollColors.dark],
+      extensions: [TranslatedTextScrollColors.dark, BookReadingColors.dark],
     );
   }
 }
@@ -105,6 +105,55 @@ class TranslatedTextScrollColors
     }
     return TranslatedTextScrollColors(
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t)!,
+    );
+  }
+}
+
+class BookReadingColors extends ThemeExtension<BookReadingColors> {
+  const BookReadingColors({
+    required this.highlightBackgroundColor,
+    required this.highlightTextColor,
+  });
+
+  final Color highlightBackgroundColor;
+  final Color highlightTextColor;
+
+  static const BookReadingColors light = BookReadingColors(
+    highlightBackgroundColor: Colors.yellow,
+    highlightTextColor: Colors.black87,
+  );
+
+  static const BookReadingColors dark = BookReadingColors(
+    highlightBackgroundColor: Colors.indigo,
+    highlightTextColor: Colors.white,
+  );
+
+  @override
+  BookReadingColors copyWith({
+    Color? highlightBackgroundColor,
+    Color? highlightTextColor,
+  }) {
+    return BookReadingColors(
+      highlightBackgroundColor:
+          highlightBackgroundColor ?? this.highlightBackgroundColor,
+      highlightTextColor: highlightTextColor ?? this.highlightTextColor,
+    );
+  }
+
+  @override
+  BookReadingColors lerp(BookReadingColors? other, double t) {
+    if (other is! BookReadingColors) return this;
+    return BookReadingColors(
+      highlightBackgroundColor: Color.lerp(
+        highlightBackgroundColor,
+        other.highlightBackgroundColor,
+        t,
+      )!,
+      highlightTextColor: Color.lerp(
+        highlightTextColor,
+        other.highlightTextColor,
+        t,
+      )!,
     );
   }
 }
