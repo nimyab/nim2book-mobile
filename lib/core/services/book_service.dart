@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
@@ -74,14 +75,16 @@ class BookService {
 
       final cachedChapter = _sharedPreferences.getString(chapterKey);
       if (cachedChapter != null) {
-        return ChapterAlignNode.fromJson(jsonDecode(cachedChapter));
+        return ChapterAlignNode.fromJson(
+          jsonDecode(_decompressString(cachedChapter)),
+        );
       }
 
       final chapter = await _apiClient.getChapter(path);
 
       final isAdded = await _sharedPreferences.setString(
         chapterKey,
-        jsonEncode(chapter.toJson()),
+        _compressString(jsonEncode(chapter.toJson())),
       );
       if (!isAdded) {
         _logger.w('Failed to cache chapter at path $path');
@@ -92,5 +95,19 @@ class BookService {
       _logger.e('Error fetching chapter at path $path: $e');
     }
     return null;
+  }
+
+  /// Compresses a string using GZip and returns a Base64 encoded string
+  String _compressString(String input) {
+    final bytes = utf8.encode(input);
+    final compressed = gzip.encode(bytes);
+    return base64Encode(compressed);
+  }
+
+  /// Decompresses a Base64 encoded GZip string
+  String _decompressString(String compressed) {
+    final bytes = base64Decode(compressed);
+    final decompressed = gzip.decode(bytes);
+    return utf8.decode(decompressed);
   }
 }
