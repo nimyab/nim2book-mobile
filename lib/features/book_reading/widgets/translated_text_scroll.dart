@@ -13,6 +13,7 @@ class TranslatedTextScroll extends StatelessWidget {
     final readingContext = context.watch<BookReadingContext>();
     final theme = Theme.of(context);
     final scrollColors = theme.extension<TranslatedTextScrollColors>()!;
+    final readingColors = theme.extension<BookReadingColors>()!;
 
     final selectedParagraphIndex = readingContext.selectedParagraphIndex;
     final selectedWordIndex = readingContext.selectedWordIndex;
@@ -73,8 +74,9 @@ class TranslatedTextScroll extends StatelessWidget {
                           ),
                           style: TextStyle(
                             fontSize: 20,
-                            backgroundColor: Colors.yellow,
-                            color: Colors.black87,
+                            backgroundColor:
+                                readingColors.highlightBackgroundColor,
+                            color: readingColors.highlightTextColor,
                           ),
                         ),
                       ),
