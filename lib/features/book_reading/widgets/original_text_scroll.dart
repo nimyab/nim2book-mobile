@@ -17,6 +17,7 @@ class OriginalTextScroll extends StatefulWidget {
     this.sidePadding,
     this.firstLineIndentEm,
     this.paragraphSpacing,
+    this.textAlign,
   });
 
   final ScrollController? translatedScrollController;
@@ -27,6 +28,7 @@ class OriginalTextScroll extends StatefulWidget {
   final double? sidePadding;
   final double? firstLineIndentEm;
   final double? paragraphSpacing;
+  final TextAlign? textAlign;
 
   @override
   State<OriginalTextScroll> createState() => _OriginalTextScrollState();
@@ -142,6 +144,7 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
               textColor: widget.textColor,
               lineHeight: widget.lineHeight,
               firstLineIndentEm: widget.firstLineIndentEm,
+              textAlign: widget.textAlign,
             ),
           );
         },

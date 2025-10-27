@@ -413,6 +413,33 @@
   "resetPosition": "Reset position",
   "@resetPosition": {
     "description": "Reset position button text"
+  },
+  "textAlignment": "Text alignment",
+  "@textAlignment": {
+    "description": "Label for text alignment setting"
+  },
+  "alignLeft": "Left",
+  "@alignLeft": {"description": "Align left option"},
+  "alignCenter": "Center",
+  "@alignCenter": {"description": "Align center option"},
+  "alignRight": "Right",
+  "@alignRight": {"description": "Align right option"},
+  "alignJustify": "Justify",
+  "@alignJustify": {"description": "Align justify option"},
+
+  "translationVerticalPaddingPx": "Translation vertical padding: {px} px",
+  "@translationVerticalPaddingPx": {
+    "description": "Parallel translation vertical padding (top & bottom)",
+    "placeholders": {"px": {"type": "int"}}
+  },
+  "translationFont": "Translation font",
+  "@translationFont": {
+    "description": "Label for parallel translation font family"
+  },
+  "translationFontSizeValue": "Translation font size: {size}",
+  "@translationFontSizeValue": {
+    "description": "Label for parallel translation font size",
+    "placeholders": {"size": {"type": "int"}}
   }
 }
 

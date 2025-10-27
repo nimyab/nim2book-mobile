@@ -16,6 +16,7 @@ class OriginalParagraph extends StatefulWidget {
   final Color? textColor;
   final double? lineHeight;
   final double? firstLineIndentEm;
+  final TextAlign? textAlign;
 
   const OriginalParagraph({
     super.key,
@@ -29,6 +30,7 @@ class OriginalParagraph extends StatefulWidget {
     this.textColor,
     this.lineHeight,
     this.firstLineIndentEm,
+    this.textAlign,
   });
 
   @override
@@ -134,7 +136,7 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
 
         final tp = TextPainter(
           text: textSpan,
-          textAlign: TextAlign.justify,
+          textAlign: widget.textAlign ?? TextAlign.justify,
           textDirection: TextDirection.ltr,
         );
 

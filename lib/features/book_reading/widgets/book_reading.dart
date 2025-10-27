@@ -31,6 +31,10 @@ class _BookReadingState extends State<BookReading> {
   double _sidePadding = 10;
   double _firstLineIndentEm = 1.5;
   double _paragraphSpacing = 7;
+  TextAlign _textAlign = TextAlign.justify;
+  double _translatedFontSize = 20;
+  String _translatedFontFamily = 'System';
+  double _translatedVerticalPadding = 5;
 
   @override
   void initState() {
@@ -39,6 +43,11 @@ class _BookReadingState extends State<BookReading> {
     _readingPersistence = GetIt.I.get<ReadingPersistence>();
     _fontFamily = _readingPersistence.getFontFamily();
     _fontSize = _readingPersistence.getFontSize();
+    _textAlign = _readingPersistence.getTextAlign();
+    _translatedFontSize = _readingPersistence.getTranslatedFontSize();
+    _translatedFontFamily = _readingPersistence.getTranslatedFontFamily();
+    _translatedVerticalPadding = _readingPersistence
+        .getTranslatedVerticalPadding();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<LoadingBookContext>().getBookData();
@@ -215,6 +224,29 @@ class _BookReadingState extends State<BookReading> {
                                 _readingPersistence.setParagraphSpacing(v);
                               }),
                               translatedController: _translatedController,
+                              textAlign: _textAlign,
+                              onTextAlignChange: (v) => setState(() {
+                                _textAlign = v;
+                                _readingPersistence.setTextAlign(v);
+                              }),
+                              translatedVerticalPadding:
+                                  _translatedVerticalPadding,
+                              onTranslatedVerticalPaddingChange: (v) =>
+                                  setState(() {
+                                    _translatedVerticalPadding = v;
+                                    _readingPersistence
+                                        .setTranslatedVerticalPadding(v);
+                                  }),
+                              translatedFontSize: _translatedFontSize,
+                              onTranslatedFontSizeChange: (v) => setState(() {
+                                _translatedFontSize = v;
+                                _readingPersistence.setTranslatedFontSize(v);
+                              }),
+                              translatedFontFamily: _translatedFontFamily,
+                              onTranslatedFontFamilyChange: (v) => setState(() {
+                                _translatedFontFamily = v;
+                                _readingPersistence.setTranslatedFontFamily(v);
+                              }),
                             ),
                           ],
                         ),
@@ -236,6 +268,9 @@ class _BookReadingState extends State<BookReading> {
                   TranslatedTextScroll(
                     key: ValueKey(index),
                     controller: _translatedController,
+                    fontSize: _translatedFontSize,
+                    fontFamily: _translatedFontFamily,
+                    verticalPadding: _translatedVerticalPadding,
                   ),
                   Expanded(
                     child: OriginalTextScroll(
@@ -248,6 +283,7 @@ class _BookReadingState extends State<BookReading> {
                       sidePadding: _sidePadding,
                       firstLineIndentEm: _firstLineIndentEm,
                       paragraphSpacing: _paragraphSpacing,
+                      textAlign: _textAlign,
                     ),
                   ),
                 ],

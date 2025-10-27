@@ -28,6 +28,16 @@ class TextSettingsTab extends StatefulWidget {
 
   final ScrollController translatedController;
 
+  final TextAlign textAlign;
+  final ValueChanged<TextAlign> onTextAlignChange;
+
+  final double translatedVerticalPadding;
+  final ValueChanged<double> onTranslatedVerticalPaddingChange;
+  final double translatedFontSize;
+  final ValueChanged<double> onTranslatedFontSizeChange;
+  final String translatedFontFamily;
+  final ValueChanged<String> onTranslatedFontFamilyChange;
+
   const TextSettingsTab({
     super.key,
     required this.fontFamily,
@@ -47,6 +57,14 @@ class TextSettingsTab extends StatefulWidget {
     required this.paragraphSpacing,
     required this.onParagraphSpacingChange,
     required this.translatedController,
+    required this.textAlign,
+    required this.onTextAlignChange,
+    required this.translatedVerticalPadding,
+    required this.onTranslatedVerticalPaddingChange,
+    required this.translatedFontSize,
+    required this.onTranslatedFontSizeChange,
+    required this.translatedFontFamily,
+    required this.onTranslatedFontFamilyChange,
   });
 
   @override
@@ -59,6 +77,8 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
   late double _sidePaddingPreview;
   late double _firstLineIndentEmPreview;
   late double _paragraphSpacingPreview;
+  late double _translatedVerticalPaddingPreview;
+  late double _translatedFontSizePreview;
 
   @override
   void initState() {
@@ -68,6 +88,8 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
     _sidePaddingPreview = widget.sidePadding;
     _firstLineIndentEmPreview = widget.firstLineIndentEm;
     _paragraphSpacingPreview = widget.paragraphSpacing;
+    _translatedVerticalPaddingPreview = widget.translatedVerticalPadding;
+    _translatedFontSizePreview = widget.translatedFontSize;
   }
 
   @override
@@ -117,6 +139,47 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                     ),
                     TextButton(
                       onPressed: () => widget.onFontFamilyChange('System'),
+                      child: Text(l10n.reset),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1),
+
+              // Text alignment
+              ListTile(
+                title: Text(l10n.textAlignment),
+                subtitle: Row(
+                  children: [
+                    Expanded(
+                      child: DropdownButton<TextAlign>(
+                        value: widget.textAlign,
+                        isExpanded: true,
+                        items: [
+                          DropdownMenuItem(
+                            value: TextAlign.left,
+                            child: Text(l10n.alignLeft),
+                          ),
+                          DropdownMenuItem(
+                            value: TextAlign.center,
+                            child: Text(l10n.alignCenter),
+                          ),
+                          DropdownMenuItem(
+                            value: TextAlign.right,
+                            child: Text(l10n.alignRight),
+                          ),
+                          DropdownMenuItem(
+                            value: TextAlign.justify,
+                            child: Text(l10n.alignJustify),
+                          ),
+                        ],
+                        onChanged: (v) =>
+                            widget.onTextAlignChange(v ?? TextAlign.justify),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () =>
+                          widget.onTextAlignChange(TextAlign.justify),
                       child: Text(l10n.reset),
                     ),
                   ],
@@ -374,6 +437,117 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
           ExpansionTile(
             title: Text(l10n.parallelTranslationHorizontalScroll),
             children: [
+              // Vertical padding for translation (top & bottom)
+              ListTile(
+                title: Text(
+                  l10n.translationVerticalPaddingPx(
+                    _translatedVerticalPaddingPreview.round(),
+                  ),
+                ),
+                subtitle: Row(
+                  children: [
+                    Expanded(
+                      child: Slider(
+                        value: _translatedVerticalPaddingPreview,
+                        min: 0,
+                        max: 32,
+                        divisions: 32,
+                        label:
+                            '${_translatedVerticalPaddingPreview.round()} px',
+                        onChanged: (v) => setState(
+                          () => _translatedVerticalPaddingPreview = v,
+                        ),
+                        onChangeEnd: (v) =>
+                            widget.onTranslatedVerticalPaddingChange(v),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        setState(() => _translatedVerticalPaddingPreview = 5);
+                        widget.onTranslatedVerticalPaddingChange(5);
+                      },
+                      child: Text(l10n.reset),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1),
+
+              // Font family for translation
+              ListTile(
+                title: Text(l10n.translationFont),
+                subtitle: Row(
+                  children: [
+                    Expanded(
+                      child: DropdownButton<String>(
+                        value: widget.translatedFontFamily,
+                        isExpanded: true,
+                        items: const [
+                          DropdownMenuItem(
+                            value: 'System',
+                            child: Text('System'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'NotoSerif',
+                            child: Text('Noto Serif'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'Merriweather',
+                            child: Text('Merriweather'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'Roboto',
+                            child: Text('Roboto'),
+                          ),
+                        ],
+                        onChanged: (v) =>
+                            widget.onTranslatedFontFamilyChange(v ?? 'System'),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () =>
+                          widget.onTranslatedFontFamilyChange('System'),
+                      child: Text(l10n.reset),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1),
+
+              // Font size for translation
+              ListTile(
+                title: Text(
+                  l10n.translationFontSizeValue(
+                    _translatedFontSizePreview.round(),
+                  ),
+                ),
+                subtitle: Row(
+                  children: [
+                    Expanded(
+                      child: Slider(
+                        value: _translatedFontSizePreview,
+                        min: 12,
+                        max: 32,
+                        divisions: 20,
+                        label: '${_translatedFontSizePreview.round()}',
+                        onChanged: (v) =>
+                            setState(() => _translatedFontSizePreview = v),
+                        onChangeEnd: (v) =>
+                            widget.onTranslatedFontSizeChange(v),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        setState(() => _translatedFontSizePreview = 20);
+                        widget.onTranslatedFontSizeChange(20);
+                      },
+                      child: Text(l10n.reset),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1),
+
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16.0,

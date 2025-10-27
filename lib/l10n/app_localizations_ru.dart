@@ -308,4 +308,32 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get resetPosition => 'Сброс положения';
+
+  @override
+  String get textAlignment => 'Выравнивание текста';
+
+  @override
+  String get alignLeft => 'По левому краю';
+
+  @override
+  String get alignCenter => 'По центру';
+
+  @override
+  String get alignRight => 'По правому краю';
+
+  @override
+  String get alignJustify => 'По ширине';
+
+  @override
+  String translationVerticalPaddingPx(int px) {
+    return 'Вертикальные отступы перевода: $px px';
+  }
+
+  @override
+  String get translationFont => 'Шрифт перевода';
+
+  @override
+  String translationFontSizeValue(int size) {
+    return 'Размер шрифта перевода: $size';
+  }
 }

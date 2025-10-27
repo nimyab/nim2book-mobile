@@ -413,5 +413,32 @@
   "resetPosition": "Сброс положения",
   "@resetPosition": {
     "description": "Reset position button text"
+  },
+  "textAlignment": "Выравнивание текста",
+  "@textAlignment": {
+    "description": "Label for text alignment setting"
+  },
+  "alignLeft": "По левому краю",
+  "@alignLeft": {"description": "Align left option"},
+  "alignCenter": "По центру",
+  "@alignCenter": {"description": "Align center option"},
+  "alignRight": "По правому краю",
+  "@alignRight": {"description": "Align right option"},
+  "alignJustify": "По ширине",
+  "@alignJustify": {"description": "Align justify option"},
+
+  "translationVerticalPaddingPx": "Вертикальные отступы перевода: {px} px",
+  "@translationVerticalPaddingPx": {
+    "description": "Parallel translation vertical padding (top & bottom)",
+    "placeholders": {"px": {"type": "int"}}
+  },
+  "translationFont": "Шрифт перевода",
+  "@translationFont": {
+    "description": "Label for parallel translation font family"
+  },
+  "translationFontSizeValue": "Размер шрифта перевода: {size}",
+  "@translationFontSizeValue": {
+    "description": "Label for parallel translation font size",
+    "placeholders": {"size": {"type": "int"}}
   }
 }

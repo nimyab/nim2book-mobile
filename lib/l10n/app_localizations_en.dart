@@ -308,4 +308,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get resetPosition => 'Reset position';
+
+  @override
+  String get textAlignment => 'Text alignment';
+
+  @override
+  String get alignLeft => 'Left';
+
+  @override
+  String get alignCenter => 'Center';
+
+  @override
+  String get alignRight => 'Right';
+
+  @override
+  String get alignJustify => 'Justify';
+
+  @override
+  String translationVerticalPaddingPx(int px) {
+    return 'Translation vertical padding: $px px';
+  }
+
+  @override
+  String get translationFont => 'Translation font';
+
+  @override
+  String translationFontSizeValue(int size) {
+    return 'Translation font size: $size';
+  }
 }

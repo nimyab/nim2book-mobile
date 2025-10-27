@@ -667,6 +667,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reset position'**
   String get resetPosition;
+
+  /// Label for text alignment setting
+  ///
+  /// In en, this message translates to:
+  /// **'Text alignment'**
+  String get textAlignment;
+
+  /// Align left option
+  ///
+  /// In en, this message translates to:
+  /// **'Left'**
+  String get alignLeft;
+
+  /// Align center option
+  ///
+  /// In en, this message translates to:
+  /// **'Center'**
+  String get alignCenter;
+
+  /// Align right option
+  ///
+  /// In en, this message translates to:
+  /// **'Right'**
+  String get alignRight;
+
+  /// Align justify option
+  ///
+  /// In en, this message translates to:
+  /// **'Justify'**
+  String get alignJustify;
+
+  /// Parallel translation vertical padding (top & bottom)
+  ///
+  /// In en, this message translates to:
+  /// **'Translation vertical padding: {px} px'**
+  String translationVerticalPaddingPx(int px);
+
+  /// Label for parallel translation font family
+  ///
+  /// In en, this message translates to:
+  /// **'Translation font'**
+  String get translationFont;
+
+  /// Label for parallel translation font size
+  ///
+  /// In en, this message translates to:
+  /// **'Translation font size: {size}'**
+  String translationFontSizeValue(int size);
 }
 
 class _AppLocalizationsDelegate
