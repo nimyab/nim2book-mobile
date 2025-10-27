@@ -23,6 +23,7 @@ import 'package:nim2book_mobile_flutter/firebase_options.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/services/reading_persistence.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,6 +72,9 @@ void main() async {
 
   final dictService = DictionaryService();
   GetIt.I.registerSingleton(dictService);
+
+  final readingPersistence = ReadingPersistence();
+  GetIt.I.registerSingleton(readingPersistence);
 
   runApp(const Nim2BookApp());
 }
