@@ -51,6 +51,20 @@ class BookReadingContext with ChangeNotifier {
     notifyListeners();
   }
 
+  void setChapters(List<ChapterAlignNode> chapters) {
+    _chapters
+      ..clear()
+      ..addAll(chapters);
+
+    if (_chapters.isEmpty) {
+      _currentChapterIndex = 0;
+    } else if (_currentChapterIndex >= _chapters.length) {
+      _currentChapterIndex = _chapters.length - 1;
+    }
+
+    notifyListeners();
+  }
+
   // Возвращает список слов для указанного параграфа текущей главы.
   // Каждый вызов создает новые элементы, избегая общей предвычисленной структуры.
   List<WordItem> getParagraphItems(int paragraphIndex) {

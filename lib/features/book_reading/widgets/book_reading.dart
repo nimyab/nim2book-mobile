@@ -18,7 +18,8 @@ class BookReading extends StatefulWidget {
   State<BookReading> createState() => _BookReadingState();
 }
 
-class _BookReadingState extends State<BookReading> {
+class _BookReadingState extends State<BookReading>
+    with TickerProviderStateMixin {
   late final ScrollController _translatedController;
   late final ReadingPersistence _readingPersistence;
   late String _fontFamily;
@@ -26,6 +27,10 @@ class _BookReadingState extends State<BookReading> {
   late Color _backgroundColor;
   late Color _textColor;
   bool _initializedFromTheme = false;
+
+  bool _isTranslatedVisible = false;
+  int _lastSelectionParagraphIndex = -1;
+  int _lastSelectionWordIndex = -1;
 
   double _lineHeight = 1.3;
   double _sidePadding = 10;
@@ -100,8 +105,13 @@ class _BookReadingState extends State<BookReading> {
 
     return ChangeNotifierProxyProvider<LoadingBookContext, BookReadingContext>(
       create: (context) => BookReadingContext(bookId: book.id, chapters: []),
-      update: (context, value, previous) =>
-          BookReadingContext(bookId: book.id, chapters: value.chapters),
+      update: (context, value, previous) {
+        if (previous == null) {
+          return BookReadingContext(bookId: book.id, chapters: value.chapters);
+        }
+        previous.setChapters(value.chapters);
+        return previous;
+      },
       child: Scaffold(
         appBar: AppBar(
           centerTitle: false,
@@ -141,6 +151,21 @@ class _BookReadingState extends State<BookReading> {
             },
           ),
           actions: [
+            Tooltip(
+              message: AppLocalizations.of(context)!.translate,
+              child: IconButton(
+                icon: Icon(
+                  _isTranslatedVisible
+                      ? Icons.keyboard_arrow_down
+                      : Icons.keyboard_arrow_up,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _isTranslatedVisible = !_isTranslatedVisible;
+                  });
+                },
+              ),
+            ),
             Builder(
               builder: (context) => Tooltip(
                 message: AppLocalizations.of(context)!.menu,
@@ -261,16 +286,45 @@ class _BookReadingState extends State<BookReading> {
         body: Consumer<BookReadingContext>(
           builder: (context, readingContext, child) {
             final index = readingContext.currentChapterIndex;
+            final selParagraph = readingContext.selectedParagraphIndex;
+            final selWord = readingContext.selectedWordIndex;
+            final selectionChanged =
+                selParagraph != _lastSelectionParagraphIndex ||
+                selWord != _lastSelectionWordIndex;
+            if (selectionChanged) {
+              _lastSelectionParagraphIndex = selParagraph;
+              _lastSelectionWordIndex = selWord;
+              if (selParagraph != -1 &&
+                  selWord != -1 &&
+                  !_isTranslatedVisible) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) {
+                    setState(() {
+                      _isTranslatedVisible = true;
+                    });
+                  }
+                });
+              }
+            }
             return Container(
               color: _backgroundColor,
               child: Column(
                 children: [
-                  TranslatedTextScroll(
-                    key: ValueKey(index),
-                    controller: _translatedController,
-                    fontSize: _translatedFontSize,
-                    fontFamily: _translatedFontFamily,
-                    verticalPadding: _translatedVerticalPadding,
+                  AnimatedSize(
+                    duration: const Duration(milliseconds: 250),
+                    curve: Curves.easeInOut,
+                    child: ClipRect(
+                      child: Align(
+                        heightFactor: _isTranslatedVisible ? 1.0 : 0.0,
+                        child: TranslatedTextScroll(
+                          key: ValueKey(index),
+                          controller: _translatedController,
+                          fontSize: _translatedFontSize,
+                          fontFamily: _translatedFontFamily,
+                          verticalPadding: _translatedVerticalPadding,
+                        ),
+                      ),
+                    ),
                   ),
                   Expanded(
                     child: OriginalTextScroll(
