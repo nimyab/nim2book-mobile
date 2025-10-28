@@ -391,7 +391,14 @@ class _LearningScreenState extends State<LearningScreen>
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  l10n.noWordsToLearn,
+                  (() {
+                    final srs = GetIt.I.get<SrsService>();
+                    final used = srs.getDailyNewCount();
+                    final total = srs.getDailyNewLimit();
+                    return used >= total
+                        ? l10n.dailyLimitReached
+                        : l10n.noWordsToLearn;
+                  })(),
                   style: theme.textTheme.titleMedium?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),

@@ -45,6 +45,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get settings => 'Настройки';
 
   @override
+  String get dailyNewWordsLimit => 'Лимит новых слов в день';
+
+  @override
+  String get dailyLimitReached =>
+      'Дневной лимит исчерпан. Возвращайтесь завтра или повторите изученные слова.';
+
+  @override
   String get theme => 'Тема';
 
   @override

@@ -170,6 +170,18 @@ abstract class AppLocalizations {
   /// **'Settings'**
   String get settings;
 
+  /// Daily new words limit setting label
+  ///
+  /// In en, this message translates to:
+  /// **'Daily new words limit'**
+  String get dailyNewWordsLimit;
+
+  /// Shown on the learning screen when the daily new words limit has been reached
+  ///
+  /// In en, this message translates to:
+  /// **'Daily limit reached. Come back tomorrow or review existing words.'**
+  String get dailyLimitReached;
+
   /// Theme setting label
   ///
   /// In en, this message translates to:

@@ -45,6 +45,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings => 'Settings';
 
   @override
+  String get dailyNewWordsLimit => 'Daily new words limit';
+
+  @override
+  String get dailyLimitReached =>
+      'Daily limit reached. Come back tomorrow or review existing words.';
+
+  @override
   String get theme => 'Theme';
 
   @override

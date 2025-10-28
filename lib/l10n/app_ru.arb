@@ -48,6 +48,14 @@
   "@settings": {
     "description": "Settings tab/screen title"
   },
+  "dailyNewWordsLimit": "Лимит новых слов в день",
+  "@dailyNewWordsLimit": {
+    "description": "Метка настройки лимита новых слов в день"
+  },
+  "dailyLimitReached": "Дневной лимит исчерпан. Возвращайтесь завтра или повторите изученные слова.",
+  "@dailyLimitReached": {
+    "description": "Сообщение на экране изучения при достижении дневного лимита новых слов"
+  },
   "theme": "Тема",
   "@theme": {
     "description": "Theme setting label"

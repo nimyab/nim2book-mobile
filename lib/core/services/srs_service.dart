@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,6 +12,85 @@ String _srsKey(String word) => 'srs_item_$word';
 class SrsService {
   final SharedPreferences _sharedPreferences = GetIt.I.get<SharedPreferences>();
   final SrsSchedulerSM2 _scheduler = const SrsSchedulerSM2();
+
+  // Наблюдаемый счётчик новых слов за день для авто‑обновления UI
+  late final ValueNotifier<int> dailyNewCountNotifier = ValueNotifier<int>(
+    _getDailyNewCount(),
+  );
+
+  // Дневной лимит новых слов
+  static const int _defaultMaxNewPerDay = 15;
+  static const String _dailyNewCountKey = 'srs_daily_new_count';
+  static const String _dailyNewDateKey = 'srs_daily_new_date';
+  static const String _dailyNewLimitKey = 'srs_daily_new_limit';
+
+  bool _isSameCalendarDay(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
+
+  int _getDailyNewCount({DateTime? now}) {
+    final n = now ?? DateTime.now();
+    final dateStr = _sharedPreferences.getString(_dailyNewDateKey);
+    final count = _sharedPreferences.getInt(_dailyNewCountKey) ?? 0;
+    if (dateStr == null) {
+      // Инициализация
+      _sharedPreferences.setString(_dailyNewDateKey, n.toIso8601String());
+      _sharedPreferences.setInt(_dailyNewCountKey, 0);
+      return 0;
+    }
+    DateTime storedDate;
+    try {
+      storedDate = DateTime.parse(dateStr);
+    } catch (_) {
+      storedDate = n;
+    }
+    if (!_isSameCalendarDay(storedDate, n)) {
+      // Новый день — сброс счётчика
+      _sharedPreferences.setString(_dailyNewDateKey, n.toIso8601String());
+      _sharedPreferences.setInt(_dailyNewCountKey, 0);
+      return 0;
+    }
+    return count;
+  }
+
+  // Публичный доступ к дневному счётчику новых слов
+  int getDailyNewCount({DateTime? now}) => _getDailyNewCount(now: now);
+
+  // Текущий лимит новых слов в день (читается из настроек)
+  int getDailyNewLimit() {
+    return _sharedPreferences.getInt(_dailyNewLimitKey) ?? _defaultMaxNewPerDay;
+  }
+
+  // Сохранение нового лимита
+  Future<void> setDailyNewLimit(int value) async {
+    await _sharedPreferences.setInt(_dailyNewLimitKey, value);
+  }
+
+  void _incrementDailyNewCount({DateTime? now}) {
+    final n = now ?? DateTime.now();
+    final dateStr = _sharedPreferences.getString(_dailyNewDateKey);
+    if (dateStr == null) {
+      _sharedPreferences.setString(_dailyNewDateKey, n.toIso8601String());
+      _sharedPreferences.setInt(_dailyNewCountKey, 1);
+      dailyNewCountNotifier.value = _getDailyNewCount(now: n);
+      return;
+    }
+    DateTime storedDate;
+    try {
+      storedDate = DateTime.parse(dateStr);
+    } catch (_) {
+      storedDate = n;
+    }
+    if (!_isSameCalendarDay(storedDate, n)) {
+      _sharedPreferences.setString(_dailyNewDateKey, n.toIso8601String());
+      _sharedPreferences.setInt(_dailyNewCountKey, 1);
+      dailyNewCountNotifier.value = _getDailyNewCount(now: n);
+    } else {
+      final prev = _sharedPreferences.getInt(_dailyNewCountKey) ?? 0;
+      _sharedPreferences.setInt(_dailyNewCountKey, prev + 1);
+      dailyNewCountNotifier.value = _getDailyNewCount(now: n);
+    }
+  }
 
   SrsItem getOrCreateItem(String word) {
     final jsonStr = _sharedPreferences.getString(_srsKey(word));
@@ -35,7 +115,12 @@ class SrsService {
 
   SrsItem updateWithRating(String word, SrsRating rating) {
     final item = getOrCreateItem(word);
+    final wasNeverReviewed = item.lastReviewedAt == null;
     final updated = _scheduler.updateOnRating(item, rating);
+    // Если слово изучено впервые — увеличиваем дневной счётчик новых слов
+    if (wasNeverReviewed) {
+      _incrementDailyNewCount(now: updated.lastReviewedAt);
+    }
     upsertItem(updated);
     return updated;
   }
@@ -54,13 +139,30 @@ class SrsService {
 
   List<String> getDueWords(Iterable<String> words, {DateTime? now}) {
     final n = now ?? DateTime.now();
-    final due = <String>[];
+    final reviewDue = <String>[]; // уже изученные слова к повторению
+    final newDue = <String>[]; // совершенно новые слова
+
     for (final word in words) {
       final item = getOrCreateItem(word);
       if (!item.nextReviewAt.isAfter(n)) {
-        due.add(word);
+        if (item.lastReviewedAt == null) {
+          newDue.add(word);
+        } else {
+          reviewDue.add(word);
+        }
       }
     }
-    return due;
+
+    final alreadyStartedToday = _getDailyNewCount(now: n);
+    final maxNewPerDay = getDailyNewLimit();
+    final availableSlots = (maxNewPerDay - alreadyStartedToday).clamp(
+      0,
+      maxNewPerDay,
+    );
+    final limitedNew = availableSlots > 0
+        ? newDue.take(availableSlots).toList()
+        : const <String>[];
+
+    return [...reviewDue, ...limitedNew];
   }
 }

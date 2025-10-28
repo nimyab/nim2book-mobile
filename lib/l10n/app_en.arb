@@ -48,6 +48,14 @@
   "@settings": {
     "description": "Settings tab/screen title"
   },
+  "dailyNewWordsLimit": "Daily new words limit",
+  "@dailyNewWordsLimit": {
+    "description": "Daily new words limit setting label"
+  },
+  "dailyLimitReached": "Daily limit reached. Come back tomorrow or review existing words.",
+  "@dailyLimitReached": {
+    "description": "Shown on the learning screen when the daily new words limit has been reached"
+  },
   "theme": "Theme",
   "@theme": {
     "description": "Theme setting label"
