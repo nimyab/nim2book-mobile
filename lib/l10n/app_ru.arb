@@ -462,4 +462,18 @@
   "@notAvailable": {
     "description": "Текст, указывающий на отсутствие данных"
   }
+  ,
+  "hard": "Сложно",
+  "@hard": {
+    "description": "Текст кнопки оценки 'сложно'"
+  },
+  "easy": "Легко",
+  "@easy": {
+    "description": "Текст кнопки оценки 'легко'"
+  },
+  "reviewDueToday": "К повторению сегодня: {count}",
+  "@reviewDueToday": {
+    "description": "Счётчик элементов, требующих повторения сегодня",
+    "placeholders": {"count": {"type": "int"}}
+  }
 }

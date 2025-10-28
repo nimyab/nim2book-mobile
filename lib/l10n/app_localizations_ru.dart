@@ -351,4 +351,15 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get notAvailable => 'Нет данных';
+
+  @override
+  String get hard => 'Сложно';
+
+  @override
+  String get easy => 'Легко';
+
+  @override
+  String reviewDueToday(int count) {
+    return 'К повторению сегодня: $count';
+  }
 }

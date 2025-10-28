@@ -745,6 +745,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'N/A'**
   String get notAvailable;
+
+  /// Hard rating button text
+  ///
+  /// In en, this message translates to:
+  /// **'Hard'**
+  String get hard;
+
+  /// Easy rating button text
+  ///
+  /// In en, this message translates to:
+  /// **'Easy'**
+  String get easy;
+
+  /// Counter of items due for review today
+  ///
+  /// In en, this message translates to:
+  /// **'Due today: {count}'**
+  String reviewDueToday(int count);
 }
 
 class _AppLocalizationsDelegate

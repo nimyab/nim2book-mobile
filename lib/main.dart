@@ -16,6 +16,7 @@ import 'package:nim2book_mobile_flutter/core/router/router.dart';
 import 'package:nim2book_mobile_flutter/core/services/book_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/dictionary_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/fmc_token_service.dart';
+import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/theme_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
@@ -72,6 +73,9 @@ void main() async {
 
   final dictService = DictionaryService();
   GetIt.I.registerSingleton(dictService);
+
+  final srsService = SrsService();
+  GetIt.I.registerSingleton(srsService);
 
   final readingPersistence = ReadingPersistence();
   GetIt.I.registerSingleton(readingPersistence);

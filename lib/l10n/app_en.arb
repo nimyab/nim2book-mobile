@@ -462,5 +462,19 @@
   "@notAvailable": {
     "description": "Text indicating a value is not available"
   }
+  ,
+  "hard": "Hard",
+  "@hard": {
+    "description": "Hard rating button text"
+  },
+  "easy": "Easy",
+  "@easy": {
+    "description": "Easy rating button text"
+  },
+  "reviewDueToday": "Due today: {count}",
+  "@reviewDueToday": {
+    "description": "Counter of items due for review today",
+    "placeholders": {"count": {"type": "int"}}
+  }
 }
 

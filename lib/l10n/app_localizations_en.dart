@@ -351,4 +351,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notAvailable => 'N/A';
+
+  @override
+  String get hard => 'Hard';
+
+  @override
+  String get easy => 'Easy';
+
+  @override
+  String reviewDueToday(int count) {
+    return 'Due today: $count';
+  }
 }

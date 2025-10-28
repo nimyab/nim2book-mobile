@@ -3,8 +3,10 @@ import 'package:nim2book_mobile_flutter/features/translated_dialog/translated_di
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/screens/learning_screen/learning_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../core/contexts/dictionary_context.dart';
+import '../../core/services/srs_service.dart';
 
 class DictionaryScreen extends StatelessWidget {
   const DictionaryScreen({super.key});
@@ -21,6 +23,32 @@ class DictionaryScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
+            if (savedWords.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.schedule,
+                      size: 18,
+                      color: theme.colorScheme.primary,
+                    ),
+                    const SizedBox(width: 8),
+                    Builder(
+                      builder: (context) {
+                        final srs = GetIt.I.get<SrsService>();
+                        final count = srs.getDueCount(savedWords.keys);
+                        return Text(
+                          l10n.reviewDueToday(count),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
             Expanded(
               child: savedWords.isEmpty
                   ? Center(
