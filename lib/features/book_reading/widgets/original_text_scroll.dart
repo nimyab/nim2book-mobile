@@ -81,6 +81,10 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
     final readingContext = context.watch<BookReadingContext>();
     final paragraphCount = readingContext.currentParagraphCount;
     final currentChapterIndex = readingContext.currentChapterIndex;
+    final currentChapter = readingContext.currentChapter;
+    final chapterTitle = currentChapter.translatedTitle.isNotEmpty
+        ? currentChapter.translatedTitle
+        : currentChapter.title;
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -115,12 +119,30 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
         padding: const EdgeInsets.only(bottom: 20),
         cacheExtent: 2000,
         controller: _scrollController,
-        itemCount: paragraphCount + 1,
-        itemBuilder: (context, paragraphIndex) {
-          if (paragraphIndex == paragraphCount) {
+        itemCount: paragraphCount + 2,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: widget.sidePadding ?? 10,
+                vertical: (widget.paragraphSpacing ?? 7) * 3.5,
+              ),
+              child: Text(
+                chapterTitle,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  fontSize: (widget.fontSize ?? 24) * 1.4,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            );
+          }
+
+          if (index == paragraphCount + 1) {
             return const SelectChapterButtons();
           }
 
+          final paragraphIndex = index - 1;
           final paragraphConverted = readingContext.getParagraphItems(
             paragraphIndex,
           );
