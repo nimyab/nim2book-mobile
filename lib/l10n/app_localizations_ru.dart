@@ -139,6 +139,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get addedToMyBooks => 'ДОБАВЛЕНО В МОИ КНИГИ';
 
   @override
+  String get readBook => 'Читать';
+
+  @override
   String get profile => 'Профиль';
 
   @override

@@ -69,6 +69,18 @@ class BookService {
     );
   }
 
+  Future<bool> removeBook(Book book) async {
+    final addedBooks = getAddedBooks();
+    final filtered = addedBooks.where((b) => b.id != book.id).toList();
+    final addedBooksJsonList = filtered
+        .map((b) => jsonEncode(b.toJson()))
+        .toList();
+    return await _sharedPreferences.setStringList(
+      _addedBooksKey,
+      addedBooksJsonList,
+    );
+  }
+
   Future<ChapterAlignNode?> getChapter(String path) async {
     try {
       final chapterKey = _chapterKey(path);

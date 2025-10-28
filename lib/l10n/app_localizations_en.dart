@@ -139,6 +139,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addedToMyBooks => 'ADDED TO MY BOOKS';
 
   @override
+  String get readBook => 'Read';
+
+  @override
   String get profile => 'Profile';
 
   @override

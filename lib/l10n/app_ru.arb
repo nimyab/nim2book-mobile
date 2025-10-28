@@ -172,6 +172,10 @@
   "@addedToMyBooks": {
     "description": "Button text when book is already in user's library"
   },
+  "readBook": "Читать",
+  "@readBook": {
+    "description": "Текст кнопки для начала чтения книги"
+  },
   "profile": "Профиль",
   "@profile": {
     "description": "Profile screen title"

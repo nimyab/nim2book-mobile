@@ -33,7 +33,7 @@ class _MyBooksScreenState extends State<MyBooksScreen> {
                   return BookCard(
                     key: ValueKey(book.id),
                     book: book,
-                    onTap: () => context.push('/reading/${book.id}'),
+                    onTap: () => context.push('/book/${book.id}'),
                   );
                 },
               ),

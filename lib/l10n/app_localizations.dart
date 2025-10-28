@@ -356,6 +356,12 @@ abstract class AppLocalizations {
   /// **'ADDED TO MY BOOKS'**
   String get addedToMyBooks;
 
+  /// Button text to start reading book
+  ///
+  /// In en, this message translates to:
+  /// **'Read'**
+  String get readBook;
+
   /// Profile screen title
   ///
   /// In en, this message translates to:
