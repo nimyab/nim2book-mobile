@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -75,10 +76,12 @@ class BookService {
     final addedBooksJsonList = filtered
         .map((b) => jsonEncode(b.toJson()))
         .toList();
-    return await _sharedPreferences.setStringList(
+    final updated = await _sharedPreferences.setStringList(
       _addedBooksKey,
       addedBooksJsonList,
     );
+    if (updated) Future(() => _cleanupBookCache(book));
+    return updated;
   }
 
   Future<ChapterAlignNode?> getChapter(String path) async {
@@ -121,5 +124,22 @@ class BookService {
     final bytes = base64Decode(compressed);
     final decompressed = gzip.decode(bytes);
     return utf8.decode(decompressed);
+  }
+
+  Future<void> _cleanupBookCache(Book book) async {
+    try {
+      for (final path in book.chapterPaths) {
+        final key = _chapterKey(path);
+        final removed = await _sharedPreferences.remove(key);
+        if (!removed) {
+          _logger.w('Failed to remove cached chapter for path $path');
+        }
+      }
+
+      await _sharedPreferences.remove('current_chapter_${book.id}');
+      await _sharedPreferences.remove('chapter_progress_${book.id}');
+    } catch (e) {
+      _logger.w('Cleanup error for book ${book.id}: $e');
+    }
   }
 }
