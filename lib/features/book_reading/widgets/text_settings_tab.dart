@@ -115,10 +115,10 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                       child: DropdownButton<String>(
                         value: widget.fontFamily,
                         isExpanded: true,
-                        items: const [
+                        items: [
                           DropdownMenuItem(
                             value: 'System',
-                            child: Text('System'),
+                            child: Text(l10n.system),
                           ),
                           DropdownMenuItem(
                             value: 'NotoSerif',
@@ -482,10 +482,10 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                       child: DropdownButton<String>(
                         value: widget.translatedFontFamily,
                         isExpanded: true,
-                        items: const [
+                        items: [
                           DropdownMenuItem(
                             value: 'System',
-                            child: Text('System'),
+                            child: Text(l10n.system),
                           ),
                           DropdownMenuItem(
                             value: 'NotoSerif',

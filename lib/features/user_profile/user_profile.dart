@@ -37,7 +37,7 @@ class UserProfile extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '${l10n.email}: ${user?.emailPasswordAccount?.email ?? user?.googleAccount?.email ?? 'N/A'}',
+                    '${l10n.email}: ${user?.emailPasswordAccount?.email ?? user?.googleAccount?.email ?? l10n.notAvailable}',
                   ),
                 ],
               ),
@@ -52,7 +52,7 @@ class UserProfile extends StatelessWidget {
                     final success = await logout();
                     if (!success && context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('${l10n.logout} failed')),
+                        SnackBar(content: Text(l10n.logoutFailed)),
                       );
                     }
                   },

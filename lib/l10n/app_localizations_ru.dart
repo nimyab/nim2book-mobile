@@ -339,4 +339,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String translationFontSizeValue(int size) {
     return 'Размер шрифта перевода: $size';
   }
+
+  @override
+  String get enterWordHint => 'Введите слово';
+
+  @override
+  String get logoutFailed => 'Ошибка выхода';
+
+  @override
+  String get bookLoadFailed => 'Не удалось загрузить данные книги.';
+
+  @override
+  String get notAvailable => 'Нет данных';
 }

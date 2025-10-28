@@ -86,6 +86,7 @@ class _BookReadingState extends State<BookReading>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final loadingBookContext = context.watch<LoadingBookContext>();
     final book = loadingBookContext.book;
 
@@ -103,7 +104,7 @@ class _BookReadingState extends State<BookReading>
     if (book == null || loadingBookContext.chapters.isEmpty) {
       return Scaffold(
         appBar: AppBar(),
-        body: const Center(child: Text('Failed to load book data.')),
+        body: Center(child: Text(l10n.bookLoadFailed)),
       );
     }
 

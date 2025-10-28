@@ -721,6 +721,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Translation font size: {size}'**
   String translationFontSizeValue(int size);
+
+  /// Hint text for input field to add a word
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a word'**
+  String get enterWordHint;
+
+  /// Error message when logout fails
+  ///
+  /// In en, this message translates to:
+  /// **'Logout failed'**
+  String get logoutFailed;
+
+  /// Message shown when book data cannot be loaded
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load book data.'**
+  String get bookLoadFailed;
+
+  /// Text indicating a value is not available
+  ///
+  /// In en, this message translates to:
+  /// **'N/A'**
+  String get notAvailable;
 }
 
 class _AppLocalizationsDelegate

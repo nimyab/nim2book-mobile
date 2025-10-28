@@ -339,4 +339,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String translationFontSizeValue(int size) {
     return 'Translation font size: $size';
   }
+
+  @override
+  String get enterWordHint => 'Enter a word';
+
+  @override
+  String get logoutFailed => 'Logout failed';
+
+  @override
+  String get bookLoadFailed => 'Failed to load book data.';
+
+  @override
+  String get notAvailable => 'N/A';
 }

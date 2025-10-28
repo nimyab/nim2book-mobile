@@ -445,4 +445,21 @@
     "description": "Label for parallel translation font size",
     "placeholders": {"size": {"type": "int"}}
   }
+  ,
+  "enterWordHint": "Введите слово",
+  "@enterWordHint": {
+    "description": "Подсказка для поля ввода слова"
+  },
+  "logoutFailed": "Ошибка выхода",
+  "@logoutFailed": {
+    "description": "Сообщение об ошибке при выходе"
+  },
+  "bookLoadFailed": "Не удалось загрузить данные книги.",
+  "@bookLoadFailed": {
+    "description": "Сообщение, когда данные книги не загружаются"
+  },
+  "notAvailable": "Нет данных",
+  "@notAvailable": {
+    "description": "Текст, указывающий на отсутствие данных"
+  }
 }

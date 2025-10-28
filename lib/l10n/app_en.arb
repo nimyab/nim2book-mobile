@@ -445,5 +445,22 @@
     "description": "Label for parallel translation font size",
     "placeholders": {"size": {"type": "int"}}
   }
+  ,
+  "enterWordHint": "Enter a word",
+  "@enterWordHint": {
+    "description": "Hint text for input field to add a word"
+  },
+  "logoutFailed": "Logout failed",
+  "@logoutFailed": {
+    "description": "Error message when logout fails"
+  },
+  "bookLoadFailed": "Failed to load book data.",
+  "@bookLoadFailed": {
+    "description": "Message shown when book data cannot be loaded"
+  },
+  "notAvailable": "N/A",
+  "@notAvailable": {
+    "description": "Text indicating a value is not available"
+  }
 }
 
