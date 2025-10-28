@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/services/reading_persistence.dart';
@@ -10,6 +11,8 @@ import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/screens/reading_screen/loading_book_context.dart';
 import 'package:nim2book_mobile_flutter/widgets/circular_progress_with_percentage.dart';
 import 'package:provider/provider.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/widgets/search_sheet.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/widgets/drawer_header_actions.dart';
 
 class BookReading extends StatefulWidget {
   const BookReading({super.key});
@@ -29,6 +32,7 @@ class _BookReadingState extends State<BookReading>
   bool _initializedFromTheme = false;
 
   bool _isTranslatedVisible = false;
+  bool _isFullscreen = false;
   int _lastSelectionParagraphIndex = -1;
   int _lastSelectionWordIndex = -1;
 
@@ -188,6 +192,29 @@ class _BookReadingState extends State<BookReading>
                   length: 2,
                   child: Column(
                     children: [
+                      DrawerHeaderActions(
+                        isFullscreen: _isFullscreen,
+                        onClose: () {
+                          Navigator.of(context).maybePop();
+                        },
+                        onToggleFullscreen: () async {
+                          setState(() {
+                            _isFullscreen = !_isFullscreen;
+                          });
+                          if (_isFullscreen) {
+                            await SystemChrome.setEnabledSystemUIMode(
+                              SystemUiMode.immersiveSticky,
+                            );
+                          } else {
+                            await SystemChrome.setEnabledSystemUIMode(
+                              SystemUiMode.edgeToEdge,
+                            );
+                          }
+                        },
+                        onOpenSearch: () {
+                          _openSearchSheet(context);
+                        },
+                      ),
                       Material(
                         color: Theme.of(context).colorScheme.surface,
                         child: TabBar(
@@ -346,6 +373,19 @@ class _BookReadingState extends State<BookReading>
           },
         ),
       ),
+    );
+  }
+
+  void _openSearchSheet(BuildContext context) {
+    final loadingBookContext = context.read<LoadingBookContext>();
+    final chapters = loadingBookContext.chapters;
+    final readingContext = context.read<BookReadingContext>();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) =>
+          SearchSheet(chapters: chapters, readingContext: readingContext),
     );
   }
 }
