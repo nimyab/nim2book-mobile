@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/features/translated_dialog/translated_dialog.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
-import 'package:nim2book_mobile_flutter/screens/learning_screen/learning_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:get_it/get_it.dart';
 
@@ -125,12 +125,7 @@ class DictionaryScreen extends StatelessWidget {
                     child: savedWords.isNotEmpty
                         ? ElevatedButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const LearningScreen(),
-                                ),
-                              );
+                              context.push('/learning');
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
