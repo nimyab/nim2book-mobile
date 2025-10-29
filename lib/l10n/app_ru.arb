@@ -48,6 +48,14 @@
   "@settings": {
     "description": "Settings tab/screen title"
   },
+  "dailyNewWordsLimit": "Лимит новых слов в день",
+  "@dailyNewWordsLimit": {
+    "description": "Метка настройки лимита новых слов в день"
+  },
+  "dailyLimitReached": "Дневной лимит исчерпан. Возвращайтесь завтра или повторите изученные слова.",
+  "@dailyLimitReached": {
+    "description": "Сообщение на экране изучения при достижении дневного лимита новых слов"
+  },
   "theme": "Тема",
   "@theme": {
     "description": "Theme setting label"
@@ -171,6 +179,10 @@
   "addedToMyBooks": "ДОБАВЛЕНО В МОИ КНИГИ",
   "@addedToMyBooks": {
     "description": "Button text when book is already in user's library"
+  },
+  "readBook": "Читать",
+  "@readBook": {
+    "description": "Текст кнопки для начала чтения книги"
   },
   "profile": "Профиль",
   "@profile": {
@@ -413,5 +425,63 @@
   "resetPosition": "Сброс положения",
   "@resetPosition": {
     "description": "Reset position button text"
+  },
+  "textAlignment": "Выравнивание текста",
+  "@textAlignment": {
+    "description": "Label for text alignment setting"
+  },
+  "alignLeft": "По левому краю",
+  "@alignLeft": {"description": "Align left option"},
+  "alignCenter": "По центру",
+  "@alignCenter": {"description": "Align center option"},
+  "alignRight": "По правому краю",
+  "@alignRight": {"description": "Align right option"},
+  "alignJustify": "По ширине",
+  "@alignJustify": {"description": "Align justify option"},
+
+  "translationVerticalPaddingPx": "Вертикальные отступы перевода: {px} px",
+  "@translationVerticalPaddingPx": {
+    "description": "Parallel translation vertical padding (top & bottom)",
+    "placeholders": {"px": {"type": "int"}}
+  },
+  "translationFont": "Шрифт перевода",
+  "@translationFont": {
+    "description": "Label for parallel translation font family"
+  },
+  "translationFontSizeValue": "Размер шрифта перевода: {size}",
+  "@translationFontSizeValue": {
+    "description": "Label for parallel translation font size",
+    "placeholders": {"size": {"type": "int"}}
+  }
+  ,
+  "enterWordHint": "Введите слово",
+  "@enterWordHint": {
+    "description": "Подсказка для поля ввода слова"
+  },
+  "logoutFailed": "Ошибка выхода",
+  "@logoutFailed": {
+    "description": "Сообщение об ошибке при выходе"
+  },
+  "bookLoadFailed": "Не удалось загрузить данные книги.",
+  "@bookLoadFailed": {
+    "description": "Сообщение, когда данные книги не загружаются"
+  },
+  "notAvailable": "Нет данных",
+  "@notAvailable": {
+    "description": "Текст, указывающий на отсутствие данных"
+  }
+  ,
+  "hard": "Сложно",
+  "@hard": {
+    "description": "Текст кнопки оценки 'сложно'"
+  },
+  "easy": "Легко",
+  "@easy": {
+    "description": "Текст кнопки оценки 'легко'"
+  },
+  "reviewDueToday": "К повторению сегодня: {count}",
+  "@reviewDueToday": {
+    "description": "Счётчик элементов, требующих повторения сегодня",
+    "placeholders": {"count": {"type": "int"}}
   }
 }

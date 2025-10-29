@@ -9,16 +9,18 @@ import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/auth_context.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/books_context.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/dictionary_context.dart';
-import 'package:nim2book_mobile_flutter/core/contexts/theme_context.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/locale_context.dart';
+import 'package:nim2book_mobile_flutter/core/contexts/theme_context.dart';
 import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/router/router.dart';
 import 'package:nim2book_mobile_flutter/core/services/book_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/dictionary_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/fmc_token_service.dart';
+import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/theme_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/services/reading_persistence.dart';
 import 'package:nim2book_mobile_flutter/firebase_options.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -71,6 +73,12 @@ void main() async {
 
   final dictService = DictionaryService();
   GetIt.I.registerSingleton(dictService);
+
+  final srsService = SrsService();
+  GetIt.I.registerSingleton(srsService);
+
+  final readingPersistence = ReadingPersistence();
+  GetIt.I.registerSingleton(readingPersistence);
 
   runApp(const Nim2BookApp());
 }

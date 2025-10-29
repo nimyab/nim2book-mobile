@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/auth_context.dart';
 import 'package:nim2book_mobile_flutter/core/models/user/user.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
+import 'package:nim2book_mobile_flutter/widgets/daily_new_limit_switcher.dart';
 import 'package:nim2book_mobile_flutter/widgets/language_switcher.dart';
 import 'package:nim2book_mobile_flutter/widgets/theme_switcher.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +38,7 @@ class UserProfile extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '${l10n.email}: ${user?.emailPasswordAccount?.email ?? user?.googleAccount?.email ?? 'N/A'}',
+                    '${l10n.email}: ${user?.emailPasswordAccount?.email ?? user?.googleAccount?.email ?? l10n.notAvailable}',
                   ),
                 ],
               ),
@@ -45,6 +46,7 @@ class UserProfile extends StatelessWidget {
           ),
           const ThemeSwitcher(),
           const LanguageSwitcher(),
+          const DailyNewLimitSwitcher(),
           ElevatedButton(
             onPressed: isAuthLoading
                 ? null
@@ -52,7 +54,7 @@ class UserProfile extends StatelessWidget {
                     final success = await logout();
                     if (!success && context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('${l10n.logout} failed')),
+                        SnackBar(content: Text(l10n.logoutFailed)),
                       );
                     }
                   },

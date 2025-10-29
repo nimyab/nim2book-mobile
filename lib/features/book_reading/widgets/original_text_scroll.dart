@@ -17,6 +17,7 @@ class OriginalTextScroll extends StatefulWidget {
     this.sidePadding,
     this.firstLineIndentEm,
     this.paragraphSpacing,
+    this.textAlign,
   });
 
   final ScrollController? translatedScrollController;
@@ -27,6 +28,7 @@ class OriginalTextScroll extends StatefulWidget {
   final double? sidePadding;
   final double? firstLineIndentEm;
   final double? paragraphSpacing;
+  final TextAlign? textAlign;
 
   @override
   State<OriginalTextScroll> createState() => _OriginalTextScrollState();
@@ -36,6 +38,12 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
   late final ScrollController _scrollController;
   Timer? _debounceTimer;
   bool _isInitialized = false;
+  final Map<int, GlobalKey> _paragraphKeys = {};
+  int _lastScrolledToParagraph = -1;
+
+  GlobalKey _keyForParagraph(int index) {
+    return _paragraphKeys.putIfAbsent(index, () => GlobalKey());
+  }
 
   @override
   void initState() {
@@ -79,6 +87,27 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
     final readingContext = context.watch<BookReadingContext>();
     final paragraphCount = readingContext.currentParagraphCount;
     final currentChapterIndex = readingContext.currentChapterIndex;
+    final currentChapter = readingContext.currentChapter;
+    final chapterTitle = currentChapter.translatedTitle.isNotEmpty
+        ? currentChapter.translatedTitle
+        : currentChapter.title;
+
+    final selectedParagraph = readingContext.selectedParagraphIndex;
+    if (selectedParagraph >= 0 &&
+        selectedParagraph != _lastScrolledToParagraph) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final ctx = _paragraphKeys[selectedParagraph]?.currentContext;
+        if (ctx != null) {
+          Scrollable.ensureVisible(
+            ctx,
+            duration: const Duration(milliseconds: 450),
+            alignment: 0.2,
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+      _lastScrolledToParagraph = selectedParagraph;
+    }
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -113,35 +142,56 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
         padding: const EdgeInsets.only(bottom: 20),
         cacheExtent: 2000,
         controller: _scrollController,
-        itemCount: paragraphCount + 1,
-        itemBuilder: (context, paragraphIndex) {
-          if (paragraphIndex == paragraphCount) {
+        itemCount: paragraphCount + 2,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: widget.sidePadding ?? 10,
+                vertical: (widget.paragraphSpacing ?? 7) * 3.5,
+              ),
+              child: Text(
+                chapterTitle,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  fontSize: (widget.fontSize ?? 24) * 1.4,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            );
+          }
+
+          if (index == paragraphCount + 1) {
             return const SelectChapterButtons();
           }
 
+          final paragraphIndex = index - 1;
           final paragraphConverted = readingContext.getParagraphItems(
             paragraphIndex,
           );
-
           return Padding(
             padding: EdgeInsets.symmetric(
               horizontal: widget.sidePadding ?? 10,
               vertical: widget.paragraphSpacing ?? 7,
             ),
-            child: OriginalParagraph(
-              key: ValueKey(
-                'chapter_${currentChapterIndex}_paragraph_$paragraphIndex',
+            child: Container(
+              key: _keyForParagraph(paragraphIndex),
+              child: OriginalParagraph(
+                key: ValueKey(
+                  'chapter_${currentChapterIndex}_paragraph_$paragraphIndex',
+                ),
+                paragraph: paragraphConverted,
+                paragraphIndex: paragraphIndex,
+                selectedParagraphIndex: readingContext.selectedParagraphIndex,
+                selectedWordIndex: readingContext.selectedWordIndex,
+                selectWord: readingContext.selectWord,
+                fontFamily: widget.fontFamily,
+                fontSize: widget.fontSize,
+                textColor: widget.textColor,
+                lineHeight: widget.lineHeight,
+                firstLineIndentEm: widget.firstLineIndentEm,
+                textAlign: widget.textAlign,
               ),
-              paragraph: paragraphConverted,
-              paragraphIndex: paragraphIndex,
-              selectedParagraphIndex: readingContext.selectedParagraphIndex,
-              selectedWordIndex: readingContext.selectedWordIndex,
-              selectWord: readingContext.selectWord,
-              fontFamily: widget.fontFamily,
-              fontSize: widget.fontSize,
-              textColor: widget.textColor,
-              lineHeight: widget.lineHeight,
-              firstLineIndentEm: widget.firstLineIndentEm,
             ),
           );
         },

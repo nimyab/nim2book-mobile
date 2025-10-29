@@ -48,6 +48,14 @@
   "@settings": {
     "description": "Settings tab/screen title"
   },
+  "dailyNewWordsLimit": "Daily new words limit",
+  "@dailyNewWordsLimit": {
+    "description": "Daily new words limit setting label"
+  },
+  "dailyLimitReached": "Daily limit reached. Come back tomorrow or review existing words.",
+  "@dailyLimitReached": {
+    "description": "Shown on the learning screen when the daily new words limit has been reached"
+  },
   "theme": "Theme",
   "@theme": {
     "description": "Theme setting label"
@@ -171,6 +179,10 @@
   "addedToMyBooks": "ADDED TO MY BOOKS",
   "@addedToMyBooks": {
     "description": "Button text when book is already in user's library"
+  },
+  "readBook": "Read",
+  "@readBook": {
+    "description": "Button text to start reading book"
   },
   "profile": "Profile",
   "@profile": {
@@ -413,6 +425,64 @@
   "resetPosition": "Reset position",
   "@resetPosition": {
     "description": "Reset position button text"
+  },
+  "textAlignment": "Text alignment",
+  "@textAlignment": {
+    "description": "Label for text alignment setting"
+  },
+  "alignLeft": "Left",
+  "@alignLeft": {"description": "Align left option"},
+  "alignCenter": "Center",
+  "@alignCenter": {"description": "Align center option"},
+  "alignRight": "Right",
+  "@alignRight": {"description": "Align right option"},
+  "alignJustify": "Justify",
+  "@alignJustify": {"description": "Align justify option"},
+
+  "translationVerticalPaddingPx": "Translation vertical padding: {px} px",
+  "@translationVerticalPaddingPx": {
+    "description": "Parallel translation vertical padding (top & bottom)",
+    "placeholders": {"px": {"type": "int"}}
+  },
+  "translationFont": "Translation font",
+  "@translationFont": {
+    "description": "Label for parallel translation font family"
+  },
+  "translationFontSizeValue": "Translation font size: {size}",
+  "@translationFontSizeValue": {
+    "description": "Label for parallel translation font size",
+    "placeholders": {"size": {"type": "int"}}
+  }
+  ,
+  "enterWordHint": "Enter a word",
+  "@enterWordHint": {
+    "description": "Hint text for input field to add a word"
+  },
+  "logoutFailed": "Logout failed",
+  "@logoutFailed": {
+    "description": "Error message when logout fails"
+  },
+  "bookLoadFailed": "Failed to load book data.",
+  "@bookLoadFailed": {
+    "description": "Message shown when book data cannot be loaded"
+  },
+  "notAvailable": "N/A",
+  "@notAvailable": {
+    "description": "Text indicating a value is not available"
+  }
+  ,
+  "hard": "Hard",
+  "@hard": {
+    "description": "Hard rating button text"
+  },
+  "easy": "Easy",
+  "@easy": {
+    "description": "Easy rating button text"
+  },
+  "reviewDueToday": "Due today: {count}",
+  "@reviewDueToday": {
+    "description": "Counter of items due for review today",
+    "placeholders": {"count": {"type": "int"}}
   }
 }
 

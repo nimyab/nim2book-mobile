@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/books_context.dart';
 import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
@@ -92,13 +93,29 @@ class _BookScreenState extends State<BookScreen> {
               textAlign: TextAlign.center,
             ),
 
-            ElevatedButton.icon(
-              onPressed: isMyBook ? null : () => booksContext.addMyBook(book),
-              icon: isMyBook ? Icon(Icons.check) : Icon(Icons.add),
-              label: isMyBook
-                  ? Text(l10n.addedToMyBooks)
-                  : Text(l10n.addToMyBooks),
-            ),
+            if (!isMyBook)
+              ElevatedButton.icon(
+                onPressed: () => booksContext.addMyBook(book),
+                icon: const Icon(Icons.add),
+                label: Text(l10n.addToMyBooks),
+              )
+            else
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: 16,
+                children: [
+                  FilledButton.icon(
+                    onPressed: () => context.push('/reading/${book.id}'),
+                    icon: const Icon(Icons.menu_book),
+                    label: Text(l10n.readBook),
+                  ),
+                  OutlinedButton.icon(
+                    onPressed: () => booksContext.removeMyBook(book),
+                    icon: const Icon(Icons.delete_outline),
+                    label: Text(l10n.delete),
+                  ),
+                ],
+              ),
           ],
         ),
       ),

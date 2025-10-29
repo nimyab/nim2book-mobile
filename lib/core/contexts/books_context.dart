@@ -44,4 +44,15 @@ class BooksContext with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> removeMyBook(Book book) async {
+    try {
+      final removed = await _bookService.removeBook(book);
+      if (removed) {
+        _myBooks.removeWhere((b) => b.id == book.id);
+      }
+    } finally {
+      notifyListeners();
+    }
+  }
 }

@@ -170,6 +170,18 @@ abstract class AppLocalizations {
   /// **'Settings'**
   String get settings;
 
+  /// Daily new words limit setting label
+  ///
+  /// In en, this message translates to:
+  /// **'Daily new words limit'**
+  String get dailyNewWordsLimit;
+
+  /// Shown on the learning screen when the daily new words limit has been reached
+  ///
+  /// In en, this message translates to:
+  /// **'Daily limit reached. Come back tomorrow or review existing words.'**
+  String get dailyLimitReached;
+
   /// Theme setting label
   ///
   /// In en, this message translates to:
@@ -355,6 +367,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'ADDED TO MY BOOKS'**
   String get addedToMyBooks;
+
+  /// Button text to start reading book
+  ///
+  /// In en, this message translates to:
+  /// **'Read'**
+  String get readBook;
 
   /// Profile screen title
   ///
@@ -667,6 +685,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reset position'**
   String get resetPosition;
+
+  /// Label for text alignment setting
+  ///
+  /// In en, this message translates to:
+  /// **'Text alignment'**
+  String get textAlignment;
+
+  /// Align left option
+  ///
+  /// In en, this message translates to:
+  /// **'Left'**
+  String get alignLeft;
+
+  /// Align center option
+  ///
+  /// In en, this message translates to:
+  /// **'Center'**
+  String get alignCenter;
+
+  /// Align right option
+  ///
+  /// In en, this message translates to:
+  /// **'Right'**
+  String get alignRight;
+
+  /// Align justify option
+  ///
+  /// In en, this message translates to:
+  /// **'Justify'**
+  String get alignJustify;
+
+  /// Parallel translation vertical padding (top & bottom)
+  ///
+  /// In en, this message translates to:
+  /// **'Translation vertical padding: {px} px'**
+  String translationVerticalPaddingPx(int px);
+
+  /// Label for parallel translation font family
+  ///
+  /// In en, this message translates to:
+  /// **'Translation font'**
+  String get translationFont;
+
+  /// Label for parallel translation font size
+  ///
+  /// In en, this message translates to:
+  /// **'Translation font size: {size}'**
+  String translationFontSizeValue(int size);
+
+  /// Hint text for input field to add a word
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a word'**
+  String get enterWordHint;
+
+  /// Error message when logout fails
+  ///
+  /// In en, this message translates to:
+  /// **'Logout failed'**
+  String get logoutFailed;
+
+  /// Message shown when book data cannot be loaded
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load book data.'**
+  String get bookLoadFailed;
+
+  /// Text indicating a value is not available
+  ///
+  /// In en, this message translates to:
+  /// **'N/A'**
+  String get notAvailable;
+
+  /// Hard rating button text
+  ///
+  /// In en, this message translates to:
+  /// **'Hard'**
+  String get hard;
+
+  /// Easy rating button text
+  ///
+  /// In en, this message translates to:
+  /// **'Easy'**
+  String get easy;
+
+  /// Counter of items due for review today
+  ///
+  /// In en, this message translates to:
+  /// **'Due today: {count}'**
+  String reviewDueToday(int count);
 }
 
 class _AppLocalizationsDelegate

@@ -3,8 +3,10 @@ import 'package:nim2book_mobile_flutter/features/translated_dialog/translated_di
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/screens/learning_screen/learning_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../core/contexts/dictionary_context.dart';
+import '../../core/services/srs_service.dart';
 
 class DictionaryScreen extends StatelessWidget {
   const DictionaryScreen({super.key});
@@ -21,6 +23,32 @@ class DictionaryScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
+            if (savedWords.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.schedule,
+                      size: 18,
+                      color: theme.colorScheme.primary,
+                    ),
+                    const SizedBox(width: 8),
+                    Builder(
+                      builder: (context) {
+                        final srs = GetIt.I.get<SrsService>();
+                        final count = srs.getDueCount(savedWords.keys);
+                        return Text(
+                          l10n.reviewDueToday(count),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
             Expanded(
               child: savedWords.isEmpty
                   ? Center(
@@ -89,38 +117,93 @@ class DictionaryScreen extends StatelessWidget {
                       },
                     ),
             ),
-            if (savedWords.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LearningScreen(),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: savedWords.isNotEmpty
+                        ? ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LearningScreen(),
+                                ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  theme.colorScheme.surfaceContainer,
+                              foregroundColor: theme.colorScheme.primary,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: Text(
+                              l10n.learnWords,
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                color: theme.colorScheme.primary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )
+                        : const SizedBox.shrink(),
+                  ),
+                  const SizedBox(width: 12),
+                  Tooltip(
+                    message: l10n.add,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        final controller = TextEditingController();
+                        showDialog(
+                          context: context,
+                          builder: (dialogContext) => AlertDialog(
+                            title: Text(l10n.add),
+                            content: TextField(
+                              controller: controller,
+                              autofocus: true,
+                              decoration: InputDecoration(
+                                hintText: l10n.enterWordHint,
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.of(dialogContext).pop(),
+                                child: Text(l10n.cancel),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  final word = controller.text.trim();
+                                  if (word.isEmpty) return;
+                                  Navigator.of(dialogContext).pop();
+                                  final dict = context
+                                      .read<DictionaryContext>();
+                                  final defs = await dict.getWord(word);
+                                  await dict.saveWord(word, defs ?? []);
+                                },
+                                child: Text(l10n.add),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: theme.colorScheme.surfaceContainer,
+                        foregroundColor: theme.colorScheme.primary,
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: theme.colorScheme.surfaceContainer,
-                      foregroundColor: theme.colorScheme.primary,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
                       ),
-                    ),
-                    child: Text(
-                      l10n.learnWords,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      child: const Icon(Icons.add),
                     ),
                   ),
-                ),
+                ],
               ),
+            ),
           ],
         ),
       ),

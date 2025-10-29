@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
-import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
-import 'package:nim2book_mobile_flutter/features/translated_dialog/translated_dialog.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/models/word_item.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/widgets/original_paragraph_painter.dart';
+import 'package:nim2book_mobile_flutter/features/translated_dialog/translated_dialog.dart';
 
 class OriginalParagraph extends StatefulWidget {
   final List<WordItem> paragraph;
@@ -15,6 +16,7 @@ class OriginalParagraph extends StatefulWidget {
   final Color? textColor;
   final double? lineHeight;
   final double? firstLineIndentEm;
+  final TextAlign? textAlign;
 
   const OriginalParagraph({
     super.key,
@@ -28,6 +30,7 @@ class OriginalParagraph extends StatefulWidget {
     this.textColor,
     this.lineHeight,
     this.firstLineIndentEm,
+    this.textAlign,
   });
 
   @override
@@ -133,7 +136,7 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
 
         final tp = TextPainter(
           text: textSpan,
-          textAlign: TextAlign.justify,
+          textAlign: widget.textAlign ?? TextAlign.justify,
           textDirection: TextDirection.ltr,
         );
 
@@ -159,12 +162,12 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
         }
 
         // Сдвигаем диапазон на символы отступа, чтобы подсветка совпадала.
-        final _WordRange? adjustedRange = selectedRange == null
+        final int? selectionStart = selectedRange == null
             ? null
-            : _WordRange(
-                selectedRange.start + indentCharCount,
-                selectedRange.end + indentCharCount,
-              );
+            : selectedRange.start + indentCharCount;
+        final int? selectionEnd = selectedRange == null
+            ? null
+            : selectedRange.end + indentCharCount;
 
         return GestureDetector(
           behavior: HitTestBehavior.deferToChild,
@@ -196,9 +199,10 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
             width: double.infinity,
             height: tp.height,
             child: CustomPaint(
-              painter: _OriginalParagraphPainter(
+              painter: OriginalParagraphPainter(
                 textPainter: tp,
-                selectedRange: adjustedRange,
+                selectionStart: selectionStart,
+                selectionEnd: selectionEnd,
                 highlightColor: readingColors.highlightBackgroundColor,
               ),
             ),
@@ -213,53 +217,4 @@ class _WordRange {
   final int start;
   final int end;
   const _WordRange(this.start, this.end);
-}
-
-class _OriginalParagraphPainter extends CustomPainter {
-  final TextPainter textPainter;
-  final _WordRange? selectedRange;
-  final Color? highlightColor;
-
-  _OriginalParagraphPainter({
-    required this.textPainter,
-    this.selectedRange,
-    this.highlightColor,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    canvas.save();
-
-    if (selectedRange != null && highlightColor != null) {
-      final boxes = textPainter.getBoxesForSelection(
-        TextSelection(
-          baseOffset: selectedRange!.start,
-          extentOffset: selectedRange!.end,
-        ),
-      );
-      final paint = Paint()..color = highlightColor!;
-      for (final box in boxes) {
-        final rect = Rect.fromLTWH(
-          box.left,
-          box.top,
-          box.right - box.left,
-          box.bottom - box.top,
-        );
-        canvas.drawRect(rect, paint);
-      }
-    }
-
-    textPainter.paint(canvas, Offset.zero);
-    canvas.restore();
-  }
-
-  @override
-  bool shouldRepaint(covariant _OriginalParagraphPainter oldDelegate) {
-    final rangeChanged =
-        (oldDelegate.selectedRange?.start != selectedRange?.start) ||
-        (oldDelegate.selectedRange?.end != selectedRange?.end);
-    return oldDelegate.textPainter.text != textPainter.text ||
-        rangeChanged ||
-        oldDelegate.highlightColor != highlightColor;
-  }
 }

@@ -45,6 +45,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings => 'Settings';
 
   @override
+  String get dailyNewWordsLimit => 'Daily new words limit';
+
+  @override
+  String get dailyLimitReached =>
+      'Daily limit reached. Come back tomorrow or review existing words.';
+
+  @override
   String get theme => 'Theme';
 
   @override
@@ -137,6 +144,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addedToMyBooks => 'ADDED TO MY BOOKS';
+
+  @override
+  String get readBook => 'Read';
 
   @override
   String get profile => 'Profile';
@@ -308,4 +318,55 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get resetPosition => 'Reset position';
+
+  @override
+  String get textAlignment => 'Text alignment';
+
+  @override
+  String get alignLeft => 'Left';
+
+  @override
+  String get alignCenter => 'Center';
+
+  @override
+  String get alignRight => 'Right';
+
+  @override
+  String get alignJustify => 'Justify';
+
+  @override
+  String translationVerticalPaddingPx(int px) {
+    return 'Translation vertical padding: $px px';
+  }
+
+  @override
+  String get translationFont => 'Translation font';
+
+  @override
+  String translationFontSizeValue(int size) {
+    return 'Translation font size: $size';
+  }
+
+  @override
+  String get enterWordHint => 'Enter a word';
+
+  @override
+  String get logoutFailed => 'Logout failed';
+
+  @override
+  String get bookLoadFailed => 'Failed to load book data.';
+
+  @override
+  String get notAvailable => 'N/A';
+
+  @override
+  String get hard => 'Hard';
+
+  @override
+  String get easy => 'Easy';
+
+  @override
+  String reviewDueToday(int count) {
+    return 'Due today: $count';
+  }
 }

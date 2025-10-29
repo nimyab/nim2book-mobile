@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/services/reading_persistence.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/widgets/chapter_list_tab.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/original_text_scroll.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/widgets/text_settings_tab.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/translated_text_scroll.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/screens/reading_screen/loading_book_context.dart';
 import 'package:nim2book_mobile_flutter/widgets/circular_progress_with_percentage.dart';
 import 'package:provider/provider.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/widgets/search_sheet.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/widgets/drawer_header_actions.dart';
 
 class BookReading extends StatefulWidget {
   const BookReading({super.key});
@@ -14,37 +21,42 @@ class BookReading extends StatefulWidget {
   State<BookReading> createState() => _BookReadingState();
 }
 
-class _BookReadingState extends State<BookReading> {
+class _BookReadingState extends State<BookReading>
+    with TickerProviderStateMixin {
   late final ScrollController _translatedController;
+  late final ReadingPersistence _readingPersistence;
   late String _fontFamily;
   late double _fontSize;
   late Color _backgroundColor;
   late Color _textColor;
   bool _initializedFromTheme = false;
 
+  bool _isTranslatedVisible = false;
+  bool _isFullscreen = false;
+  int _lastSelectionParagraphIndex = -1;
+  int _lastSelectionWordIndex = -1;
+
   double _lineHeight = 1.3;
   double _sidePadding = 10;
   double _firstLineIndentEm = 1.5;
   double _paragraphSpacing = 7;
-
-  // Превью значения для оптимистичных обновлений
-  late double _fontSizePreview;
-  double _lineHeightPreview = 1.3;
-  double _sidePaddingPreview = 10;
-  double _firstLineIndentEmPreview = 1.5;
-  double _paragraphSpacingPreview = 7;
+  TextAlign _textAlign = TextAlign.justify;
+  double _translatedFontSize = 20;
+  String _translatedFontFamily = 'System';
+  double _translatedVerticalPadding = 5;
 
   @override
   void initState() {
     super.initState();
     _translatedController = ScrollController();
-    _fontFamily = 'System';
-    _fontSize = 24;
-    _fontSizePreview = _fontSize;
-    _lineHeightPreview = _lineHeight;
-    _sidePaddingPreview = _sidePadding;
-    _firstLineIndentEmPreview = _firstLineIndentEm;
-    _paragraphSpacingPreview = _paragraphSpacing;
+    _readingPersistence = GetIt.I.get<ReadingPersistence>();
+    _fontFamily = _readingPersistence.getFontFamily();
+    _fontSize = _readingPersistence.getFontSize();
+    _textAlign = _readingPersistence.getTextAlign();
+    _translatedFontSize = _readingPersistence.getTranslatedFontSize();
+    _translatedFontFamily = _readingPersistence.getTranslatedFontFamily();
+    _translatedVerticalPadding = _readingPersistence
+        .getTranslatedVerticalPadding();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<LoadingBookContext>().getBookData();
@@ -56,10 +68,12 @@ class _BookReadingState extends State<BookReading> {
     super.didChangeDependencies();
     if (!_initializedFromTheme) {
       final theme = Theme.of(context);
-      _backgroundColor = theme.colorScheme.surface;
+      _backgroundColor =
+          _readingPersistence.getBackgroundColor() ?? theme.colorScheme.surface;
       _textColor =
-          Theme.of(context).textTheme.bodyLarge?.color ??
-          theme.colorScheme.onSurface;
+          _readingPersistence.getTextColor() ??
+          (Theme.of(context).textTheme.bodyLarge?.color ??
+              theme.colorScheme.onSurface);
       _initializedFromTheme = true;
     }
   }
@@ -72,6 +86,7 @@ class _BookReadingState extends State<BookReading> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final loadingBookContext = context.watch<LoadingBookContext>();
     final book = loadingBookContext.book;
 
@@ -89,14 +104,19 @@ class _BookReadingState extends State<BookReading> {
     if (book == null || loadingBookContext.chapters.isEmpty) {
       return Scaffold(
         appBar: AppBar(),
-        body: const Center(child: Text('Failed to load book data.')),
+        body: Center(child: Text(l10n.bookLoadFailed)),
       );
     }
 
     return ChangeNotifierProxyProvider<LoadingBookContext, BookReadingContext>(
       create: (context) => BookReadingContext(bookId: book.id, chapters: []),
-      update: (context, value, previous) =>
-          BookReadingContext(bookId: book.id, chapters: value.chapters),
+      update: (context, value, previous) {
+        if (previous == null) {
+          return BookReadingContext(bookId: book.id, chapters: value.chapters);
+        }
+        previous.setChapters(value.chapters);
+        return previous;
+      },
       child: Scaffold(
         appBar: AppBar(
           centerTitle: false,
@@ -136,6 +156,21 @@ class _BookReadingState extends State<BookReading> {
             },
           ),
           actions: [
+            Tooltip(
+              message: AppLocalizations.of(context)!.translate,
+              child: IconButton(
+                icon: Icon(
+                  _isTranslatedVisible
+                      ? Icons.keyboard_arrow_down
+                      : Icons.keyboard_arrow_up,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _isTranslatedVisible = !_isTranslatedVisible;
+                  });
+                },
+              ),
+            ),
             Builder(
               builder: (context) => Tooltip(
                 message: AppLocalizations.of(context)!.menu,
@@ -158,6 +193,29 @@ class _BookReadingState extends State<BookReading> {
                   length: 2,
                   child: Column(
                     children: [
+                      DrawerHeaderActions(
+                        isFullscreen: _isFullscreen,
+                        onClose: () {
+                          Navigator.of(context).maybePop();
+                        },
+                        onToggleFullscreen: () async {
+                          setState(() {
+                            _isFullscreen = !_isFullscreen;
+                          });
+                          if (_isFullscreen) {
+                            await SystemChrome.setEnabledSystemUIMode(
+                              SystemUiMode.immersiveSticky,
+                            );
+                          } else {
+                            await SystemChrome.setEnabledSystemUIMode(
+                              SystemUiMode.edgeToEdge,
+                            );
+                          }
+                        },
+                        onOpenSearch: () {
+                          _openSearchSheet(context);
+                        },
+                      ),
                       Material(
                         color: Theme.of(context).colorScheme.surface,
                         child: TabBar(
@@ -176,488 +234,72 @@ class _BookReadingState extends State<BookReading> {
                       Expanded(
                         child: TabBarView(
                           children: [
-                            Consumer<BookReadingContext>(
-                              builder: (context, readingContext, _) {
-                                final theme = Theme.of(context);
-                                return ListView.separated(
-                                  itemCount: chapters.length,
-                                  separatorBuilder: (_, __) =>
-                                      const Divider(height: 1),
-                                  itemBuilder: (ctx, index) {
-                                    final chapter = chapters[index];
-                                    final title =
-                                        chapter.translatedTitle.isNotEmpty
-                                        ? chapter.translatedTitle
-                                        : chapter.title;
-                                    final isCurrent =
-                                        index ==
-                                        readingContext.currentChapterIndex;
-                                    return ListTile(
-                                      tileColor: isCurrent
-                                          ? theme.colorScheme.primary
-                                                .withValues(alpha: 0.15)
-                                          : null,
-                                      title: Text(
-                                        title,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      onTap: () {
-                                        Navigator.of(context).pop();
-                                        readingContext.goToChapter(index);
-                                      },
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: ListView(
-                                children: [
-                                  const SizedBox(height: 4),
-                                  ExpansionTile(
-                                    title: Text(l10n.bookTextSettings),
-                                    initiallyExpanded: false,
-                                    children: [
-                                      ListTile(
-                                        title: Text(l10n.font),
-                                        subtitle: Row(
-                                          children: [
-                                            Expanded(
-                                              child: DropdownButton<String>(
-                                                value: _fontFamily,
-                                                isExpanded: true,
-                                                items: const [
-                                                  DropdownMenuItem(
-                                                    value: 'System',
-                                                    child: Text('System'),
-                                                  ),
-                                                  DropdownMenuItem(
-                                                    value: 'NotoSerif',
-                                                    child: Text('Noto Serif'),
-                                                  ),
-                                                  DropdownMenuItem(
-                                                    value: 'Merriweather',
-                                                    child: Text('Merriweather'),
-                                                  ),
-                                                  DropdownMenuItem(
-                                                    value: 'Roboto',
-                                                    child: Text('Roboto'),
-                                                  ),
-                                                ],
-                                                onChanged: (v) => setState(
-                                                  () => _fontFamily =
-                                                      v ?? 'System',
-                                                ),
-                                              ),
-                                            ),
-                                            TextButton(
-                                              onPressed: () => setState(
-                                                () => _fontFamily = 'System',
-                                              ),
-                                              child: Text(l10n.reset),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const Divider(height: 1),
-                                      StatefulBuilder(
-                                        builder: (context, setInnerState) {
-                                          return ListTile(
-                                            title: Text(
-                                              l10n.fontSizeValue(
-                                                _fontSizePreview.round(),
-                                              ),
-                                            ),
-                                            subtitle: Row(
-                                              children: [
-                                                Expanded(
-                                                  child: Slider(
-                                                    value: _fontSizePreview,
-                                                    min: 12,
-                                                    max: 32,
-                                                    divisions: 20,
-                                                    label:
-                                                        '${_fontSizePreview.round()}',
-                                                    onChanged: (v) =>
-                                                        setInnerState(
-                                                          () =>
-                                                              _fontSizePreview =
-                                                                  v,
-                                                        ),
-                                                    onChangeEnd: (v) =>
-                                                        setState(
-                                                          () => _fontSize = v,
-                                                        ),
-                                                  ),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    setInnerState(
-                                                      () =>
-                                                          _fontSizePreview = 24,
-                                                    );
-                                                    setState(
-                                                      () => _fontSize = 24,
-                                                    );
-                                                  },
-                                                  child: Text(l10n.reset),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const Divider(height: 1),
-                                      ListTile(
-                                        title: Text(l10n.backgroundColor),
-                                        subtitle: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const SizedBox(height: 8),
-                                            Wrap(
-                                              spacing: 8,
-                                              runSpacing: 8,
-                                              children: [
-                                                for (final c in [
-                                                  Theme.of(
-                                                    context,
-                                                  ).colorScheme.surface,
-                                                  Colors.white,
-                                                  Colors.black,
-                                                  Colors.grey,
-                                                  Colors.amberAccent.shade100,
-                                                ])
-                                                  GestureDetector(
-                                                    onTap: () => setState(
-                                                      () =>
-                                                          _backgroundColor = c,
-                                                    ),
-                                                    child: CircleAvatar(
-                                                      radius: 14,
-                                                      backgroundColor: c,
-                                                      child:
-                                                          c == _backgroundColor
-                                                          ? const Icon(
-                                                              Icons.check,
-                                                              size: 16,
-                                                              color:
-                                                                  Colors.white,
-                                                            )
-                                                          : null,
-                                                    ),
-                                                  ),
-                                              ],
-                                            ),
-                                            TextButton(
-                                              onPressed: () => setState(
-                                                () =>
-                                                    _backgroundColor = Theme.of(
-                                                      context,
-                                                    ).colorScheme.surface,
-                                              ),
-                                              child: Text(l10n.reset),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const Divider(height: 1),
-                                      ListTile(
-                                        title: Text(l10n.textColor),
-                                        subtitle: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const SizedBox(height: 8),
-                                            Wrap(
-                                              spacing: 8,
-                                              runSpacing: 8,
-                                              children: [
-                                                for (final c in [
-                                                  Theme.of(context)
-                                                          .textTheme
-                                                          .bodyLarge
-                                                          ?.color ??
-                                                      Theme.of(
-                                                        context,
-                                                      ).colorScheme.onSurface,
-                                                  Colors.black,
-                                                  Colors.white,
-                                                  Colors.brown,
-                                                ])
-                                                  GestureDetector(
-                                                    onTap: () => setState(
-                                                      () => _textColor = c,
-                                                    ),
-                                                    child: CircleAvatar(
-                                                      radius: 14,
-                                                      backgroundColor: c,
-                                                      child: c == _textColor
-                                                          ? Icon(
-                                                              Icons.check,
-                                                              size: 16,
-                                                              color:
-                                                                  c.computeLuminance() <
-                                                                      0.5
-                                                                  ? Colors.white
-                                                                  : Colors.black,
-                                                            )
-                                                          : null,
-                                                    ),
-                                                  ),
-                                              ],
-                                            ),
-                                            TextButton(
-                                              onPressed: () => setState(
-                                                () => _textColor =
-                                                    Theme.of(context)
-                                                        .textTheme
-                                                        .bodyLarge
-                                                        ?.color ??
-                                                    Theme.of(
-                                                      context,
-                                                    ).colorScheme.onSurface,
-                                              ),
-                                              child: Text(l10n.reset),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const Divider(height: 1),
-                                      StatefulBuilder(
-                                        builder: (context, setInnerState) {
-                                          return ListTile(
-                                            title: Text(
-                                              l10n.lineHeightValue(
-                                                _lineHeightPreview
-                                                    .toStringAsFixed(2),
-                                              ),
-                                            ),
-                                            subtitle: Row(
-                                              children: [
-                                                Expanded(
-                                                  child: Slider(
-                                                    value: _lineHeightPreview,
-                                                    min: 1.0,
-                                                    max: 2.0,
-                                                    divisions: 20,
-                                                    label: _lineHeightPreview
-                                                        .toStringAsFixed(2),
-                                                    onChanged: (v) =>
-                                                        setInnerState(
-                                                          () =>
-                                                              _lineHeightPreview =
-                                                                  v,
-                                                        ),
-                                                    onChangeEnd: (v) =>
-                                                        setState(
-                                                          () => _lineHeight = v,
-                                                        ),
-                                                  ),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    setInnerState(
-                                                      () => _lineHeightPreview =
-                                                          1.3,
-                                                    );
-                                                    setState(
-                                                      () => _lineHeight = 1.3,
-                                                    );
-                                                  },
-                                                  child: Text(l10n.reset),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const Divider(height: 1),
-                                      StatefulBuilder(
-                                        builder: (context, setInnerState) {
-                                          return ListTile(
-                                            title: Text(
-                                              l10n.sidePaddingPx(
-                                                _sidePaddingPreview.round(),
-                                              ),
-                                            ),
-                                            subtitle: Row(
-                                              children: [
-                                                Expanded(
-                                                  child: Slider(
-                                                    value: _sidePaddingPreview,
-                                                    min: 0,
-                                                    max: 32,
-                                                    divisions: 32,
-                                                    label:
-                                                        '${_sidePaddingPreview.round()} px',
-                                                    onChanged: (v) =>
-                                                        setInnerState(
-                                                          () =>
-                                                              _sidePaddingPreview =
-                                                                  v,
-                                                        ),
-                                                    onChangeEnd: (v) =>
-                                                        setState(
-                                                          () =>
-                                                              _sidePadding = v,
-                                                        ),
-                                                  ),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    setInnerState(
-                                                      () =>
-                                                          _sidePaddingPreview =
-                                                              10,
-                                                    );
-                                                    setState(
-                                                      () => _sidePadding = 10,
-                                                    );
-                                                  },
-                                                  child: Text(l10n.reset),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const Divider(height: 1),
-                                      StatefulBuilder(
-                                        builder: (context, setInnerState) {
-                                          return ListTile(
-                                            title: Text(
-                                              l10n.firstLineIndentEm(
-                                                _firstLineIndentEmPreview
-                                                    .toStringAsFixed(1),
-                                              ),
-                                            ),
-                                            subtitle: Row(
-                                              children: [
-                                                Expanded(
-                                                  child: Slider(
-                                                    value:
-                                                        _firstLineIndentEmPreview,
-                                                    min: 0.0,
-                                                    max: 3.0,
-                                                    divisions: 30,
-                                                    label:
-                                                        '${_firstLineIndentEmPreview.toStringAsFixed(1)} em',
-                                                    onChanged: (v) => setInnerState(
-                                                      () =>
-                                                          _firstLineIndentEmPreview =
-                                                              v,
-                                                    ),
-                                                    onChangeEnd: (v) => setState(
-                                                      () => _firstLineIndentEm =
-                                                          v,
-                                                    ),
-                                                  ),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    setInnerState(
-                                                      () =>
-                                                          _firstLineIndentEmPreview =
-                                                              1.5,
-                                                    );
-                                                    setState(
-                                                      () => _firstLineIndentEm =
-                                                          1.5,
-                                                    );
-                                                  },
-                                                  child: Text(l10n.reset),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const Divider(height: 1),
-                                      StatefulBuilder(
-                                        builder: (context, setInnerState) {
-                                          return ListTile(
-                                            title: Text(
-                                              l10n.paragraphSpacingPx(
-                                                _paragraphSpacingPreview
-                                                    .round(),
-                                              ),
-                                            ),
-                                            subtitle: Row(
-                                              children: [
-                                                Expanded(
-                                                  child: Slider(
-                                                    value:
-                                                        _paragraphSpacingPreview,
-                                                    min: 0,
-                                                    max: 24,
-                                                    divisions: 24,
-                                                    label:
-                                                        '${_paragraphSpacingPreview.round()} px',
-                                                    onChanged: (v) => setInnerState(
-                                                      () =>
-                                                          _paragraphSpacingPreview =
-                                                              v,
-                                                    ),
-                                                    onChangeEnd: (v) => setState(
-                                                      () =>
-                                                          _paragraphSpacing = v,
-                                                    ),
-                                                  ),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    setInnerState(
-                                                      () =>
-                                                          _paragraphSpacingPreview =
-                                                              7,
-                                                    );
-                                                    setState(
-                                                      () =>
-                                                          _paragraphSpacing = 7,
-                                                    );
-                                                  },
-                                                  child: Text(l10n.reset),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 12),
-                                  ExpansionTile(
-                                    title: Text(
-                                      l10n.parallelTranslationHorizontalScroll,
-                                    ),
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0,
-                                          vertical: 8.0,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Text(''),
-                                            TextButton(
-                                              onPressed: () =>
-                                                  _translatedController.jumpTo(
-                                                    0,
-                                                  ),
-                                              child: Text(l10n.resetPosition),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                            ChapterListTab(chapters: chapters),
+                            TextSettingsTab(
+                              fontFamily: _fontFamily,
+                              onFontFamilyChange: (v) => setState(() {
+                                _fontFamily = v;
+                                _readingPersistence.setFontFamily(v);
+                              }),
+                              fontSize: _fontSize,
+                              onFontSizeChange: (v) => setState(() {
+                                _fontSize = v;
+                                _readingPersistence.setFontSize(v);
+                              }),
+                              backgroundColor: _backgroundColor,
+                              onBackgroundColorChange: (c) => setState(() {
+                                _backgroundColor = c;
+                                _readingPersistence.setBackgroundColor(c);
+                              }),
+                              textColor: _textColor,
+                              onTextColorChange: (c) => setState(() {
+                                _textColor = c;
+                                _readingPersistence.setTextColor(c);
+                              }),
+                              lineHeight: _lineHeight,
+                              onLineHeightChange: (v) => setState(() {
+                                _lineHeight = v;
+                                _readingPersistence.setLineHeight(v);
+                              }),
+                              sidePadding: _sidePadding,
+                              onSidePaddingChange: (v) => setState(() {
+                                _sidePadding = v;
+                                _readingPersistence.setSidePadding(v);
+                              }),
+                              firstLineIndentEm: _firstLineIndentEm,
+                              onFirstLineIndentEmChange: (v) => setState(() {
+                                _firstLineIndentEm = v;
+                                _readingPersistence.setFirstLineIndentEm(v);
+                              }),
+                              paragraphSpacing: _paragraphSpacing,
+                              onParagraphSpacingChange: (v) => setState(() {
+                                _paragraphSpacing = v;
+                                _readingPersistence.setParagraphSpacing(v);
+                              }),
+                              translatedController: _translatedController,
+                              textAlign: _textAlign,
+                              onTextAlignChange: (v) => setState(() {
+                                _textAlign = v;
+                                _readingPersistence.setTextAlign(v);
+                              }),
+                              translatedVerticalPadding:
+                                  _translatedVerticalPadding,
+                              onTranslatedVerticalPaddingChange: (v) =>
+                                  setState(() {
+                                    _translatedVerticalPadding = v;
+                                    _readingPersistence
+                                        .setTranslatedVerticalPadding(v);
+                                  }),
+                              translatedFontSize: _translatedFontSize,
+                              onTranslatedFontSizeChange: (v) => setState(() {
+                                _translatedFontSize = v;
+                                _readingPersistence.setTranslatedFontSize(v);
+                              }),
+                              translatedFontFamily: _translatedFontFamily,
+                              onTranslatedFontFamilyChange: (v) => setState(() {
+                                _translatedFontFamily = v;
+                                _readingPersistence.setTranslatedFontFamily(v);
+                              }),
                             ),
                           ],
                         ),
@@ -672,13 +314,45 @@ class _BookReadingState extends State<BookReading> {
         body: Consumer<BookReadingContext>(
           builder: (context, readingContext, child) {
             final index = readingContext.currentChapterIndex;
+            final selParagraph = readingContext.selectedParagraphIndex;
+            final selWord = readingContext.selectedWordIndex;
+            final selectionChanged =
+                selParagraph != _lastSelectionParagraphIndex ||
+                selWord != _lastSelectionWordIndex;
+            if (selectionChanged) {
+              _lastSelectionParagraphIndex = selParagraph;
+              _lastSelectionWordIndex = selWord;
+              if (selParagraph != -1 &&
+                  selWord != -1 &&
+                  !_isTranslatedVisible) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) {
+                    setState(() {
+                      _isTranslatedVisible = true;
+                    });
+                  }
+                });
+              }
+            }
             return Container(
               color: _backgroundColor,
               child: Column(
                 children: [
-                  TranslatedTextScroll(
-                    key: ValueKey(index),
-                    controller: _translatedController,
+                  AnimatedSize(
+                    duration: const Duration(milliseconds: 250),
+                    curve: Curves.easeInOut,
+                    child: ClipRect(
+                      child: Align(
+                        heightFactor: _isTranslatedVisible ? 1.0 : 0.0,
+                        child: TranslatedTextScroll(
+                          key: ValueKey(index),
+                          controller: _translatedController,
+                          fontSize: _translatedFontSize,
+                          fontFamily: _translatedFontFamily,
+                          verticalPadding: _translatedVerticalPadding,
+                        ),
+                      ),
+                    ),
                   ),
                   Expanded(
                     child: OriginalTextScroll(
@@ -691,6 +365,7 @@ class _BookReadingState extends State<BookReading> {
                       sidePadding: _sidePadding,
                       firstLineIndentEm: _firstLineIndentEm,
                       paragraphSpacing: _paragraphSpacing,
+                      textAlign: _textAlign,
                     ),
                   ),
                 ],
@@ -699,6 +374,19 @@ class _BookReadingState extends State<BookReading> {
           },
         ),
       ),
+    );
+  }
+
+  void _openSearchSheet(BuildContext context) {
+    final loadingBookContext = context.read<LoadingBookContext>();
+    final chapters = loadingBookContext.chapters;
+    final readingContext = context.read<BookReadingContext>();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) =>
+          SearchSheet(chapters: chapters, readingContext: readingContext),
     );
   }
 }

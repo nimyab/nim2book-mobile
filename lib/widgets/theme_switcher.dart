@@ -79,7 +79,7 @@ class ThemeSwitcherTile extends StatelessWidget {
 
     return ListTile(
       leading: const Icon(Icons.palette),
-      title: const Text('Theme'),
+      title: Text(l10n.theme),
       subtitle: Text(
         themeContext.getThemeName(themeContext.currentTheme, l10n),
       ),

@@ -45,6 +45,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get settings => 'Настройки';
 
   @override
+  String get dailyNewWordsLimit => 'Лимит новых слов в день';
+
+  @override
+  String get dailyLimitReached =>
+      'Дневной лимит исчерпан. Возвращайтесь завтра или повторите изученные слова.';
+
+  @override
   String get theme => 'Тема';
 
   @override
@@ -137,6 +144,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get addedToMyBooks => 'ДОБАВЛЕНО В МОИ КНИГИ';
+
+  @override
+  String get readBook => 'Читать';
 
   @override
   String get profile => 'Профиль';
@@ -308,4 +318,55 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get resetPosition => 'Сброс положения';
+
+  @override
+  String get textAlignment => 'Выравнивание текста';
+
+  @override
+  String get alignLeft => 'По левому краю';
+
+  @override
+  String get alignCenter => 'По центру';
+
+  @override
+  String get alignRight => 'По правому краю';
+
+  @override
+  String get alignJustify => 'По ширине';
+
+  @override
+  String translationVerticalPaddingPx(int px) {
+    return 'Вертикальные отступы перевода: $px px';
+  }
+
+  @override
+  String get translationFont => 'Шрифт перевода';
+
+  @override
+  String translationFontSizeValue(int size) {
+    return 'Размер шрифта перевода: $size';
+  }
+
+  @override
+  String get enterWordHint => 'Введите слово';
+
+  @override
+  String get logoutFailed => 'Ошибка выхода';
+
+  @override
+  String get bookLoadFailed => 'Не удалось загрузить данные книги.';
+
+  @override
+  String get notAvailable => 'Нет данных';
+
+  @override
+  String get hard => 'Сложно';
+
+  @override
+  String get easy => 'Легко';
+
+  @override
+  String reviewDueToday(int count) {
+    return 'К повторению сегодня: $count';
+  }
 }

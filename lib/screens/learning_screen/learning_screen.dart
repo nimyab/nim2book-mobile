@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/contexts/dictionary_context.dart';
 import '../../core/models/dictionary/dictionary.dart';
+import '../../core/services/srs_service.dart';
+import '../../core/srs/srs_item.dart';
 
 class LearningScreen extends StatefulWidget {
   const LearningScreen({super.key});
@@ -15,18 +18,16 @@ class LearningScreen extends StatefulWidget {
 class _LearningScreenState extends State<LearningScreen>
     with TickerProviderStateMixin {
   int _currentWordIndex = 0;
+  List<String> _sessionWords = [];
   late AnimationController _swipeController;
   late AnimationController _resetController;
-
-  // Animation values for Tinder-like effects
+  // Значения анимации для эффектов наподобие Tinder
   double _dragX = 0.0;
   double _dragY = 0.0;
   double _rotation = 0.0;
   double _scale = 1.0;
   bool _isDragging = false;
   bool _showTranslation = false;
-
-  // Track initial touch position for centered cursor behavior
   double _initialTouchX = 0.0;
 
   String _getPartOfSpeechLabel(String? pos) {
@@ -68,7 +69,6 @@ class _LearningScreenState extends State<LearningScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Part of speech header
           if (definition.pos != null) ...[
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -87,7 +87,6 @@ class _LearningScreenState extends State<LearningScreen>
             const SizedBox(height: 12),
           ],
 
-          // Translations
           if (definition.tr.isNotEmpty) ...[
             ...definition.tr.asMap().entries.map((entry) {
               final index = entry.key;
@@ -95,7 +94,6 @@ class _LearningScreenState extends State<LearningScreen>
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Translation text
                   Padding(
                     padding: EdgeInsets.only(bottom: 4),
                     child: Row(
@@ -121,7 +119,6 @@ class _LearningScreenState extends State<LearningScreen>
                     ),
                   ),
 
-                  // Meanings for this translation
                   if (translation.mean != null &&
                       translation.mean!.isNotEmpty) ...[
                     Padding(
@@ -140,7 +137,6 @@ class _LearningScreenState extends State<LearningScreen>
                     ),
                   ],
 
-                  // Examples for this translation
                   if (translation.ex != null && translation.ex!.isNotEmpty) ...[
                     Padding(
                       padding: const EdgeInsets.only(left: 16, bottom: 12),
@@ -216,6 +212,18 @@ class _LearningScreenState extends State<LearningScreen>
       duration: const Duration(milliseconds: 200),
       vsync: this,
     );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final dictContext = context.read<DictionaryContext>();
+      final savedWords = dictContext.savedWords;
+      final keys = savedWords.keys.toList();
+      if (keys.isEmpty) return;
+      final srs = GetIt.I.get<SrsService>();
+      final due = srs.getDueWords(keys);
+      setState(() {
+        _sessionWords = due;
+        _currentWordIndex = 0;
+      });
+    });
   }
 
   @override
@@ -228,28 +236,21 @@ class _LearningScreenState extends State<LearningScreen>
   void _onPanStart(DragStartDetails details) {
     setState(() {
       _isDragging = true;
-      // Store the initial touch position
       _initialTouchX = details.localPosition.dx;
     });
   }
 
   void _onPanUpdate(DragUpdateDetails details) {
-    // Only allow drag updates if translation is shown
+    // Разрешаем перетаскивание только когда показан перевод
     if (_showTranslation) {
       setState(() {
-        // Calculate current cursor position relative to initial touch
         final currentTouchX = details.localPosition.dx;
         final touchDeltaX = currentTouchX - _initialTouchX;
 
-        // Set card position so cursor appears at center during horizontal movement
         _dragX = touchDeltaX;
-        // Remove vertical movement - card only moves horizontally
         _dragY = 0.0;
-
-        // Calculate rotation based on horizontal drag (max 15 degrees)
-        _rotation = (_dragX / 300) * 0.26; // 0.26 radians ≈ 15 degrees
-
-        // Calculate scale based on horizontal drag distance only
+        // Поворот на основе горизонтального сдвига (макс. ~15°)
+        _rotation = (_dragX / 300) * 0.26; // 0.26 радиан ≈ 15°
         _scale = 1.0 - (_dragX.abs() / 1000).clamp(0.0, 0.1);
       });
     }
@@ -263,13 +264,12 @@ class _LearningScreenState extends State<LearningScreen>
       _isDragging = false;
     });
 
-    // Only allow swipe completion if translation is shown
+    // Завершение свайпа разрешено только при показанном переводе
     if (!_showTranslation) {
       _resetCard();
       return;
     }
 
-    // Determine swipe direction
     if (_dragX.abs() > threshold || velocity.abs() > 500) {
       if (_dragX > 0 || velocity > 0) {
         _animateSwipeRight();
@@ -282,7 +282,6 @@ class _LearningScreenState extends State<LearningScreen>
   }
 
   void _animateSwipeRight() {
-    // Animate card flying off to the right
     _swipeController.forward().then((_) {
       _handleKnow();
       _resetCard();
@@ -291,7 +290,6 @@ class _LearningScreenState extends State<LearningScreen>
   }
 
   void _animateSwipeLeft() {
-    // Animate card flying off to the left
     _swipeController.forward().then((_) {
       _handleDontKnow();
       _resetCard();
@@ -306,7 +304,6 @@ class _LearningScreenState extends State<LearningScreen>
         _dragY = 0.0;
         _rotation = 0.0;
         _scale = 1.0;
-        // Don't reset translation state - preserve it when card returns to center
       });
       _resetController.reset();
     });
@@ -314,7 +311,6 @@ class _LearningScreenState extends State<LearningScreen>
 
   void _toggleTranslation() {
     setState(() {
-      // Only allow showing translation, not hiding it once visible
       if (!_showTranslation) {
         _showTranslation = true;
       }
@@ -322,24 +318,51 @@ class _LearningScreenState extends State<LearningScreen>
   }
 
   void _handleKnow() {
-    _nextWord();
+    _applyRatingAndNext(SrsRating.good);
   }
 
   void _handleDontKnow() {
+    _applyRatingAndNext(SrsRating.again);
+  }
+
+  void _applyRatingAndNext(SrsRating rating) {
+    if (_sessionWords.isEmpty) {
+      _nextWord();
+      return;
+    }
+    final srs = GetIt.I.get<SrsService>();
+    final word = _sessionWords[_currentWordIndex];
+    srs.updateWithRating(word, rating);
+
+    final dictContext = context.read<DictionaryContext>();
+    final savedWords = dictContext.savedWords;
+    final keys = savedWords.keys.toList();
+    final updatedDue = srs.getDueWords(keys);
+    setState(() {
+      _sessionWords = updatedDue;
+      if (_sessionWords.isEmpty) {
+        _currentWordIndex = 0;
+      } else {
+        _currentWordIndex = _currentWordIndex.clamp(
+          0,
+          _sessionWords.length - 1,
+        );
+      }
+    });
     _nextWord();
   }
 
   void _nextWord() {
-    final dictContext = context.read<DictionaryContext>();
-    final savedWords = dictContext.savedWords;
-    final words = savedWords.keys.toList();
-
     setState(() {
-      _showTranslation = false; // Reset translation when moving to next word
+      _showTranslation = false;
+      final words = _sessionWords;
+      if (words.isEmpty) {
+        _currentWordIndex = 0;
+        return;
+      }
       if (_currentWordIndex < words.length - 1) {
         _currentWordIndex++;
       } else {
-        // Loop back to the beginning
         _currentWordIndex = 0;
       }
     });
@@ -351,6 +374,42 @@ class _LearningScreenState extends State<LearningScreen>
     final dictContext = context.watch<DictionaryContext>();
     final savedWords = dictContext.savedWords;
     final theme = Theme.of(context);
+
+    if (_sessionWords.isEmpty) {
+      return Scaffold(
+        appBar: AppBar(title: Text(l10n.learning)),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.check_circle_outline,
+                  size: 80,
+                  color: theme.colorScheme.primary.withValues(alpha: 0.5),
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  (() {
+                    final srs = GetIt.I.get<SrsService>();
+                    final used = srs.getDailyNewCount();
+                    final total = srs.getDailyNewLimit();
+                    return used >= total
+                        ? l10n.dailyLimitReached
+                        : l10n.noWordsToLearn;
+                  })(),
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
 
     if (savedWords.isEmpty) {
       return Scaffold(
@@ -381,9 +440,15 @@ class _LearningScreenState extends State<LearningScreen>
       );
     }
 
-    final words = savedWords.keys.toList();
-    final currentWord = words[_currentWordIndex];
-    final currentDefinitions = savedWords[currentWord]!;
+    final words = _sessionWords;
+    final safeIndex = _currentWordIndex.clamp(
+      0,
+      words.isNotEmpty ? words.length - 1 : 0,
+    );
+    final currentWord = words.isNotEmpty ? words[safeIndex] : '';
+    final currentDefinitions = currentWord.isNotEmpty
+        ? (savedWords[currentWord] ?? [])
+        : [];
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.learning), centerTitle: true),
@@ -392,21 +457,25 @@ class _LearningScreenState extends State<LearningScreen>
           padding: const EdgeInsets.all(24.0),
           child: Column(
             children: [
-              // Progress indicator
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Column(
                   children: [
                     Text(
-                      l10n.wordProgress(_currentWordIndex + 1, words.length),
+                      l10n.wordProgress(
+                        words.isEmpty ? 0 : _currentWordIndex + 1,
+                        words.length,
+                      ),
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
                     ),
                     const SizedBox(height: 8),
                     LinearProgressIndicator(
-                      value: (_currentWordIndex + 1) / words.length,
+                      value: words.isEmpty
+                          ? 0
+                          : (_currentWordIndex + 1) / words.length,
                       backgroundColor:
                           theme.colorScheme.surfaceContainerHighest,
                       valueColor: AlwaysStoppedAnimation<Color>(
@@ -419,7 +488,6 @@ class _LearningScreenState extends State<LearningScreen>
 
               const SizedBox(height: 32),
 
-              // Flashcard
               Expanded(
                 child: Center(
                   child: GestureDetector(
@@ -432,13 +500,12 @@ class _LearningScreenState extends State<LearningScreen>
                         _resetController,
                       ]),
                       builder: (context, child) {
-                        // Calculate final position including animation
                         double finalX = _dragX;
                         double finalY = _dragY;
                         double finalRotation = _rotation;
                         double finalScale = _scale;
 
-                        // Apply swipe animation when swiping away
+                        // Применяем анимацию свайпа при уходе карточки
                         if (_swipeController.isAnimating) {
                           final swipeProgress = _swipeController.value;
                           final swipeDirection = _dragX > 0 ? 1.0 : -1.0;
@@ -451,7 +518,7 @@ class _LearningScreenState extends State<LearningScreen>
                           finalScale = _scale - (0.3 * swipeProgress);
                         }
 
-                        // Apply reset animation
+                        // Применяем анимацию возврата при сбросе
                         if (_resetController.isAnimating) {
                           final resetProgress = _resetController.value;
                           finalX = _dragX * (1 - resetProgress);
@@ -469,7 +536,6 @@ class _LearningScreenState extends State<LearningScreen>
                             ..scaleByDouble(finalScale, finalScale, 1.0, 1.0),
                           child: Stack(
                             children: [
-                              // Background card (next card preview)
                               if (!_isDragging && _dragX.abs() < 50) ...[
                                 Positioned(
                                   top: 10,
@@ -498,7 +564,6 @@ class _LearningScreenState extends State<LearningScreen>
                                 ),
                               ],
 
-                              // Main card
                               GestureDetector(
                                 onTap: _toggleTranslation,
                                 child: Container(
@@ -532,12 +597,10 @@ class _LearningScreenState extends State<LearningScreen>
                                       ),
                                       child: Column(
                                         children: [
-                                          // Main scrollable content
                                           Expanded(
                                             child: SingleChildScrollView(
                                               child: Column(
                                                 children: [
-                                                  // Top padding for centering when content is short
                                                   SizedBox(
                                                     height: _showTranslation
                                                         ? 8
@@ -584,7 +647,6 @@ class _LearningScreenState extends State<LearningScreen>
                                                     ),
                                                   ],
 
-                                                  // Translation section (only show if _showTranslation is true)
                                                   if (_showTranslation) ...[
                                                     const SizedBox(height: 24),
                                                     Divider(
@@ -605,7 +667,6 @@ class _LearningScreenState extends State<LearningScreen>
                                                           ),
                                                     ),
                                                   ] else ...[
-                                                    // Show "Tap to translate" hint when translation is hidden
                                                     const SizedBox(height: 80),
                                                     Center(
                                                       child: Container(
@@ -656,14 +717,12 @@ class _LearningScreenState extends State<LearningScreen>
                                                     ),
                                                   ],
 
-                                                  // Bottom padding to ensure content doesn't stick to bottom
                                                   const SizedBox(height: 60),
                                                 ],
                                               ),
                                             ),
                                           ),
 
-                                          // Bottom section with instruction (fixed at bottom)
                                           Container(
                                             padding: const EdgeInsets.only(
                                               top: 8,
@@ -687,7 +746,7 @@ class _LearningScreenState extends State<LearningScreen>
                                       ),
                                     ),
                                   ),
-                                ), // Close inner GestureDetector
+                                ),
                               ),
                             ],
                           ),
@@ -696,15 +755,12 @@ class _LearningScreenState extends State<LearningScreen>
                     ),
                   ),
                 ),
-              ), // Close outer GestureDetector
-              // Control buttons
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 16),
                 child: Column(
                   children: [
-                    // Translate button or Know/Don't Know buttons based on translation state
                     if (!_showTranslation) ...[
-                      // Show only Translate button when translation is hidden
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton.icon(
@@ -722,26 +778,25 @@ class _LearningScreenState extends State<LearningScreen>
                         ),
                       ),
                     ] else ...[
-                      // Show Know/Don't Know buttons when translation is visible
                       Row(
                         children: [
                           Expanded(
                             child: ElevatedButton.icon(
                               onPressed: _handleDontKnow,
-                              icon: const Icon(Icons.close),
+                              icon: const Icon(Icons.refresh),
                               label: Text(l10n.dontKnow),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
                                     theme.colorScheme.surfaceContainer,
                                 foregroundColor: theme.colorScheme.error,
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
+                                  horizontal: 12,
                                   vertical: 12,
                                 ),
                               ),
                             ),
                           ),
-                          const SizedBox(width: 16),
+                          const SizedBox(width: 12),
                           Expanded(
                             child: ElevatedButton.icon(
                               onPressed: _handleKnow,
@@ -752,7 +807,7 @@ class _LearningScreenState extends State<LearningScreen>
                                     theme.colorScheme.surfaceContainer,
                                 foregroundColor: theme.colorScheme.primary,
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
+                                  horizontal: 12,
                                   vertical: 12,
                                 ),
                               ),

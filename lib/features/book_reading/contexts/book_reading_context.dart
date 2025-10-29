@@ -1,15 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/models/word_item.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/services/chapter_converter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-class WordItem {
-  final String wordText;
-  final int? paragraphIndex;
-  final int? wordIndex;
-
-  WordItem({required this.wordText, this.paragraphIndex, this.wordIndex});
-}
 
 String currentChapterKey(String bookId) => 'current_chapter_$bookId';
 
@@ -57,34 +51,28 @@ class BookReadingContext with ChangeNotifier {
     notifyListeners();
   }
 
+  void setChapters(List<ChapterAlignNode> chapters) {
+    _chapters
+      ..clear()
+      ..addAll(chapters);
+
+    if (_chapters.isEmpty) {
+      _currentChapterIndex = 0;
+    } else if (_currentChapterIndex >= _chapters.length) {
+      _currentChapterIndex = _chapters.length - 1;
+    }
+
+    notifyListeners();
+  }
+
   // Возвращает список слов для указанного параграфа текущей главы.
   // Каждый вызов создает новые элементы, избегая общей предвычисленной структуры.
   List<WordItem> getParagraphItems(int paragraphIndex) {
     if (paragraphIndex < 0 || paragraphIndex >= currentChapter.content.length) {
       return const [];
     }
-
     final paragraph = currentChapter.content[paragraphIndex];
-    final alignWordNodes = paragraph.aw;
-    final items = <WordItem>[];
-
-    for (var wordIndex = 0; wordIndex < alignWordNodes.length; wordIndex++) {
-      final wordAlign = alignWordNodes[wordIndex];
-      final startIndex = wordAlign.iow.first;
-      final endIndex = wordAlign.iow.last;
-
-      final wordText = paragraph.op.substring(startIndex, endIndex);
-
-      items.add(
-        WordItem(
-          wordText: wordText,
-          wordIndex: wordIndex,
-          paragraphIndex: paragraphIndex,
-        ),
-      );
-    }
-
-    return items;
+    return const ChapterConverter().convertParagraph(paragraph, paragraphIndex);
   }
 
   void goToChapter(int index) {
