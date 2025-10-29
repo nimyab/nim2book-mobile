@@ -161,8 +161,8 @@ class _BookReadingState extends State<BookReading>
               child: IconButton(
                 icon: Icon(
                   _isTranslatedVisible
-                      ? Icons.keyboard_arrow_down
-                      : Icons.keyboard_arrow_up,
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_down,
                 ),
                 onPressed: () {
                   setState(() {

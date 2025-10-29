@@ -88,9 +88,11 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
     final paragraphCount = readingContext.currentParagraphCount;
     final currentChapterIndex = readingContext.currentChapterIndex;
     final currentChapter = readingContext.currentChapter;
-    final chapterTitle = currentChapter.translatedTitle.isNotEmpty
-        ? currentChapter.translatedTitle
-        : currentChapter.title;
+    // todo: consider showing translated title if available
+    // final chapterTitle = currentChapter.translatedTitle.isNotEmpty
+    //     ? currentChapter.translatedTitle
+    //     : currentChapter.title;
+    final chapterTitle = currentChapter.title;
 
     final selectedParagraph = readingContext.selectedParagraphIndex;
     if (selectedParagraph >= 0 &&
@@ -145,6 +147,9 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
         itemCount: paragraphCount + 2,
         itemBuilder: (context, index) {
           if (index == 0) {
+            if (chapterTitle.isEmpty) {
+              return const SizedBox.shrink();
+            }
             return Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: widget.sidePadding ?? 10,

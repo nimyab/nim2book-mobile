@@ -18,9 +18,11 @@ class ChapterListTab extends StatelessWidget {
           separatorBuilder: (_, __) => const Divider(height: 1),
           itemBuilder: (ctx, index) {
             final chapter = chapters[index];
-            final title = chapter.translatedTitle.isNotEmpty
-                ? chapter.translatedTitle
-                : chapter.title;
+            // todo: consider showing translated title if available
+            // final title = chapter.translatedTitle.isNotEmpty
+            //     ? chapter.translatedTitle
+            //     : chapter.title;
+            final title = chapter.title;
             final isCurrent = index == readingContext.currentChapterIndex;
             return ListTile(
               tileColor: isCurrent
