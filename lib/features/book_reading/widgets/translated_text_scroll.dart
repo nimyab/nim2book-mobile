@@ -49,6 +49,7 @@ class TranslatedTextScroll extends StatelessWidget {
     final metricsPainter = TextPainter(
       text: TextSpan(text: 'pqAy', style: textStyle),
       textDirection: TextDirection.ltr,
+      textScaler: TextScaler.linear(1.0),
     )..layout();
     final lineHeight = metricsPainter.height;
     final computedHeight = lineHeight + verticalPadding * 2;
@@ -57,7 +58,6 @@ class TranslatedTextScroll extends StatelessWidget {
       height: computedHeight,
       child: Container(
         color: scrollColors.backgroundColor,
-        padding: EdgeInsets.symmetric(horizontal: 0, vertical: verticalPadding),
         alignment: Alignment.center,
         child: ListView.separated(
           controller: controller,
@@ -85,6 +85,7 @@ class TranslatedTextScroll extends StatelessWidget {
 
               return Center(
                 child: RichText(
+                  textScaler: TextScaler.linear(1.0),
                   textAlign: TextAlign.left,
                   text: TextSpan(
                     children: [
@@ -92,6 +93,7 @@ class TranslatedTextScroll extends StatelessWidget {
                         child: Text(
                           paragraph.tp.substring(0, selectedWordNode.itw[0]),
                           style: textStyle,
+                          textScaler: TextScaler.linear(1.0),
                         ),
                       ),
 
@@ -108,6 +110,7 @@ class TranslatedTextScroll extends StatelessWidget {
                                   readingColors.highlightBackgroundColor,
                               color: readingColors.highlightTextColor,
                             ),
+                            textScaler: TextScaler.linear(1.0),
                           ),
                         ),
                       ),
@@ -116,6 +119,7 @@ class TranslatedTextScroll extends StatelessWidget {
                         child: Text(
                           paragraph.tp.substring(selectedWordNode.itw[1]),
                           style: textStyle,
+                          textScaler: TextScaler.linear(1.0),
                         ),
                       ),
                     ],
@@ -123,7 +127,13 @@ class TranslatedTextScroll extends StatelessWidget {
                 ),
               );
             } else {
-              return Center(child: Text(paragraph.tp, style: textStyle));
+              return Center(
+                child: Text(
+                  paragraph.tp,
+                  style: textStyle,
+                  textScaler: TextScaler.linear(1.0),
+                ),
+              );
             }
           },
         ),
