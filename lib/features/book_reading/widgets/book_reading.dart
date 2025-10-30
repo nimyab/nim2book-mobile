@@ -100,9 +100,7 @@ class _BookReadingState extends State<BookReading>
                           !readingContext.isTranslatedVisible) {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           if (mounted) {
-                            setState(() {
-                              readingContext.isTranslatedVisible = true;
-                            });
+                            readingContext.isTranslatedVisible = true;
                           }
                         });
                       }
