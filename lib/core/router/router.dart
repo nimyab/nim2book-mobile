@@ -10,6 +10,7 @@ import 'package:nim2book_mobile_flutter/screens/my_books_screen/my_books_screen.
 import 'package:nim2book_mobile_flutter/screens/reading_screen/reading_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/register_screen/register_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/settings_screen/settings_screen.dart';
+import 'package:nim2book_mobile_flutter/screens/stats_screen/stats_screen.dart';
 import 'package:nim2book_mobile_flutter/widgets/main_scaffold.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -101,6 +102,12 @@ final router = GoRouter(
       path: '/learning',
       name: 'learning',
       builder: (context, state) => const LearningScreen(),
+    ),
+
+    GoRoute(
+      path: '/stats',
+      name: 'stats',
+      builder: (context, state) => const StatsScreen(),
     ),
   ],
 );

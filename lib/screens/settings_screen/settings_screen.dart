@@ -31,10 +31,18 @@ class SettingsScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       spacing: 16,
-                      children: const [
-                        LanguageSwitcher(),
-                        ThemeSwitcher(),
-                        DailyNewLimitSwitcher(),
+                      children: [
+                        const LanguageSwitcher(),
+                        const ThemeSwitcher(),
+                        const DailyNewLimitSwitcher(),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            onPressed: () => context.push('/stats'),
+                            icon: const Icon(Icons.insights),
+                            label: Text(l10n.showStatistics),
+                          ),
+                        ),
                       ],
                     ),
                   ),

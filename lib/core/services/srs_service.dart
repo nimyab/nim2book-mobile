@@ -24,6 +24,10 @@ class SrsService {
   static const String _dailyNewDateKey = 'srs_daily_new_date';
   static const String _dailyNewLimitKey = 'srs_daily_new_limit';
 
+  static const String _streakCurrentKey = 'srs_streak_current';
+  static const String _streakRecordKey = 'srs_streak_record';
+  static const String _streakLastDateKey = 'srs_streak_last_date';
+
   bool _isSameCalendarDay(DateTime a, DateTime b) {
     return a.year == b.year && a.month == b.month && a.day == b.day;
   }
@@ -64,6 +68,69 @@ class SrsService {
   // Сохранение нового лимита
   Future<void> setDailyNewLimit(int value) async {
     await _sharedPreferences.setInt(_dailyNewLimitKey, value);
+  }
+
+  void _registerStudyToday({DateTime? now}) {
+    final n = now ?? DateTime.now();
+    final lastStr = _sharedPreferences.getString(_streakLastDateKey);
+    int current = _sharedPreferences.getInt(_streakCurrentKey) ?? 0;
+    int record = _sharedPreferences.getInt(_streakRecordKey) ?? 0;
+
+    if (lastStr == null) {
+      _sharedPreferences.setString(_streakLastDateKey, n.toIso8601String());
+      _sharedPreferences.setInt(_streakCurrentKey, 1);
+      if (record < 1) {
+        _sharedPreferences.setInt(_streakRecordKey, 1);
+      }
+      return;
+    }
+
+    DateTime last;
+    try {
+      last = DateTime.parse(lastStr);
+    } catch (_) {
+      last = n;
+    }
+
+    bool sameDay = _isSameCalendarDay(last, n);
+    if (sameDay) {
+      return;
+    }
+
+    final yesterday = last.add(const Duration(days: 1));
+    if (_isSameCalendarDay(yesterday, n)) {
+      current += 1;
+    } else {
+      current = 1;
+    }
+    if (current > record) record = current;
+    _sharedPreferences.setString(_streakLastDateKey, n.toIso8601String());
+    _sharedPreferences.setInt(_streakCurrentKey, current);
+    _sharedPreferences.setInt(_streakRecordKey, record);
+  }
+
+  int getStudyStreakDays({DateTime? now}) {
+    final n = now ?? DateTime.now();
+    final lastStr = _sharedPreferences.getString(_streakLastDateKey);
+    if (lastStr == null) return 0;
+    DateTime last;
+    try {
+      last = DateTime.parse(lastStr);
+    } catch (_) {
+      return _sharedPreferences.getInt(_streakCurrentKey) ?? 0;
+    }
+    final current = _sharedPreferences.getInt(_streakCurrentKey) ?? 0;
+    final diff = DateTime(
+      n.year,
+      n.month,
+      n.day,
+    ).difference(DateTime(last.year, last.month, last.day)).inDays;
+    if (diff > 1) return 0;
+    return current;
+  }
+
+  int getStudyStreakRecord() {
+    return _sharedPreferences.getInt(_streakRecordKey) ?? 0;
   }
 
   void _incrementDailyNewCount({DateTime? now}) {
@@ -121,6 +188,7 @@ class SrsService {
     if (wasNeverReviewed) {
       _incrementDailyNewCount(now: updated.lastReviewedAt);
     }
+    _registerStudyToday(now: updated.lastReviewedAt);
     upsertItem(updated);
     return updated;
   }

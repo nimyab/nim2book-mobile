@@ -369,4 +369,105 @@ class AppLocalizationsRu extends AppLocalizations {
   String reviewDueToday(int count) {
     return 'К повторению сегодня: $count';
   }
+
+  @override
+  String get statistics => 'Статистика';
+
+  @override
+  String get showStatistics => 'Показать статистику изучения';
+
+  @override
+  String studyStreakDays(int days) {
+    return 'Вы учите слова $days дней';
+  }
+
+  @override
+  String recordStreakDays(int days) {
+    return 'Рекорд $days дней';
+  }
+
+  @override
+  String learnedTodayProgress(int used, int limit) {
+    return 'Выучено сегодня $used/$limit';
+  }
+
+  @override
+  String get period => 'Период';
+
+  @override
+  String get period7Days => '7 дней';
+
+  @override
+  String get period30Days => '30 дней';
+
+  @override
+  String get period90Days => '90 дней';
+
+  @override
+  String get periodThisYear => 'Этот год';
+
+  @override
+  String get periodAllTime => 'Все время';
+
+  @override
+  String activeLearningCount(int count) {
+    return 'Сейчас изучается: $count';
+  }
+
+  @override
+  String totalLearnedWords(int count) {
+    return 'Всего выученных слов: $count';
+  }
+
+  @override
+  String totalRepeatedWords(int count) {
+    return 'Всего повторенных слов: $count';
+  }
+
+  @override
+  String totalKnownWords(int count) {
+    return 'Всего уже известных слов: $count';
+  }
+
+  @override
+  String get chartCaption => 'Дни / количество слов';
+
+  @override
+  String get periodStatsHeader => 'За выбранный период';
+
+  @override
+  String get chartAxisDays => 'Дни';
+
+  @override
+  String get chartAxisWords => 'Количество слов';
+
+  @override
+  String get chartLegendPeriod => 'За период';
+
+  @override
+  String get chartLegendTotal => 'Всего';
+
+  @override
+  String get chartLegendLearned => 'Выучено';
+
+  @override
+  String get chartLegendRepeated => 'Повторено';
+
+  @override
+  String get chartLegendKnown => 'Уже известно';
+
+  @override
+  String periodFirstLearnedWords(int count) {
+    return 'Впервые выучено: $count';
+  }
+
+  @override
+  String periodRepeatedWords(int count) {
+    return 'Повторено: $count';
+  }
+
+  @override
+  String periodBecameKnownWords(int count) {
+    return 'Стали известными: $count';
+  }
 }

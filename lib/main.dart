@@ -25,9 +25,16 @@ import 'package:nim2book_mobile_flutter/firebase_options.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/date_symbol_data_local.dart';
+// import 'package:intl/intl.dart' as intl; // Optional: set default locale if needed
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Intl date symbols for supported locales to avoid web runtime crashes
+  // when using DateFormat (e.g., DateFormat.MMMd()).
+  await initializeDateFormatting('en');
+  await initializeDateFormatting('ru');
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 

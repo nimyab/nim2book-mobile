@@ -483,6 +483,74 @@
   "@reviewDueToday": {
     "description": "Counter of items due for review today",
     "placeholders": {"count": {"type": "int"}}
-  }
+  },
+  "statistics": "Statistics",
+  "@statistics": {"description": "Statistics screen title"},
+  "showStatistics": "Show learning statistics",
+  "@showStatistics": {"description": "Button/link to open statistics"},
+  "studyStreakDays": "You are learning words for {days} days",
+  "@studyStreakDays": {"description": "Current learning streak in days", "placeholders": {"days": {"type": "int"}}},
+  "recordStreakDays": "Record {days} days",
+  "@recordStreakDays": {"description": "Record streak in days", "placeholders": {"days": {"type": "int"}}},
+  "learnedTodayProgress": "Learned today {used}/{limit}",
+  "@learnedTodayProgress": {"description": "Progress of learned new words today", "placeholders": {"used": {"type": "int"}, "limit": {"type": "int"}}},
+  "period": "Period",
+  "@period": {"description": "Period selection label"},
+  "period7Days": "7 days",
+  "@period7Days": {"description": "7 days period option"},
+  "period30Days": "30 days",
+  "@period30Days": {"description": "30 days period option"},
+  "period90Days": "90 days",
+  "@period90Days": {"description": "90 days period option"},
+  "periodThisYear": "This year",
+  "@periodThisYear": {"description": "This year period option"},
+  "periodAllTime": "All time",
+  "@periodAllTime": {"description": "All time period option"},
+  "activeLearningCount": "Currently learning: {count}",
+  "@activeLearningCount": {"description": "Number of words currently being learned", "placeholders": {"count": {"type": "int"}}},
+  "totalLearnedWords": "Total learned words: {count}",
+  "@totalLearnedWords": {"description": "Total learned words", "placeholders": {"count": {"type": "int"}}},
+  "totalRepeatedWords": "Total repeated words: {count}",
+  "@totalRepeatedWords": {"description": "Total repeated words", "placeholders": {"count": {"type": "int"}}},
+  "totalKnownWords": "Total already known words: {count}",
+  "@totalKnownWords": {"description": "Total already known words", "placeholders": {"count": {"type": "int"}}},
+  "chartCaption": "Days vs. words",
+  "@chartCaption": {"description": "Chart caption"},
+  "periodStatsHeader": "For selected period",
+  "chartAxisDays": "Days",
+  "@chartAxisDays": {
+    "description": "X-axis title for statistics chart"
+  },
+  "chartAxisWords": "Number of words",
+  "@chartAxisWords": {
+    "description": "Y-axis title for statistics chart"
+  },
+  "chartLegendPeriod": "For period",
+  "@chartLegendPeriod": {
+    "description": "Legend label for period bars"
+  },
+  "chartLegendTotal": "Total",
+  "@chartLegendTotal": {
+    "description": "Legend label for cumulative line"
+  },
+  "chartLegendLearned": "Learned",
+  "@chartLegendLearned": {
+    "description": "Legend label for learned words series"
+  },
+  "chartLegendRepeated": "Repeated",
+  "@chartLegendRepeated": {
+    "description": "Legend label for repeated words series"
+  },
+  "chartLegendKnown": "Known",
+  "@chartLegendKnown": {
+    "description": "Legend label for already known words series"
+  },
+  "@periodStatsHeader": {"description": "Header for selected period stats"},
+  "periodFirstLearnedWords": "First learned: {count}",
+  "@periodFirstLearnedWords": {"description": "Words learned first time in the period", "placeholders": {"count": {"type": "int"}}},
+  "periodRepeatedWords": "Repeated: {count}",
+  "@periodRepeatedWords": {"description": "Words repeated in the period", "placeholders": {"count": {"type": "int"}}},
+  "periodBecameKnownWords": "Became known: {count}",
+  "@periodBecameKnownWords": {"description": "Words that became known in the period", "placeholders": {"count": {"type": "int"}}}
 }
 

@@ -483,5 +483,73 @@
   "@reviewDueToday": {
     "description": "Счётчик элементов, требующих повторения сегодня",
     "placeholders": {"count": {"type": "int"}}
-  }
+  },
+  "statistics": "Статистика",
+  "@statistics": {"description": "Заголовок экрана статистики"},
+  "showStatistics": "Показать статистику изучения",
+  "@showStatistics": {"description": "Кнопка/ссылка для открытия статистики"},
+  "studyStreakDays": "Вы учите слова {days} дней",
+  "@studyStreakDays": {"description": "Текущий стрик обучения в днях", "placeholders": {"days": {"type": "int"}}},
+  "recordStreakDays": "Рекорд {days} дней",
+  "@recordStreakDays": {"description": "Рекордный стрик в днях", "placeholders": {"days": {"type": "int"}}},
+  "learnedTodayProgress": "Выучено сегодня {used}/{limit}",
+  "@learnedTodayProgress": {"description": "Прогресс выученных новых слов сегодня", "placeholders": {"used": {"type": "int"}, "limit": {"type": "int"}}},
+  "period": "Период",
+  "@period": {"description": "Метка выбора периода"},
+  "period7Days": "7 дней",
+  "@period7Days": {"description": "Опция периода 7 дней"},
+  "period30Days": "30 дней",
+  "@period30Days": {"description": "Опция периода 30 дней"},
+  "period90Days": "90 дней",
+  "@period90Days": {"description": "Опция периода 90 дней"},
+  "periodThisYear": "Этот год",
+  "@periodThisYear": {"description": "Опция периода — текущий год"},
+  "periodAllTime": "Все время",
+  "@periodAllTime": {"description": "Опция периода — за всё время"},
+  "activeLearningCount": "Сейчас изучается: {count}",
+  "@activeLearningCount": {"description": "Количество слов, изучающихся сейчас", "placeholders": {"count": {"type": "int"}}},
+  "totalLearnedWords": "Всего выученных слов: {count}",
+  "@totalLearnedWords": {"description": "Всего выученных слов", "placeholders": {"count": {"type": "int"}}},
+  "totalRepeatedWords": "Всего повторенных слов: {count}",
+  "@totalRepeatedWords": {"description": "Всего повторенных слов", "placeholders": {"count": {"type": "int"}}},
+  "totalKnownWords": "Всего уже известных слов: {count}",
+  "@totalKnownWords": {"description": "Всего уже известных слов", "placeholders": {"count": {"type": "int"}}},
+  "chartCaption": "Дни / количество слов",
+  "@chartCaption": {"description": "Подпись к графику"},
+  "periodStatsHeader": "За выбранный период",
+  "chartAxisDays": "Дни",
+  "@chartAxisDays": {
+    "description": "Название оси X для графика статистики"
+  },
+  "chartAxisWords": "Количество слов",
+  "@chartAxisWords": {
+    "description": "Название оси Y для графика статистики"
+  },
+  "chartLegendPeriod": "За период",
+  "@chartLegendPeriod": {
+    "description": "Метка легенды для столбцов периода"
+  },
+  "chartLegendTotal": "Всего",
+  "@chartLegendTotal": {
+    "description": "Метка легенды для накопительной линии"
+  },
+  "chartLegendLearned": "Выучено",
+  "@chartLegendLearned": {
+    "description": "Метка легенды для серии выученных слов"
+  },
+  "chartLegendRepeated": "Повторено",
+  "@chartLegendRepeated": {
+    "description": "Метка легенды для серии повторённых слов"
+  },
+  "chartLegendKnown": "Уже известно",
+  "@chartLegendKnown": {
+    "description": "Метка легенды для серии уже известных слов"
+  },
+  "@periodStatsHeader": {"description": "Заголовок статистики за выбранный период"},
+  "periodFirstLearnedWords": "Впервые выучено: {count}",
+  "@periodFirstLearnedWords": {"description": "Слова, впервые выученные в период", "placeholders": {"count": {"type": "int"}}},
+  "periodRepeatedWords": "Повторено: {count}",
+  "@periodRepeatedWords": {"description": "Слова, повторенные в период", "placeholders": {"count": {"type": "int"}}},
+  "periodBecameKnownWords": "Стали известными: {count}",
+  "@periodBecameKnownWords": {"description": "Слова, ставшие известными в период", "placeholders": {"count": {"type": "int"}}}
 }

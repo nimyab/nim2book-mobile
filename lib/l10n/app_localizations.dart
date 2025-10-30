@@ -775,6 +775,168 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Due today: {count}'**
   String reviewDueToday(int count);
+
+  /// Statistics screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics'**
+  String get statistics;
+
+  /// Button/link to open statistics
+  ///
+  /// In en, this message translates to:
+  /// **'Show learning statistics'**
+  String get showStatistics;
+
+  /// Current learning streak in days
+  ///
+  /// In en, this message translates to:
+  /// **'You are learning words for {days} days'**
+  String studyStreakDays(int days);
+
+  /// Record streak in days
+  ///
+  /// In en, this message translates to:
+  /// **'Record {days} days'**
+  String recordStreakDays(int days);
+
+  /// Progress of learned new words today
+  ///
+  /// In en, this message translates to:
+  /// **'Learned today {used}/{limit}'**
+  String learnedTodayProgress(int used, int limit);
+
+  /// Period selection label
+  ///
+  /// In en, this message translates to:
+  /// **'Period'**
+  String get period;
+
+  /// 7 days period option
+  ///
+  /// In en, this message translates to:
+  /// **'7 days'**
+  String get period7Days;
+
+  /// 30 days period option
+  ///
+  /// In en, this message translates to:
+  /// **'30 days'**
+  String get period30Days;
+
+  /// 90 days period option
+  ///
+  /// In en, this message translates to:
+  /// **'90 days'**
+  String get period90Days;
+
+  /// This year period option
+  ///
+  /// In en, this message translates to:
+  /// **'This year'**
+  String get periodThisYear;
+
+  /// All time period option
+  ///
+  /// In en, this message translates to:
+  /// **'All time'**
+  String get periodAllTime;
+
+  /// Number of words currently being learned
+  ///
+  /// In en, this message translates to:
+  /// **'Currently learning: {count}'**
+  String activeLearningCount(int count);
+
+  /// Total learned words
+  ///
+  /// In en, this message translates to:
+  /// **'Total learned words: {count}'**
+  String totalLearnedWords(int count);
+
+  /// Total repeated words
+  ///
+  /// In en, this message translates to:
+  /// **'Total repeated words: {count}'**
+  String totalRepeatedWords(int count);
+
+  /// Total already known words
+  ///
+  /// In en, this message translates to:
+  /// **'Total already known words: {count}'**
+  String totalKnownWords(int count);
+
+  /// Chart caption
+  ///
+  /// In en, this message translates to:
+  /// **'Days vs. words'**
+  String get chartCaption;
+
+  /// Header for selected period stats
+  ///
+  /// In en, this message translates to:
+  /// **'For selected period'**
+  String get periodStatsHeader;
+
+  /// X-axis title for statistics chart
+  ///
+  /// In en, this message translates to:
+  /// **'Days'**
+  String get chartAxisDays;
+
+  /// Y-axis title for statistics chart
+  ///
+  /// In en, this message translates to:
+  /// **'Number of words'**
+  String get chartAxisWords;
+
+  /// Legend label for period bars
+  ///
+  /// In en, this message translates to:
+  /// **'For period'**
+  String get chartLegendPeriod;
+
+  /// Legend label for cumulative line
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get chartLegendTotal;
+
+  /// Legend label for learned words series
+  ///
+  /// In en, this message translates to:
+  /// **'Learned'**
+  String get chartLegendLearned;
+
+  /// Legend label for repeated words series
+  ///
+  /// In en, this message translates to:
+  /// **'Repeated'**
+  String get chartLegendRepeated;
+
+  /// Legend label for already known words series
+  ///
+  /// In en, this message translates to:
+  /// **'Known'**
+  String get chartLegendKnown;
+
+  /// Words learned first time in the period
+  ///
+  /// In en, this message translates to:
+  /// **'First learned: {count}'**
+  String periodFirstLearnedWords(int count);
+
+  /// Words repeated in the period
+  ///
+  /// In en, this message translates to:
+  /// **'Repeated: {count}'**
+  String periodRepeatedWords(int count);
+
+  /// Words that became known in the period
+  ///
+  /// In en, this message translates to:
+  /// **'Became known: {count}'**
+  String periodBecameKnownWords(int count);
 }
 
 class _AppLocalizationsDelegate
