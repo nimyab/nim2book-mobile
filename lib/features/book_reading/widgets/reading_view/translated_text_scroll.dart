@@ -2,24 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/contexts/reading_settings_context.dart';
 import 'package:provider/provider.dart';
 
 class TranslatedTextScroll extends StatelessWidget {
-  const TranslatedTextScroll({
-    super.key,
-    this.controller,
-    this.fontSize = 20,
-    this.fontFamily,
-    this.verticalPadding = 5,
-  });
+  const TranslatedTextScroll({super.key, this.controller});
 
   final ScrollController? controller;
-  final double fontSize;
-  final String? fontFamily;
-  final double verticalPadding;
 
   @override
   Widget build(BuildContext context) {
+    final readingSettingsContext = context.watch<ReadingSettingsContext>();
     final readingContext = context.watch<BookReadingContext>();
     final theme = Theme.of(context);
     final scrollColors = theme.extension<TranslatedTextScrollColors>()!;
@@ -34,13 +27,18 @@ class TranslatedTextScroll extends StatelessWidget {
         ? null
         : currentChapter.content[selectedParagraphIndex].aw[selectedWordIndex];
 
-    final baseStyle = TextStyle(fontSize: fontSize);
+    final baseStyle = TextStyle(
+      fontSize: readingSettingsContext.translatedFontSize,
+    );
     TextStyle textStyle;
-    if (fontFamily == null || fontFamily!.toLowerCase() == 'system') {
+    if (readingSettingsContext.translatedFontFamily.toLowerCase() == 'system') {
       textStyle = baseStyle;
     } else {
       try {
-        textStyle = GoogleFonts.getFont(fontFamily!, textStyle: baseStyle);
+        textStyle = GoogleFonts.getFont(
+          readingSettingsContext.translatedFontFamily,
+          textStyle: baseStyle,
+        );
       } catch (_) {
         textStyle = baseStyle;
       }
@@ -52,7 +50,8 @@ class TranslatedTextScroll extends StatelessWidget {
       textScaler: TextScaler.linear(1.0),
     )..layout();
     final lineHeight = metricsPainter.height;
-    final computedHeight = lineHeight + verticalPadding * 2;
+    final computedHeight =
+        lineHeight + readingSettingsContext.translatedVerticalPadding * 2;
 
     return SizedBox(
       height: computedHeight,

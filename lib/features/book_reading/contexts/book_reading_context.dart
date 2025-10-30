@@ -33,6 +33,29 @@ class BookReadingContext with ChangeNotifier {
   double _chapterProgress = 0.0;
   double get chapterProgress => _chapterProgress;
 
+  bool _isTranslatedVisible = false;
+  bool get isTranslatedVisible => _isTranslatedVisible;
+  set isTranslatedVisible(bool value) {
+    _isTranslatedVisible = value;
+    notifyListeners();
+  }
+
+  bool _isFullscreen = false;
+  bool get isFullscreen => _isFullscreen;
+  set isFullscreen(bool value) {
+    _isFullscreen = value;
+    notifyListeners();
+  }
+
+  int _lastSelectionParagraphIndex = -1;
+  int _lastSelectionWordIndex = -1;
+  int get lastSelectionParagraphIndex => _lastSelectionParagraphIndex;
+  int get lastSelectionWordIndex => _lastSelectionWordIndex;
+  setLastSelection(int paragraphIndex, int wordIndex) {
+    _lastSelectionParagraphIndex = paragraphIndex;
+    _lastSelectionWordIndex = wordIndex;
+  }
+
   BookReadingContext({
     required String bookId,
     required List<ChapterAlignNode> chapters,
@@ -72,7 +95,7 @@ class BookReadingContext with ChangeNotifier {
       return const [];
     }
     final paragraph = currentChapter.content[paragraphIndex];
-    return const ChapterConverter().convertParagraph(paragraph, paragraphIndex);
+    return ChapterConverter.convertParagraph(paragraph, paragraphIndex);
   }
 
   void goToChapter(int index) {

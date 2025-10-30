@@ -1,101 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/contexts/reading_settings_context.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class TextSettingsTab extends StatefulWidget {
-  final String fontFamily;
-  final ValueChanged<String> onFontFamilyChange;
-
-  final double fontSize;
-  final ValueChanged<double> onFontSizeChange;
-
-  final Color backgroundColor;
-  final ValueChanged<Color> onBackgroundColorChange;
-
-  final Color textColor;
-  final ValueChanged<Color> onTextColorChange;
-
-  final double lineHeight;
-  final ValueChanged<double> onLineHeightChange;
-
-  final double sidePadding;
-  final ValueChanged<double> onSidePaddingChange;
-
-  final double firstLineIndentEm;
-  final ValueChanged<double> onFirstLineIndentEmChange;
-
-  final double paragraphSpacing;
-  final ValueChanged<double> onParagraphSpacingChange;
-
-  final ScrollController translatedController;
-
-  final TextAlign textAlign;
-  final ValueChanged<TextAlign> onTextAlignChange;
-
-  final double translatedVerticalPadding;
-  final ValueChanged<double> onTranslatedVerticalPaddingChange;
-  final double translatedFontSize;
-  final ValueChanged<double> onTranslatedFontSizeChange;
-  final String translatedFontFamily;
-  final ValueChanged<String> onTranslatedFontFamilyChange;
-
-  const TextSettingsTab({
-    super.key,
-    required this.fontFamily,
-    required this.onFontFamilyChange,
-    required this.fontSize,
-    required this.onFontSizeChange,
-    required this.backgroundColor,
-    required this.onBackgroundColorChange,
-    required this.textColor,
-    required this.onTextColorChange,
-    required this.lineHeight,
-    required this.onLineHeightChange,
-    required this.sidePadding,
-    required this.onSidePaddingChange,
-    required this.firstLineIndentEm,
-    required this.onFirstLineIndentEmChange,
-    required this.paragraphSpacing,
-    required this.onParagraphSpacingChange,
-    required this.translatedController,
-    required this.textAlign,
-    required this.onTextAlignChange,
-    required this.translatedVerticalPadding,
-    required this.onTranslatedVerticalPaddingChange,
-    required this.translatedFontSize,
-    required this.onTranslatedFontSizeChange,
-    required this.translatedFontFamily,
-    required this.onTranslatedFontFamilyChange,
-  });
+  const TextSettingsTab({super.key});
 
   @override
   State<TextSettingsTab> createState() => _TextSettingsTabState();
 }
 
 class _TextSettingsTabState extends State<TextSettingsTab> {
-  late double _fontSizePreview;
-  late double _lineHeightPreview;
-  late double _sidePaddingPreview;
-  late double _firstLineIndentEmPreview;
-  late double _paragraphSpacingPreview;
-  late double _translatedVerticalPaddingPreview;
-  late double _translatedFontSizePreview;
-
-  @override
-  void initState() {
-    super.initState();
-    _fontSizePreview = widget.fontSize;
-    _lineHeightPreview = widget.lineHeight;
-    _sidePaddingPreview = widget.sidePadding;
-    _firstLineIndentEmPreview = widget.firstLineIndentEm;
-    _paragraphSpacingPreview = widget.paragraphSpacing;
-    _translatedVerticalPaddingPreview = widget.translatedVerticalPadding;
-    _translatedFontSizePreview = widget.translatedFontSize;
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final readingSettingsContext = context.watch<ReadingSettingsContext>();
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -113,7 +33,7 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                   children: [
                     Expanded(
                       child: DropdownButton<String>(
-                        value: widget.fontFamily,
+                        value: readingSettingsContext.fontFamily,
                         isExpanded: true,
                         items: [
                           DropdownMenuItem(
@@ -134,11 +54,12 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                           ),
                         ],
                         onChanged: (v) =>
-                            widget.onFontFamilyChange(v ?? 'System'),
+                            readingSettingsContext.fontFamily = v ?? 'System',
                       ),
                     ),
                     TextButton(
-                      onPressed: () => widget.onFontFamilyChange('System'),
+                      onPressed: () =>
+                          readingSettingsContext.fontFamily = 'System',
                       child: Text(l10n.reset),
                     ),
                   ],
@@ -153,7 +74,7 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                   children: [
                     Expanded(
                       child: DropdownButton<TextAlign>(
-                        value: widget.textAlign,
+                        value: readingSettingsContext.textAlign,
                         isExpanded: true,
                         items: [
                           DropdownMenuItem(
@@ -173,13 +94,13 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                             child: Text(l10n.alignJustify),
                           ),
                         ],
-                        onChanged: (v) =>
-                            widget.onTextAlignChange(v ?? TextAlign.justify),
+                        onChanged: (v) => readingSettingsContext.textAlign =
+                            v ?? TextAlign.justify,
                       ),
                     ),
                     TextButton(
                       onPressed: () =>
-                          widget.onTextAlignChange(TextAlign.justify),
+                          readingSettingsContext.textAlign = TextAlign.justify,
                       child: Text(l10n.reset),
                     ),
                   ],
@@ -189,24 +110,24 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
 
               // Font size
               ListTile(
-                title: Text(l10n.fontSizeValue(_fontSizePreview.round())),
+                title: Text(
+                  l10n.fontSizeValue(readingSettingsContext.fontSize.round()),
+                ),
                 subtitle: Row(
                   children: [
                     Expanded(
                       child: Slider(
-                        value: _fontSizePreview,
+                        value: readingSettingsContext.fontSize,
                         min: 12,
                         max: 32,
                         divisions: 20,
-                        label: '${_fontSizePreview.round()}',
-                        onChanged: (v) => setState(() => _fontSizePreview = v),
-                        onChangeEnd: (v) => widget.onFontSizeChange(v),
+                        label: '${readingSettingsContext.fontSize.round()}',
+                        onChanged: (v) => readingSettingsContext.fontSize = v,
                       ),
                     ),
                     TextButton(
                       onPressed: () {
-                        setState(() => _fontSizePreview = 24);
-                        widget.onFontSizeChange(24);
+                        readingSettingsContext.fontSize = 24;
                       },
                       child: Text(l10n.reset),
                     ),
@@ -234,11 +155,12 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                           Colors.amberAccent.shade100,
                         ])
                           GestureDetector(
-                            onTap: () => widget.onBackgroundColorChange(c),
+                            onTap: () =>
+                                readingSettingsContext.backgroundColor = c,
                             child: CircleAvatar(
                               radius: 14,
                               backgroundColor: c,
-                              child: c == widget.backgroundColor
+                              child: c == readingSettingsContext.backgroundColor
                                   ? const Icon(
                                       Icons.check,
                                       size: 16,
@@ -250,9 +172,8 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                       ],
                     ),
                     TextButton(
-                      onPressed: () => widget.onBackgroundColorChange(
-                        theme.colorScheme.surface,
-                      ),
+                      onPressed: () => readingSettingsContext.backgroundColor =
+                          theme.colorScheme.surface,
                       child: Text(l10n.reset),
                     ),
                   ],
@@ -279,11 +200,11 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                           Colors.brown,
                         ])
                           GestureDetector(
-                            onTap: () => widget.onTextColorChange(c),
+                            onTap: () => readingSettingsContext.textColor = c,
                             child: CircleAvatar(
                               radius: 14,
                               backgroundColor: c,
-                              child: c == widget.textColor
+                              child: c == readingSettingsContext.textColor
                                   ? Icon(
                                       Icons.check,
                                       size: 16,
@@ -297,10 +218,9 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                       ],
                     ),
                     TextButton(
-                      onPressed: () => widget.onTextColorChange(
-                        theme.textTheme.bodyLarge?.color ??
-                            theme.colorScheme.onSurface,
-                      ),
+                      onPressed: () => readingSettingsContext.textColor =
+                          theme.textTheme.bodyLarge?.color ??
+                          theme.colorScheme.onSurface,
                       child: Text(l10n.reset),
                     ),
                   ],
@@ -311,26 +231,26 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               // Line height
               ListTile(
                 title: Text(
-                  l10n.lineHeightValue(_lineHeightPreview.toStringAsFixed(2)),
+                  l10n.lineHeightValue(
+                    readingSettingsContext.lineHeight.toStringAsFixed(2),
+                  ),
                 ),
                 subtitle: Row(
                   children: [
                     Expanded(
                       child: Slider(
-                        value: _lineHeightPreview,
+                        value: readingSettingsContext.lineHeight,
                         min: 1.0,
                         max: 2.0,
                         divisions: 20,
-                        label: _lineHeightPreview.toStringAsFixed(2),
-                        onChanged: (v) =>
-                            setState(() => _lineHeightPreview = v),
-                        onChangeEnd: (v) => widget.onLineHeightChange(v),
+                        label: readingSettingsContext.lineHeight
+                            .toStringAsFixed(2),
+                        onChanged: (v) => readingSettingsContext.lineHeight = v,
                       ),
                     ),
                     TextButton(
                       onPressed: () {
-                        setState(() => _lineHeightPreview = 1.3);
-                        widget.onLineHeightChange(1.3);
+                        readingSettingsContext.lineHeight = 1.3;
                       },
                       child: Text(l10n.reset),
                     ),
@@ -341,25 +261,28 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
 
               // Side padding
               ListTile(
-                title: Text(l10n.sidePaddingPx(_sidePaddingPreview.round())),
+                title: Text(
+                  l10n.sidePaddingPx(
+                    readingSettingsContext.sidePadding.round(),
+                  ),
+                ),
                 subtitle: Row(
                   children: [
                     Expanded(
                       child: Slider(
-                        value: _sidePaddingPreview,
+                        value: readingSettingsContext.sidePadding,
                         min: 0,
                         max: 32,
                         divisions: 32,
-                        label: '${_sidePaddingPreview.round()} px',
+                        label:
+                            '${readingSettingsContext.sidePadding.round()} px',
                         onChanged: (v) =>
-                            setState(() => _sidePaddingPreview = v),
-                        onChangeEnd: (v) => widget.onSidePaddingChange(v),
+                            readingSettingsContext.sidePadding = v,
                       ),
                     ),
                     TextButton(
                       onPressed: () {
-                        setState(() => _sidePaddingPreview = 10);
-                        widget.onSidePaddingChange(10);
+                        readingSettingsContext.sidePadding = 10;
                       },
                       child: Text(l10n.reset),
                     ),
@@ -372,28 +295,27 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ListTile(
                 title: Text(
                   l10n.firstLineIndentEm(
-                    _firstLineIndentEmPreview.toStringAsFixed(1),
+                    readingSettingsContext.firstLineIndentEm.toStringAsFixed(1),
                   ),
                 ),
                 subtitle: Row(
                   children: [
                     Expanded(
                       child: Slider(
-                        value: _firstLineIndentEmPreview,
+                        value: readingSettingsContext.firstLineIndentEm,
                         min: 0.0,
                         max: 3.0,
                         divisions: 30,
                         label:
-                            '${_firstLineIndentEmPreview.toStringAsFixed(1)} em',
-                        onChanged: (v) =>
-                            setState(() => _firstLineIndentEmPreview = v),
-                        onChangeEnd: (v) => widget.onFirstLineIndentEmChange(v),
+                            '${readingSettingsContext.firstLineIndentEm.toStringAsFixed(1)} em',
+                        onChanged: (v) => setState(
+                          () => readingSettingsContext.firstLineIndentEm = v,
+                        ),
                       ),
                     ),
                     TextButton(
                       onPressed: () {
-                        setState(() => _firstLineIndentEmPreview = 1.5);
-                        widget.onFirstLineIndentEmChange(1.5);
+                        readingSettingsContext.firstLineIndentEm = 1.5;
                       },
                       child: Text(l10n.reset),
                     ),
@@ -405,26 +327,28 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               // Paragraph spacing
               ListTile(
                 title: Text(
-                  l10n.paragraphSpacingPx(_paragraphSpacingPreview.round()),
+                  l10n.paragraphSpacingPx(
+                    readingSettingsContext.paragraphSpacing.round(),
+                  ),
                 ),
                 subtitle: Row(
                   children: [
                     Expanded(
                       child: Slider(
-                        value: _paragraphSpacingPreview,
+                        value: readingSettingsContext.paragraphSpacing,
                         min: 0,
                         max: 24,
                         divisions: 24,
-                        label: '${_paragraphSpacingPreview.round()} px',
-                        onChanged: (v) =>
-                            setState(() => _paragraphSpacingPreview = v),
-                        onChangeEnd: (v) => widget.onParagraphSpacingChange(v),
+                        label:
+                            '${readingSettingsContext.paragraphSpacing.round()} px',
+                        onChanged: (v) => setState(
+                          () => readingSettingsContext.paragraphSpacing = v,
+                        ),
                       ),
                     ),
                     TextButton(
                       onPressed: () {
-                        setState(() => _paragraphSpacingPreview = 7);
-                        widget.onParagraphSpacingChange(7);
+                        readingSettingsContext.paragraphSpacing = 7;
                       },
                       child: Text(l10n.reset),
                     ),
@@ -441,30 +365,29 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ListTile(
                 title: Text(
                   l10n.translationVerticalPaddingPx(
-                    _translatedVerticalPaddingPreview.round(),
+                    readingSettingsContext.translatedVerticalPadding.round(),
                   ),
                 ),
                 subtitle: Row(
                   children: [
                     Expanded(
                       child: Slider(
-                        value: _translatedVerticalPaddingPreview,
+                        value: readingSettingsContext.translatedVerticalPadding,
                         min: 0,
                         max: 32,
                         divisions: 32,
                         label:
-                            '${_translatedVerticalPaddingPreview.round()} px',
+                            '${readingSettingsContext.translatedVerticalPadding.round()} px',
                         onChanged: (v) => setState(
-                          () => _translatedVerticalPaddingPreview = v,
+                          () =>
+                              readingSettingsContext.translatedVerticalPadding =
+                                  v,
                         ),
-                        onChangeEnd: (v) =>
-                            widget.onTranslatedVerticalPaddingChange(v),
                       ),
                     ),
                     TextButton(
                       onPressed: () {
-                        setState(() => _translatedVerticalPaddingPreview = 5);
-                        widget.onTranslatedVerticalPaddingChange(5);
+                        readingSettingsContext.translatedVerticalPadding = 5;
                       },
                       child: Text(l10n.reset),
                     ),
@@ -480,7 +403,7 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                   children: [
                     Expanded(
                       child: DropdownButton<String>(
-                        value: widget.translatedFontFamily,
+                        value: readingSettingsContext.translatedFontFamily,
                         isExpanded: true,
                         items: [
                           DropdownMenuItem(
@@ -501,12 +424,14 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                           ),
                         ],
                         onChanged: (v) =>
-                            widget.onTranslatedFontFamilyChange(v ?? 'System'),
+                            readingSettingsContext.translatedFontFamily =
+                                v ?? 'System',
                       ),
                     ),
                     TextButton(
                       onPressed: () =>
-                          widget.onTranslatedFontFamilyChange('System'),
+                          readingSettingsContext.translatedFontFamily =
+                              'System',
                       child: Text(l10n.reset),
                     ),
                   ],
@@ -518,48 +443,28 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ListTile(
                 title: Text(
                   l10n.translationFontSizeValue(
-                    _translatedFontSizePreview.round(),
+                    readingSettingsContext.translatedFontSize.round(),
                   ),
                 ),
                 subtitle: Row(
                   children: [
                     Expanded(
                       child: Slider(
-                        value: _translatedFontSizePreview,
+                        value: readingSettingsContext.translatedFontSize,
                         min: 12,
                         max: 32,
                         divisions: 20,
-                        label: '${_translatedFontSizePreview.round()}',
+                        label:
+                            '${readingSettingsContext.translatedFontSize.round()}',
                         onChanged: (v) =>
-                            setState(() => _translatedFontSizePreview = v),
-                        onChangeEnd: (v) =>
-                            widget.onTranslatedFontSizeChange(v),
+                            readingSettingsContext.translatedFontSize = v,
                       ),
                     ),
                     TextButton(
                       onPressed: () {
-                        setState(() => _translatedFontSizePreview = 20);
-                        widget.onTranslatedFontSizeChange(20);
+                        readingSettingsContext.translatedFontSize = 20;
                       },
                       child: Text(l10n.reset),
-                    ),
-                  ],
-                ),
-              ),
-              const Divider(height: 1),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 8.0,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(''),
-                    TextButton(
-                      onPressed: () => widget.translatedController.jumpTo(0),
-                      child: Text(l10n.resetPosition),
                     ),
                   ],
                 ),

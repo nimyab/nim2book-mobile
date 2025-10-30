@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/contexts/reading_settings_context.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/models/word_item.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/widgets/original_paragraph_painter.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/original_paragraph_painter.dart';
 import 'package:nim2book_mobile_flutter/features/translated_dialog/translated_dialog.dart';
+import 'package:provider/provider.dart';
 
 class OriginalParagraph extends StatefulWidget {
   final List<WordItem> paragraph;
@@ -11,12 +13,6 @@ class OriginalParagraph extends StatefulWidget {
   final Function(int paragraphIndex, int wordIndex) selectWord;
   final int selectedParagraphIndex;
   final int selectedWordIndex;
-  final String? fontFamily;
-  final double? fontSize;
-  final Color? textColor;
-  final double? lineHeight;
-  final double? firstLineIndentEm;
-  final TextAlign? textAlign;
 
   const OriginalParagraph({
     super.key,
@@ -25,12 +21,6 @@ class OriginalParagraph extends StatefulWidget {
     required this.selectedParagraphIndex,
     required this.selectedWordIndex,
     required this.selectWord,
-    this.fontFamily,
-    this.fontSize,
-    this.textColor,
-    this.lineHeight,
-    this.firstLineIndentEm,
-    this.textAlign,
   });
 
   @override
@@ -103,15 +93,16 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
 
   @override
   Widget build(BuildContext context) {
+    final readingSettings = context.watch<ReadingSettingsContext>();
     final readingColors = Theme.of(context).extension<BookReadingColors>()!;
     final baseStyle = TextStyle(
-      fontSize: widget.fontSize ?? 24,
-      height: widget.lineHeight ?? 1.3,
-      color: widget.textColor ?? Theme.of(context).textTheme.bodyLarge?.color,
+      fontSize: readingSettings.fontSize,
+      height: readingSettings.lineHeight,
+      color: readingSettings.textColor,
     );
     TextStyle style;
-    final family = widget.fontFamily;
-    if (family == null || family.toLowerCase() == 'system') {
+    final family = readingSettings.fontFamily;
+    if (family.toLowerCase() == 'system') {
       style = baseStyle;
     } else {
       try {
@@ -124,7 +115,7 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final indentWidth =
-            (style.fontSize ?? 24) * (widget.firstLineIndentEm ?? 1.5);
+            (style.fontSize ?? 24) * (readingSettings.firstLineIndentEm);
         const indentCharCount = 1;
 
         final textSpan = TextSpan(
@@ -136,7 +127,7 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
 
         final tp = TextPainter(
           text: textSpan,
-          textAlign: widget.textAlign ?? TextAlign.justify,
+          textAlign: readingSettings.textAlign,
           textDirection: TextDirection.ltr,
         );
 

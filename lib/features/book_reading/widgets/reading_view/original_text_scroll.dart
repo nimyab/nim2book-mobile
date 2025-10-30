@@ -2,33 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/widgets/original_paragraph.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/widgets/select_chapter_buttons.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/contexts/reading_settings_context.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/original_paragraph.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/select_chapter_buttons.dart';
 import 'package:provider/provider.dart';
 
 class OriginalTextScroll extends StatefulWidget {
-  const OriginalTextScroll({
-    super.key,
-    this.translatedScrollController,
-    this.fontFamily,
-    this.fontSize,
-    this.textColor,
-    this.lineHeight,
-    this.sidePadding,
-    this.firstLineIndentEm,
-    this.paragraphSpacing,
-    this.textAlign,
-  });
+  const OriginalTextScroll({super.key, this.translatedScrollController});
 
   final ScrollController? translatedScrollController;
-  final String? fontFamily;
-  final double? fontSize;
-  final Color? textColor;
-  final double? lineHeight;
-  final double? sidePadding;
-  final double? firstLineIndentEm;
-  final double? paragraphSpacing;
-  final TextAlign? textAlign;
 
   @override
   State<OriginalTextScroll> createState() => _OriginalTextScrollState();
@@ -84,14 +66,11 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
 
   @override
   Widget build(BuildContext context) {
+    final readingSettingsContext = context.watch<ReadingSettingsContext>();
     final readingContext = context.watch<BookReadingContext>();
     final paragraphCount = readingContext.currentParagraphCount;
     final currentChapterIndex = readingContext.currentChapterIndex;
     final currentChapter = readingContext.currentChapter;
-    // todo: consider showing translated title if available
-    // final chapterTitle = currentChapter.translatedTitle.isNotEmpty
-    //     ? currentChapter.translatedTitle
-    //     : currentChapter.title;
     final chapterTitle = currentChapter.title;
 
     final selectedParagraph = readingContext.selectedParagraphIndex;
@@ -152,14 +131,14 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
             }
             return Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: widget.sidePadding ?? 10,
-                vertical: (widget.paragraphSpacing ?? 7) * 3.5,
+                horizontal: readingSettingsContext.sidePadding,
+                vertical: (readingSettingsContext.paragraphSpacing) * 3.5,
               ),
               child: Text(
                 chapterTitle,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  fontSize: (widget.fontSize ?? 24) * 1.4,
+                  fontSize: (readingSettingsContext.fontSize) * 1.4,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -176,8 +155,8 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
           );
           return Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: widget.sidePadding ?? 10,
-              vertical: widget.paragraphSpacing ?? 7,
+              horizontal: readingSettingsContext.sidePadding,
+              vertical: readingSettingsContext.paragraphSpacing,
             ),
             child: Container(
               key: _keyForParagraph(paragraphIndex),
@@ -190,12 +169,6 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
                 selectedParagraphIndex: readingContext.selectedParagraphIndex,
                 selectedWordIndex: readingContext.selectedWordIndex,
                 selectWord: readingContext.selectWord,
-                fontFamily: widget.fontFamily,
-                fontSize: widget.fontSize,
-                textColor: widget.textColor,
-                lineHeight: widget.lineHeight,
-                firstLineIndentEm: widget.firstLineIndentEm,
-                textAlign: widget.textAlign,
               ),
             ),
           );

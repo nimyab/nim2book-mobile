@@ -20,7 +20,7 @@ import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/theme_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/services/reading_persistence.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/services/reading_settings_service.dart';
 import 'package:nim2book_mobile_flutter/firebase_options.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -84,7 +84,7 @@ void main() async {
   final srsService = SrsService();
   GetIt.I.registerSingleton(srsService);
 
-  final readingPersistence = ReadingPersistence();
+  final readingPersistence = ReadingSettingsService();
   GetIt.I.registerSingleton(readingPersistence);
 
   runApp(const Nim2BookApp());

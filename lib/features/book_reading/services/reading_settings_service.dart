@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ReadingPersistence {
+class ReadingSettingsService {
   static const _fontFamilyKey = 'reading_font_family';
   static const _fontSizeKey = 'reading_font_size';
   static const _backgroundColorKey = 'reading_background_color';
@@ -20,11 +20,11 @@ class ReadingPersistence {
 
   final SharedPreferences _prefs = GetIt.I.get<SharedPreferences>();
 
-  String getFontFamily() => _prefs.getString(_fontFamilyKey) ?? 'System';
+  String? getFontFamily() => _prefs.getString(_fontFamilyKey);
   Future<void> setFontFamily(String value) =>
       _prefs.setString(_fontFamilyKey, value);
 
-  double getFontSize() => _prefs.getDouble(_fontSizeKey) ?? 24.0;
+  double? getFontSize() => _prefs.getDouble(_fontSizeKey);
   Future<void> setFontSize(double value) =>
       _prefs.setDouble(_fontSizeKey, value);
 
@@ -44,24 +44,23 @@ class ReadingPersistence {
   Future<void> setTextColor(Color value) =>
       _prefs.setInt(_textColorKey, value.toARGB32());
 
-  double getLineHeight() => _prefs.getDouble(_lineHeightKey) ?? 1.3;
+  double? getLineHeight() => _prefs.getDouble(_lineHeightKey);
   Future<void> setLineHeight(double value) =>
       _prefs.setDouble(_lineHeightKey, value);
 
-  double getSidePadding() => _prefs.getDouble(_sidePaddingKey) ?? 10.0;
+  double? getSidePadding() => _prefs.getDouble(_sidePaddingKey);
   Future<void> setSidePadding(double value) =>
       _prefs.setDouble(_sidePaddingKey, value);
 
-  double getFirstLineIndentEm() =>
-      _prefs.getDouble(_firstLineIndentEmKey) ?? 1.5;
+  double? getFirstLineIndentEm() => _prefs.getDouble(_firstLineIndentEmKey);
   Future<void> setFirstLineIndentEm(double value) =>
       _prefs.setDouble(_firstLineIndentEmKey, value);
 
-  double getParagraphSpacing() => _prefs.getDouble(_paragraphSpacingKey) ?? 7.0;
+  double? getParagraphSpacing() => _prefs.getDouble(_paragraphSpacingKey);
   Future<void> setParagraphSpacing(double value) =>
       _prefs.setDouble(_paragraphSpacingKey, value);
 
-  TextAlign getTextAlign() {
+  TextAlign? getTextAlign() {
     final s = _prefs.getString(_textAlignKey) ?? 'justify';
     switch (s) {
       case 'left':
@@ -71,8 +70,9 @@ class ReadingPersistence {
       case 'center':
         return TextAlign.center;
       case 'justify':
-      default:
         return TextAlign.justify;
+      default:
+        return null;
     }
   }
 
@@ -106,13 +106,12 @@ class ReadingPersistence {
   Future<void> setTranslatedVerticalPadding(double value) =>
       _prefs.setDouble(_translatedVerticalPaddingKey, value);
 
-  double getTranslatedFontSize() =>
-      _prefs.getDouble(_translatedFontSizeKey) ?? 20.0;
+  double? getTranslatedFontSize() => _prefs.getDouble(_translatedFontSizeKey);
   Future<void> setTranslatedFontSize(double value) =>
       _prefs.setDouble(_translatedFontSizeKey, value);
 
-  String getTranslatedFontFamily() =>
-      _prefs.getString(_translatedFontFamilyKey) ?? 'System';
+  String? getTranslatedFontFamily() =>
+      _prefs.getString(_translatedFontFamilyKey);
   Future<void> setTranslatedFontFamily(String value) =>
       _prefs.setString(_translatedFontFamilyKey, value);
 }
