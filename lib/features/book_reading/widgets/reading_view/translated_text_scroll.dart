@@ -5,11 +5,16 @@ import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_read
 import 'package:nim2book_mobile_flutter/features/book_reading/contexts/reading_settings_context.dart';
 import 'package:provider/provider.dart';
 
-class TranslatedTextScroll extends StatelessWidget {
+class TranslatedTextScroll extends StatefulWidget {
   const TranslatedTextScroll({super.key, this.controller});
 
   final ScrollController? controller;
 
+  @override
+  State<TranslatedTextScroll> createState() => _TranslatedTextScrollState();
+}
+
+class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
   @override
   Widget build(BuildContext context) {
     final readingSettingsContext = context.watch<ReadingSettingsContext>();
@@ -27,16 +32,20 @@ class TranslatedTextScroll extends StatelessWidget {
         ? null
         : currentChapter.content[selectedParagraphIndex].aw[selectedWordIndex];
 
+    final translatedFamily = readingSettingsContext.translatedFontFamily;
     final baseStyle = TextStyle(
       fontSize: readingSettingsContext.translatedFontSize,
+      // Добавляем fontFamily для гарантии обновления
+      fontFamily: translatedFamily.toLowerCase() == 'system' ? null : translatedFamily,
     );
+
     TextStyle textStyle;
-    if (readingSettingsContext.translatedFontFamily.toLowerCase() == 'system') {
+    if (translatedFamily.toLowerCase() == 'system') {
       textStyle = baseStyle;
     } else {
       try {
         textStyle = GoogleFonts.getFont(
-          readingSettingsContext.translatedFontFamily,
+          translatedFamily,
           textStyle: baseStyle,
         );
       } catch (_) {
@@ -59,7 +68,7 @@ class TranslatedTextScroll extends StatelessWidget {
         color: scrollColors.backgroundColor,
         alignment: Alignment.center,
         child: ListView.separated(
-          controller: controller,
+          controller: widget.controller,
           separatorBuilder: (context, index) => SizedBox(width: 10),
           cacheExtent: double.infinity,
           scrollDirection: Axis.horizontal,

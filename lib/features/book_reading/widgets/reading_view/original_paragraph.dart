@@ -95,13 +95,18 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
   Widget build(BuildContext context) {
     final readingSettings = context.watch<ReadingSettingsContext>();
     final readingColors = Theme.of(context).extension<BookReadingColors>()!;
+
+    // Создаем уникальный ключ на основе fontFamily для принудительной перестройки
+    final family = readingSettings.fontFamily;
     final baseStyle = TextStyle(
       fontSize: readingSettings.fontSize,
       height: readingSettings.lineHeight,
       color: readingSettings.textColor,
+      // Добавляем fontFamily в baseStyle для гарантии обновления
+      fontFamily: family.toLowerCase() == 'system' ? null : family,
     );
+
     TextStyle style;
-    final family = readingSettings.fontFamily;
     if (family.toLowerCase() == 'system') {
       style = baseStyle;
     } else {

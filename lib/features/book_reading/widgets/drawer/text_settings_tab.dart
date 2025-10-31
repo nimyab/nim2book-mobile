@@ -11,6 +11,15 @@ class TextSettingsTab extends StatefulWidget {
 }
 
 class _TextSettingsTabState extends State<TextSettingsTab> {
+  // Local state for sliders to prevent lag during dragging
+  double? _localFontSize;
+  double? _localLineHeight;
+  double? _localSidePadding;
+  double? _localFirstLineIndent;
+  double? _localParagraphSpacing;
+  double? _localTranslatedVerticalPadding;
+  double? _localTranslatedFontSize;
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -111,22 +120,29 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               // Font size
               ListTile(
                 title: Text(
-                  l10n.fontSizeValue(readingSettingsContext.fontSize.round()),
+                  l10n.fontSizeValue(
+                    (_localFontSize ?? readingSettingsContext.fontSize).round(),
+                  ),
                 ),
                 subtitle: Row(
                   children: [
                     Expanded(
                       child: Slider(
-                        value: readingSettingsContext.fontSize,
+                        value: _localFontSize ?? readingSettingsContext.fontSize,
                         min: 12,
                         max: 32,
                         divisions: 20,
-                        label: '${readingSettingsContext.fontSize.round()}',
-                        onChanged: (v) => readingSettingsContext.fontSize = v,
+                        label: '${(_localFontSize ?? readingSettingsContext.fontSize).round()}',
+                        onChanged: (v) => setState(() => _localFontSize = v),
+                        onChangeEnd: (v) {
+                          readingSettingsContext.fontSize = v;
+                          setState(() => _localFontSize = null);
+                        },
                       ),
                     ),
                     TextButton(
                       onPressed: () {
+                        setState(() => _localFontSize = null);
                         readingSettingsContext.fontSize = 24;
                       },
                       child: Text(l10n.reset),
@@ -232,24 +248,30 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ListTile(
                 title: Text(
                   l10n.lineHeightValue(
-                    readingSettingsContext.lineHeight.toStringAsFixed(2),
+                    (_localLineHeight ?? readingSettingsContext.lineHeight)
+                        .toStringAsFixed(2),
                   ),
                 ),
                 subtitle: Row(
                   children: [
                     Expanded(
                       child: Slider(
-                        value: readingSettingsContext.lineHeight,
+                        value: _localLineHeight ?? readingSettingsContext.lineHeight,
                         min: 1.0,
                         max: 2.0,
                         divisions: 20,
-                        label: readingSettingsContext.lineHeight
+                        label: (_localLineHeight ?? readingSettingsContext.lineHeight)
                             .toStringAsFixed(2),
-                        onChanged: (v) => readingSettingsContext.lineHeight = v,
+                        onChanged: (v) => setState(() => _localLineHeight = v),
+                        onChangeEnd: (v) {
+                          readingSettingsContext.lineHeight = v;
+                          setState(() => _localLineHeight = null);
+                        },
                       ),
                     ),
                     TextButton(
                       onPressed: () {
+                        setState(() => _localLineHeight = null);
                         readingSettingsContext.lineHeight = 1.3;
                       },
                       child: Text(l10n.reset),
@@ -263,25 +285,29 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ListTile(
                 title: Text(
                   l10n.sidePaddingPx(
-                    readingSettingsContext.sidePadding.round(),
+                    (_localSidePadding ?? readingSettingsContext.sidePadding).round(),
                   ),
                 ),
                 subtitle: Row(
                   children: [
                     Expanded(
                       child: Slider(
-                        value: readingSettingsContext.sidePadding,
+                        value: _localSidePadding ?? readingSettingsContext.sidePadding,
                         min: 0,
                         max: 32,
                         divisions: 32,
                         label:
-                            '${readingSettingsContext.sidePadding.round()} px',
-                        onChanged: (v) =>
-                            readingSettingsContext.sidePadding = v,
+                            '${(_localSidePadding ?? readingSettingsContext.sidePadding).round()} px',
+                        onChanged: (v) => setState(() => _localSidePadding = v),
+                        onChangeEnd: (v) {
+                          readingSettingsContext.sidePadding = v;
+                          setState(() => _localSidePadding = null);
+                        },
                       ),
                     ),
                     TextButton(
                       onPressed: () {
+                        setState(() => _localSidePadding = null);
                         readingSettingsContext.sidePadding = 10;
                       },
                       child: Text(l10n.reset),
@@ -295,26 +321,30 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ListTile(
                 title: Text(
                   l10n.firstLineIndentEm(
-                    readingSettingsContext.firstLineIndentEm.toStringAsFixed(1),
+                    (_localFirstLineIndent ?? readingSettingsContext.firstLineIndentEm)
+                        .toStringAsFixed(1),
                   ),
                 ),
                 subtitle: Row(
                   children: [
                     Expanded(
                       child: Slider(
-                        value: readingSettingsContext.firstLineIndentEm,
+                        value: _localFirstLineIndent ?? readingSettingsContext.firstLineIndentEm,
                         min: 0.0,
                         max: 3.0,
                         divisions: 30,
                         label:
-                            '${readingSettingsContext.firstLineIndentEm.toStringAsFixed(1)} em',
-                        onChanged: (v) => setState(
-                          () => readingSettingsContext.firstLineIndentEm = v,
-                        ),
+                            '${(_localFirstLineIndent ?? readingSettingsContext.firstLineIndentEm).toStringAsFixed(1)} em',
+                        onChanged: (v) => setState(() => _localFirstLineIndent = v),
+                        onChangeEnd: (v) {
+                          readingSettingsContext.firstLineIndentEm = v;
+                          setState(() => _localFirstLineIndent = null);
+                        },
                       ),
                     ),
                     TextButton(
                       onPressed: () {
+                        setState(() => _localFirstLineIndent = null);
                         readingSettingsContext.firstLineIndentEm = 1.5;
                       },
                       child: Text(l10n.reset),
@@ -328,26 +358,29 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ListTile(
                 title: Text(
                   l10n.paragraphSpacingPx(
-                    readingSettingsContext.paragraphSpacing.round(),
+                    (_localParagraphSpacing ?? readingSettingsContext.paragraphSpacing).round(),
                   ),
                 ),
                 subtitle: Row(
                   children: [
                     Expanded(
                       child: Slider(
-                        value: readingSettingsContext.paragraphSpacing,
+                        value: _localParagraphSpacing ?? readingSettingsContext.paragraphSpacing,
                         min: 0,
                         max: 24,
                         divisions: 24,
                         label:
-                            '${readingSettingsContext.paragraphSpacing.round()} px',
-                        onChanged: (v) => setState(
-                          () => readingSettingsContext.paragraphSpacing = v,
-                        ),
+                            '${(_localParagraphSpacing ?? readingSettingsContext.paragraphSpacing).round()} px',
+                        onChanged: (v) => setState(() => _localParagraphSpacing = v),
+                        onChangeEnd: (v) {
+                          readingSettingsContext.paragraphSpacing = v;
+                          setState(() => _localParagraphSpacing = null);
+                        },
                       ),
                     ),
                     TextButton(
                       onPressed: () {
+                        setState(() => _localParagraphSpacing = null);
                         readingSettingsContext.paragraphSpacing = 7;
                       },
                       child: Text(l10n.reset),
@@ -365,28 +398,29 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ListTile(
                 title: Text(
                   l10n.translationVerticalPaddingPx(
-                    readingSettingsContext.translatedVerticalPadding.round(),
+                    (_localTranslatedVerticalPadding ?? readingSettingsContext.translatedVerticalPadding).round(),
                   ),
                 ),
                 subtitle: Row(
                   children: [
                     Expanded(
                       child: Slider(
-                        value: readingSettingsContext.translatedVerticalPadding,
+                        value: _localTranslatedVerticalPadding ?? readingSettingsContext.translatedVerticalPadding,
                         min: 0,
                         max: 32,
                         divisions: 32,
                         label:
-                            '${readingSettingsContext.translatedVerticalPadding.round()} px',
-                        onChanged: (v) => setState(
-                          () =>
-                              readingSettingsContext.translatedVerticalPadding =
-                                  v,
-                        ),
+                            '${(_localTranslatedVerticalPadding ?? readingSettingsContext.translatedVerticalPadding).round()} px',
+                        onChanged: (v) => setState(() => _localTranslatedVerticalPadding = v),
+                        onChangeEnd: (v) {
+                          readingSettingsContext.translatedVerticalPadding = v;
+                          setState(() => _localTranslatedVerticalPadding = null);
+                        },
                       ),
                     ),
                     TextButton(
                       onPressed: () {
+                        setState(() => _localTranslatedVerticalPadding = null);
                         readingSettingsContext.translatedVerticalPadding = 5;
                       },
                       child: Text(l10n.reset),
@@ -443,25 +477,29 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ListTile(
                 title: Text(
                   l10n.translationFontSizeValue(
-                    readingSettingsContext.translatedFontSize.round(),
+                    (_localTranslatedFontSize ?? readingSettingsContext.translatedFontSize).round(),
                   ),
                 ),
                 subtitle: Row(
                   children: [
                     Expanded(
                       child: Slider(
-                        value: readingSettingsContext.translatedFontSize,
+                        value: _localTranslatedFontSize ?? readingSettingsContext.translatedFontSize,
                         min: 12,
                         max: 32,
                         divisions: 20,
                         label:
-                            '${readingSettingsContext.translatedFontSize.round()}',
-                        onChanged: (v) =>
-                            readingSettingsContext.translatedFontSize = v,
+                            '${(_localTranslatedFontSize ?? readingSettingsContext.translatedFontSize).round()}',
+                        onChanged: (v) => setState(() => _localTranslatedFontSize = v),
+                        onChangeEnd: (v) {
+                          readingSettingsContext.translatedFontSize = v;
+                          setState(() => _localTranslatedFontSize = null);
+                        },
                       ),
                     ),
                     TextButton(
                       onPressed: () {
+                        setState(() => _localTranslatedFontSize = null);
                         readingSettingsContext.translatedFontSize = 20;
                       },
                       child: Text(l10n.reset),
