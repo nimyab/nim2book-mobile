@@ -24,11 +24,14 @@ class _BooksScreenState extends State<BooksScreen> {
       body: Consumer<BooksContext>(
         builder: (context, value, child) {
           final books = value.allBooks;
+          final isFetching = value.isFetchingBooks;
 
-          return books.isEmpty
-              ? Center(child: const CircularProgressIndicator())
+          return isFetching
+              ? const Center(child: CircularProgressIndicator())
+              : books.isEmpty
+              ? Center(child: Text(l10n.noBooksFound))
               : Padding(
-                  padding: const EdgeInsetsGeometry.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   child: ListView.separated(
                     separatorBuilder: (context, index) =>
                         const SizedBox(height: 15),

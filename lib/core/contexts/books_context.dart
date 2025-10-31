@@ -7,9 +7,11 @@ class BooksContext with ChangeNotifier {
   final List<Book> _allBooks = [];
   final List<Book> _myBooks = [];
   final _bookService = GetIt.I.get<BookService>();
+  bool _isFetchingBooks = false;
 
   List<Book> get allBooks => _allBooks;
   List<Book> get myBooks => _myBooks;
+  bool get isFetchingBooks => _isFetchingBooks;
 
   Future<void> initial() async {
     getMyBooks();
@@ -18,10 +20,21 @@ class BooksContext with ChangeNotifier {
 
   Future<void> getBooks(String? author, String? title, int page) async {
     try {
+      _isFetchingBooks = true;
+      notifyListeners();
       final books = await _bookService.getBooks(author, title, page.toString());
-      if (page == 1) _allBooks.clear();
-      _allBooks.addAll(books);
+      if (page == 1) {
+        // Не очищаем список, если получили пустой результат (например, ошибка сети),
+        // чтобы сохранить ранее загруженные (кэшированные) книги.
+        if (books.isNotEmpty) {
+          _allBooks.clear();
+        }
+      }
+      if (books.isNotEmpty) {
+        _allBooks.addAll(books);
+      }
     } finally {
+      _isFetchingBooks = false;
       notifyListeners();
     }
   }

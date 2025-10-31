@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/screens/add_book_screen/add_book_screen.dart';
+import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
 import 'package:nim2book_mobile_flutter/screens/book_screen/book_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/books_screen/books_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/dictionary_screen/dictionary_screen.dart';
@@ -113,7 +114,9 @@ final router = GoRouter(
     GoRoute(
       path: '/add-book',
       name: 'add-book',
-      builder: (context, state) => const AddBookScreen(),
+      builder: (context, state) => AddBookScreen(
+        initialBook: state.extra is Book ? state.extra as Book : null,
+      ),
     ),
 
     GoRoute(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/books_context.dart';
@@ -42,24 +43,46 @@ class _BookScreenState extends State<BookScreen> {
     final booksContext = context.watch<BooksContext>();
     final l10n = AppLocalizations.of(context)!;
 
-    final book = this.book;
+    final currentBook = book;
     final isLoading = this.isLoading;
+    final isMyBook = currentBook != null
+        ? booksContext.myBooks.any((b) => b.id == currentBook.id)
+        : false;
 
-    if (isLoading) {
-      return Scaffold(
-        appBar: AppBar(),
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
+    final coverUrl = currentBook?.cover != null
+        ? '$_apiBaseUrl/api/v1/file/public?path=${Uri.encodeComponent(currentBook!.cover!)}'
+        : null;
 
-    if (book == null) {
-      return Scaffold(
-        appBar: AppBar(),
-        body: Center(child: Text(l10n.bookNotFound)),
-      );
-    }
-
-    final isMyBook = booksContext.myBooks.any((b) => b.id == book.id);
+    final Widget coverHero = Hero(
+      tag: 'book-cover-${widget.bookId}',
+      flightShuttleBuilder:
+          (
+            flightContext,
+            animation,
+            flightDirection,
+            fromHeroContext,
+            toHeroContext,
+          ) {
+            final Hero fromHero = fromHeroContext.widget as Hero;
+            return Material(
+              type: MaterialType.transparency,
+              child: fromHero.child,
+            );
+          },
+      child: (coverUrl != null)
+          ? Image(
+              image: CachedNetworkImageProvider(coverUrl),
+              height: 300,
+              width: 200,
+              fit: BoxFit.cover,
+            )
+          : Image.asset(
+              'assets/placeholder_book_cover.jpg',
+              height: 300,
+              width: 200,
+              fit: BoxFit.cover,
+            ),
+    );
 
     return Scaffold(
       appBar: AppBar(),
@@ -67,55 +90,53 @@ class _BookScreenState extends State<BookScreen> {
         child: Column(
           spacing: 30,
           children: [
-            if (book.cover != null)
-              Image.network(
-                '$_apiBaseUrl/api/v1/file/public?path=${Uri.encodeComponent(book.cover!)}',
-                height: 300,
-                width: 200,
-                fit: BoxFit.cover,
-              )
-            else
-              Image.asset(
-                'assets/placeholder_book_cover.jpg',
-                height: 300,
-                width: 200,
-                fit: BoxFit.cover,
+            coverHero,
+            if (isLoading)
+              const CircularProgressIndicator()
+            else if (currentBook == null)
+              Text(l10n.bookNotFound)
+            else ...[
+              Text(
+                currentBook.title,
+                style: const TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.center,
               ),
-
-            Text(
-              book.title,
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-              textAlign: TextAlign.center,
-            ),
-            Text(
-              '${l10n.author}: ${book.author}',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-              textAlign: TextAlign.center,
-            ),
-
-            if (!isMyBook)
-              ElevatedButton.icon(
-                onPressed: () => booksContext.addMyBook(book),
-                icon: const Icon(Icons.add),
-                label: Text(l10n.addToMyBooks),
-              )
-            else
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 16,
-                children: [
-                  FilledButton.icon(
-                    onPressed: () => context.push('/reading/${book.id}'),
-                    icon: const Icon(Icons.menu_book),
-                    label: Text(l10n.readBook),
-                  ),
-                  OutlinedButton.icon(
-                    onPressed: () => booksContext.removeMyBook(book),
-                    icon: const Icon(Icons.delete_outline),
-                    label: Text(l10n.delete),
-                  ),
-                ],
+              Text(
+                '${l10n.author}: ${currentBook.author}',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                ),
+                textAlign: TextAlign.center,
               ),
+              if (!isMyBook)
+                ElevatedButton.icon(
+                  onPressed: () => booksContext.addMyBook(currentBook),
+                  icon: const Icon(Icons.add),
+                  label: Text(l10n.addToMyBooks),
+                )
+              else
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 16,
+                  children: [
+                    FilledButton.icon(
+                      onPressed: () =>
+                          context.push('/reading/${currentBook.id}'),
+                      icon: const Icon(Icons.menu_book),
+                      label: Text(l10n.readBook),
+                    ),
+                    OutlinedButton.icon(
+                      onPressed: () => booksContext.removeMyBook(currentBook),
+                      icon: const Icon(Icons.delete_outline),
+                      label: Text(l10n.delete),
+                    ),
+                  ],
+                ),
+            ],
           ],
         ),
       ),

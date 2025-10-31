@@ -168,6 +168,26 @@
   "@bookNotFound": {
     "description": "Error message when book is not found"
   },
+  "offlineMode": "Offline mode",
+  "@offlineMode": {
+    "description": "Title for offline mode toggle"
+  },
+  "offlineModeDesc": "Use cached content only; network disabled",
+  "@offlineModeDesc": {
+    "description": "Description for offline mode toggle"
+  },
+  "offlineBannerTitle": "Offline mode",
+  "@offlineBannerTitle": {
+    "description": "Banner title shown when offline mode is active"
+  },
+  "offlineBannerMessage": "Network requests disabled. Only cached content is available.",
+  "@offlineBannerMessage": {
+    "description": "Banner message shown when offline mode is active"
+  },
+  "offlineCatalogUnavailable": "Book catalog is unavailable offline",
+  "@offlineCatalogUnavailable": {
+    "description": "Message shown when books catalog cannot be loaded offline"
+  },
   "author": "Author",
   "@author": {
     "description": "Author label"

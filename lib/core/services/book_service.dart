@@ -18,13 +18,27 @@ class BookService {
   final _sharedPreferences = GetIt.I.get<SharedPreferences>();
 
   Future<Book?> getBook(String bookId) async {
+    final cacheKey = 'book_$bookId';
+
+    // Try get cached book first
+    Book? cachedBook;
+    try {
+      final raw = _sharedPreferences.getString(cacheKey);
+      if (raw != null) {
+        cachedBook = Book.fromJson(jsonDecode(raw));
+      }
+    } catch (_) {}
+
     try {
       final response = await _apiClient.getBook(bookId);
-      return response.book;
+      final book = response.book;
+      await _sharedPreferences.setString(cacheKey, jsonEncode(book.toJson()));
+      return book;
     } catch (e) {
       _logger.e('Error fetching book with ID $bookId: $e');
+      // Fallback to cache
+      return cachedBook;
     }
-    return null;
   }
 
   Future<List<Book>> getBooks(
@@ -32,17 +46,38 @@ class BookService {
     String? title,
     String page,
   ) async {
+    final cacheKey = 'books_list_${author ?? ''}_${title ?? ''}_$page';
+
+    // Load cached list
+    List<Book> cached = [];
+    try {
+      final raw = _sharedPreferences.getString(cacheKey);
+      if (raw != null) {
+        final list = jsonDecode(raw) as List<dynamic>;
+        cached = list
+            .map((e) => Book.fromJson(e as Map<String, dynamic>))
+            .toList();
+      }
+    } catch (_) {}
+
     try {
       final response = await _apiClient.getBooks(
         author: author,
         title: title,
         page: page,
       );
-      return response.books;
+      final books = response.books;
+      // Cache fresh list
+      await _sharedPreferences.setString(
+        cacheKey,
+        jsonEncode(books.map((b) => b.toJson()).toList()),
+      );
+      return books;
     } catch (e) {
       _logger.e('Error fetching books: $e');
+      // Fallback to cache
+      return cached;
     }
-    return [];
   }
 
   List<Book> getAddedBooks() {

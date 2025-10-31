@@ -19,7 +19,9 @@ import 'package:nim2book_mobile_flutter/core/services/fmc_token_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/theme_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
+import 'package:nim2book_mobile_flutter/core/services/offline_service.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
+import 'package:nim2book_mobile_flutter/core/contexts/offline_context.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/services/reading_settings_service.dart';
 import 'package:nim2book_mobile_flutter/firebase_options.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
@@ -87,6 +89,9 @@ void main() async {
   final readingPersistence = ReadingSettingsService();
   GetIt.I.registerSingleton(readingPersistence);
 
+  final offlineService = OfflineService();
+  GetIt.I.registerSingleton(offlineService);
+
   runApp(const Nim2BookApp());
 }
 
@@ -102,6 +107,7 @@ class Nim2BookApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ThemeContext()),
         ChangeNotifierProvider(create: (_) => LocaleContext()),
         ChangeNotifierProvider(create: (_) => DictionaryContext()),
+        ChangeNotifierProvider(create: (_) => OfflineContext()),
       ],
       child: _AppInitializer(),
     );
@@ -122,6 +128,7 @@ class _AppInitializerState extends State<_AppInitializer> {
       context.read<BooksContext>().initial();
       context.read<ThemeContext>().initialize();
       context.read<LocaleContext>().initialize();
+      context.read<OfflineContext>().init();
     });
   }
 

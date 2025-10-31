@@ -137,6 +137,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bookNotFound => 'Book not found';
 
   @override
+  String get offlineMode => 'Offline mode';
+
+  @override
+  String get offlineModeDesc => 'Use cached content only; network disabled';
+
+  @override
+  String get offlineBannerTitle => 'Offline mode';
+
+  @override
+  String get offlineBannerMessage =>
+      'Network requests disabled. Only cached content is available.';
+
+  @override
+  String get offlineCatalogUnavailable => 'Book catalog is unavailable offline';
+
+  @override
   String get author => 'Author';
 
   @override

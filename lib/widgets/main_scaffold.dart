@@ -22,7 +22,7 @@ class MainScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      body: navigationShell,
+      body: Column(children: [Expanded(child: navigationShell)]),
       bottomNavigationBar: NavigationBar(
         selectedIndex: navigationShell.currentIndex,
         destinations: [

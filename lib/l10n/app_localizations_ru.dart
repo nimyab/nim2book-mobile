@@ -137,6 +137,24 @@ class AppLocalizationsRu extends AppLocalizations {
   String get bookNotFound => 'Книга не найдена';
 
   @override
+  String get offlineMode => 'Автономный режим';
+
+  @override
+  String get offlineModeDesc =>
+      'Использовать только кэшированный контент; сеть отключена';
+
+  @override
+  String get offlineBannerTitle => 'Автономный режим';
+
+  @override
+  String get offlineBannerMessage =>
+      'Сетевые запросы отключены. Доступен только кэшированный контент.';
+
+  @override
+  String get offlineCatalogUnavailable =>
+      'Каталог книг недоступен в автономном режиме';
+
+  @override
   String get author => 'Автор';
 
   @override

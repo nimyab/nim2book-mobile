@@ -168,6 +168,26 @@
   "@bookNotFound": {
     "description": "Error message when book is not found"
   },
+  "offlineMode": "Автономный режим",
+  "@offlineMode": {
+    "description": "Заголовок переключателя автономного режима"
+  },
+  "offlineModeDesc": "Использовать только кэшированный контент; сеть отключена",
+  "@offlineModeDesc": {
+    "description": "Описание переключателя автономного режима"
+  },
+  "offlineBannerTitle": "Автономный режим",
+  "@offlineBannerTitle": {
+    "description": "Заголовок баннера при активном автономном режиме"
+  },
+  "offlineBannerMessage": "Сетевые запросы отключены. Доступен только кэшированный контент.",
+  "@offlineBannerMessage": {
+    "description": "Текст баннера при активном автономном режиме"
+  },
+  "offlineCatalogUnavailable": "Каталог книг недоступен в автономном режиме",
+  "@offlineCatalogUnavailable": {
+    "description": "Сообщение, когда каталог книг недоступен автономно"
+  },
   "author": "Автор",
   "@author": {
     "description": "Author label"

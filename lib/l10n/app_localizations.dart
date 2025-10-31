@@ -350,6 +350,36 @@ abstract class AppLocalizations {
   /// **'Book not found'**
   String get bookNotFound;
 
+  /// Title for offline mode toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Offline mode'**
+  String get offlineMode;
+
+  /// Description for offline mode toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Use cached content only; network disabled'**
+  String get offlineModeDesc;
+
+  /// Banner title shown when offline mode is active
+  ///
+  /// In en, this message translates to:
+  /// **'Offline mode'**
+  String get offlineBannerTitle;
+
+  /// Banner message shown when offline mode is active
+  ///
+  /// In en, this message translates to:
+  /// **'Network requests disabled. Only cached content is available.'**
+  String get offlineBannerMessage;
+
+  /// Message shown when books catalog cannot be loaded offline
+  ///
+  /// In en, this message translates to:
+  /// **'Book catalog is unavailable offline'**
+  String get offlineCatalogUnavailable;
+
   /// Author label
   ///
   /// In en, this message translates to:

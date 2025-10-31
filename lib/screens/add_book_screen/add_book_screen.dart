@@ -1,17 +1,20 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/books_context.dart';
+import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class AddBookScreen extends StatefulWidget {
-  const AddBookScreen({super.key});
+  final Book? initialBook;
+  const AddBookScreen({super.key, this.initialBook});
 
   @override
   State<AddBookScreen> createState() => _AddBookScreenState();
@@ -21,6 +24,20 @@ class _AddBookScreenState extends State<AddBookScreen> {
   PlatformFile? _selectedFile;
   bool _isUploading = false;
   final _apiClient = GetIt.I.get<ApiClient>();
+  final _apiBaseUrl = GetIt.I.get<Env>().apiBaseUrl;
+  String? _initialCoverUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    final book = widget.initialBook;
+    if (book?.cover != null) {
+      _initialCoverUrl =
+          '$_apiBaseUrl/api/v1/file/public?path=${Uri.encodeComponent(book!.cover!)}';
+      // Предзагрузка обложки для мгновенного отображения
+      precacheImage(CachedNetworkImageProvider(_initialCoverUrl!), context);
+    }
+  }
 
   Future<void> _pickFile() async {
     final l10n = AppLocalizations.of(context)!;
@@ -65,9 +82,17 @@ class _AddBookScreenState extends State<AddBookScreen> {
         from: 'en',
         to: 'ru',
       );
+      if (!mounted) return;
       if (response.book != null) {
         // Book already translated
-        callbackWithBook(response.book!);
+        final book = response.book!;
+        final coverUrl = book.cover != null
+            ? '$_apiBaseUrl/api/v1/file/public?path=${Uri.encodeComponent(book.cover!)}'
+            : null;
+        if (coverUrl != null) {
+          await precacheImage(CachedNetworkImageProvider(coverUrl), context);
+        }
+        callbackWithBook(book);
         return;
       }
       if (response.messageAboutTranslate != null) {
@@ -107,6 +132,22 @@ class _AddBookScreenState extends State<AddBookScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            if (_initialCoverUrl != null)
+              Center(
+                child: Image(
+                  image: CachedNetworkImageProvider(_initialCoverUrl!),
+                  height: 160,
+                  width: 110,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Image.asset(
+                    'assets/placeholder_book_cover.jpg',
+                    height: 160,
+                    width: 110,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            if (_initialCoverUrl != null) const SizedBox(height: 16),
             Text(
               l10n.selectEpubFile,
               style: TextStyle(
