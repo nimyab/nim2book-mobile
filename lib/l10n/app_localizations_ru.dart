@@ -222,6 +222,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get learnWords => 'Изучать слова';
 
   @override
+  String get learnNewWords => 'Учить новые слова';
+
+  @override
+  String get reviewWords => 'Повторить слова';
+
+  @override
+  String get mixedMode => 'Смешанный режим';
+
+  @override
   String get learning => 'Изучение';
 
   @override
@@ -236,6 +245,15 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get noWordsToLearn =>
       'Нет слов для изучения. Сначала добавьте слова в словарь!';
+
+  @override
+  String get noNewWordsToday => 'Нет новых слов для изучения сегодня';
+
+  @override
+  String get noReviewWordsDue => 'Нет слов к повторению';
+
+  @override
+  String get noMixedSessionAvailable => 'Нет слов для смешанного режима';
 
   @override
   String wordProgress(int current, int total) {

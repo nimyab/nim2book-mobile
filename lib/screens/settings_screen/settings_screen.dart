@@ -35,14 +35,6 @@ class SettingsScreen extends StatelessWidget {
                         const LanguageSwitcher(),
                         const ThemeSwitcher(),
                         const DailyNewLimitSwitcher(),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton.icon(
-                            onPressed: () => context.push('/stats'),
-                            icon: const Icon(Icons.insights),
-                            label: Text(l10n.showStatistics),
-                          ),
-                        ),
                       ],
                     ),
                   ),

@@ -222,6 +222,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get learnWords => 'Learn Words';
 
   @override
+  String get learnNewWords => 'Learn new words';
+
+  @override
+  String get reviewWords => 'Review words';
+
+  @override
+  String get mixedMode => 'Mixed mode';
+
+  @override
   String get learning => 'Learning';
 
   @override
@@ -236,6 +245,15 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get noWordsToLearn =>
       'No words to learn. Add some words to your dictionary first!';
+
+  @override
+  String get noNewWordsToday => 'No new words to learn today';
+
+  @override
+  String get noReviewWordsDue => 'No words due for review';
+
+  @override
+  String get noMixedSessionAvailable => 'No words available for mixed session';
 
   @override
   String wordProgress(int current, int total) {

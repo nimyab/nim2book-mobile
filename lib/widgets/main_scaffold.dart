@@ -32,8 +32,8 @@ class MainScaffold extends StatelessWidget {
           ),
           NavigationDestination(icon: Icon(Icons.book), label: l10n.books),
           NavigationDestination(
-            icon: Icon(Icons.translate),
-            label: l10n.dictionary,
+            icon: Icon(Icons.school_outlined),
+            label: l10n.learning,
           ),
           NavigationDestination(
             icon: Icon(Icons.settings),

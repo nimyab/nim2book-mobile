@@ -36,7 +36,9 @@ class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
     final baseStyle = TextStyle(
       fontSize: readingSettingsContext.translatedFontSize,
       // Добавляем fontFamily для гарантии обновления
-      fontFamily: translatedFamily.toLowerCase() == 'system' ? null : translatedFamily,
+      fontFamily: translatedFamily.toLowerCase() == 'system'
+          ? null
+          : translatedFamily,
     );
 
     TextStyle textStyle;
@@ -44,10 +46,7 @@ class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
       textStyle = baseStyle;
     } else {
       try {
-        textStyle = GoogleFonts.getFont(
-          translatedFamily,
-          textStyle: baseStyle,
-        );
+        textStyle = GoogleFonts.getFont(translatedFamily, textStyle: baseStyle);
       } catch (_) {
         textStyle = baseStyle;
       }

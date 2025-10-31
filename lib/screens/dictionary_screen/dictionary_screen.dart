@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/features/translated_dialog/translated_dialog.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -121,32 +120,7 @@ class DictionaryScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 children: [
-                  Expanded(
-                    child: savedWords.isNotEmpty
-                        ? ElevatedButton(
-                            onPressed: () {
-                              context.push('/learning');
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  theme.colorScheme.surfaceContainer,
-                              foregroundColor: theme.colorScheme.primary,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            child: Text(
-                              l10n.learnWords,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                color: theme.colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          )
-                        : const SizedBox.shrink(),
-                  ),
-                  const SizedBox(width: 12),
+                  const Spacer(),
                   Tooltip(
                     message: l10n.add,
                     child: ElevatedButton(

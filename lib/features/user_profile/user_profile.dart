@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/auth_context.dart';
 import 'package:nim2book_mobile_flutter/core/models/user/user.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
@@ -49,14 +48,6 @@ class UserProfile extends StatelessWidget {
             const ThemeSwitcher(),
             const LanguageSwitcher(),
             const DailyNewLimitSwitcher(),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: () => context.push('/stats'),
-                icon: Icon(Icons.insights),
-                label: Text(l10n.showStatistics),
-              ),
-            ),
             ElevatedButton(
               onPressed: isAuthLoading
                   ? null

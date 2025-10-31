@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/services/reading_settings_service.dart';
 

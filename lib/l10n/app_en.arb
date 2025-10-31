@@ -280,6 +280,18 @@
   "@learnWords": {
     "description": "Button text to start learning words"
   },
+  "learnNewWords": "Learn new words",
+  "@learnNewWords": {
+    "description": "Card title for learning only new words"
+  },
+  "reviewWords": "Review words",
+  "@reviewWords": {
+    "description": "Card title for reviewing due words"
+  },
+  "mixedMode": "Mixed mode",
+  "@mixedMode": {
+    "description": "Card title for mixed mode (new + review)"
+  },
   "learning": "Learning",
   "@learning": {
     "description": "Learning screen title"
@@ -299,6 +311,18 @@
   "noWordsToLearn": "No words to learn. Add some words to your dictionary first!",
   "@noWordsToLearn": {
     "description": "Message when there are no words in dictionary to learn"
+  },
+  "noNewWordsToday": "No new words to learn today",
+  "@noNewWordsToday": {
+    "description": "Message when there are no new words available for learning today"
+  },
+  "noReviewWordsDue": "No words due for review",
+  "@noReviewWordsDue": {
+    "description": "Message when there are no words due for review"
+  },
+  "noMixedSessionAvailable": "No words available for mixed session",
+  "@noMixedSessionAvailable": {
+    "description": "Message when there are no words for mixed mode"
   },
   "wordProgress": "Word {current} of {total}",
   "@wordProgress": {

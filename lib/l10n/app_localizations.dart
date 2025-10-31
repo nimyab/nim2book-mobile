@@ -518,6 +518,24 @@ abstract class AppLocalizations {
   /// **'Learn Words'**
   String get learnWords;
 
+  /// Card title for learning only new words
+  ///
+  /// In en, this message translates to:
+  /// **'Learn new words'**
+  String get learnNewWords;
+
+  /// Card title for reviewing due words
+  ///
+  /// In en, this message translates to:
+  /// **'Review words'**
+  String get reviewWords;
+
+  /// Card title for mixed mode (new + review)
+  ///
+  /// In en, this message translates to:
+  /// **'Mixed mode'**
+  String get mixedMode;
+
   /// Learning screen title
   ///
   /// In en, this message translates to:
@@ -547,6 +565,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No words to learn. Add some words to your dictionary first!'**
   String get noWordsToLearn;
+
+  /// Message when there are no new words available for learning today
+  ///
+  /// In en, this message translates to:
+  /// **'No new words to learn today'**
+  String get noNewWordsToday;
+
+  /// Message when there are no words due for review
+  ///
+  /// In en, this message translates to:
+  /// **'No words due for review'**
+  String get noReviewWordsDue;
+
+  /// Message when there are no words for mixed mode
+  ///
+  /// In en, this message translates to:
+  /// **'No words available for mixed session'**
+  String get noMixedSessionAvailable;
 
   /// Progress indicator showing current word position
   ///

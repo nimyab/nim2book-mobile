@@ -280,6 +280,18 @@
   "@learnWords": {
     "description": "Button text to start learning words"
   },
+  "learnNewWords": "Учить новые слова",
+  "@learnNewWords": {
+    "description": "Заголовок карточки для изучения только новых слов"
+  },
+  "reviewWords": "Повторить слова",
+  "@reviewWords": {
+    "description": "Заголовок карточки для повторения слов к сроку"
+  },
+  "mixedMode": "Смешанный режим",
+  "@mixedMode": {
+    "description": "Заголовок карточки для смешанного режима (новые + повтор)"
+  },
   "learning": "Изучение",
   "@learning": {
     "description": "Learning screen title"
@@ -299,6 +311,18 @@
   "noWordsToLearn": "Нет слов для изучения. Сначала добавьте слова в словарь!",
   "@noWordsToLearn": {
     "description": "Message when there are no words in dictionary to learn"
+  },
+  "noNewWordsToday": "Нет новых слов для изучения сегодня",
+  "@noNewWordsToday": {
+    "description": "Message when there are no new words available for learning today"
+  },
+  "noReviewWordsDue": "Нет слов к повторению",
+  "@noReviewWordsDue": {
+    "description": "Message when there are no words due for review"
+  },
+  "noMixedSessionAvailable": "Нет слов для смешанного режима",
+  "@noMixedSessionAvailable": {
+    "description": "Message when there are no words for mixed mode"
   },
   "wordProgress": "Слово {current} из {total}",
   "@wordProgress": {

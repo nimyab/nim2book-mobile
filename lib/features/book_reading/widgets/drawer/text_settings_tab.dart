@@ -128,11 +128,13 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                   children: [
                     Expanded(
                       child: Slider(
-                        value: _localFontSize ?? readingSettingsContext.fontSize,
+                        value:
+                            _localFontSize ?? readingSettingsContext.fontSize,
                         min: 12,
                         max: 32,
                         divisions: 20,
-                        label: '${(_localFontSize ?? readingSettingsContext.fontSize).round()}',
+                        label:
+                            '${(_localFontSize ?? readingSettingsContext.fontSize).round()}',
                         onChanged: (v) => setState(() => _localFontSize = v),
                         onChangeEnd: (v) {
                           readingSettingsContext.fontSize = v;
@@ -256,12 +258,16 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                   children: [
                     Expanded(
                       child: Slider(
-                        value: _localLineHeight ?? readingSettingsContext.lineHeight,
+                        value:
+                            _localLineHeight ??
+                            readingSettingsContext.lineHeight,
                         min: 1.0,
                         max: 2.0,
                         divisions: 20,
-                        label: (_localLineHeight ?? readingSettingsContext.lineHeight)
-                            .toStringAsFixed(2),
+                        label:
+                            (_localLineHeight ??
+                                    readingSettingsContext.lineHeight)
+                                .toStringAsFixed(2),
                         onChanged: (v) => setState(() => _localLineHeight = v),
                         onChangeEnd: (v) {
                           readingSettingsContext.lineHeight = v;
@@ -285,14 +291,17 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ListTile(
                 title: Text(
                   l10n.sidePaddingPx(
-                    (_localSidePadding ?? readingSettingsContext.sidePadding).round(),
+                    (_localSidePadding ?? readingSettingsContext.sidePadding)
+                        .round(),
                   ),
                 ),
                 subtitle: Row(
                   children: [
                     Expanded(
                       child: Slider(
-                        value: _localSidePadding ?? readingSettingsContext.sidePadding,
+                        value:
+                            _localSidePadding ??
+                            readingSettingsContext.sidePadding,
                         min: 0,
                         max: 32,
                         divisions: 32,
@@ -321,7 +330,8 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ListTile(
                 title: Text(
                   l10n.firstLineIndentEm(
-                    (_localFirstLineIndent ?? readingSettingsContext.firstLineIndentEm)
+                    (_localFirstLineIndent ??
+                            readingSettingsContext.firstLineIndentEm)
                         .toStringAsFixed(1),
                   ),
                 ),
@@ -329,13 +339,16 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                   children: [
                     Expanded(
                       child: Slider(
-                        value: _localFirstLineIndent ?? readingSettingsContext.firstLineIndentEm,
+                        value:
+                            _localFirstLineIndent ??
+                            readingSettingsContext.firstLineIndentEm,
                         min: 0.0,
                         max: 3.0,
                         divisions: 30,
                         label:
                             '${(_localFirstLineIndent ?? readingSettingsContext.firstLineIndentEm).toStringAsFixed(1)} em',
-                        onChanged: (v) => setState(() => _localFirstLineIndent = v),
+                        onChanged: (v) =>
+                            setState(() => _localFirstLineIndent = v),
                         onChangeEnd: (v) {
                           readingSettingsContext.firstLineIndentEm = v;
                           setState(() => _localFirstLineIndent = null);
@@ -358,20 +371,25 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ListTile(
                 title: Text(
                   l10n.paragraphSpacingPx(
-                    (_localParagraphSpacing ?? readingSettingsContext.paragraphSpacing).round(),
+                    (_localParagraphSpacing ??
+                            readingSettingsContext.paragraphSpacing)
+                        .round(),
                   ),
                 ),
                 subtitle: Row(
                   children: [
                     Expanded(
                       child: Slider(
-                        value: _localParagraphSpacing ?? readingSettingsContext.paragraphSpacing,
+                        value:
+                            _localParagraphSpacing ??
+                            readingSettingsContext.paragraphSpacing,
                         min: 0,
                         max: 24,
                         divisions: 24,
                         label:
                             '${(_localParagraphSpacing ?? readingSettingsContext.paragraphSpacing).round()} px',
-                        onChanged: (v) => setState(() => _localParagraphSpacing = v),
+                        onChanged: (v) =>
+                            setState(() => _localParagraphSpacing = v),
                         onChangeEnd: (v) {
                           readingSettingsContext.paragraphSpacing = v;
                           setState(() => _localParagraphSpacing = null);
@@ -398,23 +416,30 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ListTile(
                 title: Text(
                   l10n.translationVerticalPaddingPx(
-                    (_localTranslatedVerticalPadding ?? readingSettingsContext.translatedVerticalPadding).round(),
+                    (_localTranslatedVerticalPadding ??
+                            readingSettingsContext.translatedVerticalPadding)
+                        .round(),
                   ),
                 ),
                 subtitle: Row(
                   children: [
                     Expanded(
                       child: Slider(
-                        value: _localTranslatedVerticalPadding ?? readingSettingsContext.translatedVerticalPadding,
+                        value:
+                            _localTranslatedVerticalPadding ??
+                            readingSettingsContext.translatedVerticalPadding,
                         min: 0,
                         max: 32,
                         divisions: 32,
                         label:
                             '${(_localTranslatedVerticalPadding ?? readingSettingsContext.translatedVerticalPadding).round()} px',
-                        onChanged: (v) => setState(() => _localTranslatedVerticalPadding = v),
+                        onChanged: (v) =>
+                            setState(() => _localTranslatedVerticalPadding = v),
                         onChangeEnd: (v) {
                           readingSettingsContext.translatedVerticalPadding = v;
-                          setState(() => _localTranslatedVerticalPadding = null);
+                          setState(
+                            () => _localTranslatedVerticalPadding = null,
+                          );
                         },
                       ),
                     ),
@@ -477,20 +502,25 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ListTile(
                 title: Text(
                   l10n.translationFontSizeValue(
-                    (_localTranslatedFontSize ?? readingSettingsContext.translatedFontSize).round(),
+                    (_localTranslatedFontSize ??
+                            readingSettingsContext.translatedFontSize)
+                        .round(),
                   ),
                 ),
                 subtitle: Row(
                   children: [
                     Expanded(
                       child: Slider(
-                        value: _localTranslatedFontSize ?? readingSettingsContext.translatedFontSize,
+                        value:
+                            _localTranslatedFontSize ??
+                            readingSettingsContext.translatedFontSize,
                         min: 12,
                         max: 32,
                         divisions: 20,
                         label:
                             '${(_localTranslatedFontSize ?? readingSettingsContext.translatedFontSize).round()}',
-                        onChanged: (v) => setState(() => _localTranslatedFontSize = v),
+                        onChanged: (v) =>
+                            setState(() => _localTranslatedFontSize = v),
                         onChangeEnd: (v) {
                           readingSettingsContext.translatedFontSize = v;
                           setState(() => _localTranslatedFontSize = null);
