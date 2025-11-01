@@ -20,7 +20,6 @@ class BookService {
   Future<Book?> getBook(String bookId) async {
     final cacheKey = 'book_$bookId';
 
-    // Try get cached book first
     Book? cachedBook;
     try {
       final raw = _sharedPreferences.getString(cacheKey);
@@ -36,7 +35,6 @@ class BookService {
       return book;
     } catch (e) {
       _logger.e('Error fetching book with ID $bookId: $e');
-      // Fallback to cache
       return cachedBook;
     }
   }
@@ -48,7 +46,6 @@ class BookService {
   ) async {
     final cacheKey = 'books_list_${author ?? ''}_${title ?? ''}_$page';
 
-    // Load cached list
     List<Book> cached = [];
     try {
       final raw = _sharedPreferences.getString(cacheKey);
@@ -67,7 +64,6 @@ class BookService {
         page: page,
       );
       final books = response.books;
-      // Cache fresh list
       await _sharedPreferences.setString(
         cacheKey,
         jsonEncode(books.map((b) => b.toJson()).toList()),
@@ -75,7 +71,6 @@ class BookService {
       return books;
     } catch (e) {
       _logger.e('Error fetching books: $e');
-      // Fallback to cache
       return cached;
     }
   }
@@ -147,14 +142,14 @@ class BookService {
     return null;
   }
 
-  /// Compresses a string using GZip and returns a Base64 encoded string
+  /// Сжимает строку с помощью GZip и возвращает Base64-представление
   String _compressString(String input) {
     final bytes = utf8.encode(input);
     final compressed = gzip.encode(bytes);
     return base64Encode(compressed);
   }
 
-  /// Decompresses a Base64 encoded GZip string
+  /// Декодирует Base64 и распаковывает GZip-строку
   String _decompressString(String compressed) {
     final bytes = base64Decode(compressed);
     final decompressed = gzip.decode(bytes);

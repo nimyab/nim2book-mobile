@@ -6,7 +6,6 @@ import 'package:nim2book_mobile_flutter/core/models/user/user.dart';
 part 'responses.freezed.dart';
 part 'responses.g.dart';
 
-// Auth responses
 @freezed
 abstract class LoginResponse with _$LoginResponse {
   const factory LoginResponse({
@@ -58,7 +57,6 @@ abstract class LogoutResponse with _$LogoutResponse {
       _$LogoutResponseFromJson(json);
 }
 
-// User responses
 @freezed
 abstract class MeResponse with _$MeResponse {
   const factory MeResponse({required User user}) = _MeResponse;
@@ -67,7 +65,6 @@ abstract class MeResponse with _$MeResponse {
       _$MeResponseFromJson(json);
 }
 
-// Book responses
 @freezed
 abstract class GetBooksResponse with _$GetBooksResponse {
   const factory GetBooksResponse({required List<Book> books}) =
@@ -104,7 +101,6 @@ abstract class UpdateBookResponse with _$UpdateBookResponse {
       _$UpdateBookResponseFromJson(json);
 }
 
-// FCM token responses
 @freezed
 abstract class AddFcmTokenResponse with _$AddFcmTokenResponse {
   const factory AddFcmTokenResponse({required bool success}) =
@@ -123,7 +119,6 @@ abstract class DeleteFcmTokenResponse with _$DeleteFcmTokenResponse {
       _$DeleteFcmTokenResponseFromJson(json);
 }
 
-// Dictionary response
 @freezed
 abstract class LookupResponse with _$LookupResponse {
   const factory LookupResponse({

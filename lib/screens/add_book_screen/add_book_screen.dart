@@ -84,7 +84,6 @@ class _AddBookScreenState extends State<AddBookScreen> {
       );
       if (!mounted) return;
       if (response.book != null) {
-        // Book already translated
         final book = response.book!;
         final coverUrl = book.cover != null
             ? '$_apiBaseUrl/api/v1/file/public?path=${Uri.encodeComponent(book.cover!)}'
@@ -96,7 +95,6 @@ class _AddBookScreenState extends State<AddBookScreen> {
         return;
       }
       if (response.messageAboutTranslate != null) {
-        // Show message about translation
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(response.messageAboutTranslate!)),

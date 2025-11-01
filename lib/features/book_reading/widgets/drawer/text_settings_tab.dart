@@ -11,7 +11,6 @@ class TextSettingsTab extends StatefulWidget {
 }
 
 class _TextSettingsTabState extends State<TextSettingsTab> {
-  // Local state for sliders to prevent lag during dragging
   double? _localFontSize;
   double? _localLineHeight;
   double? _localSidePadding;
@@ -35,7 +34,6 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
             title: Text(l10n.bookTextSettings),
             initiallyExpanded: false,
             children: [
-              // Font family
               ListTile(
                 title: Text(l10n.font),
                 subtitle: Row(
@@ -76,7 +74,6 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ),
               const Divider(height: 1),
 
-              // Text alignment
               ListTile(
                 title: Text(l10n.textAlignment),
                 subtitle: Row(
@@ -117,7 +114,6 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ),
               const Divider(height: 1),
 
-              // Font size
               ListTile(
                 title: Text(
                   l10n.fontSizeValue(
@@ -154,7 +150,6 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ),
               const Divider(height: 1),
 
-              // Background color
               ListTile(
                 title: Text(l10n.backgroundColor),
                 subtitle: Column(
@@ -199,7 +194,6 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ),
               const Divider(height: 1),
 
-              // Text color
               ListTile(
                 title: Text(l10n.textColor),
                 subtitle: Column(
@@ -246,7 +240,6 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ),
               const Divider(height: 1),
 
-              // Line height
               ListTile(
                 title: Text(
                   l10n.lineHeightValue(
@@ -287,7 +280,6 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ),
               const Divider(height: 1),
 
-              // Side padding
               ListTile(
                 title: Text(
                   l10n.sidePaddingPx(
@@ -326,7 +318,6 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ),
               const Divider(height: 1),
 
-              // First line indent
               ListTile(
                 title: Text(
                   l10n.firstLineIndentEm(
@@ -367,7 +358,6 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ),
               const Divider(height: 1),
 
-              // Paragraph spacing
               ListTile(
                 title: Text(
                   l10n.paragraphSpacingPx(
@@ -412,7 +402,6 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
           ExpansionTile(
             title: Text(l10n.parallelTranslationHorizontalScroll),
             children: [
-              // Vertical padding for translation (top & bottom)
               ListTile(
                 title: Text(
                   l10n.translationVerticalPaddingPx(
@@ -455,7 +444,6 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ),
               const Divider(height: 1),
 
-              // Font family for translation
               ListTile(
                 title: Text(l10n.translationFont),
                 subtitle: Row(
@@ -498,7 +486,6 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
               ),
               const Divider(height: 1),
 
-              // Font size for translation
               ListTile(
                 title: Text(
                   l10n.translationFontSizeValue(

@@ -74,7 +74,6 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Header
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
@@ -86,7 +85,6 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
               ),
               child: Row(
                 children: [
-                  // Star icon for favorites (for the whole word)
                   IconButton(
                     icon: isInDict
                         ? const Icon(Icons.star)
@@ -105,7 +103,6 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
                     },
                   ),
                   const SizedBox(width: 12),
-                  // Word
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,7 +127,6 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
                       ],
                     ),
                   ),
-                  // Close button
                   IconButton(
                     icon: const Icon(Icons.close),
                     color: textColor,
@@ -142,7 +138,6 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
               ),
             ),
 
-            // Content
             Flexible(
               child: _isLoading
                   ? Center(
@@ -207,7 +202,6 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Part of speech header (словарь, сущ., прил., прич., гл.)
           if (definition.pos != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
@@ -221,7 +215,6 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
               ),
             ),
 
-          // Translations
           ...definition.tr.asMap().entries.map((entry) {
             final translation = entry.value;
             return Padding(
@@ -229,7 +222,6 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Main translation with dash
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -253,7 +245,6 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
                     ],
                   ),
 
-                  // Examples with smaller indented text
                   if (translation.ex != null && translation.ex!.isNotEmpty)
                     ...translation.ex!.map((example) {
                       return Padding(
@@ -290,7 +281,6 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
                       );
                     }),
 
-                  // Meanings if available
                   if (translation.mean != null && translation.mean!.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(left: 12, top: 4),

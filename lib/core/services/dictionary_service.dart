@@ -60,7 +60,6 @@ class DictionaryService {
       return response.def;
     } catch (e) {
       _logger.e(e);
-      // Fallback to cached if available
       return savedWordInfo;
     }
   }

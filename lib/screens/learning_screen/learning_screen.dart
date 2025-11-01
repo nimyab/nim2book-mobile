@@ -220,8 +220,8 @@ class _LearningScreenState extends State<LearningScreen>
       duration: const Duration(milliseconds: 200),
       vsync: this,
     );
-    // Do not auto-start a learning session on screen open.
-    // The session will start only when the user selects a mode.
+    // Не запускаем сессию обучения при открытии экрана;
+    // сессия начнётся только после выбора режима пользователем.
 
     // Слушаем счётчик новых слов, чтобы кнопки режимов обновлялись
     final srs = GetIt.I.get<SrsService>();

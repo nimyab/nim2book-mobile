@@ -3,7 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'requests.freezed.dart';
 part 'requests.g.dart';
 
-// Auth requests
 @freezed
 abstract class LoginRequest with _$LoginRequest {
   const factory LoginRequest({
@@ -44,7 +43,6 @@ abstract class RefreshRequest with _$RefreshRequest {
       _$RefreshRequestFromJson(json);
 }
 
-// FCM token requests
 @freezed
 abstract class AddFcmTokenRequest with _$AddFcmTokenRequest {
   const factory AddFcmTokenRequest({required String fcmToken}) =
@@ -54,7 +52,6 @@ abstract class AddFcmTokenRequest with _$AddFcmTokenRequest {
       _$AddFcmTokenRequestFromJson(json);
 }
 
-// Dictionary request
 @freezed
 abstract class LookupRequest with _$LookupRequest {
   const factory LookupRequest({
