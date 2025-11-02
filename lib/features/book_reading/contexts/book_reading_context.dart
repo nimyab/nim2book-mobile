@@ -5,9 +5,9 @@ import 'package:nim2book_mobile_flutter/features/book_reading/logic/chapter_conv
 import 'package:nim2book_mobile_flutter/features/book_reading/models/word_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-String currentChapterKey(String bookId) => 'current_chapter_$bookId';
+String currentChapterKey(final String bookId) => 'current_chapter_$bookId';
 
-String chapterProgressKey(String bookId) => 'chapter_progress_$bookId';
+String chapterProgressKey(final String bookId) => 'chapter_progress_$bookId';
 
 class BookReadingContext with ChangeNotifier {
   final _sharedPreferences = GetIt.I.get<SharedPreferences>();
@@ -35,14 +35,14 @@ class BookReadingContext with ChangeNotifier {
 
   bool _isTranslatedVisible = false;
   bool get isTranslatedVisible => _isTranslatedVisible;
-  set isTranslatedVisible(bool value) {
+  set isTranslatedVisible(final bool value) {
     _isTranslatedVisible = value;
     notifyListeners();
   }
 
   bool _isFullscreen = false;
   bool get isFullscreen => _isFullscreen;
-  set isFullscreen(bool value) {
+  set isFullscreen(final bool value) {
     _isFullscreen = value;
     notifyListeners();
   }
@@ -51,14 +51,14 @@ class BookReadingContext with ChangeNotifier {
   int _lastSelectionWordIndex = -1;
   int get lastSelectionParagraphIndex => _lastSelectionParagraphIndex;
   int get lastSelectionWordIndex => _lastSelectionWordIndex;
-  setLastSelection(int paragraphIndex, int wordIndex) {
+  void setLastSelection(final int paragraphIndex, final int wordIndex) {
     _lastSelectionParagraphIndex = paragraphIndex;
     _lastSelectionWordIndex = wordIndex;
   }
 
   BookReadingContext({
-    required String bookId,
-    required List<ChapterAlignNode> chapters,
+    required final String bookId,
+    required final List<ChapterAlignNode> chapters,
   }) : _chapters = chapters,
        _bookId = bookId {
     final currentChapterIndex = _sharedPreferences.getInt(
@@ -74,7 +74,7 @@ class BookReadingContext with ChangeNotifier {
     notifyListeners();
   }
 
-  void setChapters(List<ChapterAlignNode> chapters) {
+  void setChapters(final List<ChapterAlignNode> chapters) {
     _chapters
       ..clear()
       ..addAll(chapters);
@@ -90,7 +90,7 @@ class BookReadingContext with ChangeNotifier {
 
   // Возвращает список слов для указанного параграфа текущей главы.
   // Каждый вызов создает новые элементы, избегая общей предвычисленной структуры.
-  List<WordItem> getParagraphItems(int paragraphIndex) {
+  List<WordItem> getParagraphItems(final int paragraphIndex) {
     if (paragraphIndex < 0 || paragraphIndex >= currentChapter.content.length) {
       return const [];
     }
@@ -98,7 +98,7 @@ class BookReadingContext with ChangeNotifier {
     return ChapterConverter.convertParagraph(paragraph, paragraphIndex);
   }
 
-  void goToChapter(int index) {
+  void goToChapter(final int index) {
     if (index < 0 || index >= _chapters.length) return;
 
     _currentChapterIndex = index;
@@ -122,13 +122,13 @@ class BookReadingContext with ChangeNotifier {
     }
   }
 
-  void selectWord(int paragraphIndex, int wordIndex) {
+  void selectWord(final int paragraphIndex, final int wordIndex) {
     _selectedParagraphIndex = paragraphIndex;
     _selectedWordIndex = wordIndex;
     notifyListeners();
   }
 
-  void setChapterProgress(double progress) {
+  void setChapterProgress(final double progress) {
     _chapterProgress = progress;
     _sharedPreferences.setDouble(chapterProgressKey(_bookId), progress);
   }

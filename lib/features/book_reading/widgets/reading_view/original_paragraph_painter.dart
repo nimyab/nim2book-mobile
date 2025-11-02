@@ -14,7 +14,7 @@ class OriginalParagraphPainter extends CustomPainter {
   });
 
   @override
-  void paint(Canvas canvas, Size size) {
+  void paint(final Canvas canvas, final Size size) {
     canvas.save();
 
     if (selectionStart != null &&
@@ -40,7 +40,7 @@ class OriginalParagraphPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(OriginalParagraphPainter oldDelegate) {
+  bool shouldRepaint(final OriginalParagraphPainter oldDelegate) {
     final rangeChanged =
         (oldDelegate.selectionStart != selectionStart) ||
         (oldDelegate.selectionEnd != selectionEnd);

@@ -12,12 +12,12 @@ class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final isAuthenticated = context.select<AuthContext, bool>(
-      (value) => value.isAuthenticated,
+      (final value) => value.isAuthenticated,
     );
     final isAuthLoading = context.select<AuthContext, bool>(
-      (value) => value.isLoading,
+      (final value) => value.isLoading,
     );
     final l10n = AppLocalizations.of(context)!;
 
@@ -27,14 +27,14 @@ class SettingsScreen extends StatelessWidget {
             ? const UserProfile()
             : Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
                     child: Column(
                       spacing: 16,
                       children: [
-                        const LanguageSwitcher(),
-                        const ThemeSwitcher(),
-                        const DailyNewLimitSwitcher(),
+                        LanguageSwitcher(),
+                        ThemeSwitcher(),
+                        DailyNewLimitSwitcher(),
                       ],
                     ),
                   ),
@@ -46,7 +46,7 @@ class SettingsScreen extends StatelessWidget {
                         children: [
                           Text(
                             l10n.pleaseLoginOrRegister,
-                            style: TextStyle(fontSize: 16),
+                            style: const TextStyle(fontSize: 16),
                           ),
                           ElevatedButton(
                             onPressed: isAuthLoading

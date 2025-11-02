@@ -12,12 +12,12 @@ import 'package:provider/provider.dart';
 class ReadingDrawer extends StatelessWidget {
   const ReadingDrawer({super.key});
 
-  void _openSearchSheet(BuildContext context) {
+  void _openSearchSheet(final BuildContext context) {
     final loadingBookContext = context.read<LoadingBookContext>();
     final chapters = loadingBookContext.chapters;
     final readingContext = context.read<BookReadingContext>();
 
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       builder: (_) =>
@@ -26,7 +26,7 @@ class ReadingDrawer extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final loadingBookContext = context.watch<LoadingBookContext>();
     final readingContext = context.watch<BookReadingContext>();
@@ -72,7 +72,7 @@ class ReadingDrawer extends StatelessWidget {
                 child: TabBarView(
                   children: [
                     ChapterListTab(chapters: chapters),
-                    TextSettingsTab(),
+                    const TextSettingsTab(),
                   ],
                 ),
               ),

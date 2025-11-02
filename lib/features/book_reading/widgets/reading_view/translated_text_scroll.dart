@@ -16,7 +16,7 @@ class TranslatedTextScroll extends StatefulWidget {
 
 class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final readingSettingsContext = context.watch<ReadingSettingsContext>();
     final readingContext = context.watch<BookReadingContext>();
     final theme = Theme.of(context);
@@ -55,7 +55,7 @@ class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
     final metricsPainter = TextPainter(
       text: TextSpan(text: 'pqAy', style: textStyle),
       textDirection: TextDirection.ltr,
-      textScaler: TextScaler.linear(1.0),
+      textScaler: const TextScaler.linear(1.0),
     )..layout();
     final lineHeight = metricsPainter.height;
     final computedHeight =
@@ -68,11 +68,12 @@ class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
         alignment: Alignment.center,
         child: ListView.separated(
           controller: widget.controller,
-          separatorBuilder: (context, index) => SizedBox(width: 10),
+          separatorBuilder: (final context, final index) =>
+              const SizedBox(width: 10),
           cacheExtent: double.infinity,
           scrollDirection: Axis.horizontal,
           itemCount: currentChapter.content.length,
-          itemBuilder: (context, index) {
+          itemBuilder: (final context, final index) {
             final paragraph = currentChapter.content[index];
 
             if (index == selectedParagraphIndex && selectedWordNode != null) {
@@ -83,7 +84,7 @@ class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
                 if (selectedWordContext != null) {
                   Scrollable.ensureVisible(
                     selectedWordContext,
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     alignment: 0.5,
                     curve: Curves.easeInOut,
                   );
@@ -92,7 +93,7 @@ class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
 
               return Center(
                 child: RichText(
-                  textScaler: TextScaler.linear(1.0),
+                  textScaler: const TextScaler.linear(1.0),
                   textAlign: TextAlign.left,
                   text: TextSpan(
                     children: [
@@ -100,7 +101,7 @@ class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
                         child: Text(
                           paragraph.tp.substring(0, selectedWordNode.itw[0]),
                           style: textStyle,
-                          textScaler: TextScaler.linear(1.0),
+                          textScaler: const TextScaler.linear(1.0),
                         ),
                       ),
 
@@ -117,7 +118,7 @@ class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
                                   readingColors.highlightBackgroundColor,
                               color: readingColors.highlightTextColor,
                             ),
-                            textScaler: TextScaler.linear(1.0),
+                            textScaler: const TextScaler.linear(1.0),
                           ),
                         ),
                       ),
@@ -126,7 +127,7 @@ class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
                         child: Text(
                           paragraph.tp.substring(selectedWordNode.itw[1]),
                           style: textStyle,
-                          textScaler: TextScaler.linear(1.0),
+                          textScaler: const TextScaler.linear(1.0),
                         ),
                       ),
                     ],
@@ -138,7 +139,7 @@ class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
                 child: Text(
                   paragraph.tp,
                   style: textStyle,
-                  textScaler: TextScaler.linear(1.0),
+                  textScaler: const TextScaler.linear(1.0),
                 ),
               );
             }

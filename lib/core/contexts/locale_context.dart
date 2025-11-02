@@ -12,7 +12,7 @@ class LocaleContext extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> changeLocale(Locale locale) async {
+  Future<void> changeLocale(final Locale locale) async {
     if (_currentLocale != locale) {
       _currentLocale = locale;
       await _localeService.saveLocale(locale);
@@ -22,6 +22,6 @@ class LocaleContext extends ChangeNotifier {
 
   List<Locale> get supportedLocales => _localeService.getSupportedLocales();
 
-  String getLanguageName(Locale locale) =>
+  String getLanguageName(final Locale locale) =>
       _localeService.getLanguageName(locale);
 }

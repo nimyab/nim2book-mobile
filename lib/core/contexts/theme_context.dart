@@ -17,13 +17,13 @@ class ThemeContext extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setTheme(AppTheme theme) async {
+  Future<void> setTheme(final AppTheme theme) async {
     _currentTheme = theme;
     await _themeService.setTheme(theme);
     notifyListeners();
   }
 
-  String getThemeName(AppTheme theme, AppLocalizations l10n) {
+  String getThemeName(final AppTheme theme, final AppLocalizations l10n) {
     return _themeService.getThemeName(theme, l10n);
   }
 }

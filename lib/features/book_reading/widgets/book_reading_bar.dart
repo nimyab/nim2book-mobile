@@ -15,7 +15,7 @@ class BookReadingBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(bookAppBarHeight);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final readingContext = context.watch<BookReadingContext>();
     final theme = Theme.of(context);
     final percent = readingContext.totalChapters == 0
@@ -60,7 +60,7 @@ class BookReadingBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         Builder(
-          builder: (context) => Tooltip(
+          builder: (final context) => Tooltip(
             message: AppLocalizations.of(context)!.menu,
             child: IconButton(
               icon: const Icon(Icons.more_vert),

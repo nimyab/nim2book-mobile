@@ -16,7 +16,7 @@ class ThemeService {
     return AppTheme.values[themeIndex];
   }
 
-  Future<void> setTheme(AppTheme theme) async {
+  Future<void> setTheme(final AppTheme theme) async {
     await _sharedPreferences.setInt(_themeKey, theme.index);
   }
 
@@ -31,7 +31,7 @@ class ThemeService {
     }
   }
 
-  String getThemeName(AppTheme theme, AppLocalizations l10n) {
+  String getThemeName(final AppTheme theme, final AppLocalizations l10n) {
     switch (theme) {
       case AppTheme.light:
         return l10n.light;

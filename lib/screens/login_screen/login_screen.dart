@@ -27,11 +27,11 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final login = context.read<AuthContext>().login;
     final googleLogin = context.read<AuthContext>().googleLogin;
     final isAuthLoading = context.select<AuthContext, bool>(
-      (value) => value.isLoading,
+      (final value) => value.isLoading,
     );
     final l10n = AppLocalizations.of(context)!;
 
@@ -41,25 +41,25 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(l10n.login, style: TextStyle(fontSize: 24)),
-              SizedBox(height: 60),
+              Text(l10n.login, style: const TextStyle(fontSize: 24)),
+              const SizedBox(height: 60),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 32),
+                padding: const EdgeInsets.symmetric(horizontal: 32),
                 child: Column(
                   spacing: 16,
                   children: [
                     TextField(
                       decoration: InputDecoration(
                         labelText: l10n.email,
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                       ),
                       controller: _emailController,
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                     TextField(
                       decoration: InputDecoration(
                         labelText: l10n.password,
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                       ),
                       obscureText: true,
                       controller: _passwordController,
@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               ElevatedButton(
                 onPressed: isAuthLoading
@@ -109,11 +109,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Text(l10n.noAccountRegisterHere),
               ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               if (GoogleSignIn.instance.supportsAuthenticate())
                 IconButton.filledTonal(
-                  icon: FaIcon(FontAwesomeIcons.google),
+                  icon: const FaIcon(FontAwesomeIcons.google),
                   onPressed: isAuthLoading
                       ? null
                       : () async {

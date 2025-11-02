@@ -10,7 +10,7 @@ class DictionaryScreen extends StatelessWidget {
   const DictionaryScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final dictContext = context.watch<DictionaryContext>();
     final savedWords = dictContext.savedWords;
@@ -33,7 +33,7 @@ class DictionaryScreen extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Builder(
-                      builder: (context) {
+                      builder: (final context) {
                         final srs = GetIt.I.get<SrsService>();
                         final count = srs.getDueCount(savedWords.keys);
                         return Text(
@@ -59,7 +59,7 @@ class DictionaryScreen extends StatelessWidget {
                     )
                   : ListView.builder(
                       itemCount: savedWords.length,
-                      itemBuilder: (context, index) {
+                      itemBuilder: (final context, final index) {
                         final word = savedWords.keys.elementAt(index);
                         final definitions = savedWords[word]!;
                         final transcription = definitions.isNotEmpty
@@ -105,9 +105,9 @@ class DictionaryScreen extends StatelessWidget {
                             color: theme.colorScheme.onSurfaceVariant,
                           ),
                           onTap: () {
-                            showDialog(
+                            showDialog<void>(
                               context: context,
-                              builder: (context) =>
+                              builder: (final context) =>
                                   TranslatedDialog(phrase: word),
                             );
                           },
@@ -125,9 +125,9 @@ class DictionaryScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         final controller = TextEditingController();
-                        showDialog(
+                        showDialog<void>(
                           context: context,
-                          builder: (dialogContext) => AlertDialog(
+                          builder: (final dialogContext) => AlertDialog(
                             title: Text(l10n.add),
                             content: TextField(
                               controller: controller,

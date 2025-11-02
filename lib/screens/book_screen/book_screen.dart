@@ -39,14 +39,14 @@ class _BookScreenState extends State<BookScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final booksContext = context.watch<BooksContext>();
     final l10n = AppLocalizations.of(context)!;
 
     final currentBook = book;
     final isLoading = this.isLoading;
     final isMyBook = currentBook != null
-        ? booksContext.myBooks.any((b) => b.id == currentBook.id)
+        ? booksContext.myBooks.any((final b) => b.id == currentBook.id)
         : false;
 
     final coverUrl = currentBook?.cover != null
@@ -57,13 +57,13 @@ class _BookScreenState extends State<BookScreen> {
       tag: 'book-cover-${widget.bookId}',
       flightShuttleBuilder:
           (
-            flightContext,
-            animation,
-            flightDirection,
-            fromHeroContext,
-            toHeroContext,
+            final flightContext,
+            final animation,
+            final flightDirection,
+            final fromHeroContext,
+            final toHeroContext,
           ) {
-            final Hero fromHero = fromHeroContext.widget as Hero;
+            final fromHero = fromHeroContext.widget as Hero;
             return Material(
               type: MaterialType.transparency,
               child: fromHero.child,

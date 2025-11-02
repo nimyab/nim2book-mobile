@@ -7,7 +7,7 @@ class ReadingSettingsContext with ChangeNotifier {
 
   String _fontFamily = 'System';
 
-  set fontFamily(String value) {
+  set fontFamily(final String value) {
     _fontFamily = value;
     _readSS.setFontFamily(value);
     notifyListeners();
@@ -17,7 +17,7 @@ class ReadingSettingsContext with ChangeNotifier {
 
   double _fontSize = 24.0;
 
-  set fontSize(double value) {
+  set fontSize(final double value) {
     _fontSize = value;
     _readSS.setFontSize(value);
     notifyListeners();
@@ -27,7 +27,7 @@ class ReadingSettingsContext with ChangeNotifier {
 
   Color _backgroundColor = Colors.white;
 
-  set backgroundColor(Color value) {
+  set backgroundColor(final Color value) {
     _backgroundColor = value;
     _readSS.setBackgroundColor(value);
     notifyListeners();
@@ -37,7 +37,7 @@ class ReadingSettingsContext with ChangeNotifier {
 
   Color _textColor = Colors.black;
 
-  set textColor(Color value) {
+  set textColor(final Color value) {
     _textColor = value;
     _readSS.setTextColor(value);
     notifyListeners();
@@ -47,7 +47,7 @@ class ReadingSettingsContext with ChangeNotifier {
 
   bool _isTranslatedVisible = false;
 
-  set isTranslatedVisible(bool value) {
+  set isTranslatedVisible(final bool value) {
     _isTranslatedVisible = value;
     notifyListeners();
   }
@@ -56,7 +56,7 @@ class ReadingSettingsContext with ChangeNotifier {
 
   bool _isFullscreen = false;
 
-  set isFullscreen(bool value) {
+  set isFullscreen(final bool value) {
     _isFullscreen = value;
     notifyListeners();
   }
@@ -65,7 +65,7 @@ class ReadingSettingsContext with ChangeNotifier {
 
   int _lastSelectionParagraphIndex = -1;
 
-  set lastSelectionParagraphIndex(int value) {
+  set lastSelectionParagraphIndex(final int value) {
     _lastSelectionParagraphIndex = value;
     notifyListeners();
   }
@@ -74,7 +74,7 @@ class ReadingSettingsContext with ChangeNotifier {
 
   int _lastSelectionWordIndex = -1;
 
-  set lastSelectionWordIndex(int value) {
+  set lastSelectionWordIndex(final int value) {
     _lastSelectionWordIndex = value;
     notifyListeners();
   }
@@ -83,7 +83,7 @@ class ReadingSettingsContext with ChangeNotifier {
 
   double _lineHeight = 1.3;
 
-  set lineHeight(double value) {
+  set lineHeight(final double value) {
     _lineHeight = value;
     notifyListeners();
   }
@@ -92,7 +92,7 @@ class ReadingSettingsContext with ChangeNotifier {
 
   double _sidePadding = 10;
 
-  set sidePadding(double value) {
+  set sidePadding(final double value) {
     _sidePadding = value;
     notifyListeners();
   }
@@ -101,7 +101,7 @@ class ReadingSettingsContext with ChangeNotifier {
 
   double _firstLineIndentEm = 1.5;
 
-  set firstLineIndentEm(double value) {
+  set firstLineIndentEm(final double value) {
     _firstLineIndentEm = value;
     notifyListeners();
   }
@@ -110,7 +110,7 @@ class ReadingSettingsContext with ChangeNotifier {
 
   double _paragraphSpacing = 7;
 
-  set paragraphSpacing(double value) {
+  set paragraphSpacing(final double value) {
     _paragraphSpacing = value;
     notifyListeners();
   }
@@ -119,7 +119,7 @@ class ReadingSettingsContext with ChangeNotifier {
 
   TextAlign _textAlign = TextAlign.justify;
 
-  set textAlign(TextAlign value) {
+  set textAlign(final TextAlign value) {
     _textAlign = value;
     _readSS.setTextAlign(value);
     notifyListeners();
@@ -129,7 +129,7 @@ class ReadingSettingsContext with ChangeNotifier {
 
   double _translatedFontSize = 20;
 
-  set translatedFontSize(double value) {
+  set translatedFontSize(final double value) {
     _translatedFontSize = value;
     _readSS.setTranslatedFontSize(value);
     notifyListeners();
@@ -139,7 +139,7 @@ class ReadingSettingsContext with ChangeNotifier {
 
   String _translatedFontFamily = 'System';
 
-  set translatedFontFamily(String value) {
+  set translatedFontFamily(final String value) {
     _translatedFontFamily = value;
     _readSS.setTranslatedFontFamily(value);
     notifyListeners();
@@ -149,7 +149,7 @@ class ReadingSettingsContext with ChangeNotifier {
 
   double _translatedVerticalPadding = 5;
 
-  set translatedVerticalPadding(double value) {
+  set translatedVerticalPadding(final double value) {
     _translatedVerticalPadding = value;
     _readSS.setTranslatedVerticalPadding(value);
     notifyListeners();
@@ -157,7 +157,7 @@ class ReadingSettingsContext with ChangeNotifier {
 
   double get translatedVerticalPadding => _translatedVerticalPadding;
 
-  ReadingSettingsContext(ThemeData theme) {
+  ReadingSettingsContext(final ThemeData theme) {
     _fontFamily = _readSS.getFontFamily() ?? _fontFamily;
     _fontSize = _readSS.getFontSize() ?? _fontSize;
     _textAlign = _readSS.getTextAlign() ?? _textAlign;

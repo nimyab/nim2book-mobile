@@ -21,11 +21,11 @@ class ReadingSettingsService {
   final SharedPreferences _prefs = GetIt.I.get<SharedPreferences>();
 
   String? getFontFamily() => _prefs.getString(_fontFamilyKey);
-  Future<void> setFontFamily(String value) =>
+  Future<void> setFontFamily(final String value) =>
       _prefs.setString(_fontFamilyKey, value);
 
   double? getFontSize() => _prefs.getDouble(_fontSizeKey);
-  Future<void> setFontSize(double value) =>
+  Future<void> setFontSize(final double value) =>
       _prefs.setDouble(_fontSizeKey, value);
 
   Color? getBackgroundColor() {
@@ -33,7 +33,7 @@ class ReadingSettingsService {
     return v != null ? Color(v) : null;
   }
 
-  Future<void> setBackgroundColor(Color value) =>
+  Future<void> setBackgroundColor(final Color value) =>
       _prefs.setInt(_backgroundColorKey, value.toARGB32());
 
   Color? getTextColor() {
@@ -41,23 +41,23 @@ class ReadingSettingsService {
     return v != null ? Color(v) : null;
   }
 
-  Future<void> setTextColor(Color value) =>
+  Future<void> setTextColor(final Color value) =>
       _prefs.setInt(_textColorKey, value.toARGB32());
 
   double? getLineHeight() => _prefs.getDouble(_lineHeightKey);
-  Future<void> setLineHeight(double value) =>
+  Future<void> setLineHeight(final double value) =>
       _prefs.setDouble(_lineHeightKey, value);
 
   double? getSidePadding() => _prefs.getDouble(_sidePaddingKey);
-  Future<void> setSidePadding(double value) =>
+  Future<void> setSidePadding(final double value) =>
       _prefs.setDouble(_sidePaddingKey, value);
 
   double? getFirstLineIndentEm() => _prefs.getDouble(_firstLineIndentEmKey);
-  Future<void> setFirstLineIndentEm(double value) =>
+  Future<void> setFirstLineIndentEm(final double value) =>
       _prefs.setDouble(_firstLineIndentEmKey, value);
 
   double? getParagraphSpacing() => _prefs.getDouble(_paragraphSpacingKey);
-  Future<void> setParagraphSpacing(double value) =>
+  Future<void> setParagraphSpacing(final double value) =>
       _prefs.setDouble(_paragraphSpacingKey, value);
 
   TextAlign? getTextAlign() {
@@ -76,7 +76,7 @@ class ReadingSettingsService {
     }
   }
 
-  Future<void> setTextAlign(TextAlign align) {
+  Future<void> setTextAlign(final TextAlign align) {
     String s;
     switch (align) {
       case TextAlign.left:
@@ -98,20 +98,20 @@ class ReadingSettingsService {
 
   double getTranslatedHeight() =>
       _prefs.getDouble(_translatedHeightKey) ?? 30.0;
-  Future<void> setTranslatedHeight(double value) =>
+  Future<void> setTranslatedHeight(final double value) =>
       _prefs.setDouble(_translatedHeightKey, value);
 
   double getTranslatedVerticalPadding() =>
       _prefs.getDouble(_translatedVerticalPaddingKey) ?? 5.0;
-  Future<void> setTranslatedVerticalPadding(double value) =>
+  Future<void> setTranslatedVerticalPadding(final double value) =>
       _prefs.setDouble(_translatedVerticalPaddingKey, value);
 
   double? getTranslatedFontSize() => _prefs.getDouble(_translatedFontSizeKey);
-  Future<void> setTranslatedFontSize(double value) =>
+  Future<void> setTranslatedFontSize(final double value) =>
       _prefs.setDouble(_translatedFontSizeKey, value);
 
   String? getTranslatedFontFamily() =>
       _prefs.getString(_translatedFontFamilyKey);
-  Future<void> setTranslatedFontFamily(String value) =>
+  Future<void> setTranslatedFontFamily(final String value) =>
       _prefs.setString(_translatedFontFamilyKey, value);
 }

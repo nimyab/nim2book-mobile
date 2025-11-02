@@ -29,12 +29,14 @@ class StatsBarChart extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final labelTextStyle = TextStyle(color: Colors.grey.shade600, fontSize: 10);
 
-    int maxOf(List<int> list) => list.isEmpty
+    int maxOf(final List<int> list) => list.isEmpty
         ? 0
-        : list.reduce((value, element) => value > element ? value : element);
+        : list.reduce(
+            (final value, final element) => value > element ? value : element,
+          );
     final maxLearned = maxOf(learned);
     final maxRepeated = maxOf(repeated);
     final maxKnown = maxOf(known);
@@ -42,10 +44,10 @@ class StatsBarChart extends StatelessWidget {
       maxLearned,
       maxRepeated,
       maxKnown,
-    ].reduce((a, b) => a > b ? a : b);
+    ].reduce((final a, final b) => a > b ? a : b);
     final chartMaxY = (globalMax == 0 ? 1 : globalMax).toDouble();
 
-    double textWidth(String t) {
+    double textWidth(final String t) {
       final tp = TextPainter(
         text: TextSpan(text: t, style: labelTextStyle),
         textDirection: TextDirection.ltr,
@@ -53,18 +55,18 @@ class StatsBarChart extends StatelessWidget {
       return tp.width;
     }
 
-    final label0 = '0';
+    const label0 = '0';
     final labelMid = '${(globalMax / 2).round()}';
     final labelMax = '${globalMax.round()}';
     final maxLabelWidth = [
       textWidth(label0),
       textWidth(labelMid),
       textWidth(labelMax),
-    ].reduce((a, b) => a > b ? a : b);
+    ].reduce((final a, final b) => a > b ? a : b);
 
     final leftReservedSize = maxLabelWidth + 8;
 
-    Widget legendItem(Color c, String label) {
+    Widget legendItem(final Color c, final String label) {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -100,17 +102,15 @@ class StatsBarChart extends StatelessWidget {
         const SizedBox(height: 20),
         Expanded(
           child: LayoutBuilder(
-            builder: (ctx, constraints) {
-              final int groupCount = buckets.length;
-              final bool isVeryDense = groupCount >= 90;
-              final bool isDense = !isVeryDense && groupCount >= 30;
-              final double dynamicBarWidth = isVeryDense
-                  ? 2.0
-                  : (isDense ? 3.0 : 8.0);
-              final double dynamicBarsSpace = isVeryDense
+            builder: (final ctx, final constraints) {
+              final groupCount = buckets.length;
+              final isVeryDense = groupCount >= 90;
+              final isDense = !isVeryDense && groupCount >= 30;
+              final dynamicBarWidth = isVeryDense ? 2.0 : (isDense ? 3.0 : 8.0);
+              final dynamicBarsSpace = isVeryDense
                   ? 1.0
                   : (isDense ? 1.0 : 2.0);
-              final double dynamicGroupsSpace = isVeryDense
+              final dynamicGroupsSpace = isVeryDense
                   ? 1.0
                   : (isDense ? 2.0 : 8.0);
 
@@ -119,7 +119,7 @@ class StatsBarChart extends StatelessWidget {
                   minY: 0,
                   maxY: chartMaxY,
                   groupsSpace: dynamicGroupsSpace,
-                  barGroups: List.generate(buckets.length, (i) {
+                  barGroups: List.generate(buckets.length, (final i) {
                     return BarChartGroupData(
                       x: i,
                       barsSpace: dynamicBarsSpace,
@@ -149,9 +149,9 @@ class StatsBarChart extends StatelessWidget {
                     horizontalInterval: (chartMaxY == 0
                         ? 1
                         : (chartMaxY / 4).ceilToDouble()),
-                    getDrawingHorizontalLine: (value) =>
+                    getDrawingHorizontalLine: (final value) =>
                         FlLine(color: Colors.grey.shade300, strokeWidth: 0.5),
-                    getDrawingVerticalLine: (value) =>
+                    getDrawingVerticalLine: (final value) =>
                         FlLine(color: Colors.grey.shade300, strokeWidth: 0.5),
                   ),
                   borderData: FlBorderData(
@@ -167,7 +167,7 @@ class StatsBarChart extends StatelessWidget {
                         showTitles: true,
                         reservedSize: leftReservedSize,
                         interval: chartMaxY, // только 0 и максимум
-                        getTitlesWidget: (value, meta) {
+                        getTitlesWidget: (final value, final meta) {
                           final isZero = (value.abs() < 1e-6);
                           final isMax = ((chartMaxY - value).abs() < 1e-6);
                           if (!isZero && !isMax) return const SizedBox.shrink();
@@ -184,7 +184,7 @@ class StatsBarChart extends StatelessWidget {
                         showTitles: true,
                         reservedSize: 28,
                         interval: step.toDouble(),
-                        getTitlesWidget: (value, meta) {
+                        getTitlesWidget: (final value, final meta) {
                           final i = value.toInt();
                           if (i < 0 || i >= buckets.length) {
                             return const SizedBox.shrink();

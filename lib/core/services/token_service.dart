@@ -21,7 +21,10 @@ class TokenService {
     _refreshToken = await _tokenStorage.read(key: _refreshTokenKey);
   }
 
-  Future<void> setTokens(String accessToken, String refreshToken) async {
+  Future<void> setTokens(
+    final String accessToken,
+    final String refreshToken,
+  ) async {
     _accessToken = accessToken;
     _refreshToken = refreshToken;
     await Future.wait([

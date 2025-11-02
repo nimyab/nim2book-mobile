@@ -46,7 +46,7 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final isDark = theme.brightness == Brightness.dark;
@@ -179,7 +179,7 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
                         vertical: 12,
                       ),
                       itemCount: _definitions.length,
-                      itemBuilder: (context, index) {
+                      itemBuilder: (final context, final index) {
                         final definition = _definitions[index];
                         return _buildDefinitionItem(context, definition);
                       },
@@ -191,7 +191,10 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
     );
   }
 
-  Widget _buildDefinitionItem(BuildContext context, Definition definition) {
+  Widget _buildDefinitionItem(
+    final BuildContext context,
+    final Definition definition,
+  ) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final textColor = theme.colorScheme.onSurface;
@@ -215,7 +218,7 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
               ),
             ),
 
-          ...definition.tr.asMap().entries.map((entry) {
+          ...definition.tr.asMap().entries.map((final entry) {
             final translation = entry.value;
             return Padding(
               padding: const EdgeInsets.only(left: 8, bottom: 12),
@@ -246,7 +249,7 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
                   ),
 
                   if (translation.ex != null && translation.ex!.isNotEmpty)
-                    ...translation.ex!.map((example) {
+                    ...translation.ex!.map((final example) {
                       return Padding(
                         padding: const EdgeInsets.only(left: 12, top: 4),
                         child: Row(
@@ -270,7 +273,7 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
                                         example.tr!.isNotEmpty)
                                       TextSpan(
                                         text:
-                                            ' — ${example.tr!.map((t) => t.text).join(', ')}',
+                                            ' — ${example.tr!.map((final t) => t.text).join(', ')}',
                                       ),
                                   ],
                                 ),
@@ -285,7 +288,7 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
                     Padding(
                       padding: const EdgeInsets.only(left: 12, top: 4),
                       child: Text(
-                        translation.mean!.map((m) => m.text).join(', '),
+                        translation.mean!.map((final m) => m.text).join(', '),
                         style: TextStyle(
                           fontSize: 13,
                           color: secondaryTextColor.withValues(alpha: 0.8),
@@ -302,7 +305,7 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
     );
   }
 
-  String _getPartOfSpeechLabel(AppLocalizations l10n, String pos) {
+  String _getPartOfSpeechLabel(final AppLocalizations l10n, final String pos) {
     final posMap = {
       'noun': l10n.posNoun,
       'adjective': l10n.posAdjective,

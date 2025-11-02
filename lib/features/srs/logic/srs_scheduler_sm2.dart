@@ -5,17 +5,21 @@ class SrsSchedulerSM2 {
 
   /// Применяет обновление по алгоритму SM‑2 для указанного [item] и [rating].
   /// Возвращает обновлённую неизменяемую копию.
-  SrsItem updateOnRating(SrsItem item, SrsRating rating, {DateTime? now}) {
+  SrsItem updateOnRating(
+    final SrsItem item,
+    final SrsRating rating, {
+    final DateTime? now,
+  }) {
     final q = _qualityFromRating(rating);
     final currentEf = item.easiness;
     final n = now ?? DateTime.now();
 
     // Обновление EF
     final delta = 0.1 - (5 - q) * (0.08 + (5 - q) * 0.02);
-    double newEf = currentEf + delta;
+    var newEf = currentEf + delta;
     if (newEf < 1.3) newEf = 1.3; // нижняя граница по SM-2
 
-    int newRepetition = item.repetition;
+    var newRepetition = item.repetition;
     int newInterval;
 
     if (q < 3) {
@@ -45,7 +49,7 @@ class SrsSchedulerSM2 {
     );
   }
 
-  int _qualityFromRating(SrsRating rating) {
+  int _qualityFromRating(final SrsRating rating) {
     switch (rating) {
       case SrsRating.again:
         return 2; // провал

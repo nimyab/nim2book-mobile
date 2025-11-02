@@ -6,36 +6,36 @@ part 'chapter.g.dart';
 @freezed
 abstract class ChapterAlignNode with _$ChapterAlignNode {
   const factory ChapterAlignNode({
-    required String id,
-    required String title,
-    required String translatedTitle,
-    required int order,
-    required List<ParagraphAlignNode> content,
+    required final String id,
+    required final String title,
+    required final String translatedTitle,
+    required final int order,
+    required final List<ParagraphAlignNode> content,
   }) = _ChapterAlignNode;
 
-  factory ChapterAlignNode.fromJson(Map<String, dynamic> json) =>
+  factory ChapterAlignNode.fromJson(final Map<String, dynamic> json) =>
       _$ChapterAlignNodeFromJson(json);
 }
 
 @freezed
 abstract class ParagraphAlignNode with _$ParagraphAlignNode {
   const factory ParagraphAlignNode({
-    required String op,
-    required String tp,
-    required List<WordAlignNode> aw,
+    required final String op,
+    required final String tp,
+    required final List<WordAlignNode> aw,
   }) = _ParagraphAlignNode;
 
-  factory ParagraphAlignNode.fromJson(Map<String, dynamic> json) =>
+  factory ParagraphAlignNode.fromJson(final Map<String, dynamic> json) =>
       _$ParagraphAlignNodeFromJson(json);
 }
 
 @freezed
 abstract class WordAlignNode with _$WordAlignNode {
   const factory WordAlignNode({
-    required List<int> iow,
-    required List<int> itw,
+    required final List<int> iow,
+    required final List<int> itw,
   }) = _WordAlignNode;
 
-  factory WordAlignNode.fromJson(Map<String, dynamic> json) =>
+  factory WordAlignNode.fromJson(final Map<String, dynamic> json) =>
       _$WordAlignNodeFromJson(json);
 }

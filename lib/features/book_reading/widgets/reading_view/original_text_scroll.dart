@@ -23,7 +23,7 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
   final Map<int, GlobalKey> _paragraphKeys = {};
   int _lastScrolledToParagraph = -1;
 
-  GlobalKey _keyForParagraph(int index) {
+  GlobalKey _keyForParagraph(final int index) {
     return _paragraphKeys.putIfAbsent(index, () => GlobalKey());
   }
 
@@ -65,7 +65,7 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final readingSettingsContext = context.watch<ReadingSettingsContext>();
     final readingContext = context.watch<BookReadingContext>();
     final paragraphCount = readingContext.currentParagraphCount;
@@ -92,7 +92,7 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onHorizontalDragUpdate: (details) {
+      onHorizontalDragUpdate: (final details) {
         final controller = widget.translatedScrollController;
         if (controller != null && controller.hasClients) {
           final maxExtent = controller.position.maxScrollExtent;
@@ -103,15 +103,13 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
           controller.jumpTo(newOffset);
         }
       },
-      onHorizontalDragEnd: (details) {
+      onHorizontalDragEnd: (final details) {
         final controller = widget.translatedScrollController;
         if (controller != null && controller.hasClients) {
           final vx = details.velocity.pixelsPerSecond.dx;
           final maxExtent = controller.position.maxScrollExtent;
           final target = (controller.offset - vx * 0.20).clamp(0.0, maxExtent);
-          final int durationMs = (200 + vx.abs() * 1.0)
-              .clamp(0.0, 500.0)
-              .toInt();
+          final durationMs = (200 + vx.abs() * 1.0).clamp(0.0, 500.0).toInt();
           controller.animateTo(
             target,
             duration: Duration(milliseconds: durationMs),
@@ -124,7 +122,7 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
         cacheExtent: 2000,
         controller: _scrollController,
         itemCount: paragraphCount + 2,
-        itemBuilder: (context, index) {
+        itemBuilder: (final context, final index) {
           if (index == 0) {
             if (chapterTitle.isEmpty) {
               return const SizedBox.shrink();

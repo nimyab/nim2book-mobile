@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 class OriginalParagraph extends StatefulWidget {
   final List<WordItem> paragraph;
   final int paragraphIndex;
-  final Function(int paragraphIndex, int wordIndex) selectWord;
+  final void Function(int paragraphIndex, int wordIndex) selectWord;
   final int selectedParagraphIndex;
   final int selectedWordIndex;
 
@@ -38,7 +38,7 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
   }
 
   @override
-  void didUpdateWidget(covariant OriginalParagraph oldWidget) {
+  void didUpdateWidget(covariant final OriginalParagraph oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.paragraph != widget.paragraph) {
       _computeTextData();
@@ -66,15 +66,15 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
     _wordRanges = ranges;
   }
 
-  void _handleWordTap(WordItem wordItem) {
+  void _handleWordTap(final WordItem wordItem) {
     if (wordItem.paragraphIndex != null && wordItem.wordIndex != null) {
       if (!(widget.selectedParagraphIndex == wordItem.paragraphIndex &&
           widget.selectedWordIndex == wordItem.wordIndex)) {
         widget.selectWord(wordItem.paragraphIndex!, wordItem.wordIndex!);
       } else {
-        showDialog(
+        showDialog<void>(
           context: context,
-          builder: (context) {
+          builder: (final context) {
             return TranslatedDialog(phrase: wordItem.wordText);
           },
         );
@@ -83,7 +83,7 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
   }
 
   // Возвращаем индекс слова по смещению в строке абзаца, используя предрасчитанные диапазоны `_wordRanges`.
-  int? _getWordIndexForTextOffset(int offset) {
+  int? _getWordIndexForTextOffset(final int offset) {
     for (var i = 0; i < _wordRanges.length; i++) {
       final r = _wordRanges[i];
       if (offset >= r.start && offset < r.end) return i;
@@ -92,7 +92,7 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final readingSettings = context.watch<ReadingSettingsContext>();
     final readingColors = Theme.of(context).extension<BookReadingColors>()!;
 
@@ -118,7 +118,7 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
     }
 
     return LayoutBuilder(
-      builder: (context, constraints) {
+      builder: (final context, final constraints) {
         final indentWidth =
             (style.fontSize ?? 24) * (readingSettings.firstLineIndentEm);
         const indentCharCount = 1;
@@ -158,16 +158,16 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
         }
 
         // Сдвигаем диапазон на символы отступа, чтобы подсветка совпадала.
-        final int? selectionStart = selectedRange == null
+        final selectionStart = selectedRange == null
             ? null
             : selectedRange.start + indentCharCount;
-        final int? selectionEnd = selectedRange == null
+        final selectionEnd = selectedRange == null
             ? null
             : selectedRange.end + indentCharCount;
 
         return GestureDetector(
           behavior: HitTestBehavior.deferToChild,
-          onTapDown: (details) {
+          onTapDown: (final details) {
             final local = details.localPosition;
             final dx = local.dx;
             if (dx < 0) return;

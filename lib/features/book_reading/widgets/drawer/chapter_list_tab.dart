@@ -9,14 +9,14 @@ class ChapterListTab extends StatelessWidget {
   const ChapterListTab({super.key, required this.chapters});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Consumer<BookReadingContext>(
-      builder: (context, readingContext, _) {
+      builder: (final context, final readingContext, _) {
         final theme = Theme.of(context);
         return ListView.separated(
           itemCount: chapters.length,
-          separatorBuilder: (_, __) => const Divider(height: 1),
-          itemBuilder: (ctx, index) {
+          separatorBuilder: (_, final __) => const Divider(height: 1),
+          itemBuilder: (final ctx, final index) {
             final chapter = chapters[index];
             final title = chapter.title;
             final isCurrent = index == readingContext.currentChapterIndex;

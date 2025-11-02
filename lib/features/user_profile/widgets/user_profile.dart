@@ -11,11 +11,13 @@ class UserProfile extends StatelessWidget {
   const UserProfile({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final user = context.select<AuthContext, User?>((value) => value.user);
+    final user = context.select<AuthContext, User?>(
+      (final value) => value.user,
+    );
     final isAuthLoading = context.select<AuthContext, bool>(
-      (value) => value.isLoading,
+      (final value) => value.isLoading,
     );
     final logout = context.read<AuthContext>().logout;
 

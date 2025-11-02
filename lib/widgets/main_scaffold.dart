@@ -7,7 +7,7 @@ class MainScaffold extends StatelessWidget {
 
   const MainScaffold({super.key, required this.navigationShell});
 
-  void _goBranch(int index) {
+  void _goBranch(final int index) {
     navigationShell.goBranch(
       index,
       initialLocation: index == navigationShell.currentIndex,
@@ -15,7 +15,7 @@ class MainScaffold extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: Column(children: [Expanded(child: navigationShell)]),
@@ -23,16 +23,19 @@ class MainScaffold extends StatelessWidget {
         selectedIndex: navigationShell.currentIndex,
         destinations: [
           NavigationDestination(
-            icon: Icon(Icons.my_library_books),
+            icon: const Icon(Icons.my_library_books),
             label: l10n.myBooks,
           ),
-          NavigationDestination(icon: Icon(Icons.book), label: l10n.books),
           NavigationDestination(
-            icon: Icon(Icons.school_outlined),
+            icon: const Icon(Icons.book),
+            label: l10n.books,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.school_outlined),
             label: l10n.learning,
           ),
           NavigationDestination(
-            icon: Icon(Icons.settings),
+            icon: const Icon(Icons.settings),
             label: l10n.settings,
           ),
         ],

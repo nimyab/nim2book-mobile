@@ -7,7 +7,7 @@ class LanguageSwitcher extends StatelessWidget {
   const LanguageSwitcher({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final localeContext = context.watch<LocaleContext>();
 
@@ -33,7 +33,7 @@ class LanguageSwitcher extends StatelessWidget {
                   vertical: 8,
                 ),
               ),
-              items: localeContext.supportedLocales.map((locale) {
+              items: localeContext.supportedLocales.map((final locale) {
                 return DropdownMenuItem<Locale>(
                   value: locale,
                   child: Row(
@@ -45,7 +45,7 @@ class LanguageSwitcher extends StatelessWidget {
                   ),
                 );
               }).toList(),
-              onChanged: (Locale? value) {
+              onChanged: (final Locale? value) {
                 if (value != null) {
                   localeContext.changeLocale(value);
                 }
@@ -57,7 +57,7 @@ class LanguageSwitcher extends StatelessWidget {
     );
   }
 
-  IconData _getLanguageIcon(Locale locale) {
+  IconData _getLanguageIcon(final Locale locale) {
     switch (locale.languageCode) {
       case 'en':
         return Icons.language;
@@ -73,7 +73,7 @@ class LanguageSwitcherTile extends StatelessWidget {
   const LanguageSwitcherTile({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final localeContext = context.watch<LocaleContext>();
 
@@ -88,7 +88,7 @@ class LanguageSwitcherTile extends StatelessWidget {
       trailing: DropdownButton<Locale>(
         value: localeContext.currentLocale,
         underline: const SizedBox(),
-        items: localeContext.supportedLocales.map((locale) {
+        items: localeContext.supportedLocales.map((final locale) {
           return DropdownMenuItem<Locale>(
             value: locale,
             child: Row(
@@ -101,7 +101,7 @@ class LanguageSwitcherTile extends StatelessWidget {
             ),
           );
         }).toList(),
-        onChanged: (Locale? value) {
+        onChanged: (final Locale? value) {
           if (value != null) {
             localeContext.changeLocale(value);
           }
@@ -110,7 +110,7 @@ class LanguageSwitcherTile extends StatelessWidget {
     );
   }
 
-  IconData _getLanguageIcon(Locale locale) {
+  IconData _getLanguageIcon(final Locale locale) {
     switch (locale.languageCode) {
       case 'en':
         return Icons.language;

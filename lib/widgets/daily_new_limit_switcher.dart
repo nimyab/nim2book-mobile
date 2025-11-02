@@ -18,14 +18,14 @@ class _DailyNewLimitSwitcherState extends State<DailyNewLimitSwitcher> {
   static const List<int> _options = [5, 10, 15, 20, 25, 30];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     final dropdownValue = _options.contains(_currentLimit)
         ? _currentLimit
         : _options.firstWhere(
-            (v) => v >= _currentLimit,
+            (final v) => v >= _currentLimit,
             orElse: () => _options.last,
           );
 
@@ -41,7 +41,7 @@ class _DailyNewLimitSwitcherState extends State<DailyNewLimitSwitcher> {
               initialValue: dropdownValue,
               items: _options
                   .map(
-                    (v) => DropdownMenuItem<int>(
+                    (final v) => DropdownMenuItem<int>(
                       value: v,
                       child: Text(v.toString()),
                     ),
@@ -49,7 +49,7 @@ class _DailyNewLimitSwitcherState extends State<DailyNewLimitSwitcher> {
                   .toList(),
               onChanged: _saving
                   ? null
-                  : (v) async {
+                  : (final v) async {
                       if (v == null) return;
                       setState(() {
                         _saving = true;
@@ -65,7 +65,7 @@ class _DailyNewLimitSwitcherState extends State<DailyNewLimitSwitcher> {
             ),
             ValueListenableBuilder<int>(
               valueListenable: _srs.dailyNewCountNotifier,
-              builder: (_, used, __) {
+              builder: (_, final used, final __) {
                 final total = _srs.getDailyNewLimit();
                 return Text(
                   '$used / $total',

@@ -15,7 +15,7 @@ class SrsItem {
     required this.nextReviewAt,
   });
 
-  factory SrsItem.initial(String word, {DateTime? now}) {
+  factory SrsItem.initial(final String word, {final DateTime? now}) {
     final n = now ?? DateTime.now();
     return SrsItem(
       word: word,
@@ -28,12 +28,12 @@ class SrsItem {
   }
 
   SrsItem copyWith({
-    String? word,
-    int? repetition,
-    int? intervalDays,
-    double? easiness,
-    DateTime? lastReviewedAt,
-    DateTime? nextReviewAt,
+    final String? word,
+    final int? repetition,
+    final int? intervalDays,
+    final double? easiness,
+    final DateTime? lastReviewedAt,
+    final DateTime? nextReviewAt,
   }) {
     return SrsItem(
       word: word ?? this.word,
@@ -45,7 +45,7 @@ class SrsItem {
     );
   }
 
-  factory SrsItem.fromJson(Map<String, dynamic> json) {
+  factory SrsItem.fromJson(final Map<String, dynamic> json) {
     return SrsItem(
       word: json['word'] as String,
       repetition: json['repetition'] as int? ?? 0,

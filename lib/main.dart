@@ -10,14 +10,12 @@ import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/auth_context.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/dictionary_context.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/locale_context.dart';
-import 'package:nim2book_mobile_flutter/core/contexts/offline_context.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/theme_context.dart';
 import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/router/router.dart';
 import 'package:nim2book_mobile_flutter/core/services/book_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/dictionary_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/fmc_token_service.dart';
-import 'package:nim2book_mobile_flutter/core/services/offline_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/theme_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
@@ -89,9 +87,6 @@ void main() async {
   final readingPersistence = ReadingSettingsService();
   GetIt.I.registerSingleton(readingPersistence);
 
-  final offlineService = OfflineService();
-  GetIt.I.registerSingleton(offlineService);
-
   runApp(const Nim2BookApp());
 }
 
@@ -99,7 +94,7 @@ class Nim2BookApp extends StatelessWidget {
   const Nim2BookApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthContext()),
@@ -107,7 +102,6 @@ class Nim2BookApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ThemeContext()),
         ChangeNotifierProvider(create: (_) => LocaleContext()),
         ChangeNotifierProvider(create: (_) => DictionaryContext()),
-        ChangeNotifierProvider(create: (_) => OfflineContext()),
       ],
       child: _AppInitializer(),
     );
@@ -128,26 +122,31 @@ class _AppInitializerState extends State<_AppInitializer> {
       context.read<BooksContext>().initial();
       context.read<ThemeContext>().initialize();
       context.read<LocaleContext>().initialize();
-      context.read<OfflineContext>().init();
     });
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Consumer2<ThemeContext, LocaleContext>(
-      builder: (context, themeContext, localeContext, child) {
-        return MaterialApp.router(
-          routerConfig: router,
-          // theme
-          theme: AppThemes.lightTheme,
-          darkTheme: AppThemes.darkTheme,
-          themeMode: themeContext.themeMode,
-          // locale
-          locale: localeContext.currentLocale,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-        );
-      },
+      builder:
+          (
+            final context,
+            final themeContext,
+            final localeContext,
+            final child,
+          ) {
+            return MaterialApp.router(
+              routerConfig: router,
+              // theme
+              theme: AppThemes.lightTheme,
+              darkTheme: AppThemes.darkTheme,
+              themeMode: themeContext.themeMode,
+              // locale
+              locale: localeContext.currentLocale,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+            );
+          },
     );
   }
 }

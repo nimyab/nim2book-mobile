@@ -23,11 +23,76 @@ linter:
   rules:
     # avoid_print: false  # Uncomment to disable the `avoid_print` rule
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+    prefer_single_quotes: true
+    prefer_interpolation_to_compose_strings: true
+    prefer_spread_collections: true
+    require_trailing_commas: true
+
+    always_use_package_imports: true
+
+    prefer_if_null_operators: true
+    prefer_null_aware_operators: true
+    prefer_conditional_assignment: true
+
+    exhaustive_cases: true
+    avoid_positional_boolean_parameters: true
+
+    use_super_parameters: true
+    avoid_renaming_method_parameters: true
+    avoid_unused_constructor_parameters: true
+    parameter_assignments: true
+    avoid_return_types_on_setters: true
+    type_init_formals: true
+
+    use_key_in_widget_constructors: true
+    no_logic_in_create_state: true
+    prefer_const_constructors: true
+    prefer_const_declarations: true
+    prefer_const_literals_to_create_immutables: true
+    sized_box_for_whitespace: true
+    use_colored_box: true
+    use_decorated_box: true
+
+    always_declare_return_types: true
+    type_annotate_public_apis: true
+    avoid_dynamic_calls: true
+    prefer_final_fields: true
+    prefer_final_locals: true
+    prefer_final_parameters: true
+    null_closures: true
+
+    unawaited_futures: true
+    avoid_returning_null_for_future: true
+
+    unnecessary_late: true
+    avoid_print: true
+
+    camel_case_types: true
+    use_to_and_as_if_applicable: true
+    one_member_abstracts: true
+    use_setters_to_change_properties: true
+    avoid_returning_this: true
+    prefer_typing_uninitialized_variables: true
+    omit_local_variable_types: true
+    prefer_generic_function_type_aliases: true
+    avoid_private_typedef_functions: true
+    use_function_type_syntax_for_parameters: true
+
+    hash_and_equals: true
+    avoid_equals_and_hash_code_on_mutable_classes: true
+    avoid_null_checks_in_equality_operators: true
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
 
 analyzer:
+  language:
+    strict-inference: true
+    strict-raw-types: true
+  exclude:
+    - build/**
+    - lib/**/*.g.dart
+    - lib/**/*.freezed.dart
   plugins:
     - custom_lint
   errors:

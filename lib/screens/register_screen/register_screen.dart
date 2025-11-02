@@ -16,10 +16,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passwordController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final register = context.read<AuthContext>().register;
     final isAuthLoading = context.select<AuthContext, bool>(
-      (value) => value.isLoading,
+      (final value) => value.isLoading,
     );
     final l10n = AppLocalizations.of(context)!;
 
@@ -29,25 +29,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(l10n.register, style: TextStyle(fontSize: 24)),
-              SizedBox(height: 60),
+              Text(l10n.register, style: const TextStyle(fontSize: 24)),
+              const SizedBox(height: 60),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 32),
+                padding: const EdgeInsets.symmetric(horizontal: 32),
                 child: Column(
                   spacing: 16,
                   children: [
                     TextField(
                       decoration: InputDecoration(
                         labelText: l10n.email,
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                       ),
                       controller: _emailController,
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                     TextField(
                       decoration: InputDecoration(
                         labelText: l10n.password,
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                       ),
                       obscureText: true,
                       controller: _passwordController,
@@ -55,7 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: isAuthLoading
                     ? null

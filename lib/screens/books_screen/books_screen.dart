@@ -15,14 +15,14 @@ class BooksScreen extends StatefulWidget {
 
 class _BooksScreenState extends State<BooksScreen> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final authContext = context.watch<AuthContext>();
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.books)),
       body: Consumer<BooksContext>(
-        builder: (context, value, child) {
+        builder: (final context, final value, final child) {
           final books = value.allBooks;
           final isFetching = value.isFetchingBooks;
 
@@ -33,10 +33,10 @@ class _BooksScreenState extends State<BooksScreen> {
               : Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: ListView.separated(
-                    separatorBuilder: (context, index) =>
+                    separatorBuilder: (final context, final index) =>
                         const SizedBox(height: 15),
                     itemCount: books.length,
-                    itemBuilder: (context, index) {
+                    itemBuilder: (final context, final index) {
                       final book = books[index];
                       return BookCard(
                         key: ValueKey(book.id),
@@ -57,9 +57,9 @@ class _BooksScreenState extends State<BooksScreen> {
                         SnackBar(content: Text(l10n.addingBooksVipOnly)),
                       );
                     },
-              child: Row(
+              child: const Row(
                 mainAxisSize: MainAxisSize.min,
-                children: const [Icon(Icons.add), Icon(Icons.book)],
+                children: [Icon(Icons.add), Icon(Icons.book)],
               ),
             )
           : null,

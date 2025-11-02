@@ -37,7 +37,7 @@ class _BookReadingState extends State<BookReading>
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final loadingBookContext = context.watch<LoadingBookContext>();
     final book = loadingBookContext.book;
@@ -63,9 +63,9 @@ class _BookReadingState extends State<BookReading>
     return MultiProvider(
       providers: [
         ChangeNotifierProxyProvider<LoadingBookContext, BookReadingContext>(
-          create: (context) =>
+          create: (final context) =>
               BookReadingContext(bookId: book.id, chapters: []),
-          update: (context, value, previous) {
+          update: (final context, final value, final previous) {
             if (previous == null) {
               return BookReadingContext(
                 bookId: book.id,
@@ -77,15 +77,20 @@ class _BookReadingState extends State<BookReading>
           },
         ),
       ],
-      builder: (context, child) {
+      builder: (final context, final child) {
         return ChangeNotifierProvider<ReadingSettingsContext>(
           create: (_) => ReadingSettingsContext(Theme.of(context)),
           child: Scaffold(
             appBar: BookReadingBar(book: book),
-            endDrawer: ReadingDrawer(),
+            endDrawer: const ReadingDrawer(),
             body: Consumer2<BookReadingContext, ReadingSettingsContext>(
               builder:
-                  (context, readingContext, readingSettingsContext, child) {
+                  (
+                    final context,
+                    final readingContext,
+                    final readingSettingsContext,
+                    final child,
+                  ) {
                     final index = readingContext.currentChapterIndex;
                     final selParagraph = readingContext.selectedParagraphIndex;
                     final selWord = readingContext.selectedWordIndex;
@@ -105,7 +110,7 @@ class _BookReadingState extends State<BookReading>
                         });
                       }
                     }
-                    return Container(
+                    return ColoredBox(
                       color: readingSettingsContext.backgroundColor,
                       child: Column(
                         children: [

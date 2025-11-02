@@ -35,7 +35,7 @@ class _LearningSessionScreenState extends State<LearningSessionScreen>
   bool _showTranslation = false;
   double _initialTouchX = 0.0;
 
-  String _getPartOfSpeechLabel(String? pos) {
+  String _getPartOfSpeechLabel(final String? pos) {
     if (pos == null) return '';
     final localizations = AppLocalizations.of(context)!;
     switch (pos.toLowerCase()) {
@@ -61,9 +61,9 @@ class _LearningSessionScreenState extends State<LearningSessionScreen>
   }
 
   Widget _buildDefinitionCard(
-    BuildContext context,
-    Definition definition,
-    ThemeData theme,
+    final BuildContext context,
+    final Definition definition,
+    final ThemeData theme,
   ) {
     final l10n = AppLocalizations.of(context)!;
     return Container(
@@ -91,14 +91,14 @@ class _LearningSessionScreenState extends State<LearningSessionScreen>
           ],
 
           if (definition.tr.isNotEmpty) ...[
-            ...definition.tr.asMap().entries.map((entry) {
+            ...definition.tr.asMap().entries.map((final entry) {
               final index = entry.key;
               final translation = entry.value;
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(bottom: 4),
+                    padding: const EdgeInsets.only(bottom: 4),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -128,7 +128,7 @@ class _LearningSessionScreenState extends State<LearningSessionScreen>
                       padding: const EdgeInsets.only(left: 10, bottom: 8),
                       child: Text(
                         translation.mean!
-                            .map((meaning) => meaning.text)
+                            .map((final meaning) => meaning.text)
                             .join(', '),
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontStyle: FontStyle.italic,
@@ -157,7 +157,7 @@ class _LearningSessionScreenState extends State<LearningSessionScreen>
                           ),
                           const SizedBox(height: 4),
                           ...translation.ex!.map(
-                            (example) => Container(
+                            (final example) => Container(
                               margin: const EdgeInsets.only(bottom: 6),
                               padding: const EdgeInsets.all(8),
                               child: Column(
@@ -174,7 +174,7 @@ class _LearningSessionScreenState extends State<LearningSessionScreen>
                                       example.tr!.isNotEmpty) ...[
                                     const SizedBox(height: 2),
                                     ...example.tr!.map(
-                                      (exampleTranslation) => Text(
+                                      (final exampleTranslation) => Text(
                                         '→ ${exampleTranslation.text}',
                                         style: theme.textTheme.bodySmall
                                             ?.copyWith(
@@ -284,14 +284,14 @@ class _LearningSessionScreenState extends State<LearningSessionScreen>
     }
   }
 
-  void _onPanStart(DragStartDetails details) {
+  void _onPanStart(final DragStartDetails details) {
     setState(() {
       _isDragging = true;
       _initialTouchX = details.localPosition.dx;
     });
   }
 
-  void _onPanUpdate(DragUpdateDetails details) {
+  void _onPanUpdate(final DragUpdateDetails details) {
     // Разрешаем перетаскивание только когда показан перевод
     if (_showTranslation) {
       setState(() {
@@ -307,8 +307,8 @@ class _LearningSessionScreenState extends State<LearningSessionScreen>
     }
   }
 
-  void _onPanEnd(DragEndDetails details) {
-    final threshold = 100.0;
+  void _onPanEnd(final DragEndDetails details) {
+    const threshold = 100.0;
     final velocity = details.velocity.pixelsPerSecond.dx;
 
     setState(() {
@@ -376,7 +376,7 @@ class _LearningSessionScreenState extends State<LearningSessionScreen>
     _applyRatingAndNext(SrsRating.again);
   }
 
-  void _applyRatingAndNext(SrsRating rating) {
+  void _applyRatingAndNext(final SrsRating rating) {
     if (_sessionWords.isEmpty) {
       _nextWord();
       return;
@@ -420,7 +420,7 @@ class _LearningSessionScreenState extends State<LearningSessionScreen>
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final dictContext = context.watch<DictionaryContext>();
     final savedWords = dictContext.savedWords;
@@ -495,8 +495,8 @@ class _LearningSessionScreenState extends State<LearningSessionScreen>
     );
     final currentWord = words.isNotEmpty ? words[safeIndex] : '';
     final currentDefinitions = currentWord.isNotEmpty
-        ? (savedWords[currentWord] ?? [])
-        : [];
+        ? (savedWords[currentWord] ?? <Definition>[])
+        : <Definition>[];
 
     return Scaffold(
       appBar: AppBar(title: Text(title), centerTitle: true),
@@ -547,11 +547,11 @@ class _LearningSessionScreenState extends State<LearningSessionScreen>
                         _swipeController,
                         _resetController,
                       ]),
-                      builder: (context, child) {
-                        double finalX = _dragX;
-                        double finalY = _dragY;
-                        double finalRotation = _rotation;
-                        double finalScale = _scale;
+                      builder: (final context, final child) {
+                        var finalX = _dragX;
+                        var finalY = _dragY;
+                        var finalRotation = _rotation;
+                        var finalScale = _scale;
 
                         // Применяем анимацию свайпа при уходе карточки
                         if (_swipeController.isAnimating) {
@@ -614,7 +614,7 @@ class _LearningSessionScreenState extends State<LearningSessionScreen>
 
                               GestureDetector(
                                 onTap: _toggleTranslation,
-                                child: Container(
+                                child: DecoratedBox(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
                                     boxShadow: _isDragging && _dragX.abs() > 50
@@ -707,7 +707,7 @@ class _LearningSessionScreenState extends State<LearningSessionScreen>
                                                       thickness: 1,
                                                     ),
                                                     ...currentDefinitions.map(
-                                                      (definition) =>
+                                                      (final definition) =>
                                                           _buildDefinitionCard(
                                                             context,
                                                             definition,

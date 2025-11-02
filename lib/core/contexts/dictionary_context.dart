@@ -12,28 +12,28 @@ class DictionaryContext with ChangeNotifier {
     _savedWords.addAll(_dictService.getAllSavedWords());
   }
 
-  Future<bool> saveWord(String word, List<Definition> def) async {
+  Future<bool> saveWord(final String word, final List<Definition> def) async {
     final savedSuccess = await _dictService.saveWord(word, def);
     if (savedSuccess) _savedWords[word] = def;
     notifyListeners();
     return savedSuccess;
   }
 
-  Future<bool> deleteWord(String word) async {
+  Future<bool> deleteWord(final String word) async {
     final deletedSuccess = await _dictService.deleteWord(word);
     if (deletedSuccess) _savedWords.remove(word);
     notifyListeners();
     return deletedSuccess;
   }
 
-  Future<List<Definition>?> getWord(String word) async {
+  Future<List<Definition>?> getWord(final String word) async {
     var savedWord = _savedWords[word];
     if (savedWord != null) return savedWord;
     savedWord = await _dictService.getWord(word);
     return savedWord;
   }
 
-  bool checkWordInDict(String word) {
+  bool checkWordInDict(final String word) {
     return _savedWords[word] != null;
   }
 }

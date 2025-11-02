@@ -8,7 +8,7 @@ class ThemeSwitcher extends StatelessWidget {
   const ThemeSwitcher({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final themeContext = context.watch<ThemeContext>();
     return Card(
@@ -33,7 +33,7 @@ class ThemeSwitcher extends StatelessWidget {
                   vertical: 8,
                 ),
               ),
-              items: AppTheme.values.map((theme) {
+              items: AppTheme.values.map((final theme) {
                 return DropdownMenuItem<AppTheme>(
                   value: theme,
                   child: Row(
@@ -45,7 +45,7 @@ class ThemeSwitcher extends StatelessWidget {
                   ),
                 );
               }).toList(),
-              onChanged: (AppTheme? value) {
+              onChanged: (final AppTheme? value) {
                 if (value != null) {
                   themeContext.setTheme(value);
                 }
@@ -57,7 +57,7 @@ class ThemeSwitcher extends StatelessWidget {
     );
   }
 
-  IconData _getThemeIcon(AppTheme theme) {
+  IconData _getThemeIcon(final AppTheme theme) {
     switch (theme) {
       case AppTheme.light:
         return Icons.light_mode;
@@ -73,7 +73,7 @@ class ThemeSwitcherTile extends StatelessWidget {
   const ThemeSwitcherTile({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final themeContext = context.watch<ThemeContext>();
 
@@ -86,7 +86,7 @@ class ThemeSwitcherTile extends StatelessWidget {
       trailing: DropdownButton<AppTheme>(
         value: themeContext.currentTheme,
         underline: const SizedBox(),
-        items: AppTheme.values.map((theme) {
+        items: AppTheme.values.map((final theme) {
           return DropdownMenuItem<AppTheme>(
             value: theme,
             child: Row(
@@ -99,7 +99,7 @@ class ThemeSwitcherTile extends StatelessWidget {
             ),
           );
         }).toList(),
-        onChanged: (AppTheme? value) {
+        onChanged: (final AppTheme? value) {
           if (value != null) {
             themeContext.setTheme(value);
           }
@@ -108,7 +108,7 @@ class ThemeSwitcherTile extends StatelessWidget {
     );
   }
 
-  IconData _getThemeIcon(AppTheme theme) {
+  IconData _getThemeIcon(final AppTheme theme) {
     switch (theme) {
       case AppTheme.light:
         return Icons.light_mode;

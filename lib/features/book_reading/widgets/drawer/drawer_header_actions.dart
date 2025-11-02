@@ -16,7 +16,7 @@ class DrawerHeaderActions extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Material(
       color: Theme.of(context).colorScheme.surface,

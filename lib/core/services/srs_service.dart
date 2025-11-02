@@ -6,7 +6,7 @@ import 'package:nim2book_mobile_flutter/features/srs/logic/srs_scheduler_sm2.dar
 import 'package:nim2book_mobile_flutter/features/srs/models/srs_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-String _srsKey(String word) => 'srs_item_$word';
+String _srsKey(final String word) => 'srs_item_$word';
 
 class SrsService {
   final SharedPreferences _sharedPreferences = GetIt.I.get<SharedPreferences>();
@@ -27,11 +27,11 @@ class SrsService {
   static const String _streakRecordKey = 'srs_streak_record';
   static const String _streakLastDateKey = 'srs_streak_last_date';
 
-  bool _isSameCalendarDay(DateTime a, DateTime b) {
+  bool _isSameCalendarDay(final DateTime a, final DateTime b) {
     return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 
-  int _getDailyNewCount({DateTime? now}) {
+  int _getDailyNewCount({final DateTime? now}) {
     final n = now ?? DateTime.now();
     final dateStr = _sharedPreferences.getString(_dailyNewDateKey);
     final count = _sharedPreferences.getInt(_dailyNewCountKey) ?? 0;
@@ -57,7 +57,7 @@ class SrsService {
   }
 
   // Публичный доступ к дневному счётчику новых слов
-  int getDailyNewCount({DateTime? now}) => _getDailyNewCount(now: now);
+  int getDailyNewCount({final DateTime? now}) => _getDailyNewCount(now: now);
 
   // Текущий лимит новых слов в день (читается из настроек)
   int getDailyNewLimit() {
@@ -65,15 +65,15 @@ class SrsService {
   }
 
   // Сохранение нового лимита
-  Future<void> setDailyNewLimit(int value) async {
+  Future<void> setDailyNewLimit(final int value) async {
     await _sharedPreferences.setInt(_dailyNewLimitKey, value);
   }
 
-  void _registerStudyToday({DateTime? now}) {
+  void _registerStudyToday({final DateTime? now}) {
     final n = now ?? DateTime.now();
     final lastStr = _sharedPreferences.getString(_streakLastDateKey);
-    int current = _sharedPreferences.getInt(_streakCurrentKey) ?? 0;
-    int record = _sharedPreferences.getInt(_streakRecordKey) ?? 0;
+    var current = _sharedPreferences.getInt(_streakCurrentKey) ?? 0;
+    var record = _sharedPreferences.getInt(_streakRecordKey) ?? 0;
 
     if (lastStr == null) {
       _sharedPreferences.setString(_streakLastDateKey, n.toIso8601String());
@@ -91,7 +91,7 @@ class SrsService {
       last = n;
     }
 
-    bool sameDay = _isSameCalendarDay(last, n);
+    final sameDay = _isSameCalendarDay(last, n);
     if (sameDay) {
       return;
     }
@@ -108,7 +108,7 @@ class SrsService {
     _sharedPreferences.setInt(_streakRecordKey, record);
   }
 
-  int getStudyStreakDays({DateTime? now}) {
+  int getStudyStreakDays({final DateTime? now}) {
     final n = now ?? DateTime.now();
     final lastStr = _sharedPreferences.getString(_streakLastDateKey);
     if (lastStr == null) return 0;
@@ -132,7 +132,7 @@ class SrsService {
     return _sharedPreferences.getInt(_streakRecordKey) ?? 0;
   }
 
-  void _incrementDailyNewCount({DateTime? now}) {
+  void _incrementDailyNewCount({final DateTime? now}) {
     final n = now ?? DateTime.now();
     final dateStr = _sharedPreferences.getString(_dailyNewDateKey);
     if (dateStr == null) {
@@ -158,7 +158,7 @@ class SrsService {
     }
   }
 
-  SrsItem getOrCreateItem(String word) {
+  SrsItem getOrCreateItem(final String word) {
     final jsonStr = _sharedPreferences.getString(_srsKey(word));
     if (jsonStr == null) {
       final item = SrsItem.initial(word);
@@ -175,11 +175,11 @@ class SrsService {
     }
   }
 
-  void upsertItem(SrsItem item) {
+  void upsertItem(final SrsItem item) {
     _sharedPreferences.setString(_srsKey(item.word), jsonEncode(item.toJson()));
   }
 
-  SrsItem updateWithRating(String word, SrsRating rating) {
+  SrsItem updateWithRating(final String word, final SrsRating rating) {
     final item = getOrCreateItem(word);
     final wasNeverReviewed = item.lastReviewedAt == null;
     final updated = _scheduler.updateOnRating(item, rating);
@@ -192,9 +192,9 @@ class SrsService {
     return updated;
   }
 
-  int getDueCount(Iterable<String> words, {DateTime? now}) {
+  int getDueCount(final Iterable<String> words, {final DateTime? now}) {
     final n = now ?? DateTime.now();
-    int count = 0;
+    var count = 0;
     for (final word in words) {
       final item = getOrCreateItem(word);
       if (!item.nextReviewAt.isAfter(n)) {
@@ -204,7 +204,10 @@ class SrsService {
     return count;
   }
 
-  List<String> getDueWords(Iterable<String> words, {DateTime? now}) {
+  List<String> getDueWords(
+    final Iterable<String> words, {
+    final DateTime? now,
+  }) {
     final n = now ?? DateTime.now();
     final reviewDue = <String>[]; // уже изученные слова к повторению
     final newDue = <String>[]; // совершенно новые слова

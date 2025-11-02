@@ -45,7 +45,9 @@ class _CircularProgressWithPercentageState
   }
 
   @override
-  void didUpdateWidget(covariant CircularProgressWithPercentage oldWidget) {
+  void didUpdateWidget(
+    covariant final CircularProgressWithPercentage oldWidget,
+  ) {
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.progress != widget.progress) {
@@ -71,10 +73,10 @@ class _CircularProgressWithPercentageState
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return AnimatedBuilder(
       animation: _controller,
-      builder: (context, child) {
+      builder: (final context, final child) {
         return SizedBox(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -82,7 +84,10 @@ class _CircularProgressWithPercentageState
               CircularProgressIndicator(value: _progressAnimation.value),
               Text(
                 '${_percentageAnimation.value.toStringAsFixed(0)}%',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),

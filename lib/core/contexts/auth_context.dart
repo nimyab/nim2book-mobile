@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
@@ -15,7 +17,7 @@ class AuthContext with ChangeNotifier {
   bool get isLoading => _isLoading;
   bool get isInitialized => _isInitialized;
 
-  set _internalIsLoading(bool value) {
+  set _internalIsLoading(final bool value) {
     if (_isLoading != value) {
       _isLoading = value;
       notifyListeners();
@@ -44,7 +46,7 @@ class AuthContext with ChangeNotifier {
     }
   }
 
-  Future<bool> login(String email, String password) async {
+  Future<bool> login(final String email, final String password) async {
     try {
       _internalIsLoading = true;
       final response = await _apiClient.login(
@@ -52,7 +54,7 @@ class AuthContext with ChangeNotifier {
       );
       _user = response.user;
 
-      _fcmTokenService.addFcmToken();
+      unawaited(_fcmTokenService.addFcmToken());
 
       _isInitialized = true;
       return true;
@@ -63,7 +65,7 @@ class AuthContext with ChangeNotifier {
     }
   }
 
-  Future<bool> googleLogin(String idToken) async {
+  Future<bool> googleLogin(final String idToken) async {
     try {
       _internalIsLoading = true;
       final response = await _apiClient.googleLogin(
@@ -71,7 +73,7 @@ class AuthContext with ChangeNotifier {
       );
       _user = response.user;
 
-      _fcmTokenService.addFcmToken();
+      unawaited(_fcmTokenService.addFcmToken());
 
       _isInitialized = true;
       return true;
@@ -88,7 +90,7 @@ class AuthContext with ChangeNotifier {
       await _apiClient.logout();
       _user = null;
 
-      _fcmTokenService.deleteFcmToken();
+      unawaited(_fcmTokenService.deleteFcmToken());
 
       _isInitialized = true;
       return true;
@@ -99,7 +101,7 @@ class AuthContext with ChangeNotifier {
     }
   }
 
-  Future<bool> register(String email, String password) async {
+  Future<bool> register(final String email, final String password) async {
     try {
       _internalIsLoading = true;
       final response = await _apiClient.register(

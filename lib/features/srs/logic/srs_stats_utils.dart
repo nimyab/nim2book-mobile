@@ -10,7 +10,11 @@ class StatsRange {
   const StatsRange(this.start, this.end, this.bucketDays);
 }
 
-bool isInRange(DateTime d, DateTime start, DateTime endInclusive) {
+bool isInRange(
+  final DateTime d,
+  final DateTime start,
+  final DateTime endInclusive,
+) {
   final ds = DateTime(d.year, d.month, d.day);
   final s = DateTime(start.year, start.month, start.day);
   final e = DateTime(endInclusive.year, endInclusive.month, endInclusive.day);
@@ -18,7 +22,11 @@ bool isInRange(DateTime d, DateTime start, DateTime endInclusive) {
 }
 
 /// Вычисляет период и размер корзины для статистики.
-StatsRange computeRange(List<SrsItem> items, DateTime now, StatsPeriod period) {
+StatsRange computeRange(
+  final List<SrsItem> items,
+  final DateTime now,
+  final StatsPeriod period,
+) {
   final today = DateTime(now.year, now.month, now.day);
   switch (period) {
     case StatsPeriod.last7:
@@ -33,13 +41,13 @@ StatsRange computeRange(List<SrsItem> items, DateTime now, StatsPeriod period) {
       return StatsRange(start, today, diff > 90 ? 7 : 1);
     case StatsPeriod.allTime:
       final reviewedDates = items
-          .map((i) => i.lastReviewedAt)
+          .map((final i) => i.lastReviewedAt)
           .whereType<DateTime>()
           .toList();
       if (reviewedDates.isEmpty) {
         return StatsRange(today.subtract(const Duration(days: 6)), today, 1);
       }
-      reviewedDates.sort((a, b) => a.compareTo(b));
+      reviewedDates.sort((final a, final b) => a.compareTo(b));
       final start = DateTime(
         reviewedDates.first.year,
         reviewedDates.first.month,
@@ -50,7 +58,11 @@ StatsRange computeRange(List<SrsItem> items, DateTime now, StatsPeriod period) {
   }
 }
 
-List<DateTime> buildBuckets(DateTime start, DateTime end, int bucketDays) {
+List<DateTime> buildBuckets(
+  final DateTime start,
+  final DateTime end,
+  final int bucketDays,
+) {
   final buckets = <DateTime>[];
   var cursor = start;
   while (!cursor.isAfter(end)) {
@@ -61,15 +73,15 @@ List<DateTime> buildBuckets(DateTime start, DateTime end, int bucketDays) {
 }
 
 List<int> countByBucket(
-  List<SrsItem> items,
-  List<DateTime> buckets,
-  int bucketDays,
+  final List<SrsItem> items,
+  final List<DateTime> buckets,
+  final int bucketDays,
 ) {
   final counts = List<int>.filled(buckets.length, 0);
   for (var i = 0; i < buckets.length; i++) {
     final start = buckets[i];
     final end = start.add(Duration(days: bucketDays - 1));
-    final c = items.where((item) {
+    final c = items.where((final item) {
       final d = item.lastReviewedAt;
       if (d == null) return false;
       return isInRange(d, start, end);
@@ -80,15 +92,15 @@ List<int> countByBucket(
 }
 
 List<int> countLearnedByBucket(
-  List<SrsItem> items,
-  List<DateTime> buckets,
-  int bucketDays,
+  final List<SrsItem> items,
+  final List<DateTime> buckets,
+  final int bucketDays,
 ) {
   final counts = List<int>.filled(buckets.length, 0);
   for (var i = 0; i < buckets.length; i++) {
     final start = buckets[i];
     final end = start.add(Duration(days: bucketDays - 1));
-    final c = items.where((item) {
+    final c = items.where((final item) {
       final d = item.lastReviewedAt;
       if (d == null) return false;
       final ds = DateTime(d.year, d.month, d.day);
@@ -102,15 +114,15 @@ List<int> countLearnedByBucket(
 }
 
 List<int> countKnownByBucket(
-  List<SrsItem> items,
-  List<DateTime> buckets,
-  int bucketDays,
+  final List<SrsItem> items,
+  final List<DateTime> buckets,
+  final int bucketDays,
 ) {
   final counts = List<int>.filled(buckets.length, 0);
   for (var i = 0; i < buckets.length; i++) {
     final start = buckets[i];
     final end = start.add(Duration(days: bucketDays - 1));
-    final c = items.where((item) {
+    final c = items.where((final item) {
       final d = item.lastReviewedAt;
       if (d == null) return false;
       final ds = DateTime(d.year, d.month, d.day);

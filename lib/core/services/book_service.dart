@@ -10,14 +10,14 @@ import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const String _addedBooksKey = 'added_books';
-String _chapterKey(String path) => 'book_chapter_$path';
+String _chapterKey(final String path) => 'book_chapter_$path';
 
 class BookService {
   final _logger = Logger();
   final _apiClient = GetIt.I.get<ApiClient>();
   final _sharedPreferences = GetIt.I.get<SharedPreferences>();
 
-  Future<Book?> getBook(String bookId) async {
+  Future<Book?> getBook(final String bookId) async {
     final cacheKey = 'book_$bookId';
 
     Book? cachedBook;
@@ -40,19 +40,19 @@ class BookService {
   }
 
   Future<List<Book>> getBooks(
-    String? author,
-    String? title,
-    String page,
+    final String? author,
+    final String? title,
+    final String page,
   ) async {
     final cacheKey = 'books_list_${author ?? ''}_${title ?? ''}_$page';
 
-    List<Book> cached = [];
+    var cached = <Book>[];
     try {
       final raw = _sharedPreferences.getString(cacheKey);
       if (raw != null) {
         final list = jsonDecode(raw) as List<dynamic>;
         cached = list
-            .map((e) => Book.fromJson(e as Map<String, dynamic>))
+            .map((final e) => Book.fromJson(e as Map<String, dynamic>))
             .toList();
       }
     } catch (_) {}
@@ -66,7 +66,7 @@ class BookService {
       final books = response.books;
       await _sharedPreferences.setString(
         cacheKey,
-        jsonEncode(books.map((b) => b.toJson()).toList()),
+        jsonEncode(books.map((final b) => b.toJson()).toList()),
       );
       return books;
     } catch (e) {
@@ -81,18 +81,18 @@ class BookService {
       return [];
     }
     return addedBooksJsonList
-        .map((json) => Book.fromJson(jsonDecode(json)))
+        .map((final json) => Book.fromJson(jsonDecode(json)))
         .toList();
   }
 
-  Future<bool> addBook(Book book) async {
+  Future<bool> addBook(final Book book) async {
     final addedBooks = getAddedBooks();
-    if (addedBooks.any((b) => b.id == book.id)) {
+    if (addedBooks.any((final b) => b.id == book.id)) {
       return false;
     }
     addedBooks.add(book);
     final addedBooksJsonList = addedBooks
-        .map((b) => jsonEncode(b.toJson()))
+        .map((final b) => jsonEncode(b.toJson()))
         .toList();
     return await _sharedPreferences.setStringList(
       _addedBooksKey,
@@ -100,21 +100,23 @@ class BookService {
     );
   }
 
-  Future<bool> removeBook(Book book) async {
+  Future<bool> removeBook(final Book book) async {
     final addedBooks = getAddedBooks();
-    final filtered = addedBooks.where((b) => b.id != book.id).toList();
+    final filtered = addedBooks.where((final b) => b.id != book.id).toList();
     final addedBooksJsonList = filtered
-        .map((b) => jsonEncode(b.toJson()))
+        .map((final b) => jsonEncode(b.toJson()))
         .toList();
     final updated = await _sharedPreferences.setStringList(
       _addedBooksKey,
       addedBooksJsonList,
     );
-    if (updated) Future(() => _cleanupBookCache(book));
+    if (updated) {
+      unawaited(_cleanupBookCache(book));
+    }
     return updated;
   }
 
-  Future<ChapterAlignNode?> getChapter(String path) async {
+  Future<ChapterAlignNode?> getChapter(final String path) async {
     try {
       final chapterKey = _chapterKey(path);
 
@@ -143,20 +145,20 @@ class BookService {
   }
 
   /// Сжимает строку с помощью GZip и возвращает Base64-представление
-  String _compressString(String input) {
+  String _compressString(final String input) {
     final bytes = utf8.encode(input);
     final compressed = gzip.encode(bytes);
     return base64Encode(compressed);
   }
 
   /// Декодирует Base64 и распаковывает GZip-строку
-  String _decompressString(String compressed) {
+  String _decompressString(final String compressed) {
     final bytes = base64Decode(compressed);
     final decompressed = gzip.decode(bytes);
     return utf8.decode(decompressed);
   }
 
-  Future<void> _cleanupBookCache(Book book) async {
+  Future<void> _cleanupBookCache(final Book book) async {
     try {
       for (final path in book.chapterPaths) {
         final key = _chapterKey(path);

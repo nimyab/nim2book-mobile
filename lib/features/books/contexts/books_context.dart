@@ -15,10 +15,14 @@ class BooksContext with ChangeNotifier {
 
   Future<void> initial() async {
     getMyBooks();
-    getBooks(null, null, 1);
+    await getBooks(null, null, 1);
   }
 
-  Future<void> getBooks(String? author, String? title, int page) async {
+  Future<void> getBooks(
+    final String? author,
+    final String? title,
+    final int page,
+  ) async {
     try {
       _isFetchingBooks = true;
       notifyListeners();
@@ -49,7 +53,7 @@ class BooksContext with ChangeNotifier {
     }
   }
 
-  Future<void> addMyBook(Book book) async {
+  Future<void> addMyBook(final Book book) async {
     try {
       final isAdded = await _bookService.addBook(book);
       if (isAdded) _myBooks.add(book);
@@ -58,11 +62,11 @@ class BooksContext with ChangeNotifier {
     }
   }
 
-  Future<void> removeMyBook(Book book) async {
+  Future<void> removeMyBook(final Book book) async {
     try {
       final removed = await _bookService.removeBook(book);
       if (removed) {
-        _myBooks.removeWhere((b) => b.id == book.id);
+        _myBooks.removeWhere((final b) => b.id == book.id);
       }
     } finally {
       notifyListeners();

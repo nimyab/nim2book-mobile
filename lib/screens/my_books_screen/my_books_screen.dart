@@ -14,7 +14,7 @@ class MyBooksScreen extends StatefulWidget {
 
 class _MyBooksScreenState extends State<MyBooksScreen> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final booksContext = context.watch<BooksContext>();
     final l10n = AppLocalizations.of(context)!;
 
@@ -26,9 +26,9 @@ class _MyBooksScreenState extends State<MyBooksScreen> {
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: ListView.separated(
                 itemCount: booksContext.myBooks.length,
-                separatorBuilder: (context, index) =>
+                separatorBuilder: (final context, final index) =>
                     const SizedBox(height: 15),
-                itemBuilder: (context, index) {
+                itemBuilder: (final context, final index) {
                   final book = booksContext.myBooks[index];
                   return BookCard(
                     key: ValueKey(book.id),

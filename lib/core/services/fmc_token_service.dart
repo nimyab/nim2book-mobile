@@ -14,17 +14,17 @@ class FcmTokenService {
 
   void _initializeFirebaseMessaging() {
     // Обновление токена
-    FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
+    FirebaseMessaging.instance.onTokenRefresh.listen((final fcmToken) {
       _apiClient.addFcmToken(AddFcmTokenRequest(fcmToken: fcmToken));
     });
 
     // Обработка уведомлений когда приложение в foreground
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessage.listen((final RemoteMessage message) {
       _logger.i(message);
     });
 
     // Обработка нажатий на уведомления когда приложение в background/terminated
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessageOpenedApp.listen((final RemoteMessage message) {
       _logger.i(message);
     });
   }

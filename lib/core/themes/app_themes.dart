@@ -33,7 +33,10 @@ class AppThemes {
           vertical: 12,
         ),
       ),
-      extensions: [TranslatedTextScrollColors.light, BookReadingColors.light],
+      extensions: const [
+        TranslatedTextScrollColors.light,
+        BookReadingColors.light,
+      ],
     );
   }
 
@@ -69,7 +72,10 @@ class AppThemes {
           vertical: 12,
         ),
       ),
-      extensions: [TranslatedTextScrollColors.dark, BookReadingColors.dark],
+      extensions: const [
+        TranslatedTextScrollColors.dark,
+        BookReadingColors.dark,
+      ],
     );
   }
 }
@@ -90,8 +96,8 @@ class TranslatedTextScrollColors
 
   @override
   TranslatedTextScrollColors copyWith({
-    Color? backgroundColor,
-    Color? highlightColor,
+    final Color? backgroundColor,
+    final Color? highlightColor,
   }) {
     return TranslatedTextScrollColors(
       backgroundColor: backgroundColor ?? this.backgroundColor,
@@ -99,7 +105,10 @@ class TranslatedTextScrollColors
   }
 
   @override
-  TranslatedTextScrollColors lerp(TranslatedTextScrollColors? other, double t) {
+  TranslatedTextScrollColors lerp(
+    final TranslatedTextScrollColors? other,
+    final double t,
+  ) {
     if (other is! TranslatedTextScrollColors) {
       return this;
     }
@@ -130,8 +139,8 @@ class BookReadingColors extends ThemeExtension<BookReadingColors> {
 
   @override
   BookReadingColors copyWith({
-    Color? highlightBackgroundColor,
-    Color? highlightTextColor,
+    final Color? highlightBackgroundColor,
+    final Color? highlightTextColor,
   }) {
     return BookReadingColors(
       highlightBackgroundColor:
@@ -141,7 +150,7 @@ class BookReadingColors extends ThemeExtension<BookReadingColors> {
   }
 
   @override
-  BookReadingColors lerp(BookReadingColors? other, double t) {
+  BookReadingColors lerp(final BookReadingColors? other, final double t) {
     if (other is! BookReadingColors) return this;
     return BookReadingColors(
       highlightBackgroundColor: Color.lerp(

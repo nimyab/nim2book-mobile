@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nim2book_mobile_flutter/screens/add_book_screen/add_book_screen.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
+import 'package:nim2book_mobile_flutter/screens/add_book_screen/add_book_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/book_screen/book_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/books_screen/books_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/dictionary_screen/dictionary_screen.dart';
@@ -23,16 +23,16 @@ final router = GoRouter(
     GoRoute(
       path: '/login',
       name: 'login',
-      builder: (context, state) => const LoginScreen(),
+      builder: (final context, final state) => const LoginScreen(),
     ),
     GoRoute(
       path: '/register',
       name: 'register',
-      builder: (context, state) => const RegisterScreen(),
+      builder: (final context, final state) => const RegisterScreen(),
     ),
 
     StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) {
+      builder: (final context, final state, final navigationShell) {
         return MainScaffold(navigationShell: navigationShell);
       },
       branches: [
@@ -41,7 +41,7 @@ final router = GoRouter(
             GoRoute(
               path: '/my-books',
               name: 'my-books',
-              builder: (context, state) => const MyBooksScreen(),
+              builder: (final context, final state) => const MyBooksScreen(),
             ),
           ],
         ),
@@ -50,7 +50,7 @@ final router = GoRouter(
             GoRoute(
               path: '/books',
               name: 'books',
-              builder: (context, state) => const BooksScreen(),
+              builder: (final context, final state) => const BooksScreen(),
             ),
           ],
         ),
@@ -59,24 +59,24 @@ final router = GoRouter(
             GoRoute(
               path: '/learning',
               name: 'learning-shell',
-              builder: (context, state) => const LearningScreen(),
+              builder: (final context, final state) => const LearningScreen(),
             ),
             GoRoute(
               path: '/learning/new',
               name: 'learning-new',
-              builder: (context, state) =>
+              builder: (final context, final state) =>
                   const LearningSessionScreen(mode: LearningMode.newOnly),
             ),
             GoRoute(
               path: '/learning/review',
               name: 'learning-review',
-              builder: (context, state) =>
+              builder: (final context, final state) =>
                   const LearningSessionScreen(mode: LearningMode.reviewOnly),
             ),
             GoRoute(
               path: '/learning/mixed',
               name: 'learning-mixed',
-              builder: (context, state) =>
+              builder: (final context, final state) =>
                   const LearningSessionScreen(mode: LearningMode.mixed),
             ),
           ],
@@ -86,7 +86,7 @@ final router = GoRouter(
             GoRoute(
               path: '/settings',
               name: 'settings',
-              builder: (context, state) => const SettingsScreen(),
+              builder: (final context, final state) => const SettingsScreen(),
             ),
           ],
         ),
@@ -96,7 +96,7 @@ final router = GoRouter(
     GoRoute(
       path: '/book/:bookId',
       name: 'book',
-      builder: (context, state) {
+      builder: (final context, final state) {
         final bookId = state.pathParameters['bookId']!;
         return BookScreen(bookId: bookId);
       },
@@ -105,7 +105,7 @@ final router = GoRouter(
     GoRoute(
       path: '/reading/:bookId',
       name: 'reading',
-      builder: (context, state) {
+      builder: (final context, final state) {
         final bookId = state.pathParameters['bookId']!;
         return ReadingScreen(bookId: bookId);
       },
@@ -114,7 +114,7 @@ final router = GoRouter(
     GoRoute(
       path: '/add-book',
       name: 'add-book',
-      builder: (context, state) => AddBookScreen(
+      builder: (final context, final state) => AddBookScreen(
         initialBook: state.extra is Book ? state.extra as Book : null,
       ),
     ),
@@ -122,7 +122,7 @@ final router = GoRouter(
     GoRoute(
       path: '/dictionary',
       name: 'dictionary',
-      builder: (context, state) => const DictionaryScreen(),
+      builder: (final context, final state) => const DictionaryScreen(),
     ),
   ],
 );

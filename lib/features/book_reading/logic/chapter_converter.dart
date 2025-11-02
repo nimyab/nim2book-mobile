@@ -5,8 +5,8 @@ class ChapterConverter {
   const ChapterConverter();
 
   static List<WordItem> convertParagraph(
-    ParagraphAlignNode paragraph,
-    int paragraphIndex,
+    final ParagraphAlignNode paragraph,
+    final int paragraphIndex,
   ) {
     final alignWordNodes = paragraph.aw;
     final items = <WordItem>[];

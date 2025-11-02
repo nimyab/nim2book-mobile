@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
@@ -22,17 +23,17 @@ class ApiClient {
 
     _dio.interceptors.add(
       InterceptorsWrapper(
-        onRequest: (options, handler) {
+        onRequest: (final options, final handler) {
           _logger.i('Request: ${options.method} ${options.path}');
           handler.next(options);
         },
-        onResponse: (response, handler) {
+        onResponse: (final response, final handler) {
           _logger.i(
             'Response [statusCode: ${response.statusCode}], path: ${response.requestOptions.path}, data: ${response.data}',
           );
           handler.next(response);
         },
-        onError: (error, handler) {
+        onError: (final error, final handler) {
           _logger.e(
             'Error [statusCode: ${error.response?.statusCode}], path: ${error.requestOptions.path}, errorData: ${error.response?.data}',
           );
@@ -44,12 +45,12 @@ class ApiClient {
     // Add auth interceptor
     _dio.interceptors.add(
       InterceptorsWrapper(
-        onRequest: (options, handler) {
+        onRequest: (final options, final handler) {
           options.headers['Authorization'] =
               'Bearer ${_tokenService.accessToken}';
           handler.next(options);
         },
-        onError: (error, handler) async {
+        onError: (final error, final handler) async {
           if (error.response?.statusCode == 401 &&
               _tokenService.refreshToken != null) {
             // Если уже идет процесс обновления токена, добавляем запрос в очередь
@@ -66,7 +67,7 @@ class ApiClient {
 
               error.requestOptions.headers['Authorization'] =
                   'Bearer ${_tokenService.accessToken}';
-              final response = await _dio.fetch(error.requestOptions);
+              final response = await _dio.fetch<Object?>(error.requestOptions);
 
               handler.resolve(response);
             } catch (refreshError) {
@@ -77,7 +78,7 @@ class ApiClient {
               for (final pendingRequest in _pendingRequests) {
                 pendingRequest.headers['Authorization'] =
                     'Bearer ${_tokenService.accessToken}';
-                _dio.fetch(pendingRequest);
+                handler.resolve(await _dio.fetch<Object?>(pendingRequest));
               }
               _pendingRequests.clear();
 
@@ -106,12 +107,12 @@ class ApiClient {
   }
 
   // Auth endpoints
-  Future<LoginResponse> login(LoginRequest request) async {
-    final response = await _dio.post(
+  Future<LoginResponse> login(final LoginRequest request) async {
+    final response = await _dio.post<Map<String, dynamic>>(
       '/api/v1/auth/login',
       data: request.toJson(),
     );
-    final loginResponse = LoginResponse.fromJson(response.data);
+    final loginResponse = LoginResponse.fromJson(response.data!);
 
     await _tokenService.setTokens(
       loginResponse.accessToken,
@@ -121,12 +122,14 @@ class ApiClient {
     return loginResponse;
   }
 
-  Future<GoogleLoginResponse> googleLogin(GoogleLoginRequest request) async {
-    final response = await _dio.post(
+  Future<GoogleLoginResponse> googleLogin(
+    final GoogleLoginRequest request,
+  ) async {
+    final response = await _dio.post<Map<String, dynamic>>(
       '/api/v1/auth/google-login',
       data: request.toJson(),
     );
-    final googleLoginResponse = GoogleLoginResponse.fromJson(response.data);
+    final googleLoginResponse = GoogleLoginResponse.fromJson(response.data!);
 
     await _tokenService.setTokens(
       googleLoginResponse.accessToken,
@@ -136,25 +139,27 @@ class ApiClient {
     return googleLoginResponse;
   }
 
-  Future<RegisterResponse> register(RegisterRequest request) async {
-    final response = await _dio.post(
+  Future<RegisterResponse> register(final RegisterRequest request) async {
+    final response = await _dio.post<Map<String, dynamic>>(
       '/api/v1/auth/register',
       data: request.toJson(),
     );
-    return RegisterResponse.fromJson(response.data);
+    return RegisterResponse.fromJson(response.data!);
   }
 
-  Future<RefreshResponse> _refresh(RefreshRequest request) async {
-    final response = await _dio.post(
+  Future<RefreshResponse> _refresh(final RefreshRequest request) async {
+    final response = await _dio.post<Map<String, dynamic>>(
       '/api/v1/auth/refresh',
       data: request.toJson(),
     );
-    return RefreshResponse.fromJson(response.data);
+    return RefreshResponse.fromJson(response.data!);
   }
 
   Future<LogoutResponse> logout() async {
-    final response = await _dio.post('/api/v1/auth/logout');
-    final logoutResponse = LogoutResponse.fromJson(response.data);
+    final response = await _dio.post<Map<String, dynamic>>(
+      '/api/v1/auth/logout',
+    );
+    final logoutResponse = LogoutResponse.fromJson(response.data!);
 
     // Очищаем токены после logout
     await _tokenService.clearTokens();
@@ -164,15 +169,15 @@ class ApiClient {
 
   // User endpoints
   Future<MeResponse> getMe() async {
-    final response = await _dio.get('/api/v1/user/me');
-    return MeResponse.fromJson(response.data);
+    final response = await _dio.get<Map<String, dynamic>>('/api/v1/user/me');
+    return MeResponse.fromJson(response.data!);
   }
 
   // Book endpoints
   Future<GetBooksResponse> getBooks({
-    String? author,
-    String? title,
-    required String page,
+    final String? author,
+    final String? title,
+    required final String page,
   }) async {
     final queryParams = <String, dynamic>{
       'page': page,
@@ -180,27 +185,29 @@ class ApiClient {
       if (title != null) 'title': title,
     };
 
-    final response = await _dio.get(
+    final response = await _dio.get<Map<String, dynamic>>(
       '/api/v1/book',
       queryParameters: queryParams,
     );
-    return GetBooksResponse.fromJson(response.data);
+    return GetBooksResponse.fromJson(response.data!);
   }
 
-  Future<GetBookResponse> getBook(String id) async {
-    final response = await _dio.get('/api/v1/book/$id');
-    return GetBookResponse.fromJson(response.data);
+  Future<GetBookResponse> getBook(final String id) async {
+    final response = await _dio.get<Map<String, dynamic>>('/api/v1/book/$id');
+    return GetBookResponse.fromJson(response.data!);
   }
 
-  Future<ChapterAlignNode> getChapter(String path) async {
-    final response = await _dio.get('/api/v1/book/get-chapter/$path');
-    return ChapterAlignNode.fromJson(response.data);
+  Future<ChapterAlignNode> getChapter(final String path) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      '/api/v1/book/get-chapter/$path',
+    );
+    return ChapterAlignNode.fromJson(response.data!);
   }
 
   Future<TranslateBookResponse> translateBook({
-    required File file,
-    required String from,
-    required String to,
+    required final File file,
+    required final String from,
+    required final String to,
   }) async {
     final formData = FormData.fromMap({
       'file': await MultipartFile.fromFile(file.path),
@@ -208,20 +215,20 @@ class ApiClient {
       'to': to,
     });
 
-    final response = await _dio.post(
+    final response = await _dio.post<Map<String, dynamic>>(
       '/api/v1/translate/book',
       data: formData,
       options: Options(contentType: 'multipart/form-data'),
     );
 
-    return TranslateBookResponse.fromJson(response.data);
+    return TranslateBookResponse.fromJson(response.data!);
   }
 
   Future<UpdateBookResponse> updateBook({
-    required String id,
-    String? title,
-    String? author,
-    File? cover,
+    required final String id,
+    final String? title,
+    final String? author,
+    final File? cover,
   }) async {
     final formData = FormData();
 
@@ -233,47 +240,49 @@ class ApiClient {
       );
     }
 
-    final response = await _dio.put(
+    final response = await _dio.put<Map<String, dynamic>>(
       '/api/v1/book/$id',
       data: formData,
       options: Options(contentType: 'multipart/form-data'),
     );
 
-    return UpdateBookResponse.fromJson(response.data);
+    return UpdateBookResponse.fromJson(response.data!);
   }
 
   // Dictionary endpoints
-  Future<LookupResponse> lookup(LookupRequest request) async {
-    final response = await _dio.post(
+  Future<LookupResponse> lookup(final LookupRequest request) async {
+    final response = await _dio.post<Map<String, dynamic>>(
       '/api/v1/dictionary/lookup',
       data: request.toJson(),
     );
-    return LookupResponse.fromJson(response.data);
+    return LookupResponse.fromJson(response.data!);
   }
 
   // FCM token endpoints
-  Future<AddFcmTokenResponse> addFcmToken(AddFcmTokenRequest request) async {
-    final response = await _dio.post(
+  Future<AddFcmTokenResponse> addFcmToken(
+    final AddFcmTokenRequest request,
+  ) async {
+    final response = await _dio.post<Map<String, dynamic>>(
       '/api/v1/fcm-token/add',
       data: request.toJson(),
     );
-    return AddFcmTokenResponse.fromJson(response.data);
+    return AddFcmTokenResponse.fromJson(response.data!);
   }
 
-  Future<DeleteFcmTokenResponse> deleteFcmToken(String token) async {
-    final response = await _dio.delete(
+  Future<DeleteFcmTokenResponse> deleteFcmToken(final String token) async {
+    final response = await _dio.delete<Map<String, dynamic>>(
       '/api/v1/fcm-token/delete',
       queryParameters: {'token': token},
     );
-    return DeleteFcmTokenResponse.fromJson(response.data);
+    return DeleteFcmTokenResponse.fromJson(response.data!);
   }
 
   // File endpoints
-  Future<File> getPublicFile(String path) async {
-    final response = await _dio.get(
+  Future<File> getPublicFile(final String path) async {
+    final response = await _dio.get<String>(
       '/api/v1/file/public',
       queryParameters: {'path': path},
     );
-    return File(response.data);
+    return File(response.data!);
   }
 }

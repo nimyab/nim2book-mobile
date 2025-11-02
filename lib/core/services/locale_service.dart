@@ -17,7 +17,7 @@ class LocaleService {
     return null;
   }
 
-  Future<void> saveLocale(Locale locale) async {
+  Future<void> saveLocale(final Locale locale) async {
     await _sharedPreferences.setString(_localeKey, locale.languageCode);
   }
 
@@ -42,7 +42,7 @@ class LocaleService {
     return AppLocalizations.supportedLocales;
   }
 
-  String getLanguageName(Locale locale) {
+  String getLanguageName(final Locale locale) {
     switch (locale.languageCode) {
       case 'en':
         return 'English';

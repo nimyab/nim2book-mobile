@@ -43,7 +43,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
+      final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['epub'],
       );
@@ -62,7 +62,9 @@ class _AddBookScreenState extends State<AddBookScreen> {
     }
   }
 
-  Future<void> _uploadBook(void Function(Book book) callbackWithBook) async {
+  Future<void> _uploadBook(
+    final void Function(Book book) callbackWithBook,
+  ) async {
     final l10n = AppLocalizations.of(context)!;
 
     if (_selectedFile == null) {
@@ -117,7 +119,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
@@ -137,12 +139,14 @@ class _AddBookScreenState extends State<AddBookScreen> {
                   height: 160,
                   width: 110,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Image.asset(
-                    'assets/placeholder_book_cover.jpg',
-                    height: 160,
-                    width: 110,
-                    fit: BoxFit.cover,
-                  ),
+                  errorBuilder:
+                      (final context, final error, final stackTrace) =>
+                          Image.asset(
+                            'assets/placeholder_book_cover.jpg',
+                            height: 160,
+                            width: 110,
+                            fit: BoxFit.cover,
+                          ),
                 ),
               ),
             if (_initialCoverUrl != null) const SizedBox(height: 16),
@@ -208,7 +212,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
               onPressed: _isUploading
                   ? null
                   : () {
-                      _uploadBook((book) {
+                      _uploadBook((final book) {
                         context.read<BooksContext>().addMyBook(book);
                         context.go('/my-books');
                       });

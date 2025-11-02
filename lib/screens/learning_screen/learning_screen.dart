@@ -43,7 +43,7 @@ class _LearningScreenState extends State<LearningScreen> {
     super.dispose();
   }
 
-  String _periodLabel(AppLocalizations l10n, StatsPeriod p) {
+  String _periodLabel(final AppLocalizations l10n, final StatsPeriod p) {
     switch (p) {
       case StatsPeriod.last7:
         return l10n.period7Days;
@@ -58,10 +58,13 @@ class _LearningScreenState extends State<LearningScreen> {
     }
   }
 
-  void _openPeriodPicker(BuildContext context, AppLocalizations l10n) {
-    showModalBottomSheet(
+  void _openPeriodPicker(
+    final BuildContext context,
+    final AppLocalizations l10n,
+  ) {
+    showModalBottomSheet<void>(
       context: context,
-      builder: (ctx) {
+      builder: (final ctx) {
         return SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -77,13 +80,13 @@ class _LearningScreenState extends State<LearningScreen> {
                 DropdownButton<StatsPeriod>(
                   value: _period,
                   isExpanded: true,
-                  items: StatsPeriod.values.map((p) {
+                  items: StatsPeriod.values.map((final p) {
                     return DropdownMenuItem(
                       value: p,
                       child: Text(_periodLabel(l10n, p)),
                     );
                   }).toList(),
-                  onChanged: (val) {
+                  onChanged: (final val) {
                     if (val == null) return;
                     setState(() => _period = val);
                     Navigator.of(ctx).pop();
@@ -99,22 +102,28 @@ class _LearningScreenState extends State<LearningScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final dictContext = context.watch<DictionaryContext>();
     final savedWords = dictContext.savedWords;
     final theme = Theme.of(context);
     final srs = GetIt.I.get<SrsService>();
     final now = DateTime.now();
-    final items = savedWords.keys.map((w) => srs.getOrCreateItem(w)).toList();
+    final items = savedWords.keys
+        .map((final w) => srs.getOrCreateItem(w))
+        .toList();
     final usedToday = srs.getDailyNewCount(now: now);
     final dailyLimit = srs.getDailyNewLimit();
     final availableSlots = (dailyLimit - usedToday).clamp(0, dailyLimit);
     final reviewDueCount = items
-        .where((i) => i.lastReviewedAt != null && !i.nextReviewAt.isAfter(now))
+        .where(
+          (final i) => i.lastReviewedAt != null && !i.nextReviewAt.isAfter(now),
+        )
         .length;
     final newDueCount = items
-        .where((i) => i.lastReviewedAt == null && !i.nextReviewAt.isAfter(now))
+        .where(
+          (final i) => i.lastReviewedAt == null && !i.nextReviewAt.isAfter(now),
+        )
         .length;
     final newDueLimited = availableSlots > 0
         ? newDueCount.clamp(0, availableSlots)
@@ -125,10 +134,12 @@ class _LearningScreenState extends State<LearningScreen> {
     final hasReview = reviewDueCount > 0;
     final hasMixed = mixedDueCount > 0;
 
-    final activeCount = items.where((i) => i.lastReviewedAt != null).length;
-    final learnedTotal = items.where((i) => i.repetition >= 3).length;
-    final repeatedTotal = items.where((i) => i.repetition >= 1).length;
-    final knownTotal = items.where((i) => i.repetition >= 8).length;
+    final activeCount = items
+        .where((final i) => i.lastReviewedAt != null)
+        .length;
+    final learnedTotal = items.where((final i) => i.repetition >= 3).length;
+    final repeatedTotal = items.where((final i) => i.repetition >= 1).length;
+    final knownTotal = items.where((final i) => i.repetition >= 8).length;
 
     final periodRange = computeRange(items, now, _period);
     final bucketDays = periodRange.bucketDays;
@@ -141,18 +152,18 @@ class _LearningScreenState extends State<LearningScreen> {
     final repeatedByBucket = countByBucket(items, buckets, bucketDays);
     final knownByBucket = countKnownByBucket(items, buckets, bucketDays);
 
-    final periodFirstLearned = items.where((i) {
+    final periodFirstLearned = items.where((final i) {
       final d = i.lastReviewedAt;
       if (d == null) return false;
       return isInRange(d, periodRange.start, periodRange.end) &&
           i.repetition >= 3;
     }).length;
-    final periodRepeated = items.where((i) {
+    final periodRepeated = items.where((final i) {
       final d = i.lastReviewedAt;
       if (d == null) return false;
       return isInRange(d, periodRange.start, periodRange.end);
     }).length;
-    final periodKnown = items.where((i) {
+    final periodKnown = items.where((final i) {
       final d = i.lastReviewedAt;
       if (d == null) return false;
       return isInRange(d, periodRange.start, periodRange.end) &&

@@ -20,7 +20,7 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
   double? _localTranslatedFontSize;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final readingSettingsContext = context.watch<ReadingSettingsContext>();
@@ -47,20 +47,20 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                             value: 'System',
                             child: Text(l10n.system),
                           ),
-                          DropdownMenuItem(
+                          const DropdownMenuItem(
                             value: 'NotoSerif',
                             child: Text('Noto Serif'),
                           ),
-                          DropdownMenuItem(
+                          const DropdownMenuItem(
                             value: 'Merriweather',
                             child: Text('Merriweather'),
                           ),
-                          DropdownMenuItem(
+                          const DropdownMenuItem(
                             value: 'Roboto',
                             child: Text('Roboto'),
                           ),
                         ],
-                        onChanged: (v) =>
+                        onChanged: (final v) =>
                             readingSettingsContext.fontFamily = v ?? 'System',
                       ),
                     ),
@@ -100,8 +100,9 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                             child: Text(l10n.alignJustify),
                           ),
                         ],
-                        onChanged: (v) => readingSettingsContext.textAlign =
-                            v ?? TextAlign.justify,
+                        onChanged: (final v) =>
+                            readingSettingsContext.textAlign =
+                                v ?? TextAlign.justify,
                       ),
                     ),
                     TextButton(
@@ -131,8 +132,9 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                         divisions: 20,
                         label:
                             '${(_localFontSize ?? readingSettingsContext.fontSize).round()}',
-                        onChanged: (v) => setState(() => _localFontSize = v),
-                        onChangeEnd: (v) {
+                        onChanged: (final v) =>
+                            setState(() => _localFontSize = v),
+                        onChangeEnd: (final v) {
                           readingSettingsContext.fontSize = v;
                           setState(() => _localFontSize = null);
                         },
@@ -261,8 +263,9 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                             (_localLineHeight ??
                                     readingSettingsContext.lineHeight)
                                 .toStringAsFixed(2),
-                        onChanged: (v) => setState(() => _localLineHeight = v),
-                        onChangeEnd: (v) {
+                        onChanged: (final v) =>
+                            setState(() => _localLineHeight = v),
+                        onChangeEnd: (final v) {
                           readingSettingsContext.lineHeight = v;
                           setState(() => _localLineHeight = null);
                         },
@@ -299,8 +302,9 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                         divisions: 32,
                         label:
                             '${(_localSidePadding ?? readingSettingsContext.sidePadding).round()} px',
-                        onChanged: (v) => setState(() => _localSidePadding = v),
-                        onChangeEnd: (v) {
+                        onChanged: (final v) =>
+                            setState(() => _localSidePadding = v),
+                        onChangeEnd: (final v) {
                           readingSettingsContext.sidePadding = v;
                           setState(() => _localSidePadding = null);
                         },
@@ -338,9 +342,9 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                         divisions: 30,
                         label:
                             '${(_localFirstLineIndent ?? readingSettingsContext.firstLineIndentEm).toStringAsFixed(1)} em',
-                        onChanged: (v) =>
+                        onChanged: (final v) =>
                             setState(() => _localFirstLineIndent = v),
-                        onChangeEnd: (v) {
+                        onChangeEnd: (final v) {
                           readingSettingsContext.firstLineIndentEm = v;
                           setState(() => _localFirstLineIndent = null);
                         },
@@ -378,9 +382,9 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                         divisions: 24,
                         label:
                             '${(_localParagraphSpacing ?? readingSettingsContext.paragraphSpacing).round()} px',
-                        onChanged: (v) =>
+                        onChanged: (final v) =>
                             setState(() => _localParagraphSpacing = v),
-                        onChangeEnd: (v) {
+                        onChangeEnd: (final v) {
                           readingSettingsContext.paragraphSpacing = v;
                           setState(() => _localParagraphSpacing = null);
                         },
@@ -422,9 +426,9 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                         divisions: 32,
                         label:
                             '${(_localTranslatedVerticalPadding ?? readingSettingsContext.translatedVerticalPadding).round()} px',
-                        onChanged: (v) =>
+                        onChanged: (final v) =>
                             setState(() => _localTranslatedVerticalPadding = v),
-                        onChangeEnd: (v) {
+                        onChangeEnd: (final v) {
                           readingSettingsContext.translatedVerticalPadding = v;
                           setState(
                             () => _localTranslatedVerticalPadding = null,
@@ -457,20 +461,20 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                             value: 'System',
                             child: Text(l10n.system),
                           ),
-                          DropdownMenuItem(
+                          const DropdownMenuItem(
                             value: 'NotoSerif',
                             child: Text('Noto Serif'),
                           ),
-                          DropdownMenuItem(
+                          const DropdownMenuItem(
                             value: 'Merriweather',
                             child: Text('Merriweather'),
                           ),
-                          DropdownMenuItem(
+                          const DropdownMenuItem(
                             value: 'Roboto',
                             child: Text('Roboto'),
                           ),
                         ],
-                        onChanged: (v) =>
+                        onChanged: (final v) =>
                             readingSettingsContext.translatedFontFamily =
                                 v ?? 'System',
                       ),
@@ -506,9 +510,9 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                         divisions: 20,
                         label:
                             '${(_localTranslatedFontSize ?? readingSettingsContext.translatedFontSize).round()}',
-                        onChanged: (v) =>
+                        onChanged: (final v) =>
                             setState(() => _localTranslatedFontSize = v),
-                        onChangeEnd: (v) {
+                        onChangeEnd: (final v) {
                           readingSettingsContext.translatedFontSize = v;
                           setState(() => _localTranslatedFontSize = null);
                         },

@@ -9,123 +9,125 @@ part 'responses.g.dart';
 @freezed
 abstract class LoginResponse with _$LoginResponse {
   const factory LoginResponse({
-    required String accessToken,
-    required String refreshToken,
-    required User user,
+    required final String accessToken,
+    required final String refreshToken,
+    required final User user,
   }) = _LoginResponse;
 
-  factory LoginResponse.fromJson(Map<String, dynamic> json) =>
+  factory LoginResponse.fromJson(final Map<String, dynamic> json) =>
       _$LoginResponseFromJson(json);
 }
 
 @freezed
 abstract class GoogleLoginResponse with _$GoogleLoginResponse {
   const factory GoogleLoginResponse({
-    required String accessToken,
-    required String refreshToken,
-    required User user,
+    required final String accessToken,
+    required final String refreshToken,
+    required final User user,
   }) = _GoogleLoginResponse;
 
-  factory GoogleLoginResponse.fromJson(Map<String, dynamic> json) =>
+  factory GoogleLoginResponse.fromJson(final Map<String, dynamic> json) =>
       _$GoogleLoginResponseFromJson(json);
 }
 
 @freezed
 abstract class RegisterResponse with _$RegisterResponse {
-  const factory RegisterResponse({required bool success}) = _RegisterResponse;
+  const factory RegisterResponse({required final bool success}) =
+      _RegisterResponse;
 
-  factory RegisterResponse.fromJson(Map<String, dynamic> json) =>
+  factory RegisterResponse.fromJson(final Map<String, dynamic> json) =>
       _$RegisterResponseFromJson(json);
 }
 
 @freezed
 abstract class RefreshResponse with _$RefreshResponse {
   const factory RefreshResponse({
-    required String accessToken,
-    required String refreshToken,
+    required final String accessToken,
+    required final String refreshToken,
   }) = _RefreshResponse;
 
-  factory RefreshResponse.fromJson(Map<String, dynamic> json) =>
+  factory RefreshResponse.fromJson(final Map<String, dynamic> json) =>
       _$RefreshResponseFromJson(json);
 }
 
 @freezed
 abstract class LogoutResponse with _$LogoutResponse {
-  const factory LogoutResponse({required bool success}) = _LogoutResponse;
+  const factory LogoutResponse({required final bool success}) = _LogoutResponse;
 
-  factory LogoutResponse.fromJson(Map<String, dynamic> json) =>
+  factory LogoutResponse.fromJson(final Map<String, dynamic> json) =>
       _$LogoutResponseFromJson(json);
 }
 
 @freezed
 abstract class MeResponse with _$MeResponse {
-  const factory MeResponse({required User user}) = _MeResponse;
+  const factory MeResponse({required final User user}) = _MeResponse;
 
-  factory MeResponse.fromJson(Map<String, dynamic> json) =>
+  factory MeResponse.fromJson(final Map<String, dynamic> json) =>
       _$MeResponseFromJson(json);
 }
 
 @freezed
 abstract class GetBooksResponse with _$GetBooksResponse {
-  const factory GetBooksResponse({required List<Book> books}) =
+  const factory GetBooksResponse({required final List<Book> books}) =
       _GetBooksResponse;
 
-  factory GetBooksResponse.fromJson(Map<String, dynamic> json) =>
+  factory GetBooksResponse.fromJson(final Map<String, dynamic> json) =>
       _$GetBooksResponseFromJson(json);
 }
 
 @freezed
 abstract class GetBookResponse with _$GetBookResponse {
-  const factory GetBookResponse({required Book book}) = _GetBookResponse;
+  const factory GetBookResponse({required final Book book}) = _GetBookResponse;
 
-  factory GetBookResponse.fromJson(Map<String, dynamic> json) =>
+  factory GetBookResponse.fromJson(final Map<String, dynamic> json) =>
       _$GetBookResponseFromJson(json);
 }
 
 @freezed
 abstract class TranslateBookResponse with _$TranslateBookResponse {
   const factory TranslateBookResponse({
-    Book? book,
-    String? messageAboutTranslate,
+    final Book? book,
+    final String? messageAboutTranslate,
   }) = _TranslateBookResponse;
 
-  factory TranslateBookResponse.fromJson(Map<String, dynamic> json) =>
+  factory TranslateBookResponse.fromJson(final Map<String, dynamic> json) =>
       _$TranslateBookResponseFromJson(json);
 }
 
 @freezed
 abstract class UpdateBookResponse with _$UpdateBookResponse {
-  const factory UpdateBookResponse({required Book book}) = _UpdateBookResponse;
+  const factory UpdateBookResponse({required final Book book}) =
+      _UpdateBookResponse;
 
-  factory UpdateBookResponse.fromJson(Map<String, dynamic> json) =>
+  factory UpdateBookResponse.fromJson(final Map<String, dynamic> json) =>
       _$UpdateBookResponseFromJson(json);
 }
 
 @freezed
 abstract class AddFcmTokenResponse with _$AddFcmTokenResponse {
-  const factory AddFcmTokenResponse({required bool success}) =
+  const factory AddFcmTokenResponse({required final bool success}) =
       _AddFcmTokenResponse;
 
-  factory AddFcmTokenResponse.fromJson(Map<String, dynamic> json) =>
+  factory AddFcmTokenResponse.fromJson(final Map<String, dynamic> json) =>
       _$AddFcmTokenResponseFromJson(json);
 }
 
 @freezed
 abstract class DeleteFcmTokenResponse with _$DeleteFcmTokenResponse {
-  const factory DeleteFcmTokenResponse({required bool success}) =
+  const factory DeleteFcmTokenResponse({required final bool success}) =
       _DeleteFcmTokenResponse;
 
-  factory DeleteFcmTokenResponse.fromJson(Map<String, dynamic> json) =>
+  factory DeleteFcmTokenResponse.fromJson(final Map<String, dynamic> json) =>
       _$DeleteFcmTokenResponseFromJson(json);
 }
 
 @freezed
 abstract class LookupResponse with _$LookupResponse {
   const factory LookupResponse({
-    required List<Definition> def,
-    Map<String, dynamic>? head,
+    required final List<Definition> def,
+    final Map<String, dynamic>? head,
   }) = _LookupResponse;
 
-  factory LookupResponse.fromJson(Map<String, dynamic> json) =>
+  factory LookupResponse.fromJson(final Map<String, dynamic> json) =>
       _$LookupResponseFromJson(json);
 }

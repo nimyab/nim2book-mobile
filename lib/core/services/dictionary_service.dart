@@ -7,7 +7,7 @@ import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
 import 'package:nim2book_mobile_flutter/core/models/requests/requests.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-String _getWordKey(String word) => 'dictionary_word_$word';
+String _getWordKey(final String word) => 'dictionary_word_$word';
 
 const _lang = 'en-ru';
 const _ui = 'ru';
@@ -17,9 +17,11 @@ class DictionaryService {
   final _apiClient = GetIt.I.get<ApiClient>();
   final _sharedPreferences = GetIt.I.get<SharedPreferences>();
 
-  Future<bool> saveWord(String word, List<Definition> defs) async {
+  Future<bool> saveWord(final String word, final List<Definition> defs) async {
     try {
-      final wordJson = defs.map((def) => jsonEncode(def.toJson())).toList();
+      final wordJson = defs
+          .map((final def) => jsonEncode(def.toJson()))
+          .toList();
       return _sharedPreferences.setStringList(_getWordKey(word), wordJson);
     } catch (e) {
       _logger.e('Error saving word $word: $e');
@@ -27,7 +29,7 @@ class DictionaryService {
     }
   }
 
-  Future<bool> deleteWord(String word) async {
+  Future<bool> deleteWord(final String word) async {
     try {
       return _sharedPreferences.remove(_getWordKey(word));
     } catch (e) {
@@ -36,12 +38,12 @@ class DictionaryService {
     }
   }
 
-  List<Definition>? _getWordFromSharedPreferences(String key) {
+  List<Definition>? _getWordFromSharedPreferences(final String key) {
     try {
       final wordJsonList = _sharedPreferences.getStringList(key);
       if (wordJsonList == null) return null;
       return wordJsonList
-          .map((json) => Definition.fromJson(jsonDecode(json)))
+          .map((final json) => Definition.fromJson(jsonDecode(json)))
           .toList();
     } catch (e) {
       _logger.e('Error retrieving word $key: $e');
@@ -49,7 +51,7 @@ class DictionaryService {
     }
   }
 
-  Future<List<Definition>?> getWord(String word) async {
+  Future<List<Definition>?> getWord(final String word) async {
     final savedWordInfo = _getWordFromSharedPreferences(_getWordKey(word));
     if (savedWordInfo != null) return savedWordInfo;
 
@@ -67,7 +69,7 @@ class DictionaryService {
   Map<String, List<Definition>> getAllSavedWords() {
     try {
       final keys = _sharedPreferences.getKeys();
-      final Map<String, List<Definition>> allWords = {};
+      final allWords = <String, List<Definition>>{};
 
       for (var key in keys) {
         if (key.startsWith('dictionary_word_')) {
