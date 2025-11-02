@@ -1,4 +1,4 @@
-import 'srs_item.dart';
+import 'package:nim2book_mobile_flutter/features/srs/models/srs_item.dart';
 
 class SrsSchedulerSM2 {
   const SrsSchedulerSM2();

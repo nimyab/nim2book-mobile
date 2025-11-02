@@ -4,30 +4,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:logger/logger.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/auth_context.dart';
-import 'package:nim2book_mobile_flutter/core/contexts/books_context.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/dictionary_context.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/locale_context.dart';
+import 'package:nim2book_mobile_flutter/core/contexts/offline_context.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/theme_context.dart';
 import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/router/router.dart';
 import 'package:nim2book_mobile_flutter/core/services/book_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/dictionary_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/fmc_token_service.dart';
+import 'package:nim2book_mobile_flutter/core/services/offline_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/theme_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
-import 'package:nim2book_mobile_flutter/core/services/offline_service.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
-import 'package:nim2book_mobile_flutter/core/contexts/offline_context.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/services/reading_settings_service.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/data/reading_settings_service.dart';
+import 'package:nim2book_mobile_flutter/features/books/contexts/books_context.dart';
 import 'package:nim2book_mobile_flutter/firebase_options.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/date_symbol_data_local.dart';
 // import 'package:intl/intl.dart' as intl; // Optional: set default locale if needed
 
 void main() async {

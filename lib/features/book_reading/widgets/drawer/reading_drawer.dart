@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/contexts/loading_book_context.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/drawer/chapter_list_tab.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/drawer/drawer_header_actions.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/drawer/search_sheet.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/drawer/text_settings_tab.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
-import 'package:nim2book_mobile_flutter/screens/reading_screen/loading_book_context.dart';
 import 'package:provider/provider.dart';
 
 class ReadingDrawer extends StatelessWidget {

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/auth_context.dart';
-import 'package:nim2book_mobile_flutter/core/contexts/books_context.dart';
+import 'package:nim2book_mobile_flutter/features/books/contexts/books_context.dart';
+import 'package:nim2book_mobile_flutter/features/books/widgets/book_card.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
-import 'package:nim2book_mobile_flutter/widgets/book_card.dart';
 import 'package:provider/provider.dart';
 
 class BooksScreen extends StatefulWidget {

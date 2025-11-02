@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/contexts/loading_book_context.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/contexts/reading_settings_context.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/book_reading_bar.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/drawer/reading_drawer.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/original_text_scroll.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/translated_text_scroll.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
-import 'package:nim2book_mobile_flutter/screens/reading_screen/loading_book_context.dart';
 import 'package:nim2book_mobile_flutter/widgets/circular_progress_with_percentage.dart';
 import 'package:provider/provider.dart';
 

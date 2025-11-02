@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:provider/provider.dart';
-
+import 'package:nim2book_mobile_flutter/core/contexts/dictionary_context.dart';
+import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
+import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
+import 'package:nim2book_mobile_flutter/features/srs/models/srs_item.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
-import '../../core/contexts/dictionary_context.dart';
-import '../../core/models/dictionary/dictionary.dart';
-import '../../core/services/srs_service.dart';
-import '../../core/srs/srs_item.dart';
+import 'package:provider/provider.dart';
 
 enum LearningMode { newOnly, reviewOnly, mixed }
 

@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/logic/chapter_converter.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/models/word_item.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/services/chapter_converter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 String currentChapterKey(String bookId) => 'current_chapter_$bookId';

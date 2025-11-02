@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/services/reading_settings_service.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/data/reading_settings_service.dart';
 
 class ReadingSettingsContext with ChangeNotifier {
   final _readSS = GetIt.I.get<ReadingSettingsService>();

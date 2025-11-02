@@ -4,7 +4,7 @@ import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/contexts/reading_settings_context.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/models/word_item.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/original_paragraph_painter.dart';
-import 'package:nim2book_mobile_flutter/features/translated_dialog/translated_dialog.dart';
+import 'package:nim2book_mobile_flutter/features/translated_dialog/widgets/translated_dialog.dart';
 import 'package:provider/provider.dart';
 
 class OriginalParagraph extends StatefulWidget {

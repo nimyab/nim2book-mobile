@@ -1,11 +1,10 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
-
 import 'package:get_it/get_it.dart';
+import 'package:nim2book_mobile_flutter/features/srs/logic/srs_scheduler_sm2.dart';
+import 'package:nim2book_mobile_flutter/features/srs/models/srs_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../srs/srs_item.dart';
-import '../srs/srs_scheduler_sm2.dart';
 
 String _srsKey(String word) => 'srs_item_$word';
 

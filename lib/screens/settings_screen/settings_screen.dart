@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/auth_context.dart';
-import 'package:nim2book_mobile_flutter/features/user_profile/user_profile.dart';
+import 'package:nim2book_mobile_flutter/features/user_profile/widgets/user_profile.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/widgets/daily_new_limit_switcher.dart';
 import 'package:nim2book_mobile_flutter/widgets/language_switcher.dart';
