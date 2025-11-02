@@ -14,6 +14,13 @@ import 'package:nim2book_mobile_flutter/screens/register_screen/register_screen.
 import 'package:nim2book_mobile_flutter/screens/settings_screen/settings_screen.dart';
 import 'package:nim2book_mobile_flutter/widgets/main_scaffold.dart';
 
+class BookRouteExtra {
+  final String? heroTag;
+  final Book? book;
+
+  const BookRouteExtra({this.heroTag, this.book});
+}
+
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final router = GoRouter(
@@ -98,7 +105,23 @@ final router = GoRouter(
       name: 'book',
       builder: (final context, final state) {
         final bookId = state.pathParameters['bookId']!;
-        return BookScreen(bookId: bookId);
+        String? heroTag;
+        Book? initialBook;
+        final extra = state.extra;
+        if (extra is String) {
+          heroTag = extra;
+        } else if (extra is BookRouteExtra) {
+          heroTag = extra.heroTag;
+          initialBook = extra.book;
+        } else if (extra is Map) {
+          heroTag = extra['heroTag'] as String?;
+          initialBook = extra['book'] as Book?;
+        }
+        return BookScreen(
+          bookId: bookId,
+          heroTag: heroTag,
+          initialBook: initialBook,
+        );
       },
     ),
 

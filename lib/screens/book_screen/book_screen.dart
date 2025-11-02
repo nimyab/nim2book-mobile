@@ -11,8 +11,15 @@ import 'package:provider/provider.dart';
 
 class BookScreen extends StatefulWidget {
   final String bookId;
+  final String? heroTag;
+  final Book? initialBook;
 
-  const BookScreen({super.key, required this.bookId});
+  const BookScreen({
+    super.key,
+    required this.bookId,
+    this.heroTag,
+    this.initialBook,
+  });
 
   @override
   State<BookScreen> createState() => _BookScreenState();
@@ -35,7 +42,13 @@ class _BookScreenState extends State<BookScreen> {
   @override
   void initState() {
     super.initState();
-    _loadBook();
+    final initial = widget.initialBook;
+    if (initial != null) {
+      book = initial;
+      isLoading = false;
+    } else {
+      _loadBook();
+    }
   }
 
   @override
@@ -54,7 +67,7 @@ class _BookScreenState extends State<BookScreen> {
         : null;
 
     final Widget coverHero = Hero(
-      tag: 'book-cover-${widget.bookId}',
+      tag: widget.heroTag ?? 'book-cover-${widget.bookId}',
       flightShuttleBuilder:
           (
             final flightContext,

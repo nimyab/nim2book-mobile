@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/contexts/auth_context.dart';
+import 'package:nim2book_mobile_flutter/core/router/router.dart';
 import 'package:nim2book_mobile_flutter/features/books/contexts/books_context.dart';
 import 'package:nim2book_mobile_flutter/features/books/widgets/book_card.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
@@ -38,10 +39,15 @@ class _BooksScreenState extends State<BooksScreen> {
                     itemCount: books.length,
                     itemBuilder: (final context, final index) {
                       final book = books[index];
+                      final tag = 'book-cover-${book.id}-books';
                       return BookCard(
                         key: ValueKey(book.id),
                         book: book,
-                        onTap: () => context.push('/book/${book.id}'),
+                        heroTag: tag,
+                        onTap: () => context.push(
+                          '/book/${book.id}',
+                          extra: BookRouteExtra(heroTag: tag, book: book),
+                        ),
                       );
                     },
                   ),

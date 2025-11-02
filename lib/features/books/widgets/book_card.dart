@@ -8,8 +8,9 @@ class BookCard extends StatelessWidget {
   final _apiBaseUrl = GetIt.I.get<Env>().apiBaseUrl;
   final Book book;
   final VoidCallback? onTap;
+  final String? heroTag;
 
-  BookCard({super.key, required this.book, this.onTap});
+  BookCard({super.key, required this.book, this.onTap, this.heroTag});
 
   @override
   Widget build(final BuildContext context) {
@@ -31,7 +32,7 @@ class BookCard extends StatelessWidget {
           children: [
             if (coverUrl != null)
               Hero(
-                tag: 'book-cover-${book.id}',
+                tag: heroTag ?? 'book-cover-${book.id}',
                 child: Image(
                   image: CachedNetworkImageProvider(coverUrl),
                   height: 120,
