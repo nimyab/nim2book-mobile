@@ -596,5 +596,10 @@
   "@periodRepeatedWords": {"description": "Words repeated in the period", "placeholders": {"count": {"type": "int"}}},
   "periodBecameKnownWords": "Became known: {count}",
   "@periodBecameKnownWords": {"description": "Words that became known in the period", "placeholders": {"count": {"type": "int"}}}
+  ,
+  "noResults": "No results",
+  "@noResults": {
+    "description": "Displayed when a search yields no results"
+  }
 }
 

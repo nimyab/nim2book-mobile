@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/web.dart';
-import 'package:nim2book_mobile_flutter/core/contexts/auth_context.dart';
+import 'package:nim2book_mobile_flutter/core/bloc/auth/auth_cubit.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -28,10 +28,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(final BuildContext context) {
-    final login = context.read<AuthContext>().login;
-    final googleLogin = context.read<AuthContext>().googleLogin;
-    final isAuthLoading = context.select<AuthContext, bool>(
-      (final value) => value.isLoading,
+    final login = context.read<AuthCubit>().login;
+    final googleLogin = context.read<AuthCubit>().googleLogin;
+    final isAuthLoading = context.select(
+      (final AuthCubit c) => c.state.isLoading,
     );
     final l10n = AppLocalizations.of(context)!;
 

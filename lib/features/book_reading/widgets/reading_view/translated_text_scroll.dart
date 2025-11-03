@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/contexts/reading_settings_context.dart';
-import 'package:provider/provider.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading_cubit.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/reading_settings_cubit.dart';
 
 class TranslatedTextScroll extends StatefulWidget {
   const TranslatedTextScroll({super.key, this.controller});
@@ -15,38 +15,51 @@ class TranslatedTextScroll extends StatefulWidget {
 }
 
 class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
+  int? _lastEnsuredParagraph;
+  int? _lastEnsuredWord;
   @override
   Widget build(final BuildContext context) {
-    final readingSettingsContext = context.watch<ReadingSettingsContext>();
-    final readingContext = context.watch<BookReadingContext>();
+    final translatedFontSize = context.select(
+      (final ReadingSettingsCubit c) => c.state.translatedFontSize,
+    );
+    final translatedFontFamily = context.select(
+      (final ReadingSettingsCubit c) => c.state.translatedFontFamily,
+    );
+    final translatedVerticalPadding = context.select(
+      (final ReadingSettingsCubit c) => c.state.translatedVerticalPadding,
+    );
+    final readingState = context.watch<BookReadingCubit>().state;
     final theme = Theme.of(context);
     final scrollColors = theme.extension<TranslatedTextScrollColors>()!;
     final readingColors = theme.extension<BookReadingColors>()!;
 
-    final selectedParagraphIndex = readingContext.selectedParagraphIndex;
-    final selectedWordIndex = readingContext.selectedWordIndex;
-    final currentChapter = readingContext.currentChapter;
+    final selectedParagraphIndex = readingState.selectedParagraphIndex;
+    final selectedWordIndex = readingState.selectedWordIndex;
+    final currentChapter =
+        readingState.chapters[readingState.currentChapterIndex];
 
     final selectedWordNode =
-        selectedWordIndex == -1 || selectedParagraphIndex == -1
+        selectedWordIndex == null || selectedParagraphIndex == null
         ? null
         : currentChapter.content[selectedParagraphIndex].aw[selectedWordIndex];
 
-    final translatedFamily = readingSettingsContext.translatedFontFamily;
     final baseStyle = TextStyle(
-      fontSize: readingSettingsContext.translatedFontSize,
+      fontSize: translatedFontSize,
       // Добавляем fontFamily для гарантии обновления
-      fontFamily: translatedFamily.toLowerCase() == 'system'
+      fontFamily: translatedFontFamily.toLowerCase() == 'system'
           ? null
-          : translatedFamily,
+          : translatedFontFamily,
     );
 
     TextStyle textStyle;
-    if (translatedFamily.toLowerCase() == 'system') {
+    if (translatedFontFamily.toLowerCase() == 'system') {
       textStyle = baseStyle;
     } else {
       try {
-        textStyle = GoogleFonts.getFont(translatedFamily, textStyle: baseStyle);
+        textStyle = GoogleFonts.getFont(
+          translatedFontFamily,
+          textStyle: baseStyle,
+        );
       } catch (_) {
         textStyle = baseStyle;
       }
@@ -58,8 +71,7 @@ class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
       textScaler: const TextScaler.linear(1.0),
     )..layout();
     final lineHeight = metricsPainter.height;
-    final computedHeight =
-        lineHeight + readingSettingsContext.translatedVerticalPadding * 2;
+    final computedHeight = lineHeight + translatedVerticalPadding * 2;
 
     return SizedBox(
       height: computedHeight,
@@ -78,18 +90,24 @@ class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
 
             if (index == selectedParagraphIndex && selectedWordNode != null) {
               final selectedWordKey = GlobalKey();
-
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                final selectedWordContext = selectedWordKey.currentContext;
-                if (selectedWordContext != null) {
-                  Scrollable.ensureVisible(
-                    selectedWordContext,
-                    duration: const Duration(milliseconds: 300),
-                    alignment: 0.5,
-                    curve: Curves.easeInOut,
-                  );
-                }
-              });
+              final needEnsure =
+                  _lastEnsuredParagraph != selectedParagraphIndex ||
+                  _lastEnsuredWord != selectedWordIndex;
+              if (needEnsure) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  final selectedWordContext = selectedWordKey.currentContext;
+                  if (selectedWordContext != null) {
+                    Scrollable.ensureVisible(
+                      selectedWordContext,
+                      duration: const Duration(milliseconds: 300),
+                      alignment: 0.5,
+                      curve: Curves.easeInOut,
+                    );
+                  }
+                });
+                _lastEnsuredParagraph = selectedParagraphIndex;
+                _lastEnsuredWord = selectedWordIndex;
+              }
 
               return Center(
                 child: RichText(

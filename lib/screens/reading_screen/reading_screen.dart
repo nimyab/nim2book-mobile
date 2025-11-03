@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/contexts/loading_book_context.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/loading_book_cubit.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/book_reading.dart';
-import 'package:provider/provider.dart';
 
 class ReadingScreen extends StatefulWidget {
   final String bookId;
@@ -15,11 +15,10 @@ class ReadingScreen extends StatefulWidget {
 class _ReadingScreenState extends State<ReadingScreen> {
   @override
   Widget build(final BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (final context) => LoadingBookContext(bookId: widget.bookId),
-      builder: (final context, final child) {
-        return const BookReading();
-      },
+    return BlocProvider<LoadingBookCubit>(
+      create: (final context) =>
+          LoadingBookCubit(bookId: widget.bookId)..getBookData(),
+      child: const BookReading(),
     );
   }
 }

@@ -596,4 +596,9 @@
   "@periodRepeatedWords": {"description": "Слова, повторенные в период", "placeholders": {"count": {"type": "int"}}},
   "periodBecameKnownWords": "Стали известными: {count}",
   "@periodBecameKnownWords": {"description": "Слова, ставшие известными в период", "placeholders": {"count": {"type": "int"}}}
+  ,
+  "noResults": "Нет результатов",
+  "@noResults": {
+    "description": "Отображается, когда поиск не даёт результатов"
+  }
 }

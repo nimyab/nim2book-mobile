@@ -170,6 +170,8 @@ class BookService {
 
       await _sharedPreferences.remove('current_chapter_${book.id}');
       await _sharedPreferences.remove('chapter_progress_${book.id}');
+      await _sharedPreferences.remove('reading_current_chapter_${book.id}');
+      await _sharedPreferences.remove('reading_progress_${book.id}');
     } catch (e) {
       _logger.w('Cleanup error for book ${book.id}: $e');
     }

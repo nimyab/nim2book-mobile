@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/contexts/reading_settings_context.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/reading_settings_cubit.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/models/word_item.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/original_paragraph_painter.dart';
 import 'package:nim2book_mobile_flutter/features/translated_dialog/widgets/translated_dialog.dart';
-import 'package:provider/provider.dart';
 
 class OriginalParagraph extends StatefulWidget {
   final List<WordItem> paragraph;
@@ -30,6 +30,11 @@ class OriginalParagraph extends StatefulWidget {
 class _OriginalParagraphState extends State<OriginalParagraph> {
   late String _paragraphText;
   late List<_WordRange> _wordRanges;
+  TextPainter? _tp;
+  double? _lastMaxWidth;
+  String? _lastStyleSig;
+  TextAlign? _lastTextAlign;
+  double? _lastIndentEm;
 
   @override
   void initState() {
@@ -64,6 +69,8 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
 
     _paragraphText = sb.toString();
     _wordRanges = ranges;
+    // Инвалидируем кэш разметки при изменении текста
+    _tp = null;
   }
 
   void _handleWordTap(final WordItem wordItem) {
@@ -93,25 +100,40 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
 
   @override
   Widget build(final BuildContext context) {
-    final readingSettings = context.watch<ReadingSettingsContext>();
+    final fontFamily = context.select(
+      (final ReadingSettingsCubit c) => c.state.fontFamily,
+    );
+    final fontSize = context.select(
+      (final ReadingSettingsCubit c) => c.state.fontSize,
+    );
+    final lineHeight = context.select(
+      (final ReadingSettingsCubit c) => c.state.lineHeight,
+    );
+    final textColor = context.select(
+      (final ReadingSettingsCubit c) => c.state.textColor,
+    );
+    final textAlign = context.select(
+      (final ReadingSettingsCubit c) => c.state.textAlign,
+    );
+    final firstLineIndentEm = context.select(
+      (final ReadingSettingsCubit c) => c.state.firstLineIndentEm,
+    );
     final readingColors = Theme.of(context).extension<BookReadingColors>()!;
 
-    // Создаем уникальный ключ на основе fontFamily для принудительной перестройки
-    final family = readingSettings.fontFamily;
     final baseStyle = TextStyle(
-      fontSize: readingSettings.fontSize,
-      height: readingSettings.lineHeight,
-      color: readingSettings.textColor,
+      fontSize: fontSize,
+      height: lineHeight,
+      color: textColor,
       // Добавляем fontFamily в baseStyle для гарантии обновления
-      fontFamily: family.toLowerCase() == 'system' ? null : family,
+      fontFamily: fontFamily.toLowerCase() == 'system' ? null : fontFamily,
     );
 
     TextStyle style;
-    if (family.toLowerCase() == 'system') {
+    if (fontFamily.toLowerCase() == 'system') {
       style = baseStyle;
     } else {
       try {
-        style = GoogleFonts.getFont(family, textStyle: baseStyle);
+        style = GoogleFonts.getFont(fontFamily, textStyle: baseStyle);
       } catch (_) {
         style = baseStyle;
       }
@@ -119,36 +141,49 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
 
     return LayoutBuilder(
       builder: (final context, final constraints) {
-        final indentWidth =
-            (style.fontSize ?? 24) * (readingSettings.firstLineIndentEm);
+        final indentWidth = (style.fontSize ?? 24) * (firstLineIndentEm);
         const indentCharCount = 1;
-
-        final textSpan = TextSpan(
-          children: [
-            WidgetSpan(child: SizedBox(width: indentWidth)),
-            TextSpan(text: _paragraphText, style: style),
-          ],
-        );
-
-        final tp = TextPainter(
-          text: textSpan,
-          textAlign: readingSettings.textAlign,
-          textDirection: TextDirection.ltr,
-        );
-
-        tp.setPlaceholderDimensions([
-          PlaceholderDimensions(
-            size: Size(
-              indentWidth,
-              (style.fontSize ?? 24) * (style.height ?? 1.0),
+        // Кэшируем разметку абзаца: пересчитываем только при изменении ширины/стиля
+        final styleSig =
+            '${style.fontFamily}|${style.fontSize}|${style.height}|${style.color?.toARGB32()}';
+        final needsLayout =
+            _tp == null ||
+            _lastMaxWidth != constraints.maxWidth ||
+            _lastStyleSig != styleSig ||
+            _lastTextAlign != textAlign ||
+            _lastIndentEm != firstLineIndentEm;
+        if (needsLayout) {
+          final textSpan = TextSpan(
+            children: [
+              const WidgetSpan(
+                child: SizedBox(),
+              ), // placeholder, dimensions below
+              TextSpan(text: _paragraphText, style: style),
+            ],
+          );
+          final tp = TextPainter(
+            text: textSpan,
+            textAlign: textAlign,
+            textDirection: TextDirection.ltr,
+          );
+          tp.setPlaceholderDimensions([
+            PlaceholderDimensions(
+              size: Size(
+                indentWidth,
+                (style.fontSize ?? 24) * (style.height ?? 1.0),
+              ),
+              alignment: PlaceholderAlignment.middle,
+              baseline: null,
+              baselineOffset: 0,
             ),
-            alignment: PlaceholderAlignment.middle,
-            baseline: null,
-            baselineOffset: 0,
-          ),
-        ]);
-
-        tp.layout(maxWidth: constraints.maxWidth);
+          ]);
+          tp.layout(maxWidth: constraints.maxWidth);
+          _tp = tp;
+          _lastMaxWidth = constraints.maxWidth;
+          _lastStyleSig = styleSig;
+          _lastTextAlign = textAlign;
+          _lastIndentEm = firstLineIndentEm;
+        }
 
         _WordRange? selectedRange;
         if (widget.paragraphIndex == widget.selectedParagraphIndex &&
@@ -172,7 +207,7 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
             final dx = local.dx;
             if (dx < 0) return;
             // Получаем позицию в тексте с учетом отступа.
-            final pos = tp.getPositionForOffset(Offset(dx, local.dy));
+            final pos = _tp!.getPositionForOffset(Offset(dx, local.dy));
             final offset = pos.offset;
 
             if (offset < indentCharCount) return;
@@ -193,13 +228,15 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
           },
           child: SizedBox(
             width: double.infinity,
-            height: tp.height,
-            child: CustomPaint(
-              painter: OriginalParagraphPainter(
-                textPainter: tp,
-                selectionStart: selectionStart,
-                selectionEnd: selectionEnd,
-                highlightColor: readingColors.highlightBackgroundColor,
+            height: _tp!.height,
+            child: RepaintBoundary(
+              child: CustomPaint(
+                painter: OriginalParagraphPainter(
+                  textPainter: _tp!,
+                  selectionStart: selectionStart,
+                  selectionEnd: selectionEnd,
+                  highlightColor: readingColors.highlightBackgroundColor,
+                ),
               ),
             ),
           ),

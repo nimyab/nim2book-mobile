@@ -504,4 +504,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String periodBecameKnownWords(int count) {
     return 'Became known: $count';
   }
+
+  @override
+  String get noResults => 'No results';
 }

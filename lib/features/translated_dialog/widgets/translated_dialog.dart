@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/web.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
-import 'package:nim2book_mobile_flutter/core/contexts/dictionary_context.dart';
+import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_cubit.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 class TranslatedDialog extends StatefulWidget {
   final String phrase;
@@ -26,7 +26,7 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
       setState(() {
         _isLoading = true;
       });
-      final definitions = await context.read<DictionaryContext>().getWord(
+      final definitions = await context.read<DictionaryCubit>().getWord(
         widget.phrase,
       );
       if (definitions != null) _definitions.addAll(definitions);
@@ -50,9 +50,9 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final isDark = theme.brightness == Brightness.dark;
-    final dictContext = context.watch<DictionaryContext>();
-
-    final isInDict = dictContext.checkWordInDict(widget.phrase);
+    final isInDict = context.select(
+      (final DictionaryCubit c) => c.checkWordInDict(widget.phrase),
+    );
 
     final backgroundColor = isDark
         ? theme.colorScheme.surface
@@ -95,10 +95,15 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
                     constraints: const BoxConstraints(),
                     onPressed: () {
                       if (isInDict) {
-                        dictContext.deleteWord(widget.phrase);
+                        context.read<DictionaryCubit>().deleteWord(
+                          widget.phrase,
+                        );
                       } else {
                         if (_definitions.isEmpty) return;
-                        dictContext.saveWord(widget.phrase, _definitions);
+                        context.read<DictionaryCubit>().saveWord(
+                          widget.phrase,
+                          _definitions,
+                        );
                       }
                     },
                   ),

@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading_cubit.dart';
 
 class SelectChapterButtons extends StatelessWidget {
   const SelectChapterButtons({super.key});
 
   @override
   Widget build(final BuildContext context) {
-    final readingContext = context.watch<BookReadingContext>();
+    final readingState = context.watch<BookReadingCubit>().state;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       spacing: 20,
       children: [
-        if (readingContext.currentChapterIndex > 0)
+        if (readingState.currentChapterIndex > 0)
           IconButton.filledTonal(
-            onPressed: () => readingContext.goToPreviousChapter(),
+            onPressed: () =>
+                context.read<BookReadingCubit>().goToPreviousChapter(),
             icon: const Icon(Icons.arrow_back),
           ),
-        if (readingContext.currentChapterIndex <
-            readingContext.totalChapters - 1)
+        if (readingState.currentChapterIndex < readingState.chapters.length - 1)
           IconButton.filledTonal(
-            onPressed: () => readingContext.goToNextChapter(),
+            onPressed: () => context.read<BookReadingCubit>().goToNextChapter(),
             icon: const Icon(Icons.arrow_forward),
           ),
       ],

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading_cubit.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/reading_settings_cubit.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 const double bookAppBarHeight = 64;
 
@@ -16,15 +17,15 @@ class BookReadingBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final readingContext = context.watch<BookReadingContext>();
+    final readingState = context.watch<BookReadingCubit>().state;
     final theme = Theme.of(context);
-    final percent = readingContext.totalChapters == 0
+    final total = readingState.chapters.length;
+    final percent = total == 0
         ? 0
-        : (((readingContext.currentChapterIndex + 1) /
-                      readingContext.totalChapters) *
-                  100)
-              .round();
-    final chapterTitle = readingContext.currentChapter.title;
+        : (((readingState.currentChapterIndex + 1) / total) * 100).round();
+    final chapterTitle = readingState.chapters.isEmpty
+        ? ''
+        : readingState.chapters[readingState.currentChapterIndex].title;
 
     return AppBar(
       centerTitle: false,
@@ -49,13 +50,21 @@ class BookReadingBar extends StatelessWidget implements PreferredSizeWidget {
           message: AppLocalizations.of(context)!.translate,
           child: IconButton(
             icon: Icon(
-              readingContext.isTranslatedVisible
+              context.select(
+                    (final ReadingSettingsCubit c) =>
+                        c.state.isTranslatedVisible,
+                  )
                   ? Icons.keyboard_arrow_up
                   : Icons.keyboard_arrow_down,
             ),
             onPressed: () {
-              readingContext.isTranslatedVisible =
-                  !readingContext.isTranslatedVisible;
+              final visible = context
+                  .read<ReadingSettingsCubit>()
+                  .state
+                  .isTranslatedVisible;
+              context.read<ReadingSettingsCubit>().setTranslatedVisible(
+                value: !visible,
+              );
             },
           ),
         ),

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nim2book_mobile_flutter/core/contexts/auth_context.dart';
+import 'package:nim2book_mobile_flutter/core/bloc/auth/auth_cubit.dart';
 import 'package:nim2book_mobile_flutter/core/router/router.dart';
-import 'package:nim2book_mobile_flutter/features/books/contexts/books_context.dart';
+import 'package:nim2book_mobile_flutter/features/books/bloc/books_cubit.dart';
 import 'package:nim2book_mobile_flutter/features/books/widgets/book_card.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 class BooksScreen extends StatefulWidget {
   const BooksScreen({super.key});
@@ -18,45 +18,45 @@ class _BooksScreenState extends State<BooksScreen> {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final authContext = context.watch<AuthContext>();
+    final isAuthenticated = context.select(
+      (final AuthCubit c) => c.state.isAuthenticated,
+    );
+    final isVIP = context.select((final AuthCubit c) => c.state.isVIP);
+
+    final booksState = context.watch<BooksCubit>().state;
+    final books = booksState.allBooks;
+    final isFetching = booksState.isFetching;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.books)),
-      body: Consumer<BooksContext>(
-        builder: (final context, final value, final child) {
-          final books = value.allBooks;
-          final isFetching = value.isFetchingBooks;
-
-          return isFetching
-              ? const Center(child: CircularProgressIndicator())
-              : books.isEmpty
-              ? Center(child: Text(l10n.noBooksFound))
-              : Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: ListView.separated(
-                    separatorBuilder: (final context, final index) =>
-                        const SizedBox(height: 15),
-                    itemCount: books.length,
-                    itemBuilder: (final context, final index) {
-                      final book = books[index];
-                      final tag = 'book-cover-${book.id}-books';
-                      return BookCard(
-                        key: ValueKey(book.id),
-                        book: book,
-                        heroTag: tag,
-                        onTap: () => context.push(
-                          '/book/${book.id}',
-                          extra: BookRouteExtra(heroTag: tag, book: book),
-                        ),
-                      );
-                    },
-                  ),
-                );
-        },
-      ),
-      floatingActionButton: authContext.isAuthenticated
+      body: isFetching
+          ? const Center(child: CircularProgressIndicator())
+          : books.isEmpty
+          ? Center(child: Text(l10n.noBooksFound))
+          : Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: ListView.separated(
+                separatorBuilder: (final context, final index) =>
+                    const SizedBox(height: 15),
+                itemCount: books.length,
+                itemBuilder: (final context, final index) {
+                  final book = books[index];
+                  final tag = 'book-cover-${book.id}-books';
+                  return BookCard(
+                    key: ValueKey(book.id),
+                    book: book,
+                    heroTag: tag,
+                    onTap: () => context.push(
+                      '/book/${book.id}',
+                      extra: BookRouteExtra(heroTag: tag, book: book),
+                    ),
+                  );
+                },
+              ),
+            ),
+      floatingActionButton: isAuthenticated
           ? FloatingActionButton(
-              onPressed: authContext.isVIP
+              onPressed: isVIP
                   ? () => context.push('/add-book')
                   : () {
                       ScaffoldMessenger.of(context).showSnackBar(

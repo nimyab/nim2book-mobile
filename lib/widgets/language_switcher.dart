@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nim2book_mobile_flutter/core/contexts/locale_context.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nim2book_mobile_flutter/core/bloc/locale/locale_cubit.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 class LanguageSwitcher extends StatelessWidget {
   const LanguageSwitcher({super.key});
@@ -9,7 +9,12 @@ class LanguageSwitcher extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final localeContext = context.watch<LocaleContext>();
+    final currentLocale = context.select(
+      (final LocaleCubit c) => c.state.currentLocale,
+    );
+    final supportedLocales = context.select(
+      (final LocaleCubit c) => c.state.supportedLocales,
+    );
 
     return Card(
       child: Padding(
@@ -25,7 +30,7 @@ class LanguageSwitcher extends StatelessWidget {
               ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             DropdownButtonFormField<Locale>(
-              initialValue: localeContext.currentLocale,
+              initialValue: currentLocale,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 contentPadding: EdgeInsets.symmetric(
@@ -33,21 +38,21 @@ class LanguageSwitcher extends StatelessWidget {
                   vertical: 8,
                 ),
               ),
-              items: localeContext.supportedLocales.map((final locale) {
+              items: supportedLocales.map((final locale) {
                 return DropdownMenuItem<Locale>(
                   value: locale,
                   child: Row(
                     children: [
                       Icon(_getLanguageIcon(locale), size: 20),
                       const SizedBox(width: 8),
-                      Text(localeContext.getLanguageName(locale)),
+                      Text(context.read<LocaleCubit>().getLanguageName(locale)),
                     ],
                   ),
                 );
               }).toList(),
               onChanged: (final Locale? value) {
                 if (value != null) {
-                  localeContext.changeLocale(value);
+                  context.read<LocaleCubit>().changeLocale(value);
                 }
               },
             ),
@@ -75,20 +80,25 @@ class LanguageSwitcherTile extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final localeContext = context.watch<LocaleContext>();
+    final currentLocale = context.select(
+      (final LocaleCubit c) => c.state.currentLocale,
+    );
+    final supportedLocales = context.select(
+      (final LocaleCubit c) => c.state.supportedLocales,
+    );
 
     return ListTile(
       leading: const Icon(Icons.language),
       title: Text(l10n.language),
       subtitle: Text(
-        localeContext.getLanguageName(
-          localeContext.currentLocale ?? const Locale('en'),
+        context.read<LocaleCubit>().getLanguageName(
+          currentLocale ?? const Locale('en'),
         ),
       ),
       trailing: DropdownButton<Locale>(
-        value: localeContext.currentLocale,
+        value: currentLocale,
         underline: const SizedBox(),
-        items: localeContext.supportedLocales.map((final locale) {
+        items: supportedLocales.map((final locale) {
           return DropdownMenuItem<Locale>(
             value: locale,
             child: Row(
@@ -96,14 +106,14 @@ class LanguageSwitcherTile extends StatelessWidget {
               children: [
                 Icon(_getLanguageIcon(locale), size: 16),
                 const SizedBox(width: 8),
-                Text(localeContext.getLanguageName(locale)),
+                Text(context.read<LocaleCubit>().getLanguageName(locale)),
               ],
             ),
           );
         }).toList(),
         onChanged: (final Locale? value) {
           if (value != null) {
-            localeContext.changeLocale(value);
+            context.read<LocaleCubit>().changeLocale(value);
           }
         },
       ),

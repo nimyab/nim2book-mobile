@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nim2book_mobile_flutter/core/contexts/dictionary_context.dart';
+import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_cubit.dart';
 import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
 import 'package:nim2book_mobile_flutter/features/srs/logic/srs_stats_utils.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/widgets/stats_bar_chart.dart';
-import 'package:provider/provider.dart';
 
 class LearningScreen extends StatefulWidget {
   const LearningScreen({super.key});
@@ -104,8 +104,9 @@ class _LearningScreenState extends State<LearningScreen> {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final dictContext = context.watch<DictionaryContext>();
-    final savedWords = dictContext.savedWords;
+    final savedWords = context.select(
+      (final DictionaryCubit c) => c.state.savedWords,
+    );
     final theme = Theme.of(context);
     final srs = GetIt.I.get<SrsService>();
     final now = DateTime.now();

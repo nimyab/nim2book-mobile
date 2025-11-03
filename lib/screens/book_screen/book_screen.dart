@@ -5,9 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
 import 'package:nim2book_mobile_flutter/core/services/book_service.dart';
-import 'package:nim2book_mobile_flutter/features/books/contexts/books_context.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nim2book_mobile_flutter/features/books/bloc/books_cubit.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 class BookScreen extends StatefulWidget {
   final String bookId;
@@ -53,13 +53,13 @@ class _BookScreenState extends State<BookScreen> {
 
   @override
   Widget build(final BuildContext context) {
-    final booksContext = context.watch<BooksContext>();
+    final booksState = context.watch<BooksCubit>().state;
     final l10n = AppLocalizations.of(context)!;
 
     final currentBook = book;
     final isLoading = this.isLoading;
     final isMyBook = currentBook != null
-        ? booksContext.myBooks.any((final b) => b.id == currentBook.id)
+        ? booksState.myBooks.any((final b) => b.id == currentBook.id)
         : false;
 
     final coverUrl = currentBook?.cover != null
@@ -127,7 +127,8 @@ class _BookScreenState extends State<BookScreen> {
               ),
               if (!isMyBook)
                 ElevatedButton.icon(
-                  onPressed: () => booksContext.addMyBook(currentBook),
+                  onPressed: () =>
+                      context.read<BooksCubit>().addMyBook(currentBook),
                   icon: const Icon(Icons.add),
                   label: Text(l10n.addToMyBooks),
                 )
@@ -143,7 +144,8 @@ class _BookScreenState extends State<BookScreen> {
                       label: Text(l10n.readBook),
                     ),
                     OutlinedButton.icon(
-                      onPressed: () => booksContext.removeMyBook(currentBook),
+                      onPressed: () =>
+                          context.read<BooksCubit>().removeMyBook(currentBook),
                       icon: const Icon(Icons.delete_outline),
                       label: Text(l10n.delete),
                     ),

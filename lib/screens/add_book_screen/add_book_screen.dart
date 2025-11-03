@@ -8,9 +8,9 @@ import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
-import 'package:nim2book_mobile_flutter/features/books/contexts/books_context.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nim2book_mobile_flutter/features/books/bloc/books_cubit.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 class AddBookScreen extends StatefulWidget {
   final Book? initialBook;
@@ -213,7 +213,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                   ? null
                   : () {
                       _uploadBook((final book) {
-                        context.read<BooksContext>().addMyBook(book);
+                        context.read<BooksCubit>().addMyBook(book);
                         context.go('/my-books');
                       });
                     },

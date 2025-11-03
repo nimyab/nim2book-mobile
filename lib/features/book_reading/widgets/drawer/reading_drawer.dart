@@ -1,36 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/contexts/loading_book_context.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/loading_book_cubit.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/reading_settings_cubit.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/drawer/chapter_list_tab.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/drawer/drawer_header_actions.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/drawer/search_sheet.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/drawer/text_settings_tab.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 class ReadingDrawer extends StatelessWidget {
   const ReadingDrawer({super.key});
 
   void _openSearchSheet(final BuildContext context) {
-    final loadingBookContext = context.read<LoadingBookContext>();
-    final chapters = loadingBookContext.chapters;
-    final readingContext = context.read<BookReadingContext>();
+    final loadingState = context.read<LoadingBookCubit>().state;
+    final chapters = loadingState.chapters;
 
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      builder: (_) =>
-          SearchSheet(chapters: chapters, readingContext: readingContext),
+      builder: (_) => SearchSheet(chapters: chapters),
     );
   }
 
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final loadingBookContext = context.watch<LoadingBookContext>();
-    final readingContext = context.watch<BookReadingContext>();
-    final chapters = loadingBookContext.chapters;
+    final loadingState = context.watch<LoadingBookCubit>().state;
+    final isFullscreen = context.select(
+      (final ReadingSettingsCubit c) => c.state.isFullscreen,
+    );
+    final chapters = loadingState.chapters;
 
     return Drawer(
       child: SafeArea(
@@ -39,13 +39,16 @@ class ReadingDrawer extends StatelessWidget {
           child: Column(
             children: [
               DrawerHeaderActions(
-                isFullscreen: readingContext.isFullscreen,
+                isFullscreen: isFullscreen,
                 onClose: () {
                   Navigator.of(context).maybePop();
                 },
                 onToggleFullscreen: () async {
-                  readingContext.isFullscreen = !readingContext.isFullscreen;
-                  if (readingContext.isFullscreen) {
+                  final newValue = !isFullscreen;
+                  context.read<ReadingSettingsCubit>().setFullscreen(
+                    value: newValue,
+                  );
+                  if (newValue) {
                     await SystemChrome.setEnabledSystemUIMode(
                       SystemUiMode.immersiveSticky,
                     );

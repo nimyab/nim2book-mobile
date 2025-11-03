@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/contexts/reading_settings_context.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading_cubit.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/reading_settings_cubit.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/logic/chapter_converter.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/models/word_item.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/original_paragraph.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/select_chapter_buttons.dart';
-import 'package:provider/provider.dart';
 
 class OriginalTextScroll extends StatefulWidget {
   const OriginalTextScroll({super.key, this.translatedScrollController});
@@ -22,6 +24,8 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
   bool _isInitialized = false;
   final Map<int, GlobalKey> _paragraphKeys = {};
   int _lastScrolledToParagraph = -1;
+  List<List<WordItem>> _convertedParagraphs = const [];
+  int _lastChapterIndexForConvert = -1;
 
   GlobalKey _keyForParagraph(final int index) {
     return _paragraphKeys.putIfAbsent(index, () => GlobalKey());
@@ -32,8 +36,11 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
     super.initState();
 
     // Инициализируем контроллер сразу с нужной позицией, чтобы избежать скачка
-    final chapterProgress = context.read<BookReadingContext>().chapterProgress;
-    _scrollController = ScrollController(initialScrollOffset: chapterProgress);
+    final readingState = context.read<BookReadingCubit>().state;
+    final initialOffset = context.read<BookReadingCubit>().getChapterProgress(
+      readingState.currentChapterIndex,
+    );
+    _scrollController = ScrollController(initialScrollOffset: initialOffset);
 
     // Отмечаем как инициализированный после первого фрейма
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -58,30 +65,55 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
     _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 200), () {
       if (_scrollController.hasClients) {
-        final readingContext = context.read<BookReadingContext>();
-        readingContext.setChapterProgress(_scrollController.offset);
+        final cubit = context.read<BookReadingCubit>();
+        cubit.setChapterProgress(
+          cubit.state.currentChapterIndex,
+          _scrollController.offset,
+        );
       }
     });
   }
 
   @override
   Widget build(final BuildContext context) {
-    final readingSettingsContext = context.watch<ReadingSettingsContext>();
-    final readingContext = context.watch<BookReadingContext>();
-    final paragraphCount = readingContext.currentParagraphCount;
-    final currentChapterIndex = readingContext.currentChapterIndex;
-    final currentChapter = readingContext.currentChapter;
+    final sidePadding = context.select(
+      (final ReadingSettingsCubit c) => c.state.sidePadding,
+    );
+    final paragraphSpacing = context.select(
+      (final ReadingSettingsCubit c) => c.state.paragraphSpacing,
+    );
+    final fontSize = context.select(
+      (final ReadingSettingsCubit c) => c.state.fontSize,
+    );
+    final readingState = context.watch<BookReadingCubit>().state;
+    final currentChapterIndex = readingState.currentChapterIndex;
+    final currentChapter = readingState.chapters[currentChapterIndex];
+    final paragraphCount = currentChapter.content.length;
     final chapterTitle = currentChapter.title;
 
-    final selectedParagraph = readingContext.selectedParagraphIndex;
-    if (selectedParagraph >= 0 &&
+    // Предрасчет конвертации абзацев только при смене главы
+    if (_lastChapterIndexForConvert != currentChapterIndex ||
+        _convertedParagraphs.length != paragraphCount) {
+      _convertedParagraphs = List.generate(
+        paragraphCount,
+        (final i) =>
+            ChapterConverter.convertParagraph(currentChapter.content[i], i),
+      );
+      _lastChapterIndexForConvert = currentChapterIndex;
+    }
+
+    final selectedParagraph = readingState.selectedParagraphIndex ?? -1;
+    final hasWordSelected = readingState.selectedWordIndex != null;
+    // Не скроллим оригинальный текст при выборе слова, только при выборе абзаца
+    if (!hasWordSelected &&
+        selectedParagraph >= 0 &&
         selectedParagraph != _lastScrolledToParagraph) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final ctx = _paragraphKeys[selectedParagraph]?.currentContext;
         if (ctx != null) {
           Scrollable.ensureVisible(
             ctx,
-            duration: const Duration(milliseconds: 450),
+            duration: const Duration(milliseconds: 300),
             alignment: 0.2,
             curve: Curves.easeInOut,
           );
@@ -129,14 +161,14 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
             }
             return Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: readingSettingsContext.sidePadding,
-                vertical: (readingSettingsContext.paragraphSpacing) * 3.5,
+                horizontal: sidePadding,
+                vertical: (paragraphSpacing) * 3.5,
               ),
               child: Text(
                 chapterTitle,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  fontSize: (readingSettingsContext.fontSize) * 1.4,
+                  fontSize: (fontSize) * 1.4,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -148,13 +180,11 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
           }
 
           final paragraphIndex = index - 1;
-          final paragraphConverted = readingContext.getParagraphItems(
-            paragraphIndex,
-          );
+          final paragraphConverted = _convertedParagraphs[paragraphIndex];
           return Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: readingSettingsContext.sidePadding,
-              vertical: readingSettingsContext.paragraphSpacing,
+              horizontal: sidePadding,
+              vertical: paragraphSpacing,
             ),
             child: Container(
               key: _keyForParagraph(paragraphIndex),
@@ -164,9 +194,10 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
                 ),
                 paragraph: paragraphConverted,
                 paragraphIndex: paragraphIndex,
-                selectedParagraphIndex: readingContext.selectedParagraphIndex,
-                selectedWordIndex: readingContext.selectedWordIndex,
-                selectWord: readingContext.selectWord,
+                selectedParagraphIndex:
+                    readingState.selectedParagraphIndex ?? -1,
+                selectedWordIndex: readingState.selectedWordIndex ?? -1,
+                selectWord: context.read<BookReadingCubit>().selectWord,
               ),
             ),
           );

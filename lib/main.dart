@@ -1,19 +1,22 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:logger/logger.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
-import 'package:nim2book_mobile_flutter/core/contexts/auth_context.dart';
-import 'package:nim2book_mobile_flutter/core/contexts/dictionary_context.dart';
-import 'package:nim2book_mobile_flutter/core/contexts/locale_context.dart';
-import 'package:nim2book_mobile_flutter/core/contexts/theme_context.dart';
+import 'package:nim2book_mobile_flutter/core/bloc/app_bloc_observer.dart';
+import 'package:nim2book_mobile_flutter/core/bloc/auth/auth_cubit.dart';
+import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_cubit.dart';
+import 'package:nim2book_mobile_flutter/core/bloc/locale/locale_cubit.dart';
+import 'package:nim2book_mobile_flutter/core/bloc/theme/theme_cubit.dart';
 import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/router/router.dart';
 import 'package:nim2book_mobile_flutter/core/services/book_service.dart';
+import 'package:nim2book_mobile_flutter/core/services/locale_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/dictionary_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/fmc_token_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
@@ -21,15 +24,16 @@ import 'package:nim2book_mobile_flutter/core/services/theme_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/data/reading_settings_service.dart';
-import 'package:nim2book_mobile_flutter/features/books/contexts/books_context.dart';
+import 'package:nim2book_mobile_flutter/features/books/bloc/books_cubit.dart';
 import 'package:nim2book_mobile_flutter/firebase_options.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
+// provider removed after Bloc migration
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:intl/intl.dart' as intl; // Optional: set default locale if needed
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Bloc.observer = AppBlocObserver();
 
   // Initialize Intl date symbols for supported locales to avoid web runtime crashes
   // when using DateFormat (e.g., DateFormat.MMMd()).
@@ -72,6 +76,10 @@ void main() async {
   final bookService = BookService();
   GetIt.I.registerSingleton(bookService);
 
+  // Регистрируем LocaleService для LocaleCubit
+  final localeService = LocaleService();
+  GetIt.I.registerSingleton(localeService);
+
   final themeService = ThemeService();
   GetIt.I.registerSingleton(themeService);
 
@@ -95,13 +103,13 @@ class Nim2BookApp extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return MultiProvider(
+    return MultiBlocProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthContext()),
-        ChangeNotifierProvider(create: (_) => BooksContext()),
-        ChangeNotifierProvider(create: (_) => ThemeContext()),
-        ChangeNotifierProvider(create: (_) => LocaleContext()),
-        ChangeNotifierProvider(create: (_) => DictionaryContext()),
+        BlocProvider(create: (_) => AuthCubit()),
+        BlocProvider(create: (_) => BooksCubit()),
+        BlocProvider(create: (_) => ThemeCubit()),
+        BlocProvider(create: (_) => LocaleCubit()),
+        BlocProvider(create: (_) => DictionaryCubit()),
       ],
       child: _AppInitializer(),
     );
@@ -118,35 +126,28 @@ class _AppInitializerState extends State<_AppInitializer> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AuthContext>().getUser();
-      context.read<BooksContext>().initial();
-      context.read<ThemeContext>().initialize();
-      context.read<LocaleContext>().initialize();
+      // Initialize Cubits
+      context.read<AuthCubit>().getUser();
+      context.read<ThemeCubit>().initialize();
+      context.read<LocaleCubit>().initialize();
+      context.read<BooksCubit>().initialize();
     });
   }
 
   @override
   Widget build(final BuildContext context) {
-    return Consumer2<ThemeContext, LocaleContext>(
-      builder:
-          (
-            final context,
-            final themeContext,
-            final localeContext,
-            final child,
-          ) {
-            return MaterialApp.router(
-              routerConfig: router,
-              // theme
-              theme: AppThemes.lightTheme,
-              darkTheme: AppThemes.darkTheme,
-              themeMode: themeContext.themeMode,
-              // locale
-              locale: localeContext.currentLocale,
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              supportedLocales: AppLocalizations.supportedLocales,
-            );
-          },
+    final themeMode = context.select((final ThemeCubit c) => c.state.themeMode);
+    final locale = context.select(
+      (final LocaleCubit c) => c.state.currentLocale,
+    );
+    return MaterialApp.router(
+      routerConfig: router,
+      theme: AppThemes.lightTheme,
+      darkTheme: AppThemes.darkTheme,
+      themeMode: themeMode,
+      locale: locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
     );
   }
 }

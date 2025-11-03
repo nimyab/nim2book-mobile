@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/contexts/book_reading_context.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading_cubit.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 class SearchResult {
@@ -21,12 +22,7 @@ class SearchResult {
 
 class SearchSheet extends StatefulWidget {
   final List<ChapterAlignNode> chapters;
-  final BookReadingContext readingContext;
-  const SearchSheet({
-    super.key,
-    required this.chapters,
-    required this.readingContext,
-  });
+  const SearchSheet({super.key, required this.chapters});
 
   @override
   State<SearchSheet> createState() => _SearchSheetState();
@@ -157,7 +153,7 @@ class _SearchSheetState extends State<SearchSheet> {
                     child: _results.isEmpty
                         ? Center(
                             child: Text(
-                              _query.isEmpty ? l10n.search : 'No results',
+                              _query.isEmpty ? l10n.search : l10n.noResults,
                             ),
                           )
                         : ListView.separated(
@@ -179,12 +175,13 @@ class _SearchSheetState extends State<SearchSheet> {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 onTap: () {
-                                  final rc = widget.readingContext;
+                                  final cubit = context
+                                      .read<BookReadingCubit>();
                                   Navigator.of(context).pop();
-                                  rc.goToChapter(r.chapterIndex);
+                                  cubit.goToChapter(r.chapterIndex);
                                   if (r.paragraphIndex >= 0 &&
                                       r.wordIndex >= 0) {
-                                    rc.selectWord(
+                                    cubit.selectWord(
                                       r.paragraphIndex,
                                       r.wordIndex,
                                     );

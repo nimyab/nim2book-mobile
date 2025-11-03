@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:nim2book_mobile_flutter/core/contexts/auth_context.dart';
-import 'package:nim2book_mobile_flutter/core/models/user/user.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nim2book_mobile_flutter/core/bloc/auth/auth_cubit.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/widgets/daily_new_limit_switcher.dart';
 import 'package:nim2book_mobile_flutter/widgets/language_switcher.dart';
 import 'package:nim2book_mobile_flutter/widgets/theme_switcher.dart';
-import 'package:provider/provider.dart';
 
 class UserProfile extends StatelessWidget {
   const UserProfile({super.key});
@@ -13,13 +12,11 @@ class UserProfile extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final user = context.select<AuthContext, User?>(
-      (final value) => value.user,
+    final user = context.select((final AuthCubit c) => c.state.user);
+    final isAuthLoading = context.select(
+      (final AuthCubit c) => c.state.isLoading,
     );
-    final isAuthLoading = context.select<AuthContext, bool>(
-      (final value) => value.isLoading,
-    );
-    final logout = context.read<AuthContext>().logout;
+    final logout = context.read<AuthCubit>().logout;
 
     return Padding(
       padding: const EdgeInsets.all(16.0),

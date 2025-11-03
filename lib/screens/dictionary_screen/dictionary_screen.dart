@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:nim2book_mobile_flutter/core/contexts/dictionary_context.dart';
+import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_cubit.dart';
 import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
 import 'package:nim2book_mobile_flutter/features/translated_dialog/widgets/translated_dialog.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 class DictionaryScreen extends StatelessWidget {
   const DictionaryScreen({super.key});
@@ -12,8 +12,9 @@ class DictionaryScreen extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final dictContext = context.watch<DictionaryContext>();
-    final savedWords = dictContext.savedWords;
+    final savedWords = context.select(
+      (final DictionaryCubit c) => c.state.savedWords,
+    );
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -147,8 +148,7 @@ class DictionaryScreen extends StatelessWidget {
                                   final word = controller.text.trim();
                                   if (word.isEmpty) return;
                                   Navigator.of(dialogContext).pop();
-                                  final dict = context
-                                      .read<DictionaryContext>();
+                                  final dict = context.read<DictionaryCubit>();
                                   final defs = await dict.getWord(word);
                                   await dict.saveWord(word, defs ?? []);
                                 },

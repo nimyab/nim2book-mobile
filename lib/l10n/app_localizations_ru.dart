@@ -506,4 +506,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String periodBecameKnownWords(int count) {
     return 'Стали известными: $count';
   }
+
+  @override
+  String get noResults => 'Нет результатов';
 }
