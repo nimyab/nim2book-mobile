@@ -79,10 +79,14 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
           widget.selectedWordIndex == wordItem.wordIndex)) {
         widget.selectWord(wordItem.paragraphIndex!, wordItem.wordIndex!);
       } else {
+        final regExp = RegExp(r'[А-Яа-яA-Za-z]+');
+        final match = regExp.firstMatch(wordItem.wordText);
+        if (match == null) return;
+        final wordText = match.group(0)!;
         showDialog<void>(
           context: context,
           builder: (final context) {
-            return TranslatedDialog(phrase: wordItem.wordText);
+            return TranslatedDialog(phrase: wordText);
           },
         );
       }
