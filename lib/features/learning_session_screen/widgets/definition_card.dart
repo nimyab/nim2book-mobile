@@ -5,10 +5,7 @@ import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 class DefinitionCard extends StatelessWidget {
   final Definition definition;
 
-  const DefinitionCard({
-    super.key,
-    required this.definition,
-  });
+  const DefinitionCard({super.key, required this.definition});
 
   String _getPartOfSpeechLabel(final BuildContext context, final String? pos) {
     if (pos == null) return '';
@@ -104,8 +101,9 @@ class DefinitionCard extends StatelessWidget {
                             .join(', '),
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontStyle: FontStyle.italic,
-                          color: theme.colorScheme.onSurface
-                              .withValues(alpha: 0.8),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.8,
+                          ),
                         ),
                       ),
                     ),
@@ -119,8 +117,9 @@ class DefinitionCard extends StatelessWidget {
                           Text(
                             l10n.examplesLabel,
                             style: theme.textTheme.labelMedium?.copyWith(
-                              color: theme.colorScheme.onSurface
-                                  .withValues(alpha: 0.7),
+                              color: theme.colorScheme.onSurface.withValues(
+                                alpha: 0.7,
+                              ),
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -145,8 +144,8 @@ class DefinitionCard extends StatelessWidget {
                                     ...example.tr!.map(
                                       (final exampleTranslation) => Text(
                                         '→ ${exampleTranslation.text}',
-                                        style:
-                                            theme.textTheme.bodySmall?.copyWith(
+                                        style: theme.textTheme.bodySmall
+                                            ?.copyWith(
                                               color: theme.colorScheme.onSurface
                                                   .withValues(alpha: 0.7),
                                             ),

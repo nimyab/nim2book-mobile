@@ -29,9 +29,9 @@ class LearningSessionState extends Equatable {
 
   @override
   List<Object?> get props => [
-        sessionWords,
-        currentWordIndex,
-        showTranslation,
-        sessionEmpty,
-      ];
+    sessionWords,
+    currentWordIndex,
+    showTranslation,
+    sessionEmpty,
+  ];
 }

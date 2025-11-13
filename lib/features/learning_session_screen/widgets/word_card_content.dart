@@ -41,8 +41,9 @@ class WordCardContent extends StatelessWidget {
                   Text(
                     '[${definitions.first.ts}]',
                     style: theme.textTheme.bodyLarge?.copyWith(
-                      color: theme.colorScheme.onPrimaryContainer
-                          .withValues(alpha: 0.8),
+                      color: theme.colorScheme.onPrimaryContainer.withValues(
+                        alpha: 0.8,
+                      ),
                       fontStyle: FontStyle.italic,
                     ),
                   ),
@@ -50,12 +51,14 @@ class WordCardContent extends StatelessWidget {
                 if (showTranslation) ...[
                   const SizedBox(height: 24),
                   Divider(
-                    color: theme.colorScheme.onPrimaryContainer
-                        .withValues(alpha: 0.3),
+                    color: theme.colorScheme.onPrimaryContainer.withValues(
+                      alpha: 0.3,
+                    ),
                     thickness: 1,
                   ),
                   ...definitions.map(
-                    (final definition) => DefinitionCard(definition: definition),
+                    (final definition) =>
+                        DefinitionCard(definition: definition),
                   ),
                 ] else ...[
                   const SizedBox(height: 80),
@@ -66,8 +69,9 @@ class WordCardContent extends StatelessWidget {
                         vertical: 12,
                       ),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.onPrimaryContainer
-                            .withValues(alpha: 0.1),
+                        color: theme.colorScheme.onPrimaryContainer.withValues(
+                          alpha: 0.1,
+                        ),
                         borderRadius: BorderRadius.circular(25),
                         border: Border.all(
                           color: theme.colorScheme.onPrimaryContainer
@@ -95,8 +99,9 @@ class WordCardContent extends StatelessWidget {
           child: Text(
             showTranslation ? l10n.swipeInstructions : l10n.tapToTranslate,
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onPrimaryContainer
-                  .withValues(alpha: 0.6),
+              color: theme.colorScheme.onPrimaryContainer.withValues(
+                alpha: 0.6,
+              ),
             ),
             textAlign: TextAlign.center,
           ),

@@ -449,6 +449,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String activeNewTodayCount(int count) {
+    return 'Studying now: $count new words';
+  }
+
+  @override
   String totalLearnedWords(int count) {
     return 'Total learned words: $count';
   }

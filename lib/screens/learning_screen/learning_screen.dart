@@ -1,9 +1,12 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_cubit.dart';
 import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
+import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
 import 'package:nim2book_mobile_flutter/features/srs/logic/srs_stats_utils.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/widgets/stats_bar_chart.dart';
@@ -18,6 +21,7 @@ class LearningScreen extends StatefulWidget {
 class _LearningScreenState extends State<LearningScreen> {
   StatsPeriod _period = StatsPeriod.last7;
   VoidCallback? _srsDailyNewListener;
+  static const bool isMock = false;
 
   // Сессионные карточки убраны из этого экрана
 
@@ -80,12 +84,15 @@ class _LearningScreenState extends State<LearningScreen> {
                 DropdownButton<StatsPeriod>(
                   value: _period,
                   isExpanded: true,
-                  items: StatsPeriod.values.map((final p) {
-                    return DropdownMenuItem(
-                      value: p,
-                      child: Text(_periodLabel(l10n, p)),
-                    );
-                  }).toList(),
+                  items: StatsPeriod.values
+                      .where((final p) => p != StatsPeriod.allTime)
+                      .map((final p) {
+                        return DropdownMenuItem(
+                          value: p,
+                          child: Text(_periodLabel(l10n, p)),
+                        );
+                      })
+                      .toList(),
                   onChanged: (final val) {
                     if (val == null) return;
                     setState(() => _period = val);
@@ -113,7 +120,7 @@ class _LearningScreenState extends State<LearningScreen> {
     final items = savedWords.keys
         .map((final w) => srs.getOrCreateItem(w))
         .toList();
-    final usedToday = srs.getDailyNewCount(now: now);
+    var usedToday = srs.getDailyNewCount(now: now);
     final dailyLimit = srs.getDailyNewLimit();
     final availableSlots = (dailyLimit - usedToday).clamp(0, dailyLimit);
     final reviewDueCount = items
@@ -135,41 +142,130 @@ class _LearningScreenState extends State<LearningScreen> {
     final hasReview = reviewDueCount > 0;
     final hasMixed = mixedDueCount > 0;
 
-    final activeCount = items
-        .where((final i) => i.lastReviewedAt != null)
-        .length;
-    final learnedTotal = items.where((final i) => i.repetition >= 3).length;
-    final repeatedTotal = items.where((final i) => i.repetition >= 1).length;
-    final knownTotal = items.where((final i) => i.repetition >= 8).length;
+    var learnedTotal = items.where((final i) => i.repetition >= 3).length;
+    var repeatedTotal = items.where((final i) => i.repetition >= 1).length;
+    var knownTotal = items.where((final i) => i.repetition >= 8).length;
 
     final periodRange = computeRange(items, now, _period);
     final bucketDays = periodRange.bucketDays;
-    final buckets = buildBuckets(
-      periodRange.start,
-      periodRange.end,
-      bucketDays,
-    );
-    final learnedByBucket = countLearnedByBucket(items, buckets, bucketDays);
-    final repeatedByBucket = countByBucket(items, buckets, bucketDays);
-    final knownByBucket = countKnownByBucket(items, buckets, bucketDays);
+    var buckets = buildBuckets(periodRange.start, periodRange.end, bucketDays);
+    var learnedByBucket = countLearnedByBucket(items, buckets, bucketDays);
+    var repeatedByBucket = countByBucket(items, buckets, bucketDays);
+    var knownByBucket = countKnownByBucket(items, buckets, bucketDays);
 
-    final periodFirstLearned = items.where((final i) {
+    var periodFirstLearned = items.where((final i) {
       final d = i.lastReviewedAt;
       if (d == null) return false;
       return isInRange(d, periodRange.start, periodRange.end) &&
           i.repetition >= 3;
     }).length;
-    final periodRepeated = items.where((final i) {
+    var periodRepeated = items.where((final i) {
       final d = i.lastReviewedAt;
       if (d == null) return false;
       return isInRange(d, periodRange.start, periodRange.end);
     }).length;
-    final periodKnown = items.where((final i) {
+    var periodKnown = items.where((final i) {
       final d = i.lastReviewedAt;
       if (d == null) return false;
       return isInRange(d, periodRange.start, periodRange.end) &&
           i.repetition >= 8;
     }).length;
+
+    if (isMock) {
+      final today = DateTime(now.year, now.month, now.day);
+      final mockStart = today.subtract(const Duration(days: 729));
+      final rnd = math.Random(42);
+
+      final mockDays = today.difference(mockStart).inDays + 1;
+      final learnedDaily = List<int>.generate(mockDays, (final i) {
+        const base = 3;
+        const amp = 4;
+        final seasonal = math.sin(i / 14.0) * amp;
+        final noise = rnd.nextInt(3);
+        final v = (base + seasonal + noise).round();
+        return v < 0 ? 0 : v;
+      });
+      final repeatedDaily = List<int>.generate(mockDays, (final i) {
+        return (learnedDaily[i] ~/ 2) + rnd.nextInt(2);
+      });
+      final knownDaily = List<int>.generate(mockDays, (final i) {
+        return (learnedDaily[i] ~/ 3);
+      });
+
+      int idxOf(final DateTime d) {
+        final ds = DateTime(d.year, d.month, d.day);
+        return ds.difference(mockStart).inDays;
+      }
+
+      int sumRange(final DateTime s, final DateTime e, final List<int> src) {
+        final si = idxOf(s);
+        final ei = idxOf(e);
+        var sum = 0;
+        for (var i = si; i <= ei; i++) {
+          if (i >= 0 && i < src.length) sum += src[i];
+        }
+        return sum;
+      }
+
+      final effectiveStart = periodRange.start.isBefore(mockStart)
+          ? mockStart
+          : periodRange.start;
+      buckets = buildBuckets(effectiveStart, periodRange.end, bucketDays);
+
+      learnedByBucket = List<int>.generate(buckets.length, (final i) {
+        final s = buckets[i];
+        final e = s.add(Duration(days: bucketDays - 1));
+        return sumRange(s, e, learnedDaily);
+      });
+      repeatedByBucket = List<int>.generate(buckets.length, (final i) {
+        final s = buckets[i];
+        final e = s.add(Duration(days: bucketDays - 1));
+        return sumRange(s, e, repeatedDaily);
+      });
+      knownByBucket = List<int>.generate(buckets.length, (final i) {
+        final s = buckets[i];
+        final e = s.add(Duration(days: bucketDays - 1));
+        return sumRange(s, e, knownDaily);
+      });
+
+      // Дополнительно мокируем агрегаты для статистики
+      final totalLearned = learnedDaily.fold<int>(
+        0,
+        (final a, final b) => a + b,
+      );
+      final totalRepeated = repeatedDaily.fold<int>(
+        0,
+        (final a, final b) => a + b,
+      );
+      final totalKnown = knownDaily.fold<int>(0, (final a, final b) => a + b);
+
+      final periodLearnedSum = sumRange(
+        effectiveStart,
+        periodRange.end,
+        learnedDaily,
+      );
+      final periodRepeatedSum = sumRange(
+        effectiveStart,
+        periodRange.end,
+        repeatedDaily,
+      );
+      final periodKnownSum = sumRange(
+        effectiveStart,
+        periodRange.end,
+        knownDaily,
+      );
+
+      learnedTotal = totalLearned;
+      repeatedTotal = totalRepeated;
+      knownTotal = totalKnown;
+
+      usedToday = sumRange(today, today, learnedDaily);
+
+      // Периодические значения для правой колонки статистики
+      periodFirstLearned = periodLearnedSum;
+      periodRepeated = periodRepeatedSum;
+      periodKnown = periodKnownSum;
+    }
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.learning), centerTitle: true),
@@ -270,50 +366,6 @@ class _LearningScreenState extends State<LearningScreen> {
 
             // Убраны кнопки "Пролистать слова" и "Автоматический режим"
             const SizedBox(height: 12),
-            // Блок статистики
-            Row(
-              children: [
-                Expanded(
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            l10n.learnedTodayProgress(usedToday, dailyLimit),
-                            style: theme.textTheme.titleMedium,
-                          ),
-                          Text(
-                            l10n.periodStatsHeader,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            l10n.activeLearningCount(activeCount),
-                            style: theme.textTheme.titleMedium,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
 
             const SizedBox(height: 12),
             Card(
@@ -323,16 +375,26 @@ class _LearningScreenState extends State<LearningScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          _periodLabel(l10n, _period),
+                          '${l10n.period}: ',
                           style: theme.textTheme.titleMedium,
                         ),
-                        TextButton.icon(
-                          onPressed: () => _openPeriodPicker(context, l10n),
-                          icon: const Icon(Icons.filter_list),
-                          label: Text(l10n.periodStatsHeader),
+                        InkWell(
+                          onTap: () => _openPeriodPicker(context, l10n),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 4.0,
+                              vertical: 2.0,
+                            ),
+                            child: Text(
+                              _periodLabel(l10n, _period),
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                color: theme.colorScheme.primary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -343,12 +405,19 @@ class _LearningScreenState extends State<LearningScreen> {
                         repeated: repeatedByBucket,
                         known: knownByBucket,
                         buckets: buckets,
-                        learnedColor: theme.colorScheme.primary,
-                        repeatedColor: theme.colorScheme.secondary,
-                        knownColor: theme.colorScheme.tertiary,
+                        learnedColor: Theme.of(
+                          context,
+                        ).extension<ChartColors>()!.learned,
+                        repeatedColor: Theme.of(
+                          context,
+                        ).extension<ChartColors>()!.repeated,
+                        knownColor: Theme.of(
+                          context,
+                        ).extension<ChartColors>()!.known,
                         legendLearnedLabel: l10n.chartLegendLearned,
                         legendRepeatedLabel: l10n.chartLegendRepeated,
                         legendKnownLabel: l10n.chartLegendKnown,
+                        noResultsLabel: l10n.noResults,
                       ),
                     ),
                   ],
@@ -360,69 +429,173 @@ class _LearningScreenState extends State<LearningScreen> {
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  l10n.learnedTodayProgress(usedToday, dailyLimit),
+                  style: theme.textTheme.titleMedium,
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 12),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      l10n.periodStatsHeader,
-                      style: theme.textTheme.titleMedium,
-                    ),
                     Row(
                       children: [
-                        Expanded(
-                          child: Text(
-                            l10n.totalLearnedWords(learnedTotal),
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.secondary,
-                              fontWeight: FontWeight.w600,
+                        Opacity(
+                          opacity: 0.0,
+                          child: Container(
+                            width: 10,
+                            height: 10,
+                            margin: const EdgeInsets.only(right: 8),
+                            decoration: BoxDecoration(
+                              color: Theme.of(
+                                context,
+                              ).extension<ChartColors>()!.learned,
+                              borderRadius: BorderRadius.circular(2),
                             ),
+                          ),
+                        ),
+                        const Expanded(child: SizedBox.shrink()),
+                        SizedBox(
+                          width: 64,
+                          child: Text(
+                            l10n.chartLegendTotal,
+                            textAlign: TextAlign.right,
+                            style: theme.textTheme.titleMedium,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 64,
+                          child: Text(
+                            _periodLabel(l10n, _period),
+                            textAlign: TextAlign.right,
+                            style: theme.textTheme.titleMedium,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          margin: const EdgeInsets.only(right: 8),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.primary,
+                            borderRadius: BorderRadius.circular(2),
                           ),
                         ),
                         Expanded(
                           child: Text(
-                            l10n.totalRepeatedWords(repeatedTotal),
+                            l10n.chartLegendLearned,
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 64,
+                          child: Text(
+                            '$learnedTotal',
+                            textAlign: TextAlign.right,
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.secondary,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
-                        Expanded(
+                        SizedBox(
+                          width: 64,
                           child: Text(
-                            l10n.totalKnownWords(knownTotal),
+                            '$periodFirstLearned',
+                            textAlign: TextAlign.right,
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.secondary,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
                       ],
                     ),
+                    const SizedBox(height: 8),
                     Row(
                       children: [
-                        Expanded(
-                          child: Text(
-                            l10n.periodFirstLearnedWords(periodFirstLearned),
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.primary,
-                              fontWeight: FontWeight.w600,
-                            ),
+                        Container(
+                          width: 10,
+                          height: 10,
+                          margin: const EdgeInsets.only(right: 8),
+                          decoration: BoxDecoration(
+                            color: Theme.of(
+                              context,
+                            ).extension<ChartColors>()!.repeated,
+                            borderRadius: BorderRadius.circular(2),
                           ),
                         ),
                         Expanded(
                           child: Text(
-                            l10n.periodRepeatedWords(periodRepeated),
+                            l10n.chartLegendRepeated,
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 64,
+                          child: Text(
+                            '$repeatedTotal',
+                            textAlign: TextAlign.right,
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.primary,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
+                        SizedBox(
+                          width: 64,
+                          child: Text(
+                            '$periodRepeated',
+                            textAlign: TextAlign.right,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          margin: const EdgeInsets.only(right: 8),
+                          decoration: BoxDecoration(
+                            color: Theme.of(
+                              context,
+                            ).extension<ChartColors>()!.known,
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
                         Expanded(
                           child: Text(
-                            l10n.periodBecameKnownWords(periodKnown),
+                            l10n.chartLegendKnown,
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 64,
+                          child: Text(
+                            '$knownTotal',
+                            textAlign: TextAlign.right,
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.primary,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 64,
+                          child: Text(
+                            '$periodKnown',
+                            textAlign: TextAlign.right,
+                            style: theme.textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.w600,
                             ),
                           ),

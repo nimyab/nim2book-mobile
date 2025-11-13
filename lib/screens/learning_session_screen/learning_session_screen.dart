@@ -27,14 +27,17 @@ class LearningSessionScreen extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final savedWords =
-        context.read<DictionaryCubit>().state.savedWords.keys.toList();
+    final savedWords = context
+        .read<DictionaryCubit>()
+        .state
+        .savedWords
+        .keys
+        .toList();
 
     return BlocProvider(
-      create: (final context) => LearningSessionCubit(
-        mode: mode,
-        allSavedWords: savedWords,
-      )..initializeSession(),
+      create: (final context) =>
+          LearningSessionCubit(mode: mode, allSavedWords: savedWords)
+            ..initializeSession(),
       child: Scaffold(
         appBar: AppBar(title: Text(_getTitle(context)), centerTitle: true),
         body: const LearningSessionContent(),

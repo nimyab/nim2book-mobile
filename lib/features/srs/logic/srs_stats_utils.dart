@@ -45,7 +45,8 @@ StatsRange computeRange(
           .whereType<DateTime>()
           .toList();
       if (reviewedDates.isEmpty) {
-        return StatsRange(today.subtract(const Duration(days: 6)), today, 1);
+        final start = today.subtract(const Duration(days: 89));
+        return StatsRange(start, today, 7);
       }
       reviewedDates.sort((final a, final b) => a.compareTo(b));
       final start = DateTime(

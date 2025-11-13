@@ -13,6 +13,7 @@ class StatsBarChart extends StatelessWidget {
   final String legendLearnedLabel;
   final String legendRepeatedLabel;
   final String legendKnownLabel;
+  final String? noResultsLabel;
 
   const StatsBarChart({
     super.key,
@@ -26,11 +27,22 @@ class StatsBarChart extends StatelessWidget {
     required this.legendLearnedLabel,
     required this.legendRepeatedLabel,
     required this.legendKnownLabel,
+    this.noResultsLabel,
   });
 
   @override
   Widget build(final BuildContext context) {
-    final labelTextStyle = TextStyle(color: Colors.grey.shade600, fontSize: 10);
+    final theme = Theme.of(context);
+    final gridColor = theme.colorScheme.onSurfaceVariant.withValues(
+      alpha: 0.28,
+    );
+    final axisColor = theme.colorScheme.onSurfaceVariant.withValues(
+      alpha: 0.40,
+    );
+    final labelTextStyle = TextStyle(
+      color: theme.colorScheme.onSurfaceVariant,
+      fontSize: 10,
+    );
 
     int maxOf(final List<int> list) => list.isEmpty
         ? 0
@@ -46,6 +58,7 @@ class StatsBarChart extends StatelessWidget {
       maxKnown,
     ].reduce((final a, final b) => a > b ? a : b);
     final chartMaxY = (globalMax == 0 ? 1 : globalMax).toDouble();
+    final hasData = buckets.isNotEmpty && globalMax > 0;
 
     double textWidth(final String t) {
       final tp = TextPainter(
@@ -66,16 +79,9 @@ class StatsBarChart extends StatelessWidget {
 
     final leftReservedSize = maxLabelWidth + 8;
 
-    Widget legendItem(final Color c, final String label) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(width: 10, height: 10, color: c),
-          const SizedBox(width: 4),
-          Text(label, style: labelTextStyle),
-        ],
-      );
-    }
+    final leftLabelInterval = chartMaxY == 0
+        ? 1.0
+        : (chartMaxY / 4).ceilToDouble();
 
     final localeCode = Localizations.localeOf(context).languageCode;
     final dateFmt = intl.DateFormat.MMMd(localeCode);
@@ -89,129 +95,150 @@ class StatsBarChart extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            legendItem(learnedColor, legendLearnedLabel),
-            const SizedBox(width: 12),
-            legendItem(repeatedColor, legendRepeatedLabel),
-            const SizedBox(width: 12),
-            legendItem(knownColor, legendKnownLabel),
-          ],
-        ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 12),
         Expanded(
-          child: LayoutBuilder(
-            builder: (final ctx, final constraints) {
-              final groupCount = buckets.length;
-              final isVeryDense = groupCount >= 90;
-              final isDense = !isVeryDense && groupCount >= 30;
-              final dynamicBarWidth = isVeryDense ? 2.0 : (isDense ? 3.0 : 8.0);
-              final dynamicBarsSpace = isVeryDense
-                  ? 1.0
-                  : (isDense ? 1.0 : 2.0);
-              final dynamicGroupsSpace = isVeryDense
-                  ? 1.0
-                  : (isDense ? 2.0 : 8.0);
+          child: hasData
+              ? LayoutBuilder(
+                  builder: (final ctx, final constraints) {
+                    final groupCount = buckets.length;
+                    final isVeryDense = groupCount >= 90;
+                    final isDense = !isVeryDense && groupCount >= 30;
+                    final dynamicLineWidth = isVeryDense
+                        ? 1.2
+                        : (isDense ? 1.6 : 2.2);
 
-              return BarChart(
-                BarChartData(
-                  minY: 0,
-                  maxY: chartMaxY,
-                  groupsSpace: dynamicGroupsSpace,
-                  barGroups: List.generate(buckets.length, (final i) {
-                    return BarChartGroupData(
-                      x: i,
-                      barsSpace: dynamicBarsSpace,
-                      barRods: [
-                        BarChartRodData(
-                          toY: (i < learned.length ? learned[i] : 0).toDouble(),
-                          color: learnedColor.withValues(alpha: 0.85),
-                          width: dynamicBarWidth,
+                    return LineChart(
+                      LineChartData(
+                        minX: 0,
+                        maxX: (buckets.isEmpty ? 0 : buckets.length - 1)
+                            .toDouble(),
+                        minY: 0,
+                        maxY: chartMaxY,
+                        gridData: FlGridData(
+                          show: true,
+                          horizontalInterval: (chartMaxY == 0
+                              ? 1
+                              : (chartMaxY / 4).ceilToDouble()),
+                          getDrawingHorizontalLine: (final value) => FlLine(
+                            color: gridColor,
+                            strokeWidth: 0.8,
+                            dashArray: const [4, 4],
+                          ),
+                          getDrawingVerticalLine: (final value) => FlLine(
+                            color: gridColor,
+                            strokeWidth: 0.8,
+                            dashArray: const [4, 4],
+                          ),
                         ),
-                        BarChartRodData(
-                          toY: (i < repeated.length ? repeated[i] : 0)
-                              .toDouble(),
-                          color: repeatedColor.withValues(alpha: 0.85),
-                          width: dynamicBarWidth,
+                        borderData: FlBorderData(
+                          show: true,
+                          border: Border(
+                            bottom: BorderSide(color: axisColor, width: 1),
+                            left: BorderSide(color: axisColor, width: 1),
+                            right: BorderSide(color: axisColor, width: 1),
+                            top: BorderSide(color: axisColor, width: 1),
+                          ),
                         ),
-                        BarChartRodData(
-                          toY: (i < known.length ? known[i] : 0).toDouble(),
-                          color: knownColor.withValues(alpha: 1.0),
-                          width: dynamicBarWidth,
+                        titlesData: FlTitlesData(
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: leftReservedSize,
+                              interval: leftLabelInterval,
+                              getTitlesWidget: (final value, final meta) {
+                                final isZero = (value.abs() < 1e-6);
+                                final isMax =
+                                    ((chartMaxY - value).abs() < 1e-6);
+                                final ratio = value / leftLabelInterval;
+                                final isMultiple =
+                                    ((ratio.roundToDouble() - ratio).abs() <
+                                    1e-6);
+                                if (!isZero && !isMultiple && !isMax) {
+                                  return const SizedBox.shrink();
+                                }
+                                final t = value.round().toString();
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 4),
+                                  child: Text(t, style: labelTextStyle),
+                                );
+                              },
+                            ),
+                          ),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 28,
+                              interval: step.toDouble(),
+                              getTitlesWidget: (final value, final meta) {
+                                final i = value.toInt();
+                                if (i < 0 || i >= buckets.length) {
+                                  return const SizedBox.shrink();
+                                }
+                                if (i % step != 0) {
+                                  return const SizedBox.shrink();
+                                }
+                                final label = dateFmt.format(buckets[i]);
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 4),
+                                  child: Text(label, style: labelTextStyle),
+                                );
+                              },
+                            ),
+                          ),
+                          rightTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          topTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
                         ),
-                      ],
+                        lineTouchData: const LineTouchData(enabled: false),
+                        lineBarsData: [
+                          LineChartBarData(
+                            color: learnedColor,
+                            isCurved: false,
+                            barWidth: dynamicLineWidth,
+                            dotData: const FlDotData(show: false),
+                            spots: List.generate(buckets.length, (final i) {
+                              final y = (i < learned.length ? learned[i] : 0)
+                                  .toDouble();
+                              return FlSpot(i.toDouble(), y);
+                            }),
+                          ),
+                          LineChartBarData(
+                            color: repeatedColor,
+                            isCurved: false,
+                            barWidth: dynamicLineWidth,
+                            dotData: const FlDotData(show: false),
+                            spots: List.generate(buckets.length, (final i) {
+                              final y = (i < repeated.length ? repeated[i] : 0)
+                                  .toDouble();
+                              return FlSpot(i.toDouble(), y);
+                            }),
+                          ),
+                          LineChartBarData(
+                            color: knownColor,
+                            isCurved: false,
+                            barWidth: dynamicLineWidth,
+                            dotData: const FlDotData(show: false),
+                            spots: List.generate(buckets.length, (final i) {
+                              final y = (i < known.length ? known[i] : 0)
+                                  .toDouble();
+                              return FlSpot(i.toDouble(), y);
+                            }),
+                          ),
+                        ],
+                      ),
                     );
-                  }),
-                  gridData: FlGridData(
-                    show: true,
-                    drawVerticalLine: true,
-                    horizontalInterval: (chartMaxY == 0
-                        ? 1
-                        : (chartMaxY / 4).ceilToDouble()),
-                    getDrawingHorizontalLine: (final value) =>
-                        FlLine(color: Colors.grey.shade300, strokeWidth: 0.5),
-                    getDrawingVerticalLine: (final value) =>
-                        FlLine(color: Colors.grey.shade300, strokeWidth: 0.5),
+                  },
+                )
+              : Center(
+                  child: Text(
+                    noResultsLabel ?? '',
+                    style: labelTextStyle,
+                    textAlign: TextAlign.center,
                   ),
-                  borderData: FlBorderData(
-                    show: true,
-                    border: Border(
-                      bottom: BorderSide(color: Colors.grey.shade400, width: 1),
-                      left: BorderSide(color: Colors.grey.shade400, width: 1),
-                    ),
-                  ),
-                  titlesData: FlTitlesData(
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: leftReservedSize,
-                        interval: chartMaxY, // только 0 и максимум
-                        getTitlesWidget: (final value, final meta) {
-                          final isZero = (value.abs() < 1e-6);
-                          final isMax = ((chartMaxY - value).abs() < 1e-6);
-                          if (!isZero && !isMax) return const SizedBox.shrink();
-                          final t = value.round().toString();
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 4),
-                            child: Text(t, style: labelTextStyle),
-                          );
-                        },
-                      ),
-                    ),
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 28,
-                        interval: step.toDouble(),
-                        getTitlesWidget: (final value, final meta) {
-                          final i = value.toInt();
-                          if (i < 0 || i >= buckets.length) {
-                            return const SizedBox.shrink();
-                          }
-                          if (i % step != 0) {
-                            return const SizedBox.shrink();
-                          }
-                          final label = dateFmt.format(buckets[i]);
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 4),
-                            child: Text(label, style: labelTextStyle),
-                          );
-                        },
-                      ),
-                    ),
-                    rightTitles: const AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                    topTitles: const AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                  ),
-                  barTouchData: BarTouchData(enabled: false),
                 ),
-              );
-            },
-          ),
         ),
       ],
     );

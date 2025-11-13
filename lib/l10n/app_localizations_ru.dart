@@ -451,6 +451,11 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String activeNewTodayCount(int count) {
+    return 'Изучается сейчас: $count новых слов';
+  }
+
+  @override
   String totalLearnedWords(int count) {
     return 'Всего выученных слов: $count';
   }
