@@ -552,6 +552,8 @@
   "@periodAllTime": {"description": "Опция периода — за всё время"},
   "activeLearningCount": "Сейчас изучается: {count}",
   "@activeLearningCount": {"description": "Количество слов, изучающихся сейчас", "placeholders": {"count": {"type": "int"}}},
+  "activeNewTodayCount": "Изучается сейчас: {count} новых слов",
+  "@activeNewTodayCount": {"description": "Количество новых слов, изучаемых сегодня", "placeholders": {"count": {"type": "int"}}},
   "totalLearnedWords": "Всего выученных слов: {count}",
   "@totalLearnedWords": {"description": "Всего выученных слов", "placeholders": {"count": {"type": "int"}}},
   "totalRepeatedWords": "Всего повторенных слов: {count}",

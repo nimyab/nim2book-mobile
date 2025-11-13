@@ -552,6 +552,8 @@
   "@periodAllTime": {"description": "All time period option"},
   "activeLearningCount": "Currently learning: {count}",
   "@activeLearningCount": {"description": "Number of words currently being learned", "placeholders": {"count": {"type": "int"}}},
+  "activeNewTodayCount": "Studying now: {count} new words",
+  "@activeNewTodayCount": {"description": "Number of new words being studied today", "placeholders": {"count": {"type": "int"}}},
   "totalLearnedWords": "Total learned words: {count}",
   "@totalLearnedWords": {"description": "Total learned words", "placeholders": {"count": {"type": "int"}}},
   "totalRepeatedWords": "Total repeated words: {count}",
@@ -602,4 +604,3 @@
     "description": "Displayed when a search yields no results"
   }
 }
-

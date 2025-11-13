@@ -914,6 +914,12 @@ abstract class AppLocalizations {
   /// **'Currently learning: {count}'**
   String activeLearningCount(int count);
 
+  /// Number of new words being studied today
+  ///
+  /// In en, this message translates to:
+  /// **'Studying now: {count} new words'**
+  String activeNewTodayCount(int count);
+
   /// Total learned words
   ///
   /// In en, this message translates to:

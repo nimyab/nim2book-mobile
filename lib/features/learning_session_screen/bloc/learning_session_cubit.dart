@@ -10,15 +10,8 @@ class LearningSessionCubit extends Cubit<LearningSessionState> {
   final List<String> allSavedWords;
   final SrsService _srsService = GetIt.I.get<SrsService>();
 
-  LearningSessionCubit({
-    required this.mode,
-    required this.allSavedWords,
-  }) : super(
-          const LearningSessionState(
-            sessionWords: [],
-            currentWordIndex: 0,
-          ),
-        );
+  LearningSessionCubit({required this.mode, required this.allSavedWords})
+    : super(const LearningSessionState(sessionWords: [], currentWordIndex: 0));
 
   void initializeSession() {
     final now = DateTime.now();
@@ -94,12 +87,7 @@ class LearningSessionCubit extends Cubit<LearningSessionState> {
         ? 0
         : state.currentWordIndex.clamp(0, updatedDue.length - 1);
 
-    emit(
-      state.copyWith(
-        sessionWords: updatedDue,
-        currentWordIndex: newIndex,
-      ),
-    );
+    emit(state.copyWith(sessionWords: updatedDue, currentWordIndex: newIndex));
 
     _nextWord();
   }
@@ -107,12 +95,7 @@ class LearningSessionCubit extends Cubit<LearningSessionState> {
   void _nextWord() {
     final words = state.sessionWords;
     if (words.isEmpty) {
-      emit(
-        state.copyWith(
-          showTranslation: false,
-          currentWordIndex: 0,
-        ),
-      );
+      emit(state.copyWith(showTranslation: false, currentWordIndex: 0));
       return;
     }
 
@@ -120,11 +103,6 @@ class LearningSessionCubit extends Cubit<LearningSessionState> {
         ? state.currentWordIndex + 1
         : 0;
 
-    emit(
-      state.copyWith(
-        showTranslation: false,
-        currentWordIndex: newIndex,
-      ),
-    );
+    emit(state.copyWith(showTranslation: false, currentWordIndex: newIndex));
   }
 }

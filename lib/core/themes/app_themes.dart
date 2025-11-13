@@ -36,6 +36,7 @@ class AppThemes {
       extensions: const [
         TranslatedTextScrollColors.light,
         BookReadingColors.light,
+        ChartColors.light,
       ],
     );
   }
@@ -75,6 +76,7 @@ class AppThemes {
       extensions: const [
         TranslatedTextScrollColors.dark,
         BookReadingColors.dark,
+        ChartColors.dark,
       ],
     );
   }
@@ -163,6 +165,53 @@ class BookReadingColors extends ThemeExtension<BookReadingColors> {
         other.highlightTextColor,
         t,
       )!,
+    );
+  }
+}
+
+class ChartColors extends ThemeExtension<ChartColors> {
+  const ChartColors({
+    required this.learned,
+    required this.repeated,
+    required this.known,
+  });
+
+  final Color learned;
+  final Color repeated;
+  final Color known;
+
+  static const ChartColors light = ChartColors(
+    learned: Color(0xFF2962FF),
+    repeated: Color(0xFFFFD600),
+    known: Color(0xFFFF4081),
+  );
+
+  static const ChartColors dark = ChartColors(
+    learned: Color(0xFF82B1FF),
+    repeated: Color(0xFFEEFF41),
+    known: Color(0xFFFF80AB),
+  );
+
+  @override
+  ChartColors copyWith({
+    final Color? learned,
+    final Color? repeated,
+    final Color? known,
+  }) {
+    return ChartColors(
+      learned: learned ?? this.learned,
+      repeated: repeated ?? this.repeated,
+      known: known ?? this.known,
+    );
+  }
+
+  @override
+  ChartColors lerp(final ChartColors? other, final double t) {
+    if (other is! ChartColors) return this;
+    return ChartColors(
+      learned: Color.lerp(learned, other.learned, t)!,
+      repeated: Color.lerp(repeated, other.repeated, t)!,
+      known: Color.lerp(known, other.known, t)!,
     );
   }
 }
