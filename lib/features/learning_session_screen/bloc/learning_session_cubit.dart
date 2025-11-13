@@ -90,7 +90,7 @@ class LearningSessionCubit extends Cubit<LearningSessionState> {
     _srsService.updateWithRating(word, rating);
 
     final updatedDue = _srsService.getDueWords(allSavedWords);
-    final newIndex = state.sessionWords.isEmpty
+    final newIndex = updatedDue.isEmpty
         ? 0
         : state.currentWordIndex.clamp(0, updatedDue.length - 1);
 

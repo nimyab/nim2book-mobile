@@ -81,11 +81,6 @@ class _WordCardState extends State<WordCard> with TickerProviderStateMixin {
 
     _isDraggingNotifier.value = false;
 
-    if (!widget.showTranslation) {
-      _resetCard();
-      return;
-    }
-
     final dragX = _dragXNotifier.value;
     if (dragX.abs() > threshold || velocity.abs() > 500) {
       if (dragX > 0 || velocity > 0) {
