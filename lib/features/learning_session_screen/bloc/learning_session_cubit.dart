@@ -55,6 +55,8 @@ class LearningSessionCubit extends Cubit<LearningSessionState> {
         sessionWords: words,
         currentWordIndex: 0,
         sessionEmpty: isEmpty,
+        totalWordsStudied: 0,
+        initialSessionSize: words.length,
       ),
     );
   }
@@ -82,27 +84,51 @@ class LearningSessionCubit extends Cubit<LearningSessionState> {
     final word = state.sessionWords[state.currentWordIndex];
     _srsService.updateWithRating(word, rating);
 
-    final updatedDue = _srsService.getDueWords(allSavedWords);
-    final newIndex = updatedDue.isEmpty
-        ? 0
-        : state.currentWordIndex.clamp(0, updatedDue.length - 1);
+    final newTotalStudied = state.totalWordsStudied + 1;
 
-    emit(state.copyWith(sessionWords: updatedDue, currentWordIndex: newIndex));
+    // Get updated due words to remove words that are no longer due
+    final updatedDue = _srsService.getDueWords(allSavedWords);
+
+    emit(
+      state.copyWith(
+        totalWordsStudied: newTotalStudied,
+        sessionWords: updatedDue,
+      ),
+    );
 
     _nextWord();
   }
 
   void _nextWord() {
-    final words = state.sessionWords;
-    if (words.isEmpty) {
-      emit(state.copyWith(showTranslation: false, currentWordIndex: 0));
+    // Check if session is complete
+    if (state.totalWordsStudied >= state.initialSessionSize) {
+      emit(
+        state.copyWith(
+          showTranslation: false,
+          currentWordIndex: 0,
+          sessionEmpty: true,
+        ),
+      );
       return;
     }
 
-    final newIndex = state.currentWordIndex < words.length - 1
-        ? state.currentWordIndex + 1
-        : 0;
+    final words = state.sessionWords;
+    if (words.isEmpty) {
+      emit(
+        state.copyWith(
+          showTranslation: false,
+          currentWordIndex: 0,
+          sessionEmpty: true,
+        ),
+      );
+      return;
+    }
 
-    emit(state.copyWith(showTranslation: false, currentWordIndex: newIndex));
+    // Ensure currentIndex is valid for the updated word list
+    final safeIndex = state.currentWordIndex >= words.length
+        ? 0
+        : state.currentWordIndex;
+
+    emit(state.copyWith(showTranslation: false, currentWordIndex: safeIndex));
   }
 }

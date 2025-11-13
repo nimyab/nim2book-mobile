@@ -22,7 +22,7 @@ class SessionProgressBar extends StatelessWidget {
         children: [
           Text(
             l10n.wordProgress(
-              totalWords == 0 ? 0 : currentIndex + 1,
+              currentIndex,
               totalWords,
             ),
             style: theme.textTheme.bodyMedium?.copyWith(
@@ -31,7 +31,7 @@ class SessionProgressBar extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           LinearProgressIndicator(
-            value: totalWords == 0 ? 0 : (currentIndex + 1) / totalWords,
+            value: totalWords == 0 ? 0 : currentIndex / totalWords,
             backgroundColor: theme.colorScheme.surfaceContainerHighest,
             valueColor: AlwaysStoppedAnimation<Color>(
               theme.colorScheme.primary,

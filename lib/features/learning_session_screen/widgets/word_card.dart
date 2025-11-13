@@ -95,17 +95,17 @@ class _WordCardState extends State<WordCard> with TickerProviderStateMixin {
 
   void _animateSwipeRight() {
     _swipeController.forward().then((_) {
-      widget.onKnow();
-      _resetCard();
       _swipeController.reset();
+      _resetCardImmediately();
+      widget.onKnow();
     });
   }
 
   void _animateSwipeLeft() {
     _swipeController.forward().then((_) {
-      widget.onDontKnow();
-      _resetCard();
       _swipeController.reset();
+      _resetCardImmediately();
+      widget.onDontKnow();
     });
   }
 
@@ -117,6 +117,13 @@ class _WordCardState extends State<WordCard> with TickerProviderStateMixin {
       _scaleNotifier.value = 1.0;
       _resetController.reset();
     });
+  }
+
+  void _resetCardImmediately() {
+    _dragXNotifier.value = 0.0;
+    _dragYNotifier.value = 0.0;
+    _rotationNotifier.value = 0.0;
+    _scaleNotifier.value = 1.0;
   }
 
   @override

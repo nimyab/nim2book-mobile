@@ -107,8 +107,8 @@ class _LearningSessionContentState extends State<LearningSessionContent> {
             child: Column(
               children: [
                 SessionProgressBar(
-                  currentIndex: sessionState.currentWordIndex,
-                  totalWords: words.length,
+                  currentIndex: sessionState.totalWordsStudied,
+                  totalWords: sessionState.initialSessionSize,
                 ),
                 const SizedBox(height: 24),
                 Expanded(
