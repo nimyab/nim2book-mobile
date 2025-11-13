@@ -212,7 +212,7 @@ class _LearningScreenState extends State<LearningScreen> {
                     );
                     return;
                   }
-                  context.push('/learning/new');
+                  context.push('/learning-session/new');
                 },
               ),
             ),
@@ -238,7 +238,7 @@ class _LearningScreenState extends State<LearningScreen> {
                     );
                     return;
                   }
-                  context.push('/learning/review');
+                  context.push('/learning-session/review');
                 },
               ),
             ),
@@ -263,7 +263,7 @@ class _LearningScreenState extends State<LearningScreen> {
                     );
                     return;
                   }
-                  context.push('/learning/mixed');
+                  context.push('/learning-session/mixed');
                 },
               ),
             ),

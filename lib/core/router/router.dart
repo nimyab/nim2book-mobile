@@ -68,24 +68,6 @@ final router = GoRouter(
               name: 'learning-shell',
               builder: (final context, final state) => const LearningScreen(),
             ),
-            GoRoute(
-              path: '/learning/new',
-              name: 'learning-new',
-              builder: (final context, final state) =>
-                  const LearningSessionScreen(mode: LearningMode.newOnly),
-            ),
-            GoRoute(
-              path: '/learning/review',
-              name: 'learning-review',
-              builder: (final context, final state) =>
-                  const LearningSessionScreen(mode: LearningMode.reviewOnly),
-            ),
-            GoRoute(
-              path: '/learning/mixed',
-              name: 'learning-mixed',
-              builder: (final context, final state) =>
-                  const LearningSessionScreen(mode: LearningMode.mixed),
-            ),
           ],
         ),
         StatefulShellBranch(
@@ -96,6 +78,32 @@ final router = GoRouter(
               builder: (final context, final state) => const SettingsScreen(),
             ),
           ],
+        ),
+      ],
+    ),
+
+    GoRoute(
+      path: '/learning-session',
+      name: 'learning-session',
+      redirect: (_, _) => '/learning-session/mixed',
+      routes: [
+        GoRoute(
+          path: '/new',
+          name: 'learning-session-new',
+          builder: (final context, final state) =>
+              const LearningSessionScreen(mode: LearningMode.newOnly),
+        ),
+        GoRoute(
+          path: '/review',
+          name: 'learning-session-review',
+          builder: (final context, final state) =>
+              const LearningSessionScreen(mode: LearningMode.reviewOnly),
+        ),
+        GoRoute(
+          path: '/mixed',
+          name: 'learning-session-mixed',
+          builder: (final context, final state) =>
+              const LearningSessionScreen(mode: LearningMode.mixed),
         ),
       ],
     ),
