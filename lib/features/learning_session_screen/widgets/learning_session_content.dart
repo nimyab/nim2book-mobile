@@ -1,0 +1,171 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_cubit.dart';
+import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
+import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
+import 'package:nim2book_mobile_flutter/features/learning_session_screen/bloc/learning_session_cubit.dart';
+import 'package:nim2book_mobile_flutter/features/learning_session_screen/bloc/learning_session_state.dart';
+import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/session_progress_bar.dart';
+import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/word_card.dart';
+
+enum LearningMode { newOnly, reviewOnly, mixed }
+
+class LearningSessionContent extends StatefulWidget {
+  const LearningSessionContent({super.key});
+
+  @override
+  State<LearningSessionContent> createState() => _LearningSessionContentState();
+}
+
+class _LearningSessionContentState extends State<LearningSessionContent> {
+  bool _pendingEmptyNotification = false;
+
+  void _toggleTranslation() {
+    context.read<LearningSessionCubit>().toggleTranslation();
+  }
+
+  void _handleKnow() {
+    context.read<LearningSessionCubit>().handleKnow();
+  }
+
+  void _handleDontKnow() {
+    context.read<LearningSessionCubit>().handleDontKnow();
+  }
+
+  @override
+  Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    return BlocConsumer<LearningSessionCubit, LearningSessionState>(
+      listener: (final context, final state) {
+        if (state.sessionEmpty && !_pendingEmptyNotification) {
+          _pendingEmptyNotification = true;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) return;
+            final messenger = ScaffoldMessenger.of(context);
+            messenger.clearSnackBars();
+            final cubit = context.read<LearningSessionCubit>();
+            switch (cubit.mode) {
+              case LearningMode.newOnly:
+                messenger.showSnackBar(
+                  SnackBar(content: Text(l10n.noNewWordsToday)),
+                );
+                break;
+              case LearningMode.reviewOnly:
+                messenger.showSnackBar(
+                  SnackBar(content: Text(l10n.noReviewWordsDue)),
+                );
+                break;
+              case LearningMode.mixed:
+                messenger.showSnackBar(
+                  SnackBar(content: Text(l10n.noMixedSessionAvailable)),
+                );
+                break;
+            }
+            setState(() {
+              _pendingEmptyNotification = false;
+            });
+          });
+        }
+      },
+      builder: (final context, final sessionState) {
+        final savedWords = context.select(
+          (final DictionaryCubit c) => c.state.savedWords,
+        );
+
+        if (sessionState.sessionWords.isEmpty) {
+          final cubit = context.read<LearningSessionCubit>();
+          return Center(
+            child: Text(
+              switch (cubit.mode) {
+                LearningMode.newOnly => l10n.noNewWordsToday,
+                LearningMode.reviewOnly => l10n.noReviewWordsDue,
+                LearningMode.mixed => l10n.noMixedSessionAvailable,
+              },
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          );
+        }
+
+        final words = sessionState.sessionWords;
+        final safeIndex = sessionState.currentWordIndex.clamp(
+          0,
+          words.isNotEmpty ? words.length - 1 : 0,
+        );
+        final currentWord = words.isNotEmpty ? words[safeIndex] : '';
+        final currentDefinitions = currentWord.isNotEmpty
+            ? (savedWords[currentWord] ?? <Definition>[])
+            : <Definition>[];
+
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              children: [
+                SessionProgressBar(
+                  currentIndex: sessionState.currentWordIndex,
+                  totalWords: words.length,
+                ),
+                const SizedBox(height: 24),
+                Expanded(
+                  child: Center(
+                    child: WordCard(
+                      word: currentWord,
+                      definitions: currentDefinitions,
+                      showTranslation: sessionState.showTranslation,
+                      onToggleTranslation: _toggleTranslation,
+                      onKnow: _handleKnow,
+                      onDontKnow: _handleDontKnow,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: _handleDontKnow,
+                          icon: const Icon(Icons.refresh),
+                          label: Text(l10n.dontKnow),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: theme.colorScheme.surfaceContainer,
+                            foregroundColor: theme.colorScheme.error,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: _handleKnow,
+                          icon: const Icon(Icons.check),
+                          label: Text(l10n.know),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: theme.colorScheme.surfaceContainer,
+                            foregroundColor: theme.colorScheme.primary,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
