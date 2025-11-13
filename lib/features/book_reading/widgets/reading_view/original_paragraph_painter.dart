@@ -44,7 +44,7 @@ class OriginalParagraphPainter extends CustomPainter {
     final rangeChanged =
         (oldDelegate.selectionStart != selectionStart) ||
         (oldDelegate.selectionEnd != selectionEnd);
-    return oldDelegate.textPainter.text != textPainter.text ||
+    return oldDelegate.textPainter != textPainter ||
         rangeChanged ||
         oldDelegate.highlightColor != highlightColor;
   }
