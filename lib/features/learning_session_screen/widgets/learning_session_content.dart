@@ -111,7 +111,9 @@ class _LearningSessionContentState extends State<LearningSessionContent> {
                 Expanded(
                   child: Center(
                     child: WordCard(
-                      key: ValueKey('$currentWord-${sessionState.currentWordIndex}'),
+                      key: ValueKey(
+                        '$currentWord-${sessionState.currentWordIndex}',
+                      ),
                       word: currentWord,
                       definitions: currentDefinitions,
                       showTranslation: sessionState.showTranslation,

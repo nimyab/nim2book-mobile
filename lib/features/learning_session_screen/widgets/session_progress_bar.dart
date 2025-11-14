@@ -21,10 +21,7 @@ class SessionProgressBar extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            l10n.wordProgress(
-              currentIndex,
-              totalWords,
-            ),
+            l10n.wordProgress(currentIndex, totalWords),
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),

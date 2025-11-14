@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -15,6 +17,34 @@ class BooksScreen extends StatefulWidget {
 }
 
 class _BooksScreenState extends State<BooksScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  Timer? _debounce;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(() => setState(() {}));
+  }
+
+  void _onQueryChanged(final String value) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 300), () {
+      final q = value.trim();
+      if (q.isEmpty) {
+        context.read<BooksCubit>().getBooks(null, null, 1);
+      } else {
+        context.read<BooksCubit>().searchBooks(q);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -29,31 +59,59 @@ class _BooksScreenState extends State<BooksScreen> {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.books)),
-      body: isFetching
-          ? const Center(child: CircularProgressIndicator())
-          : books.isEmpty
-          ? Center(child: Text(l10n.noBooksFound))
-          : Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: ListView.separated(
-                separatorBuilder: (final context, final index) =>
-                    const SizedBox(height: 15),
-                itemCount: books.length,
-                itemBuilder: (final context, final index) {
-                  final book = books[index];
-                  final tag = 'book-cover-${book.id}-books';
-                  return BookCard(
-                    key: ValueKey(book.id),
-                    book: book,
-                    heroTag: tag,
-                    onTap: () => context.push(
-                      '/book/${book.id}',
-                      extra: BookRouteExtra(heroTag: tag, book: book),
-                    ),
-                  );
-                },
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+              child: TextField(
+                controller: _searchController,
+                onChanged: _onQueryChanged,
+                decoration: InputDecoration(
+                  hintText: l10n.search,
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: _searchController.text.isEmpty
+                      ? null
+                      : IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            _searchController.clear();
+                            _onQueryChanged('');
+                          },
+                        ),
+                ),
               ),
             ),
+            Expanded(
+              child: isFetching
+                  ? const Center(child: CircularProgressIndicator())
+                  : books.isEmpty
+                  ? Center(child: Text(l10n.noBooksFound))
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: ListView.separated(
+                        separatorBuilder: (final context, final index) =>
+                            const SizedBox(height: 15),
+                        itemCount: books.length,
+                        itemBuilder: (final context, final index) {
+                          final book = books[index];
+                          final tag = 'book-cover-${book.id}-books';
+                          return BookCard(
+                            key: ValueKey(book.id),
+                            book: book,
+                            heroTag: tag,
+                            onTap: () => context.push(
+                              '/book/${book.id}',
+                              extra: BookRouteExtra(heroTag: tag, book: book),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+            ),
+          ],
+        ),
+      ),
       floatingActionButton: isAuthenticated
           ? FloatingActionButton(
               onPressed: isVIP

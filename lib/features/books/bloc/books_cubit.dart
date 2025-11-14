@@ -44,16 +44,43 @@ class BooksCubit extends Cubit<BooksState> {
   ) async {
     try {
       emit(state.copyWith(isFetching: true));
-      final books = await _bookService.getBooks(author, title, page.toString());
       if (page == 1) {
-        if (books.isNotEmpty) {
-          emit(state.copyWith(allBooks: []));
-        }
+        emit(state.copyWith(allBooks: []));
       }
+      final books = await _bookService.getBooks(author, title, page.toString());
       if (books.isNotEmpty) {
         final updated = List<Book>.from(state.allBooks)..addAll(books);
         emit(state.copyWith(allBooks: updated));
       }
+    } finally {
+      emit(state.copyWith(isFetching: false));
+    }
+  }
+
+  Future<void> searchBooks(final String query) async {
+    try {
+      emit(state.copyWith(isFetching: true));
+      emit(state.copyWith(allBooks: []));
+
+      final q = query.trim();
+      if (q.isEmpty) {
+        final books = await _bookService.getBooks(null, null, '1');
+        emit(state.copyWith(allBooks: books));
+        return;
+      }
+
+      final byTitle = await _bookService.getBooks(null, q, '1');
+      final byAuthor = await _bookService.getBooks(q, null, '1');
+
+      final map = <String, Book>{};
+      for (final b in byTitle) {
+        map[b.id] = b;
+      }
+      for (final b in byAuthor) {
+        map[b.id] = b;
+      }
+
+      emit(state.copyWith(allBooks: map.values.toList()));
     } finally {
       emit(state.copyWith(isFetching: false));
     }
