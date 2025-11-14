@@ -629,4 +629,7 @@
       }
     }
   }
+  ,
+  "pronounce": "Pronounce",
+  "@pronounce": {"description": "Tooltip for text-to-speech button"}
 }

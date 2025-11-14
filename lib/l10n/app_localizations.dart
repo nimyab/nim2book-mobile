@@ -1039,6 +1039,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next review: {days} {days, plural, =1{day} other{days}}'**
   String nextReviewDays(int days);
+
+  /// Tooltip for text-to-speech button
+  ///
+  /// In en, this message translates to:
+  /// **'Pronounce'**
+  String get pronounce;
 }
 
 class _AppLocalizationsDelegate

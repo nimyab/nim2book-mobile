@@ -5,6 +5,7 @@ import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_cubit.da
 import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
 import 'package:nim2book_mobile_flutter/features/translated_dialog/widgets/translated_dialog.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
+import 'package:nim2book_mobile_flutter/core/services/tts_service.dart';
 
 class DictionaryScreen extends StatelessWidget {
   const DictionaryScreen({super.key});
@@ -100,10 +101,28 @@ class DictionaryScreen extends StatelessWidget {
                                   ),
                                 )
                               : null,
-                          trailing: Icon(
-                            Icons.arrow_forward_ios,
-                            size: 16,
-                            color: theme.colorScheme.onSurfaceVariant,
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Tooltip(
+                                message: l10n.pronounce,
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.volume_up,
+                                    color: theme.colorScheme.primary,
+                                  ),
+                                  onPressed: () {
+                                    GetIt.I.get<TtsService>().speak(word);
+                                  },
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                size: 16,
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
+                            ],
                           ),
                           onTap: () {
                             showDialog<void>(

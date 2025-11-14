@@ -27,6 +27,7 @@ import 'package:nim2book_mobile_flutter/features/book_reading/services/reading_s
 import 'package:nim2book_mobile_flutter/features/books/bloc/books_cubit.dart';
 import 'package:nim2book_mobile_flutter/firebase_options.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
+import 'package:nim2book_mobile_flutter/core/services/tts_service.dart';
 // provider removed after Bloc migration
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:intl/intl.dart' as intl; // Optional: set default locale if needed
@@ -94,6 +95,9 @@ void main() async {
 
   final readingPersistence = ReadingSettingsService();
   GetIt.I.registerSingleton(readingPersistence);
+
+  final ttsService = TtsService();
+  GetIt.I.registerSingleton(ttsService);
 
   runApp(const Nim2BookApp());
 }

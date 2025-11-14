@@ -534,4 +534,7 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return 'Next review: $days $_temp0';
   }
+
+  @override
+  String get pronounce => 'Pronounce';
 }

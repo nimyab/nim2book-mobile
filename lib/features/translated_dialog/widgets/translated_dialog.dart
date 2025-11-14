@@ -6,6 +6,7 @@ import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_cubit.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
+import 'package:nim2book_mobile_flutter/core/services/tts_service.dart';
 
 class TranslatedDialog extends StatefulWidget {
   final String phrase;
@@ -108,16 +109,21 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
                     },
                   ),
                   const SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          widget.phrase,
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: textColor,
+                        GestureDetector(
+                          onTap: () =>
+                              GetIt.I.get<TtsService>().speak(widget.phrase),
+                          child: Text(
+                            widget.phrase,
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: textColor,
+                            ),
                           ),
                         ),
                         if (_definitions.isNotEmpty &&

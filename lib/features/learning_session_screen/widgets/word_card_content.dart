@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/definition_card.dart';
+import 'package:get_it/get_it.dart';
+import 'package:nim2book_mobile_flutter/core/services/tts_service.dart';
 
 class WordCardContent extends StatelessWidget {
   final String word;
@@ -28,13 +30,36 @@ class WordCardContent extends StatelessWidget {
               children: [
                 SizedBox(height: showTranslation ? 8 : 40),
                 const SizedBox(height: 16),
-                Text(
-                  word,
-                  style: theme.textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.onSurface,
-                  ),
-                  textAlign: TextAlign.center,
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 56),
+                      child: Text(
+                        word,
+                        style: theme.textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Positioned(
+                      right: 8,
+                      child: Tooltip(
+                        message: l10n.pronounce,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.volume_up,
+                            color: theme.colorScheme.primary,
+                          ),
+                          onPressed: () {
+                            GetIt.I.get<TtsService>().speak(word);
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 if (definitions.isNotEmpty && definitions.first.ts != null) ...[
                   const SizedBox(height: 8),

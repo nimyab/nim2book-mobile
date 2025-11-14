@@ -537,4 +537,7 @@ class AppLocalizationsRu extends AppLocalizations {
     );
     return 'Следующее повторение: $days $_temp0';
   }
+
+  @override
+  String get pronounce => 'Прослушать';
 }
