@@ -130,6 +130,14 @@ class _WordCardState extends State<WordCard> with TickerProviderStateMixin {
   Widget build(final BuildContext context) {
     final theme = Theme.of(context);
 
+    final staticContent = RepaintBoundary(
+      child: WordCardContent(
+        word: widget.word,
+        definitions: widget.definitions,
+        showTranslation: widget.showTranslation,
+      ),
+    );
+
     return GestureDetector(
       onPanStart: _onPanStart,
       onPanUpdate: _onPanUpdate,
@@ -144,6 +152,7 @@ class _WordCardState extends State<WordCard> with TickerProviderStateMixin {
           _scaleNotifier,
           _isDraggingNotifier,
         ]),
+        child: staticContent,
         builder: (final context, final child) {
           final dragX = _dragXNotifier.value;
           final dragY = _dragYNotifier.value;
@@ -196,7 +205,7 @@ class _WordCardState extends State<WordCard> with TickerProviderStateMixin {
                             height: 400,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
-                              color: theme.colorScheme.surfaceContainerHigh,
+                              color: theme.colorScheme.surfaceContainer,
                             ),
                           ),
                         ),
@@ -212,13 +221,18 @@ class _WordCardState extends State<WordCard> with TickerProviderStateMixin {
                       border: isDragging && dragX.abs() > 50
                           ? Border.all(
                               color: (dragX > 0
-                                  ? Colors.green.withValues(alpha: 0.6)
-                                  : Colors.red.withValues(alpha: 0.6)),
+                                  ? theme.colorScheme.primary.withValues(
+                                      alpha: 0.6,
+                                    )
+                                  : theme.colorScheme.error.withValues(
+                                      alpha: 0.6,
+                                    )),
                               width: 3,
                             )
                           : null,
                     ),
                     child: Card(
+                      clipBehavior: Clip.none,
                       elevation: isDragging ? 12 : 8,
                       child: Container(
                         width: double.infinity,
@@ -227,11 +241,7 @@ class _WordCardState extends State<WordCard> with TickerProviderStateMixin {
                           borderRadius: BorderRadius.circular(12),
                           color: theme.colorScheme.surfaceContainer,
                         ),
-                        child: WordCardContent(
-                          word: widget.word,
-                          definitions: widget.definitions,
-                          showTranslation: widget.showTranslation,
-                        ),
+                        child: child,
                       ),
                     ),
                   ),
