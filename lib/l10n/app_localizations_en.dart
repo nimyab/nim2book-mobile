@@ -512,4 +512,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noResults => 'No results';
+
+  @override
+  String get newWord => 'New Word';
+
+  @override
+  String get reviewWord => 'Review';
+
+  @override
+  String wordLevel(int level) {
+    return 'Level $level';
+  }
+
+  @override
+  String nextReviewDays(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'days',
+      one: 'day',
+    );
+    return 'Next review: $days $_temp0';
+  }
 }

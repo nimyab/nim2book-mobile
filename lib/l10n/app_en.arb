@@ -602,5 +602,31 @@
   "noResults": "No results",
   "@noResults": {
     "description": "Displayed when a search yields no results"
+  },
+  "newWord": "New Word",
+  "@newWord": {
+    "description": "Label for a word that has never been reviewed"
+  },
+  "reviewWord": "Review",
+  "@reviewWord": {
+    "description": "Label for a word being reviewed"
+  },
+  "wordLevel": "Level {level}",
+  "@wordLevel": {
+    "description": "Current learning level of the word",
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "nextReviewDays": "Next review: {days} {days, plural, =1{day} other{days}}",
+  "@nextReviewDays": {
+    "description": "Shows when the word will be reviewed next",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
   }
 }

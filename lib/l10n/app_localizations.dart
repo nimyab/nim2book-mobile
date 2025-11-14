@@ -1015,6 +1015,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No results'**
   String get noResults;
+
+  /// Label for a word that has never been reviewed
+  ///
+  /// In en, this message translates to:
+  /// **'New Word'**
+  String get newWord;
+
+  /// Label for a word being reviewed
+  ///
+  /// In en, this message translates to:
+  /// **'Review'**
+  String get reviewWord;
+
+  /// Current learning level of the word
+  ///
+  /// In en, this message translates to:
+  /// **'Level {level}'**
+  String wordLevel(int level);
+
+  /// Shows when the word will be reviewed next
+  ///
+  /// In en, this message translates to:
+  /// **'Next review: {days} {days, plural, =1{day} other{days}}'**
+  String nextReviewDays(int days);
 }
 
 class _AppLocalizationsDelegate

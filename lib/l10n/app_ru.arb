@@ -602,5 +602,31 @@
   "noResults": "Нет результатов",
   "@noResults": {
     "description": "Отображается, когда поиск не даёт результатов"
+  },
+  "newWord": "Новое слово",
+  "@newWord": {
+    "description": "Метка для слова, которое ещё не было повторено"
+  },
+  "reviewWord": "Повторение",
+  "@reviewWord": {
+    "description": "Метка для повторяемого слова"
+  },
+  "wordLevel": "Уровень {level}",
+  "@wordLevel": {
+    "description": "Текущий уровень изучения слова",
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "nextReviewDays": "Следующее повторение: {days} {days, plural, =1{день} few{дня} other{дней}}",
+  "@nextReviewDays": {
+    "description": "Показывает, когда слово будет повторено в следующий раз",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
   }
 }

@@ -514,4 +514,27 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get noResults => 'Нет результатов';
+
+  @override
+  String get newWord => 'Новое слово';
+
+  @override
+  String get reviewWord => 'Повторение';
+
+  @override
+  String wordLevel(int level) {
+    return 'Уровень $level';
+  }
+
+  @override
+  String nextReviewDays(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'дней',
+      few: 'дня',
+      one: 'день',
+    );
+    return 'Следующее повторение: $days $_temp0';
+  }
 }

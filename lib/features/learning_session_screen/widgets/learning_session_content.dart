@@ -5,8 +5,8 @@ import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/bloc/learning_session_cubit.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/bloc/learning_session_state.dart';
-import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/session_progress_bar.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/word_card.dart';
+import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/word_progress_indicator.dart';
 
 enum LearningMode { newOnly, reviewOnly, mixed }
 
@@ -106,14 +106,12 @@ class _LearningSessionContentState extends State<LearningSessionContent> {
             padding: const EdgeInsets.all(24.0),
             child: Column(
               children: [
-                SessionProgressBar(
-                  currentIndex: sessionState.totalWordsStudied,
-                  totalWords: sessionState.initialSessionSize,
-                ),
-                const SizedBox(height: 24),
+                WordProgressIndicator(word: currentWord),
+                const SizedBox(height: 16),
                 Expanded(
                   child: Center(
                     child: WordCard(
+                      key: ValueKey('$currentWord-${sessionState.currentWordIndex}'),
                       word: currentWord,
                       definitions: currentDefinitions,
                       showTranslation: sessionState.showTranslation,
