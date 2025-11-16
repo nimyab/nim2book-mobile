@@ -103,11 +103,7 @@ class LearningSessionCubit extends Cubit<LearningSessionState> {
       final currentWord = updatedWords.removeAt(state.currentWordIndex);
       updatedWords.add(currentWord);
 
-      emit(
-        state.copyWith(
-          sessionWords: updatedWords,
-        ),
-      );
+      emit(state.copyWith(sessionWords: updatedWords));
     }
 
     _nextWord();
