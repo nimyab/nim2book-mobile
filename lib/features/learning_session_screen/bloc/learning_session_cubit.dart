@@ -77,58 +77,66 @@ class LearningSessionCubit extends Cubit<LearningSessionState> {
 
   void _applyRatingAndNext(final SrsRating rating) {
     if (state.sessionWords.isEmpty) {
-      _nextWord();
+      _completeSession();
       return;
     }
 
     final word = state.sessionWords[state.currentWordIndex];
     _srsService.updateWithRating(word, rating);
 
-    final newTotalStudied = state.totalWordsStudied + 1;
+    final updatedWords = List<String>.from(state.sessionWords);
 
-    // Get updated due words to remove words that are no longer due
-    final updatedDue = _srsService.getDueWords(allSavedWords);
+    if (rating == SrsRating.good) {
+      // Слово выучено - удаляем из сессии
+      updatedWords.removeAt(state.currentWordIndex);
 
-    emit(
-      state.copyWith(
-        totalWordsStudied: newTotalStudied,
-        sessionWords: updatedDue,
-      ),
-    );
+      final newTotalStudied = state.totalWordsStudied + 1;
+
+      emit(
+        state.copyWith(
+          totalWordsStudied: newTotalStudied,
+          sessionWords: updatedWords,
+        ),
+      );
+    } else {
+      // Слово не выучено - перемещаем в конец списка
+      final currentWord = updatedWords.removeAt(state.currentWordIndex);
+      updatedWords.add(currentWord);
+
+      emit(
+        state.copyWith(
+          sessionWords: updatedWords,
+        ),
+      );
+    }
 
     _nextWord();
   }
 
   void _nextWord() {
-    // Check if session is complete
-    if (state.totalWordsStudied >= state.initialSessionSize) {
-      emit(
-        state.copyWith(
-          showTranslation: false,
-          currentWordIndex: 0,
-          sessionEmpty: true,
-        ),
-      );
-      return;
-    }
-
     final words = state.sessionWords;
-    if (words.isEmpty) {
-      emit(
-        state.copyWith(
-          showTranslation: false,
-          currentWordIndex: 0,
-          sessionEmpty: true,
-        ),
-      );
+
+    // Проверяем, завершена ли сессия
+    if (words.isEmpty || state.totalWordsStudied >= state.initialSessionSize) {
+      _completeSession();
       return;
     }
 
-    // Ensure currentIndex is valid for the updated word list
+    // Убеждаемся, что индекс валиден
     final safeIndex = state.currentWordIndex >= words.length
         ? 0
         : state.currentWordIndex;
 
     emit(state.copyWith(showTranslation: false, currentWordIndex: safeIndex));
+  }
+
+  void _completeSession() {
+    emit(
+      state.copyWith(
+        showTranslation: false,
+        currentWordIndex: 0,
+        sessionEmpty: true,
+      ),
+    );
   }
 }
