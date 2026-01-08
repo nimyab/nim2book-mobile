@@ -28,9 +28,7 @@ import 'package:nim2book_mobile_flutter/features/books/bloc/books_cubit.dart';
 import 'package:nim2book_mobile_flutter/firebase_options.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/core/services/tts_service.dart';
-// provider removed after Bloc migration
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:intl/intl.dart' as intl; // Optional: set default locale if needed
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
