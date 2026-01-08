@@ -1,12 +1,12 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
-import 'package:logger/logger.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/models/requests/requests.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class FcmTokenService {
   final _apiClient = GetIt.I<ApiClient>();
-  final _logger = Logger();
+  final _logger = GetIt.I.get<Talker>();
 
   FcmTokenService() {
     _initializeFirebaseMessaging();
@@ -20,12 +20,12 @@ class FcmTokenService {
 
     // Обработка уведомлений когда приложение в foreground
     FirebaseMessaging.onMessage.listen((final RemoteMessage message) {
-      _logger.i(message);
+      _logger.info(message);
     });
 
     // Обработка нажатий на уведомления когда приложение в background/terminated
     FirebaseMessaging.onMessageOpenedApp.listen((final RemoteMessage message) {
-      _logger.i(message);
+      _logger.info(message);
     });
   }
 

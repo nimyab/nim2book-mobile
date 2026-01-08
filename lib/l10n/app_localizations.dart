@@ -110,6 +110,12 @@ abstract class AppLocalizations {
   /// **'Login'**
   String get login;
 
+  /// Login with Google
+  ///
+  /// In en, this message translates to:
+  /// **'Login with Google'**
+  String get loginWithGoogle;
+
   /// Register button text
   ///
   /// In en, this message translates to:
@@ -1045,6 +1051,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pronounce'**
   String get pronounce;
+
+  /// Skip button text on onboarding screen
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
+  /// Onboarding screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome'**
+  String get onboarding;
 }
 
 class _AppLocalizationsDelegate

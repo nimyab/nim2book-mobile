@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:get_it/get_it.dart';
-import 'package:logger/web.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
 import 'package:nim2book_mobile_flutter/core/models/requests/requests.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 String _getWordKey(final String word) => 'dictionary_word_$word';
 
@@ -13,7 +13,7 @@ const _lang = 'en-ru';
 const _ui = 'ru';
 
 class DictionaryService {
-  final _logger = Logger();
+  final _logger = GetIt.I.get<Talker>();
   final _apiClient = GetIt.I.get<ApiClient>();
   final _sharedPreferences = GetIt.I.get<SharedPreferences>();
 
@@ -24,7 +24,7 @@ class DictionaryService {
           .toList();
       return _sharedPreferences.setStringList(_getWordKey(word), wordJson);
     } catch (e) {
-      _logger.e('Error saving word $word: $e');
+      _logger.error('Error saving word $word: $e');
       return false;
     }
   }
@@ -33,7 +33,7 @@ class DictionaryService {
     try {
       return _sharedPreferences.remove(_getWordKey(word));
     } catch (e) {
-      _logger.e(e);
+      _logger.error('Error deleting word $word: $e');
       return false;
     }
   }
@@ -46,7 +46,7 @@ class DictionaryService {
           .map((final json) => Definition.fromJson(jsonDecode(json)))
           .toList();
     } catch (e) {
-      _logger.e('Error retrieving word $key: $e');
+      _logger.error('Error retrieving word $key: $e');
       return null;
     }
   }
@@ -61,7 +61,7 @@ class DictionaryService {
       );
       return response.def;
     } catch (e) {
-      _logger.e(e);
+      _logger.error(e);
       return savedWordInfo;
     }
   }
@@ -81,7 +81,7 @@ class DictionaryService {
 
       return allWords;
     } catch (e) {
-      _logger.e('Error retrieving all words: $e');
+      _logger.error('Error retrieving all words: $e');
       return {};
     }
   }

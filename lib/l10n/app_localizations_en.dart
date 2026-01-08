@@ -15,6 +15,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login => 'Login';
 
   @override
+  String get loginWithGoogle => 'Login with Google';
+
+  @override
   String get register => 'Register';
 
   @override
@@ -537,4 +540,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pronounce => 'Pronounce';
+
+  @override
+  String get skip => 'Skip';
+
+  @override
+  String get onboarding => 'Welcome';
 }

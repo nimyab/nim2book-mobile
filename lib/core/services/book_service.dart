@@ -3,17 +3,17 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:get_it/get_it.dart';
-import 'package:logger/logger.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 const String _addedBooksKey = 'added_books';
 String _chapterKey(final String path) => 'book_chapter_$path';
 
 class BookService {
-  final _logger = Logger();
+  final _logger = GetIt.I.get<Talker>();
   final _apiClient = GetIt.I.get<ApiClient>();
   final _sharedPreferences = GetIt.I.get<SharedPreferences>();
 
@@ -34,7 +34,7 @@ class BookService {
       await _sharedPreferences.setString(cacheKey, jsonEncode(book.toJson()));
       return book;
     } catch (e) {
-      _logger.e('Error fetching book with ID $bookId: $e');
+      _logger.error('Error fetching book with ID $bookId: $e');
       return cachedBook;
     }
   }
@@ -70,7 +70,7 @@ class BookService {
       );
       return books;
     } catch (e) {
-      _logger.e('Error fetching books: $e');
+      _logger.error('Error fetching books: $e');
       return cached;
     }
   }
@@ -134,12 +134,12 @@ class BookService {
         _compressString(jsonEncode(chapter.toJson())),
       );
       if (!isAdded) {
-        _logger.w('Failed to cache chapter at path $path');
+        _logger.warning('Failed to cache chapter at path $path');
       }
 
       return chapter;
     } catch (e) {
-      _logger.e('Error fetching chapter at path $path: $e');
+      _logger.error('Error fetching chapter at path $path: $e');
     }
     return null;
   }
@@ -164,7 +164,7 @@ class BookService {
         final key = _chapterKey(path);
         final removed = await _sharedPreferences.remove(key);
         if (!removed) {
-          _logger.w('Failed to remove cached chapter for path $path');
+          _logger.warning('Failed to remove cached chapter for path $path');
         }
       }
 
@@ -173,7 +173,7 @@ class BookService {
       await _sharedPreferences.remove('reading_current_chapter_${book.id}');
       await _sharedPreferences.remove('reading_progress_${book.id}');
     } catch (e) {
-      _logger.w('Cleanup error for book ${book.id}: $e');
+      _logger.warning('Cleanup error for book ${book.id}: $e');
     }
   }
 }

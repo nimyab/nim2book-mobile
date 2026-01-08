@@ -2,16 +2,17 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import 'package:logger/logger.dart';
 import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:nim2book_mobile_flutter/core/models/requests/requests.dart';
 import 'package:nim2book_mobile_flutter/core/models/responses/responses.dart';
 import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
+import 'package:talker_dio_logger/talker_dio_logger_interceptor.dart';
+import 'package:talker_dio_logger/talker_dio_logger_settings.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class ApiClient {
   final _tokenService = GetIt.I.get<TokenService>();
-  final _logger = Logger();
 
   late final Dio _dio;
 
@@ -22,23 +23,9 @@ class ApiClient {
     _dio = Dio(BaseOptions(baseUrl: GetIt.I.get<Env>().apiBaseUrl));
 
     _dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (final options, final handler) {
-          _logger.i('Request: ${options.method} ${options.path}');
-          handler.next(options);
-        },
-        onResponse: (final response, final handler) {
-          _logger.i(
-            'Response [statusCode: ${response.statusCode}], path: ${response.requestOptions.path}, data: ${response.data}',
-          );
-          handler.next(response);
-        },
-        onError: (final error, final handler) {
-          _logger.e(
-            'Error [statusCode: ${error.response?.statusCode}], path: ${error.requestOptions.path}, errorData: ${error.response?.data}',
-          );
-          handler.next(error);
-        },
+      TalkerDioLogger(
+        talker: GetIt.I.get<Talker>(),
+        settings: const TalkerDioLoggerSettings(printRequestHeaders: true),
       ),
     );
 

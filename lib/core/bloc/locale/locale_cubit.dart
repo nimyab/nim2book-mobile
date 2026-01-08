@@ -24,9 +24,7 @@ class LocaleState {
 class LocaleCubit extends Cubit<LocaleState> {
   final LocaleService _localeService = GetIt.I<LocaleService>();
 
-  LocaleCubit() : super(const LocaleState());
-
-  void initialize() {
+  LocaleCubit() : super(const LocaleState()) {
     final supported = _localeService.getSupportedLocales();
     emit(
       state.copyWith(

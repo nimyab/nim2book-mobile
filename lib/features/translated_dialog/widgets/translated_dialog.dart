@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:logger/web.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_cubit.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/core/services/tts_service.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class TranslatedDialog extends StatefulWidget {
   final String phrase;
@@ -32,7 +32,7 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
       );
       if (definitions != null) _definitions.addAll(definitions);
     } catch (e) {
-      Logger().e('Failed to fetch translation: $e');
+      GetIt.I.get<Talker>().error('Failed to fetch translation: $e');
     } finally {
       setState(() {
         _isLoading = false;

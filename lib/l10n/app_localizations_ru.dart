@@ -15,6 +15,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get login => 'Войти';
 
   @override
+  String get loginWithGoogle => 'Войти с помощью Google';
+
+  @override
   String get register => 'Регистрация';
 
   @override
@@ -540,4 +543,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get pronounce => 'Прослушать';
+
+  @override
+  String get skip => 'Пропустить';
+
+  @override
+  String get onboarding => 'Добро пожаловать';
 }

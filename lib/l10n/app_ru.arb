@@ -8,6 +8,10 @@
   "@login": {
     "description": "Login button text"
   },
+  "loginWithGoogle": "Войти с помощью Google",
+  "@loginWithGoogle": {
+    "description": "Login with Google"
+  },
   "register": "Регистрация",
   "@register": {
     "description": "Register button text"
@@ -631,5 +635,9 @@
   }
   ,
   "pronounce": "Прослушать",
-  "@pronounce": {"description": "Подсказка для кнопки озвучивания текста"}
+  "@pronounce": {"description": "Подсказка для кнопки озвучивания текста"},
+  "skip": "Пропустить",
+  "@skip": {"description": "Текст кнопки пропустить на экране onboarding"},
+  "onboarding": "Добро пожаловать",
+  "@onboarding": {"description": "Заголовок экрана onboarding"}
 }

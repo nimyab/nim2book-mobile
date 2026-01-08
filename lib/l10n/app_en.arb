@@ -8,6 +8,10 @@
   "@login": {
     "description": "Login button text"
   },
+  "loginWithGoogle": "Login with Google",
+  "@loginWithGoogle": {
+    "description": "Login with Google"
+  },
   "register": "Register",
   "@register": {
     "description": "Register button text"
@@ -631,5 +635,9 @@
   }
   ,
   "pronounce": "Pronounce",
-  "@pronounce": {"description": "Tooltip for text-to-speech button"}
+  "@pronounce": {"description": "Tooltip for text-to-speech button"},
+  "skip": "Skip",
+  "@skip": {"description": "Skip button text on onboarding screen"},
+  "onboarding": "Welcome",
+  "@onboarding": {"description": "Onboarding screen title"}
 }

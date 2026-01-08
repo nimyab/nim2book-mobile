@@ -27,9 +27,7 @@ class ThemeState {
 class ThemeCubit extends Cubit<ThemeState> {
   final ThemeService _themeService = GetIt.I<ThemeService>();
 
-  ThemeCubit() : super(const ThemeState());
-
-  void initialize() {
+  ThemeCubit() : super(const ThemeState()) {
     final theme = _themeService.currentTheme;
     emit(
       state.copyWith(
