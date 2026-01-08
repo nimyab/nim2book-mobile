@@ -1,63 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading/book_reading_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-class BookReadingState {
-  final String bookId;
-  final List<ChapterAlignNode> chapters;
-  final int currentChapterIndex;
-  final int? selectedParagraphIndex;
-  final int? selectedWordIndex;
-  final Map<int, double> chapterProgress;
-  final bool prefsLoaded;
-
-  const BookReadingState({
-    required this.bookId,
-    required this.chapters,
-    required this.currentChapterIndex,
-    required this.selectedParagraphIndex,
-    required this.selectedWordIndex,
-    required this.chapterProgress,
-    this.prefsLoaded = false,
-  });
-
-  static const Object _noParam = Object();
-
-  BookReadingState copyWith({
-    final String? bookId,
-    final List<ChapterAlignNode>? chapters,
-    final int? currentChapterIndex,
-    final Object? selectedParagraphIndex = _noParam,
-    final Object? selectedWordIndex = _noParam,
-    final Map<int, double>? chapterProgress,
-    final bool? prefsLoaded,
-  }) {
-    final selectedParagraphIndex0 = selectedParagraphIndex == _noParam
-        ? this.selectedParagraphIndex
-        : selectedParagraphIndex as int?;
-    final selectedWordIndex0 = selectedWordIndex == _noParam
-        ? this.selectedWordIndex
-        : selectedWordIndex as int?;
-
-    return BookReadingState(
-      bookId: bookId ?? this.bookId,
-      chapters: chapters ?? this.chapters,
-      currentChapterIndex: currentChapterIndex ?? this.currentChapterIndex,
-      selectedParagraphIndex: selectedParagraphIndex0,
-      selectedWordIndex: selectedWordIndex0,
-      chapterProgress: chapterProgress ?? this.chapterProgress,
-      prefsLoaded: prefsLoaded ?? this.prefsLoaded,
-    );
-  }
-
-  @override
-  String toString() {
-    return 'BookReadingState(bookId: $bookId, chapterIndex: $currentChapterIndex, '
-        'selection: ${selectedParagraphIndex ?? -1}:${selectedWordIndex ?? -1}, '
-        'chapters: ${chapters.length}, progressKeys: ${chapterProgress.length}, '
-        'prefsLoaded: $prefsLoaded)';
-  }
-}
 
 class BookReadingCubit extends Cubit<BookReadingState> {
   BookReadingCubit({

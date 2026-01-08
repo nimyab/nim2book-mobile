@@ -1,24 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_state.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
 import 'package:nim2book_mobile_flutter/core/services/dictionary_service.dart';
-
-class DictionaryState {
-  final Map<String, List<Definition>> savedWords;
-  final bool isLoading;
-
-  const DictionaryState({this.savedWords = const {}, this.isLoading = false});
-
-  DictionaryState copyWith({
-    final Map<String, List<Definition>>? savedWords,
-    final bool? isLoading,
-  }) {
-    return DictionaryState(
-      savedWords: savedWords ?? this.savedWords,
-      isLoading: isLoading ?? this.isLoading,
-    );
-  }
-}
 
 class DictionaryCubit extends Cubit<DictionaryState> {
   final DictionaryService _dictService = GetIt.I.get<DictionaryService>();

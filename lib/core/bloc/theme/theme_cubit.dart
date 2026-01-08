@@ -1,28 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:nim2book_mobile_flutter/core/bloc/theme/theme_state.dart';
 import 'package:nim2book_mobile_flutter/core/services/theme_service.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
-
-class ThemeState {
-  final AppTheme currentTheme;
-  final ThemeMode themeMode;
-
-  const ThemeState({
-    this.currentTheme = AppTheme.system,
-    this.themeMode = ThemeMode.system,
-  });
-
-  ThemeState copyWith({
-    final AppTheme? currentTheme,
-    final ThemeMode? themeMode,
-  }) {
-    return ThemeState(
-      currentTheme: currentTheme ?? this.currentTheme,
-      themeMode: themeMode ?? this.themeMode,
-    );
-  }
-}
 
 class ThemeCubit extends Cubit<ThemeState> {
   final ThemeService _themeService = GetIt.I<ThemeService>();

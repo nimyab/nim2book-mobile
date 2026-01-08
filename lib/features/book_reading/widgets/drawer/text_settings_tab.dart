@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/reading_settings_cubit.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/reading_settings/reading_settings_cubit.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 class TextSettingsTab extends StatefulWidget {

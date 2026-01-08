@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/bloc/auth/auth_cubit.dart';
 import 'package:nim2book_mobile_flutter/core/router/router.dart';
-import 'package:nim2book_mobile_flutter/features/books/bloc/books_cubit.dart';
+import 'package:nim2book_mobile_flutter/features/books/bloc/books/books_cubit.dart';
 import 'package:nim2book_mobile_flutter/features/books/widgets/book_card.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 

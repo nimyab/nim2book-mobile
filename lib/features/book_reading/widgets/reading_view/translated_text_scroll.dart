@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading_cubit.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/reading_settings_cubit.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading/book_reading_cubit.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/reading_settings/reading_settings_cubit.dart';
 
 class TranslatedTextScroll extends StatefulWidget {
   const TranslatedTextScroll({super.key, this.controller});

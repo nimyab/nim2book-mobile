@@ -1,86 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/reading_settings/reading_settings_state.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/services/reading_settings_service.dart';
-
-class ReadingSettingsState {
-  final String fontFamily;
-  final double fontSize;
-  final Color backgroundColor;
-  final Color textColor;
-  final bool isTranslatedVisible;
-  final bool isFullscreen;
-  final int lastSelectionParagraphIndex;
-  final int lastSelectionWordIndex;
-  final double lineHeight;
-  final double sidePadding;
-  final double firstLineIndentEm;
-  final double paragraphSpacing;
-  final TextAlign textAlign;
-  final double translatedFontSize;
-  final String translatedFontFamily;
-  final double translatedVerticalPadding;
-
-  const ReadingSettingsState({
-    this.fontFamily = 'System',
-    this.fontSize = 24.0,
-    this.backgroundColor = Colors.white,
-    this.textColor = Colors.black,
-    this.isTranslatedVisible = false,
-    this.isFullscreen = false,
-    this.lastSelectionParagraphIndex = -1,
-    this.lastSelectionWordIndex = -1,
-    this.lineHeight = 1.3,
-    this.sidePadding = 10.0,
-    this.firstLineIndentEm = 1.5,
-    this.paragraphSpacing = 7.0,
-    this.textAlign = TextAlign.justify,
-    this.translatedFontSize = 20.0,
-    this.translatedFontFamily = 'System',
-    this.translatedVerticalPadding = 5.0,
-  });
-
-  ReadingSettingsState copyWith({
-    final String? fontFamily,
-    final double? fontSize,
-    final Color? backgroundColor,
-    final Color? textColor,
-    final bool? isTranslatedVisible,
-    final bool? isFullscreen,
-    final int? lastSelectionParagraphIndex,
-    final int? lastSelectionWordIndex,
-    final double? lineHeight,
-    final double? sidePadding,
-    final double? firstLineIndentEm,
-    final double? paragraphSpacing,
-    final TextAlign? textAlign,
-    final double? translatedFontSize,
-    final String? translatedFontFamily,
-    final double? translatedVerticalPadding,
-  }) {
-    return ReadingSettingsState(
-      fontFamily: fontFamily ?? this.fontFamily,
-      fontSize: fontSize ?? this.fontSize,
-      backgroundColor: backgroundColor ?? this.backgroundColor,
-      textColor: textColor ?? this.textColor,
-      isTranslatedVisible: isTranslatedVisible ?? this.isTranslatedVisible,
-      isFullscreen: isFullscreen ?? this.isFullscreen,
-      lastSelectionParagraphIndex:
-          lastSelectionParagraphIndex ?? this.lastSelectionParagraphIndex,
-      lastSelectionWordIndex:
-          lastSelectionWordIndex ?? this.lastSelectionWordIndex,
-      lineHeight: lineHeight ?? this.lineHeight,
-      sidePadding: sidePadding ?? this.sidePadding,
-      firstLineIndentEm: firstLineIndentEm ?? this.firstLineIndentEm,
-      paragraphSpacing: paragraphSpacing ?? this.paragraphSpacing,
-      textAlign: textAlign ?? this.textAlign,
-      translatedFontSize: translatedFontSize ?? this.translatedFontSize,
-      translatedFontFamily: translatedFontFamily ?? this.translatedFontFamily,
-      translatedVerticalPadding:
-          translatedVerticalPadding ?? this.translatedVerticalPadding,
-    );
-  }
-}
 
 class ReadingSettingsCubit extends Cubit<ReadingSettingsState> {
   final ReadingSettingsService _service = GetIt.I.get<ReadingSettingsService>();

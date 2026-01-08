@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading_cubit.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/loading_book_cubit.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/reading_settings_cubit.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading/book_reading_cubit.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading/book_reading_state.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/loading_book/loading_book_cubit.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/loading_book/loading_book_state.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/reading_settings/reading_settings_cubit.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/book_reading_bar.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/drawer/reading_drawer.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/original_text_scroll.dart';

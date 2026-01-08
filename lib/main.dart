@@ -23,7 +23,7 @@ import 'package:nim2book_mobile_flutter/core/services/theme_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/services/reading_settings_service.dart';
-import 'package:nim2book_mobile_flutter/features/books/bloc/books_cubit.dart';
+import 'package:nim2book_mobile_flutter/features/books/bloc/books/books_cubit.dart';
 import 'package:nim2book_mobile_flutter/firebase_options.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/core/services/tts_service.dart';
@@ -51,7 +51,7 @@ void main() async {
     TalkerFlutter.init(
       logger: TalkerLogger(
         settings: TalkerLoggerSettings(
-          level: env.appEnv == AppEnv.dev ? LogLevel.critical : LogLevel.info,
+          level: env.appEnv == AppEnv.dev ? LogLevel.verbose : LogLevel.info,
         ),
       ),
     ),

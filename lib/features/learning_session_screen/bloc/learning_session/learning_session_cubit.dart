@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
 import 'package:nim2book_mobile_flutter/features/srs/models/srs_item.dart';
-import 'package:nim2book_mobile_flutter/features/learning_session_screen/bloc/learning_session_state.dart';
+import 'package:nim2book_mobile_flutter/features/learning_session_screen/bloc/learning_session/learning_session_state.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/learning_session_content.dart';
 
 class LearningSessionCubit extends Cubit<LearningSessionState> {

@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading_cubit.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/reading_settings_cubit.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading/book_reading_cubit.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/reading_settings/reading_settings_cubit.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/services/chapter_converter.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/models/word_item.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/original_paragraph.dart';

@@ -2,30 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
 import 'package:nim2book_mobile_flutter/core/services/book_service.dart';
-
-class BooksState {
-  final List<Book> allBooks;
-  final List<Book> myBooks;
-  final bool isFetching;
-
-  const BooksState({
-    this.allBooks = const [],
-    this.myBooks = const [],
-    this.isFetching = false,
-  });
-
-  BooksState copyWith({
-    final List<Book>? allBooks,
-    final List<Book>? myBooks,
-    final bool? isFetching,
-  }) {
-    return BooksState(
-      allBooks: allBooks ?? this.allBooks,
-      myBooks: myBooks ?? this.myBooks,
-      isFetching: isFetching ?? this.isFetching,
-    );
-  }
-}
+import 'package:nim2book_mobile_flutter/features/books/bloc/books/books_state.dart';
 
 class BooksCubit extends Cubit<BooksState> {
   final BookService _bookService = GetIt.I.get<BookService>();

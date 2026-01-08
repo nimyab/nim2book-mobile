@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading_cubit.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading/book_reading_cubit.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading/book_reading_state.dart';
 
 class ChapterListTab extends StatelessWidget {
   final List<ChapterAlignNode> chapters;

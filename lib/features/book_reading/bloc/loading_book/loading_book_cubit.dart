@@ -1,36 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:nim2book_mobile_flutter/core/services/book_service.dart';
-
-class LoadingBookState {
-  final Book? book;
-  final List<ChapterAlignNode> chapters;
-  final double progress;
-  final bool isLoading;
-
-  const LoadingBookState({
-    this.book,
-    this.chapters = const [],
-    this.progress = 0.0,
-    this.isLoading = false,
-  });
-
-  LoadingBookState copyWith({
-    final Book? book,
-    final List<ChapterAlignNode>? chapters,
-    final double? progress,
-    final bool? isLoading,
-  }) {
-    return LoadingBookState(
-      book: book ?? this.book,
-      chapters: chapters ?? this.chapters,
-      progress: progress ?? this.progress,
-      isLoading: isLoading ?? this.isLoading,
-    );
-  }
-}
+import 'package:nim2book_mobile_flutter/features/book_reading/bloc/loading_book/loading_book_state.dart';
 
 class LoadingBookCubit extends Cubit<LoadingBookState> {
   final String bookId;
