@@ -10,10 +10,9 @@ abstract class AuthState with _$AuthState {
   const factory AuthState({
     final User? user,
     @Default(false) final bool isLoading,
-    @Default(false) final bool isInitialized,
   }) = _AuthState;
 
-  bool get isAuthenticated => user != null;
+  bool get isAuthenticated => user != null && !isLoading;
   bool get isAdmin => user?.isAdmin ?? false;
   bool get isVIP => user?.isVIP ?? false;
 }

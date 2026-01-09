@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
@@ -30,10 +31,12 @@ import 'package:nim2book_mobile_flutter/core/services/tts_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger_observer.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   // Initialize Intl date symbols for supported locales to avoid web runtime crashes
   // when using DateFormat (e.g., DateFormat.MMMd()).
@@ -85,45 +88,42 @@ void main() async {
   GetIt.I.registerSingleton(TtsService());
   GetIt.I.registerSingleton(OnboardingService());
 
-  // Создаем AuthCubit и инициализируем его до запуска приложения
-  final authCubit = AuthCubit();
-  await authCubit.getUser();
-
-  runApp(Nim2BookApp(authCubit: authCubit));
+  runApp(const Nim2BookAppWrapper());
 }
 
-class Nim2BookApp extends StatelessWidget {
-  final AuthCubit authCubit;
-
-  const Nim2BookApp({super.key, required this.authCubit});
+class Nim2BookAppWrapper extends StatelessWidget {
+  const Nim2BookAppWrapper({super.key});
 
   @override
   Widget build(final BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(value: authCubit),
-        BlocProvider(create: (_) => BooksCubit()),
         BlocProvider(create: (_) => ThemeCubit()),
         BlocProvider(create: (_) => LocaleCubit()),
+        BlocProvider(create: (_) => AuthCubit()..initialize()),
+        BlocProvider(create: (_) => BooksCubit()..initialize()),
         BlocProvider(create: (_) => DictionaryCubit()),
       ],
-      child: _AppInitializer(),
+      child: const Nim2BookApp(),
     );
   }
 }
 
-class _AppInitializer extends StatefulWidget {
+class Nim2BookApp extends StatefulWidget {
+  const Nim2BookApp({super.key});
+
   @override
-  State<_AppInitializer> createState() => _AppInitializerState();
+  State<Nim2BookApp> createState() => _Nim2BookAppState();
 }
 
-class _AppInitializerState extends State<_AppInitializer> {
+class _Nim2BookAppState extends State<Nim2BookApp> {
+  late final GoRouter _router;
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<BooksCubit>().initialize();
-    });
+    final authCubit = context.read<AuthCubit>();
+    _router = createRouter(authCubit);
   }
 
   @override
@@ -132,10 +132,9 @@ class _AppInitializerState extends State<_AppInitializer> {
     final locale = context.select(
       (final LocaleCubit c) => c.state.currentLocale,
     );
-    final router = AppRouter.getRouter(context);
 
     return MaterialApp.router(
-      routerConfig: router,
+      routerConfig: _router,
       theme: AppThemes.lightTheme,
       darkTheme: AppThemes.darkTheme,
       themeMode: themeMode,

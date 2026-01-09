@@ -58,7 +58,6 @@ linter:
     avoid_dynamic_calls: true
     prefer_final_fields: true
     prefer_final_locals: true
-    prefer_final_parameters: true
     null_closures: true
 
     unawaited_futures: true

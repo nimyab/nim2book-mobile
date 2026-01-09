@@ -2,9 +2,9 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingService {
-  static const String _onboardingCompleteKey = 'onboarding_complete';
+  static const _onboardingCompleteKey = 'onboarding_complete';
 
-  final SharedPreferences _prefs = GetIt.I.get<SharedPreferences>();
+  final _prefs = GetIt.I.get<SharedPreferences>();
 
   bool get isOnboardingComplete =>
       _prefs.getBool(_onboardingCompleteKey) ?? false;

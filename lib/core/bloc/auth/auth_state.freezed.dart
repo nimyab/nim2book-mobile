@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AuthState {
 
- User? get user; bool get isLoading; bool get isInitialized;
+ User? get user; bool get isLoading;
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $AuthStateCopyWith<AuthState> get copyWith => _$AuthStateCopyWithImpl<AuthState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthState&&(identical(other.user, user) || other.user == user)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isInitialized, isInitialized) || other.isInitialized == isInitialized));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthState&&(identical(other.user, user) || other.user == user)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,user,isLoading,isInitialized);
+int get hashCode => Object.hash(runtimeType,user,isLoading);
 
 @override
 String toString() {
-  return 'AuthState(user: $user, isLoading: $isLoading, isInitialized: $isInitialized)';
+  return 'AuthState(user: $user, isLoading: $isLoading)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $AuthStateCopyWith<$Res>  {
   factory $AuthStateCopyWith(AuthState value, $Res Function(AuthState) _then) = _$AuthStateCopyWithImpl;
 @useResult
 $Res call({
- User? user, bool isLoading, bool isInitialized
+ User? user, bool isLoading
 });
 
 
@@ -62,11 +62,10 @@ class _$AuthStateCopyWithImpl<$Res>
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? user = freezed,Object? isLoading = null,Object? isInitialized = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? user = freezed,Object? isLoading = null,}) {
   return _then(_self.copyWith(
 user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as User?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,isInitialized: null == isInitialized ? _self.isInitialized : isInitialized // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -164,10 +163,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( User? user,  bool isLoading,  bool isInitialized)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( User? user,  bool isLoading)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AuthState() when $default != null:
-return $default(_that.user,_that.isLoading,_that.isInitialized);case _:
+return $default(_that.user,_that.isLoading);case _:
   return orElse();
 
 }
@@ -185,10 +184,10 @@ return $default(_that.user,_that.isLoading,_that.isInitialized);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( User? user,  bool isLoading,  bool isInitialized)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( User? user,  bool isLoading)  $default,) {final _that = this;
 switch (_that) {
 case _AuthState():
-return $default(_that.user,_that.isLoading,_that.isInitialized);case _:
+return $default(_that.user,_that.isLoading);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -205,10 +204,10 @@ return $default(_that.user,_that.isLoading,_that.isInitialized);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( User? user,  bool isLoading,  bool isInitialized)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( User? user,  bool isLoading)?  $default,) {final _that = this;
 switch (_that) {
 case _AuthState() when $default != null:
-return $default(_that.user,_that.isLoading,_that.isInitialized);case _:
+return $default(_that.user,_that.isLoading);case _:
   return null;
 
 }
@@ -220,12 +219,11 @@ return $default(_that.user,_that.isLoading,_that.isInitialized);case _:
 
 
 class _AuthState extends AuthState {
-  const _AuthState({this.user, this.isLoading = false, this.isInitialized = false}): super._();
+  const _AuthState({this.user, this.isLoading = false}): super._();
   
 
 @override final  User? user;
 @override@JsonKey() final  bool isLoading;
-@override@JsonKey() final  bool isInitialized;
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
@@ -237,16 +235,16 @@ _$AuthStateCopyWith<_AuthState> get copyWith => __$AuthStateCopyWithImpl<_AuthSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthState&&(identical(other.user, user) || other.user == user)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isInitialized, isInitialized) || other.isInitialized == isInitialized));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthState&&(identical(other.user, user) || other.user == user)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,user,isLoading,isInitialized);
+int get hashCode => Object.hash(runtimeType,user,isLoading);
 
 @override
 String toString() {
-  return 'AuthState(user: $user, isLoading: $isLoading, isInitialized: $isInitialized)';
+  return 'AuthState(user: $user, isLoading: $isLoading)';
 }
 
 
@@ -257,7 +255,7 @@ abstract mixin class _$AuthStateCopyWith<$Res> implements $AuthStateCopyWith<$Re
   factory _$AuthStateCopyWith(_AuthState value, $Res Function(_AuthState) _then) = __$AuthStateCopyWithImpl;
 @override @useResult
 $Res call({
- User? user, bool isLoading, bool isInitialized
+ User? user, bool isLoading
 });
 
 
@@ -274,11 +272,10 @@ class __$AuthStateCopyWithImpl<$Res>
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? user = freezed,Object? isLoading = null,Object? isInitialized = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? user = freezed,Object? isLoading = null,}) {
   return _then(_AuthState(
 user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as User?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,isInitialized: null == isInitialized ? _self.isInitialized : isInitialized // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

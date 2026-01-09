@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/bloc/auth/auth_cubit.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
-import 'package:nim2book_mobile_flutter/core/services/onboarding_service.dart';
 import 'package:nim2book_mobile_flutter/screens/add_book_screen/add_book_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/book_screen/book_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/books_screen/books_screen.dart';
@@ -13,7 +11,6 @@ import 'package:nim2book_mobile_flutter/screens/learning_screen/learning_screen.
 import 'package:nim2book_mobile_flutter/screens/learning_session_screen/learning_session_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/login_screen/login_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/my_books_screen/my_books_screen.dart';
-import 'package:nim2book_mobile_flutter/screens/onboarding_screen/onboarding_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/reading_screen/reading_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/register_screen/register_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/settings_screen/settings_screen.dart';
@@ -29,17 +26,6 @@ class BookRouteExtra {
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
-class AppRouter {
-  static GoRouter? _instance;
-
-  static GoRouter getRouter(final BuildContext context) {
-    if (_instance != null) return _instance!;
-
-    _instance = _createRouter(context);
-    return _instance!;
-  }
-}
-
 class GoRouterRefreshNotifier extends ChangeNotifier {
   GoRouterRefreshNotifier(final AuthCubit authCubit) {
     authCubit.stream.listen((_) {
@@ -48,54 +34,24 @@ class GoRouterRefreshNotifier extends ChangeNotifier {
   }
 }
 
-GoRouter _createRouter(final BuildContext context) {
-  final authCubit = context.read<AuthCubit>();
-
+GoRouter createRouter(final AuthCubit authCubit) {
   return GoRouter(
     initialLocation: '/my-books',
     navigatorKey: _rootNavigatorKey,
     observers: [TalkerRouteObserver(GetIt.I.get<Talker>())],
-    redirect: (final context, final state) {
-      final onboardingService = GetIt.I.get<OnboardingService>();
-      final authState = authCubit.state;
-
-      final isOnboarding = state.matchedLocation == '/onboarding';
-      final isLogin = state.matchedLocation == '/login';
-      final isRegister = state.matchedLocation == '/register';
-
-      // Если onboarding не пройден, отправляем туда
-      if (!onboardingService.isOnboardingComplete && !isOnboarding) {
-        return '/onboarding';
-      }
-
-      // Если onboarding пройден, но пользователь не авторизован и не на страницах авторизации
-      if (onboardingService.isOnboardingComplete &&
-          !authState.isAuthenticated &&
-          !isLogin &&
-          !isRegister) {
-        return '/login';
-      }
-
-      // Если авторизован и пытается зайти на onboarding/login/register - отправляем на главную
-      if (authState.isAuthenticated &&
-          (isOnboarding || isLogin || isRegister)) {
-        return '/my-books';
-      }
-
+    refreshListenable: GoRouterRefreshNotifier(authCubit),
+    redirect: (context, state) {
+      final isAuthenticated = authCubit.state.isAuthenticated;
+      if (!isAuthenticated) return '/login';
       return null;
     },
-    refreshListenable: GoRouterRefreshNotifier(authCubit),
     routes: [
-      GoRoute(
-        path: '/onboarding',
-        name: 'onboarding',
-        builder: (final context, final state) => const OnboardingScreen(),
-      ),
       GoRoute(
         path: '/login',
         name: 'login',
         builder: (final context, final state) => const LoginScreen(),
       ),
+
       GoRoute(
         path: '/register',
         name: 'register',
