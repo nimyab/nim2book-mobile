@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
 import 'package:nim2book_mobile_flutter/core/models/genre/genre.dart';
+import 'package:nim2book_mobile_flutter/core/models/personal_user_book/personal_user_book.dart';
 import 'package:nim2book_mobile_flutter/core/models/user/user.dart';
 
 part 'responses.freezed.dart';

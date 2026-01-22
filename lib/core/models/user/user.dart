@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:nim2book_mobile_flutter/core/models/genre/genre.dart';
+import 'package:nim2book_mobile_flutter/core/models/personal_user_book/personal_user_book.dart';
 
 part 'user.freezed.dart';
 part 'user.g.dart';
@@ -27,22 +27,6 @@ abstract class EmailPasswordAccount with _$EmailPasswordAccount {
 
   factory EmailPasswordAccount.fromJson(final Map<String, dynamic> json) =>
       _$EmailPasswordAccountFromJson(json);
-}
-
-@freezed
-abstract class PersonalUserBook with _$PersonalUserBook {
-  const factory PersonalUserBook({
-    required final String id,
-    required final String title,
-    required final String author,
-    required final List<String> chapterPaths,
-    required final String userId,
-    final String? cover,
-    final List<Genre>? genres,
-  }) = _PersonalUserBook;
-
-  factory PersonalUserBook.fromJson(final Map<String, dynamic> json) =>
-      _$PersonalUserBookFromJson(json);
 }
 
 @freezed
