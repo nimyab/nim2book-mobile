@@ -639,5 +639,9 @@
   "skip": "Пропустить",
   "@skip": {"description": "Текст кнопки пропустить на экране onboarding"},
   "onboarding": "Добро пожаловать",
-  "@onboarding": {"description": "Заголовок экрана onboarding"}
+  "@onboarding": {"description": "Заголовок экрана onboarding"},
+  "personalBooks": "Личные книги",
+  "@personalBooks": {"description": "Заголовок секции личных книг"},
+  "addedBooks": "Добавленные книги",
+  "@addedBooks": {"description": "Заголовок секции добавленных книг"}
 }

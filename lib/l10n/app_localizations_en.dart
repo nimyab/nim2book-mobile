@@ -546,4 +546,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboarding => 'Welcome';
+
+  @override
+  String get personalBooks => 'Personal Books';
+
+  @override
+  String get addedBooks => 'Added Books';
 }

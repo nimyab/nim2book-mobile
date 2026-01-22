@@ -639,5 +639,9 @@
   "skip": "Skip",
   "@skip": {"description": "Skip button text on onboarding screen"},
   "onboarding": "Welcome",
-  "@onboarding": {"description": "Onboarding screen title"}
+  "@onboarding": {"description": "Onboarding screen title"},
+  "personalBooks": "Personal Books",
+  "@personalBooks": {"description": "Personal books section title"},
+  "addedBooks": "Added Books",
+  "@addedBooks": {"description": "Added books section title"}
 }

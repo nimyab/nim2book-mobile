@@ -1063,6 +1063,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Welcome'**
   String get onboarding;
+
+  /// Personal books section title
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Books'**
+  String get personalBooks;
+
+  /// Added books section title
+  ///
+  /// In en, this message translates to:
+  /// **'Added Books'**
+  String get addedBooks;
 }
 
 class _AppLocalizationsDelegate

@@ -1,16 +1,19 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
 import 'package:nim2book_mobile_flutter/core/services/book_service.dart';
 import 'package:nim2book_mobile_flutter/features/books/bloc/books/books_state.dart';
 
 class BooksCubit extends Cubit<BooksState> {
   final BookService _bookService = GetIt.I.get<BookService>();
+  final ApiClient _apiClient = GetIt.I.get<ApiClient>();
 
   BooksCubit() : super(const BooksState());
 
   Future<void> initialize() async {
     getMyBooks();
+    getPersonalBooks();
     await getBooks(null, null, 1);
   }
 
@@ -82,6 +85,16 @@ class BooksCubit extends Cubit<BooksState> {
       final updated = List<Book>.from(state.myBooks)
         ..removeWhere((final b) => b.id == book.id);
       emit(state.copyWith(myBooks: updated));
+    }
+  }
+
+  Future<void> getPersonalBooks() async {
+    try {
+      final response = await _apiClient.getPersonalUserBooks(page: 1);
+      emit(state.copyWith(personalBooks: response.books));
+    } catch (e) {
+      // Handle error silently or log it
+      emit(state.copyWith(personalBooks: []));
     }
   }
 }

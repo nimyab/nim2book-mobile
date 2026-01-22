@@ -549,4 +549,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get onboarding => 'Добро пожаловать';
+
+  @override
+  String get personalBooks => 'Личные книги';
+
+  @override
+  String get addedBooks => 'Добавленные книги';
 }
