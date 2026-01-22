@@ -56,10 +56,53 @@ abstract class AddFcmTokenRequest with _$AddFcmTokenRequest {
 abstract class LookupRequest with _$LookupRequest {
   const factory LookupRequest({
     required final String text,
-    required final String lang,
+    required final String fromLang,
+    required final String toLang,
     required final String ui,
   }) = _LookupRequest;
 
   factory LookupRequest.fromJson(final Map<String, dynamic> json) =>
       _$LookupRequestFromJson(json);
+}
+
+@freezed
+abstract class CreateGenreRequest with _$CreateGenreRequest {
+  const factory CreateGenreRequest({
+    required final String name,
+  }) = _CreateGenreRequest;
+
+  factory CreateGenreRequest.fromJson(final Map<String, dynamic> json) =>
+      _$CreateGenreRequestFromJson(json);
+}
+
+@freezed
+abstract class UpdateGenreRequest with _$UpdateGenreRequest {
+  const factory UpdateGenreRequest({
+    required final String id,
+    required final String name,
+  }) = _UpdateGenreRequest;
+
+  factory UpdateGenreRequest.fromJson(final Map<String, dynamic> json) =>
+      _$UpdateGenreRequestFromJson(json);
+}
+
+@freezed
+abstract class UpdateMetadataRequest with _$UpdateMetadataRequest {
+  const factory UpdateMetadataRequest({
+    required final Map<String, dynamic> metadata,
+  }) = _UpdateMetadataRequest;
+
+  factory UpdateMetadataRequest.fromJson(final Map<String, dynamic> json) =>
+      _$UpdateMetadataRequestFromJson(json);
+}
+
+@freezed
+abstract class NotificationTestRequest with _$NotificationTestRequest {
+  const factory NotificationTestRequest({
+    final String? title,
+    final String? body,
+  }) = _NotificationTestRequest;
+
+  factory NotificationTestRequest.fromJson(final Map<String, dynamic> json) =>
+      _$NotificationTestRequestFromJson(json);
 }

@@ -4,55 +4,33 @@ part 'dictionary.freezed.dart';
 part 'dictionary.g.dart';
 
 @freezed
-abstract class Definition with _$Definition {
-  const factory Definition({
+abstract class DictionaryWord with _$DictionaryWord {
+  const factory DictionaryWord({
+    required final String id,
     required final String text,
-    required final List<Translation> tr,
-    final String? pos,
-    final String? ts,
-  }) = _Definition;
+    required final String fromLangCode,
+    required final String toLangCode,
+    final String? partOfSpeech,
+    final String? transcription,
+    final List<String>? translations,
+    final List<DictionaryExample>? examples,
+  }) = _DictionaryWord;
 
-  factory Definition.fromJson(final Map<String, dynamic> json) =>
-      _$DefinitionFromJson(json);
+  factory DictionaryWord.fromJson(final Map<String, dynamic> json) =>
+      _$DictionaryWordFromJson(json);
 }
 
 @freezed
-abstract class Translation with _$Translation {
-  const factory Translation({
+abstract class DictionaryExample with _$DictionaryExample {
+  const factory DictionaryExample({
+    required final String id,
+    required final String dictionaryID,
     required final String text,
-    final String? pos,
-    final List<Mean>? mean,
-    final List<Example>? ex,
-  }) = _Translation;
+    required final String translatedText,
+    required final int wordPositionStart,
+    required final int wordPositionEnd,
+  }) = _DictionaryExample;
 
-  factory Translation.fromJson(final Map<String, dynamic> json) =>
-      _$TranslationFromJson(json);
-}
-
-@freezed
-abstract class Mean with _$Mean {
-  const factory Mean({required final String text}) = _Mean;
-
-  factory Mean.fromJson(final Map<String, dynamic> json) =>
-      _$MeanFromJson(json);
-}
-
-@freezed
-abstract class Example with _$Example {
-  const factory Example({
-    required final String text,
-    final List<ExampleTranslation>? tr,
-  }) = _Example;
-
-  factory Example.fromJson(final Map<String, dynamic> json) =>
-      _$ExampleFromJson(json);
-}
-
-@freezed
-abstract class ExampleTranslation with _$ExampleTranslation {
-  const factory ExampleTranslation({required final String text}) =
-      _ExampleTranslation;
-
-  factory ExampleTranslation.fromJson(final Map<String, dynamic> json) =>
-      _$ExampleTranslationFromJson(json);
+  factory DictionaryExample.fromJson(final Map<String, dynamic> json) =>
+      _$DictionaryExampleFromJson(json);
 }

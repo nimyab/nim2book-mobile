@@ -4,7 +4,7 @@ import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets
 
 class WordCard extends StatefulWidget {
   final String word;
-  final List<Definition> definitions;
+  final List<DictionaryWord> definitions;
   final bool showTranslation;
   final VoidCallback onToggleTranslation;
   final VoidCallback onKnow;

@@ -4,8 +4,8 @@ import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_cubit.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
-import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/core/services/tts_service.dart';
+import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class TranslatedDialog extends StatefulWidget {
@@ -19,7 +19,7 @@ class TranslatedDialog extends StatefulWidget {
 
 class _TranslatedDialogState extends State<TranslatedDialog> {
   final apiClient = GetIt.I.get<ApiClient>();
-  final List<Definition> _definitions = [];
+  final List<DictionaryWord> _words = [];
   bool _isLoading = false;
 
   Future<void> fetchTranslation() async {
@@ -27,10 +27,10 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
       setState(() {
         _isLoading = true;
       });
-      final definitions = await context.read<DictionaryCubit>().getWord(
+      final words = await context.read<DictionaryCubit>().getWord(
         widget.phrase,
       );
-      if (definitions != null) _definitions.addAll(definitions);
+      if (words != null) _words.addAll(words);
     } catch (e) {
       GetIt.I.get<Talker>().error('Failed to fetch translation: $e');
     } finally {
@@ -100,10 +100,10 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
                           widget.phrase,
                         );
                       } else {
-                        if (_definitions.isEmpty) return;
+                        if (_words.isEmpty) return;
                         context.read<DictionaryCubit>().saveWord(
                           widget.phrase,
-                          _definitions,
+                          _words,
                         );
                       }
                     },
@@ -126,10 +126,10 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
                             ),
                           ),
                         ),
-                        if (_definitions.isNotEmpty &&
-                            _definitions[0].ts != null)
+                        if (_words.isNotEmpty &&
+                            _words[0].transcription != null)
                           Text(
-                            '[${_definitions[0].ts}]',
+                            '[${_words[0].transcription}]',
                             style: TextStyle(
                               fontSize: 14,
                               color: secondaryTextColor,
@@ -159,7 +159,7 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
                         ),
                       ),
                     )
-                  : _definitions.isEmpty
+                  : _words.isEmpty
                   ? Center(
                       child: Padding(
                         padding: const EdgeInsets.all(32.0),
@@ -189,10 +189,10 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
                         horizontal: 16,
                         vertical: 12,
                       ),
-                      itemCount: _definitions.length,
+                      itemCount: _words.length,
                       itemBuilder: (final context, final index) {
-                        final definition = _definitions[index];
-                        return _buildDefinitionItem(context, definition);
+                        final word = _words[index];
+                        return _buildWordItem(context, word);
                       },
                     ),
             ),
@@ -202,9 +202,9 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
     );
   }
 
-  Widget _buildDefinitionItem(
+  Widget _buildWordItem(
     final BuildContext context,
-    final Definition definition,
+    final DictionaryWord word,
   ) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
@@ -216,11 +216,11 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (definition.pos != null)
+          if (word.partOfSpeech != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: Text(
-                _getPartOfSpeechLabel(l10n, definition.pos!),
+                _getPartOfSpeechLabel(l10n, word.partOfSpeech!),
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -229,88 +229,79 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
               ),
             ),
 
-          ...definition.tr.asMap().entries.map((final entry) {
+          if (word.transcription != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8, left: 8),
+              child: Text(
+                '[${word.transcription}]',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: secondaryTextColor,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
+
+          ...(word.translations ?? []).asMap().entries.map((final entry) {
             final translation = entry.value;
             return Padding(
               padding: const EdgeInsets.only(left: 8, bottom: 12),
-              child: Column(
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '- ',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: secondaryTextColor,
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          translation.text,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: textColor,
-                          ),
-                        ),
-                      ),
-                    ],
+                  Text(
+                    '- ',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: secondaryTextColor,
+                    ),
                   ),
-
-                  if (translation.ex != null && translation.ex!.isNotEmpty)
-                    ...translation.ex!.map((final example) {
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 12, top: 4),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: RichText(
-                                text: TextSpan(
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: secondaryTextColor,
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      text: example.text,
-                                      style: const TextStyle(
-                                        fontStyle: FontStyle.italic,
-                                      ),
-                                    ),
-                                    if (example.tr != null &&
-                                        example.tr!.isNotEmpty)
-                                      TextSpan(
-                                        text:
-                                            ' — ${example.tr!.map((final t) => t.text).join(', ')}',
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
-
-                  if (translation.mean != null && translation.mean!.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(left: 12, top: 4),
-                      child: Text(
-                        translation.mean!.map((final m) => m.text).join(', '),
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: secondaryTextColor.withValues(alpha: 0.8),
-                          fontStyle: FontStyle.italic,
-                        ),
+                  Expanded(
+                    child: Text(
+                      translation,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: textColor,
                       ),
                     ),
+                  ),
                 ],
               ),
             );
           }),
+
+          // Display examples if available
+          if (word.examples != null && word.examples!.isNotEmpty)
+            ...word.examples!.map((final example) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 8, top: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      example.text,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: secondaryTextColor,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                    if (example.translatedText.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: Text(
+                          '— ${example.translatedText}',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: secondaryTextColor.withValues(alpha: 0.8),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              );
+            }),
         ],
       ),
     );

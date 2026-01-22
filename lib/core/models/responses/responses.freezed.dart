@@ -2500,6 +2500,296 @@ $BookCopyWith<$Res>? get book {
 
 
 /// @nodoc
+mixin _$TranslatePersonalUserBookResponse {
+
+ PersonalUserBook? get book; String? get messageAboutTranslate;
+/// Create a copy of TranslatePersonalUserBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$TranslatePersonalUserBookResponseCopyWith<TranslatePersonalUserBookResponse> get copyWith => _$TranslatePersonalUserBookResponseCopyWithImpl<TranslatePersonalUserBookResponse>(this as TranslatePersonalUserBookResponse, _$identity);
+
+  /// Serializes this TranslatePersonalUserBookResponse to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TranslatePersonalUserBookResponse&&(identical(other.book, book) || other.book == book)&&(identical(other.messageAboutTranslate, messageAboutTranslate) || other.messageAboutTranslate == messageAboutTranslate));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,book,messageAboutTranslate);
+
+@override
+String toString() {
+  return 'TranslatePersonalUserBookResponse(book: $book, messageAboutTranslate: $messageAboutTranslate)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $TranslatePersonalUserBookResponseCopyWith<$Res>  {
+  factory $TranslatePersonalUserBookResponseCopyWith(TranslatePersonalUserBookResponse value, $Res Function(TranslatePersonalUserBookResponse) _then) = _$TranslatePersonalUserBookResponseCopyWithImpl;
+@useResult
+$Res call({
+ PersonalUserBook? book, String? messageAboutTranslate
+});
+
+
+$PersonalUserBookCopyWith<$Res>? get book;
+
+}
+/// @nodoc
+class _$TranslatePersonalUserBookResponseCopyWithImpl<$Res>
+    implements $TranslatePersonalUserBookResponseCopyWith<$Res> {
+  _$TranslatePersonalUserBookResponseCopyWithImpl(this._self, this._then);
+
+  final TranslatePersonalUserBookResponse _self;
+  final $Res Function(TranslatePersonalUserBookResponse) _then;
+
+/// Create a copy of TranslatePersonalUserBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? book = freezed,Object? messageAboutTranslate = freezed,}) {
+  return _then(_self.copyWith(
+book: freezed == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
+as PersonalUserBook?,messageAboutTranslate: freezed == messageAboutTranslate ? _self.messageAboutTranslate : messageAboutTranslate // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+/// Create a copy of TranslatePersonalUserBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PersonalUserBookCopyWith<$Res>? get book {
+    if (_self.book == null) {
+    return null;
+  }
+
+  return $PersonalUserBookCopyWith<$Res>(_self.book!, (value) {
+    return _then(_self.copyWith(book: value));
+  });
+}
+}
+
+
+/// Adds pattern-matching-related methods to [TranslatePersonalUserBookResponse].
+extension TranslatePersonalUserBookResponsePatterns on TranslatePersonalUserBookResponse {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _TranslatePersonalUserBookResponse value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _TranslatePersonalUserBookResponse() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _TranslatePersonalUserBookResponse value)  $default,){
+final _that = this;
+switch (_that) {
+case _TranslatePersonalUserBookResponse():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _TranslatePersonalUserBookResponse value)?  $default,){
+final _that = this;
+switch (_that) {
+case _TranslatePersonalUserBookResponse() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PersonalUserBook? book,  String? messageAboutTranslate)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _TranslatePersonalUserBookResponse() when $default != null:
+return $default(_that.book,_that.messageAboutTranslate);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PersonalUserBook? book,  String? messageAboutTranslate)  $default,) {final _that = this;
+switch (_that) {
+case _TranslatePersonalUserBookResponse():
+return $default(_that.book,_that.messageAboutTranslate);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PersonalUserBook? book,  String? messageAboutTranslate)?  $default,) {final _that = this;
+switch (_that) {
+case _TranslatePersonalUserBookResponse() when $default != null:
+return $default(_that.book,_that.messageAboutTranslate);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _TranslatePersonalUserBookResponse implements TranslatePersonalUserBookResponse {
+  const _TranslatePersonalUserBookResponse({this.book, this.messageAboutTranslate});
+  factory _TranslatePersonalUserBookResponse.fromJson(Map<String, dynamic> json) => _$TranslatePersonalUserBookResponseFromJson(json);
+
+@override final  PersonalUserBook? book;
+@override final  String? messageAboutTranslate;
+
+/// Create a copy of TranslatePersonalUserBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$TranslatePersonalUserBookResponseCopyWith<_TranslatePersonalUserBookResponse> get copyWith => __$TranslatePersonalUserBookResponseCopyWithImpl<_TranslatePersonalUserBookResponse>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$TranslatePersonalUserBookResponseToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TranslatePersonalUserBookResponse&&(identical(other.book, book) || other.book == book)&&(identical(other.messageAboutTranslate, messageAboutTranslate) || other.messageAboutTranslate == messageAboutTranslate));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,book,messageAboutTranslate);
+
+@override
+String toString() {
+  return 'TranslatePersonalUserBookResponse(book: $book, messageAboutTranslate: $messageAboutTranslate)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$TranslatePersonalUserBookResponseCopyWith<$Res> implements $TranslatePersonalUserBookResponseCopyWith<$Res> {
+  factory _$TranslatePersonalUserBookResponseCopyWith(_TranslatePersonalUserBookResponse value, $Res Function(_TranslatePersonalUserBookResponse) _then) = __$TranslatePersonalUserBookResponseCopyWithImpl;
+@override @useResult
+$Res call({
+ PersonalUserBook? book, String? messageAboutTranslate
+});
+
+
+@override $PersonalUserBookCopyWith<$Res>? get book;
+
+}
+/// @nodoc
+class __$TranslatePersonalUserBookResponseCopyWithImpl<$Res>
+    implements _$TranslatePersonalUserBookResponseCopyWith<$Res> {
+  __$TranslatePersonalUserBookResponseCopyWithImpl(this._self, this._then);
+
+  final _TranslatePersonalUserBookResponse _self;
+  final $Res Function(_TranslatePersonalUserBookResponse) _then;
+
+/// Create a copy of TranslatePersonalUserBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? book = freezed,Object? messageAboutTranslate = freezed,}) {
+  return _then(_TranslatePersonalUserBookResponse(
+book: freezed == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
+as PersonalUserBook?,messageAboutTranslate: freezed == messageAboutTranslate ? _self.messageAboutTranslate : messageAboutTranslate // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+/// Create a copy of TranslatePersonalUserBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PersonalUserBookCopyWith<$Res>? get book {
+    if (_self.book == null) {
+    return null;
+  }
+
+  return $PersonalUserBookCopyWith<$Res>(_self.book!, (value) {
+    return _then(_self.copyWith(book: value));
+  });
+}
+}
+
+
+/// @nodoc
 mixin _$UpdateBookResponse {
 
  Book get book;
@@ -3309,7 +3599,7 @@ as bool,
 /// @nodoc
 mixin _$LookupResponse {
 
- List<Definition> get def; Map<String, dynamic>? get head;
+ List<DictionaryWord> get words;
 /// Create a copy of LookupResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -3322,16 +3612,16 @@ $LookupResponseCopyWith<LookupResponse> get copyWith => _$LookupResponseCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LookupResponse&&const DeepCollectionEquality().equals(other.def, def)&&const DeepCollectionEquality().equals(other.head, head));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LookupResponse&&const DeepCollectionEquality().equals(other.words, words));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(def),const DeepCollectionEquality().hash(head));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(words));
 
 @override
 String toString() {
-  return 'LookupResponse(def: $def, head: $head)';
+  return 'LookupResponse(words: $words)';
 }
 
 
@@ -3342,7 +3632,7 @@ abstract mixin class $LookupResponseCopyWith<$Res>  {
   factory $LookupResponseCopyWith(LookupResponse value, $Res Function(LookupResponse) _then) = _$LookupResponseCopyWithImpl;
 @useResult
 $Res call({
- List<Definition> def, Map<String, dynamic>? head
+ List<DictionaryWord> words
 });
 
 
@@ -3359,11 +3649,10 @@ class _$LookupResponseCopyWithImpl<$Res>
 
 /// Create a copy of LookupResponse
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? def = null,Object? head = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? words = null,}) {
   return _then(_self.copyWith(
-def: null == def ? _self.def : def // ignore: cast_nullable_to_non_nullable
-as List<Definition>,head: freezed == head ? _self.head : head // ignore: cast_nullable_to_non_nullable
-as Map<String, dynamic>?,
+words: null == words ? _self.words : words // ignore: cast_nullable_to_non_nullable
+as List<DictionaryWord>,
   ));
 }
 
@@ -3448,10 +3737,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<Definition> def,  Map<String, dynamic>? head)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<DictionaryWord> words)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LookupResponse() when $default != null:
-return $default(_that.def,_that.head);case _:
+return $default(_that.words);case _:
   return orElse();
 
 }
@@ -3469,10 +3758,10 @@ return $default(_that.def,_that.head);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<Definition> def,  Map<String, dynamic>? head)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<DictionaryWord> words)  $default,) {final _that = this;
 switch (_that) {
 case _LookupResponse():
-return $default(_that.def,_that.head);case _:
+return $default(_that.words);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -3489,10 +3778,10 @@ return $default(_that.def,_that.head);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<Definition> def,  Map<String, dynamic>? head)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<DictionaryWord> words)?  $default,) {final _that = this;
 switch (_that) {
 case _LookupResponse() when $default != null:
-return $default(_that.def,_that.head);case _:
+return $default(_that.words);case _:
   return null;
 
 }
@@ -3504,23 +3793,14 @@ return $default(_that.def,_that.head);case _:
 @JsonSerializable()
 
 class _LookupResponse implements LookupResponse {
-  const _LookupResponse({required final  List<Definition> def, final  Map<String, dynamic>? head}): _def = def,_head = head;
+  const _LookupResponse({required final  List<DictionaryWord> words}): _words = words;
   factory _LookupResponse.fromJson(Map<String, dynamic> json) => _$LookupResponseFromJson(json);
 
- final  List<Definition> _def;
-@override List<Definition> get def {
-  if (_def is EqualUnmodifiableListView) return _def;
+ final  List<DictionaryWord> _words;
+@override List<DictionaryWord> get words {
+  if (_words is EqualUnmodifiableListView) return _words;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_def);
-}
-
- final  Map<String, dynamic>? _head;
-@override Map<String, dynamic>? get head {
-  final value = _head;
-  if (value == null) return null;
-  if (_head is EqualUnmodifiableMapView) return _head;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableMapView(value);
+  return EqualUnmodifiableListView(_words);
 }
 
 
@@ -3537,16 +3817,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LookupResponse&&const DeepCollectionEquality().equals(other._def, _def)&&const DeepCollectionEquality().equals(other._head, _head));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LookupResponse&&const DeepCollectionEquality().equals(other._words, _words));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_def),const DeepCollectionEquality().hash(_head));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_words));
 
 @override
 String toString() {
-  return 'LookupResponse(def: $def, head: $head)';
+  return 'LookupResponse(words: $words)';
 }
 
 
@@ -3557,7 +3837,7 @@ abstract mixin class _$LookupResponseCopyWith<$Res> implements $LookupResponseCo
   factory _$LookupResponseCopyWith(_LookupResponse value, $Res Function(_LookupResponse) _then) = __$LookupResponseCopyWithImpl;
 @override @useResult
 $Res call({
- List<Definition> def, Map<String, dynamic>? head
+ List<DictionaryWord> words
 });
 
 
@@ -3574,15 +3854,2501 @@ class __$LookupResponseCopyWithImpl<$Res>
 
 /// Create a copy of LookupResponse
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? def = null,Object? head = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? words = null,}) {
   return _then(_LookupResponse(
-def: null == def ? _self._def : def // ignore: cast_nullable_to_non_nullable
-as List<Definition>,head: freezed == head ? _self._head : head // ignore: cast_nullable_to_non_nullable
-as Map<String, dynamic>?,
+words: null == words ? _self._words : words // ignore: cast_nullable_to_non_nullable
+as List<DictionaryWord>,
   ));
 }
 
 
+}
+
+
+/// @nodoc
+mixin _$GetGenresResponse {
+
+ List<Genre> get genres;
+/// Create a copy of GetGenresResponse
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$GetGenresResponseCopyWith<GetGenresResponse> get copyWith => _$GetGenresResponseCopyWithImpl<GetGenresResponse>(this as GetGenresResponse, _$identity);
+
+  /// Serializes this GetGenresResponse to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GetGenresResponse&&const DeepCollectionEquality().equals(other.genres, genres));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(genres));
+
+@override
+String toString() {
+  return 'GetGenresResponse(genres: $genres)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $GetGenresResponseCopyWith<$Res>  {
+  factory $GetGenresResponseCopyWith(GetGenresResponse value, $Res Function(GetGenresResponse) _then) = _$GetGenresResponseCopyWithImpl;
+@useResult
+$Res call({
+ List<Genre> genres
+});
+
+
+
+
+}
+/// @nodoc
+class _$GetGenresResponseCopyWithImpl<$Res>
+    implements $GetGenresResponseCopyWith<$Res> {
+  _$GetGenresResponseCopyWithImpl(this._self, this._then);
+
+  final GetGenresResponse _self;
+  final $Res Function(GetGenresResponse) _then;
+
+/// Create a copy of GetGenresResponse
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? genres = null,}) {
+  return _then(_self.copyWith(
+genres: null == genres ? _self.genres : genres // ignore: cast_nullable_to_non_nullable
+as List<Genre>,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [GetGenresResponse].
+extension GetGenresResponsePatterns on GetGenresResponse {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _GetGenresResponse value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _GetGenresResponse() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _GetGenresResponse value)  $default,){
+final _that = this;
+switch (_that) {
+case _GetGenresResponse():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _GetGenresResponse value)?  $default,){
+final _that = this;
+switch (_that) {
+case _GetGenresResponse() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<Genre> genres)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _GetGenresResponse() when $default != null:
+return $default(_that.genres);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<Genre> genres)  $default,) {final _that = this;
+switch (_that) {
+case _GetGenresResponse():
+return $default(_that.genres);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<Genre> genres)?  $default,) {final _that = this;
+switch (_that) {
+case _GetGenresResponse() when $default != null:
+return $default(_that.genres);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _GetGenresResponse implements GetGenresResponse {
+  const _GetGenresResponse({required final  List<Genre> genres}): _genres = genres;
+  factory _GetGenresResponse.fromJson(Map<String, dynamic> json) => _$GetGenresResponseFromJson(json);
+
+ final  List<Genre> _genres;
+@override List<Genre> get genres {
+  if (_genres is EqualUnmodifiableListView) return _genres;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_genres);
+}
+
+
+/// Create a copy of GetGenresResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$GetGenresResponseCopyWith<_GetGenresResponse> get copyWith => __$GetGenresResponseCopyWithImpl<_GetGenresResponse>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$GetGenresResponseToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GetGenresResponse&&const DeepCollectionEquality().equals(other._genres, _genres));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_genres));
+
+@override
+String toString() {
+  return 'GetGenresResponse(genres: $genres)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$GetGenresResponseCopyWith<$Res> implements $GetGenresResponseCopyWith<$Res> {
+  factory _$GetGenresResponseCopyWith(_GetGenresResponse value, $Res Function(_GetGenresResponse) _then) = __$GetGenresResponseCopyWithImpl;
+@override @useResult
+$Res call({
+ List<Genre> genres
+});
+
+
+
+
+}
+/// @nodoc
+class __$GetGenresResponseCopyWithImpl<$Res>
+    implements _$GetGenresResponseCopyWith<$Res> {
+  __$GetGenresResponseCopyWithImpl(this._self, this._then);
+
+  final _GetGenresResponse _self;
+  final $Res Function(_GetGenresResponse) _then;
+
+/// Create a copy of GetGenresResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? genres = null,}) {
+  return _then(_GetGenresResponse(
+genres: null == genres ? _self._genres : genres // ignore: cast_nullable_to_non_nullable
+as List<Genre>,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
+mixin _$GetGenreResponse {
+
+ Genre get genre;
+/// Create a copy of GetGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$GetGenreResponseCopyWith<GetGenreResponse> get copyWith => _$GetGenreResponseCopyWithImpl<GetGenreResponse>(this as GetGenreResponse, _$identity);
+
+  /// Serializes this GetGenreResponse to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GetGenreResponse&&(identical(other.genre, genre) || other.genre == genre));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,genre);
+
+@override
+String toString() {
+  return 'GetGenreResponse(genre: $genre)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $GetGenreResponseCopyWith<$Res>  {
+  factory $GetGenreResponseCopyWith(GetGenreResponse value, $Res Function(GetGenreResponse) _then) = _$GetGenreResponseCopyWithImpl;
+@useResult
+$Res call({
+ Genre genre
+});
+
+
+$GenreCopyWith<$Res> get genre;
+
+}
+/// @nodoc
+class _$GetGenreResponseCopyWithImpl<$Res>
+    implements $GetGenreResponseCopyWith<$Res> {
+  _$GetGenreResponseCopyWithImpl(this._self, this._then);
+
+  final GetGenreResponse _self;
+  final $Res Function(GetGenreResponse) _then;
+
+/// Create a copy of GetGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? genre = null,}) {
+  return _then(_self.copyWith(
+genre: null == genre ? _self.genre : genre // ignore: cast_nullable_to_non_nullable
+as Genre,
+  ));
+}
+/// Create a copy of GetGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GenreCopyWith<$Res> get genre {
+  
+  return $GenreCopyWith<$Res>(_self.genre, (value) {
+    return _then(_self.copyWith(genre: value));
+  });
+}
+}
+
+
+/// Adds pattern-matching-related methods to [GetGenreResponse].
+extension GetGenreResponsePatterns on GetGenreResponse {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _GetGenreResponse value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _GetGenreResponse() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _GetGenreResponse value)  $default,){
+final _that = this;
+switch (_that) {
+case _GetGenreResponse():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _GetGenreResponse value)?  $default,){
+final _that = this;
+switch (_that) {
+case _GetGenreResponse() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Genre genre)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _GetGenreResponse() when $default != null:
+return $default(_that.genre);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Genre genre)  $default,) {final _that = this;
+switch (_that) {
+case _GetGenreResponse():
+return $default(_that.genre);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Genre genre)?  $default,) {final _that = this;
+switch (_that) {
+case _GetGenreResponse() when $default != null:
+return $default(_that.genre);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _GetGenreResponse implements GetGenreResponse {
+  const _GetGenreResponse({required this.genre});
+  factory _GetGenreResponse.fromJson(Map<String, dynamic> json) => _$GetGenreResponseFromJson(json);
+
+@override final  Genre genre;
+
+/// Create a copy of GetGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$GetGenreResponseCopyWith<_GetGenreResponse> get copyWith => __$GetGenreResponseCopyWithImpl<_GetGenreResponse>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$GetGenreResponseToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GetGenreResponse&&(identical(other.genre, genre) || other.genre == genre));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,genre);
+
+@override
+String toString() {
+  return 'GetGenreResponse(genre: $genre)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$GetGenreResponseCopyWith<$Res> implements $GetGenreResponseCopyWith<$Res> {
+  factory _$GetGenreResponseCopyWith(_GetGenreResponse value, $Res Function(_GetGenreResponse) _then) = __$GetGenreResponseCopyWithImpl;
+@override @useResult
+$Res call({
+ Genre genre
+});
+
+
+@override $GenreCopyWith<$Res> get genre;
+
+}
+/// @nodoc
+class __$GetGenreResponseCopyWithImpl<$Res>
+    implements _$GetGenreResponseCopyWith<$Res> {
+  __$GetGenreResponseCopyWithImpl(this._self, this._then);
+
+  final _GetGenreResponse _self;
+  final $Res Function(_GetGenreResponse) _then;
+
+/// Create a copy of GetGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? genre = null,}) {
+  return _then(_GetGenreResponse(
+genre: null == genre ? _self.genre : genre // ignore: cast_nullable_to_non_nullable
+as Genre,
+  ));
+}
+
+/// Create a copy of GetGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GenreCopyWith<$Res> get genre {
+  
+  return $GenreCopyWith<$Res>(_self.genre, (value) {
+    return _then(_self.copyWith(genre: value));
+  });
+}
+}
+
+
+/// @nodoc
+mixin _$CreateGenreResponse {
+
+ Genre get genre;
+/// Create a copy of CreateGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CreateGenreResponseCopyWith<CreateGenreResponse> get copyWith => _$CreateGenreResponseCopyWithImpl<CreateGenreResponse>(this as CreateGenreResponse, _$identity);
+
+  /// Serializes this CreateGenreResponse to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateGenreResponse&&(identical(other.genre, genre) || other.genre == genre));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,genre);
+
+@override
+String toString() {
+  return 'CreateGenreResponse(genre: $genre)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CreateGenreResponseCopyWith<$Res>  {
+  factory $CreateGenreResponseCopyWith(CreateGenreResponse value, $Res Function(CreateGenreResponse) _then) = _$CreateGenreResponseCopyWithImpl;
+@useResult
+$Res call({
+ Genre genre
+});
+
+
+$GenreCopyWith<$Res> get genre;
+
+}
+/// @nodoc
+class _$CreateGenreResponseCopyWithImpl<$Res>
+    implements $CreateGenreResponseCopyWith<$Res> {
+  _$CreateGenreResponseCopyWithImpl(this._self, this._then);
+
+  final CreateGenreResponse _self;
+  final $Res Function(CreateGenreResponse) _then;
+
+/// Create a copy of CreateGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? genre = null,}) {
+  return _then(_self.copyWith(
+genre: null == genre ? _self.genre : genre // ignore: cast_nullable_to_non_nullable
+as Genre,
+  ));
+}
+/// Create a copy of CreateGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GenreCopyWith<$Res> get genre {
+  
+  return $GenreCopyWith<$Res>(_self.genre, (value) {
+    return _then(_self.copyWith(genre: value));
+  });
+}
+}
+
+
+/// Adds pattern-matching-related methods to [CreateGenreResponse].
+extension CreateGenreResponsePatterns on CreateGenreResponse {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _CreateGenreResponse value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _CreateGenreResponse() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _CreateGenreResponse value)  $default,){
+final _that = this;
+switch (_that) {
+case _CreateGenreResponse():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _CreateGenreResponse value)?  $default,){
+final _that = this;
+switch (_that) {
+case _CreateGenreResponse() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Genre genre)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _CreateGenreResponse() when $default != null:
+return $default(_that.genre);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Genre genre)  $default,) {final _that = this;
+switch (_that) {
+case _CreateGenreResponse():
+return $default(_that.genre);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Genre genre)?  $default,) {final _that = this;
+switch (_that) {
+case _CreateGenreResponse() when $default != null:
+return $default(_that.genre);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _CreateGenreResponse implements CreateGenreResponse {
+  const _CreateGenreResponse({required this.genre});
+  factory _CreateGenreResponse.fromJson(Map<String, dynamic> json) => _$CreateGenreResponseFromJson(json);
+
+@override final  Genre genre;
+
+/// Create a copy of CreateGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$CreateGenreResponseCopyWith<_CreateGenreResponse> get copyWith => __$CreateGenreResponseCopyWithImpl<_CreateGenreResponse>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$CreateGenreResponseToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateGenreResponse&&(identical(other.genre, genre) || other.genre == genre));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,genre);
+
+@override
+String toString() {
+  return 'CreateGenreResponse(genre: $genre)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$CreateGenreResponseCopyWith<$Res> implements $CreateGenreResponseCopyWith<$Res> {
+  factory _$CreateGenreResponseCopyWith(_CreateGenreResponse value, $Res Function(_CreateGenreResponse) _then) = __$CreateGenreResponseCopyWithImpl;
+@override @useResult
+$Res call({
+ Genre genre
+});
+
+
+@override $GenreCopyWith<$Res> get genre;
+
+}
+/// @nodoc
+class __$CreateGenreResponseCopyWithImpl<$Res>
+    implements _$CreateGenreResponseCopyWith<$Res> {
+  __$CreateGenreResponseCopyWithImpl(this._self, this._then);
+
+  final _CreateGenreResponse _self;
+  final $Res Function(_CreateGenreResponse) _then;
+
+/// Create a copy of CreateGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? genre = null,}) {
+  return _then(_CreateGenreResponse(
+genre: null == genre ? _self.genre : genre // ignore: cast_nullable_to_non_nullable
+as Genre,
+  ));
+}
+
+/// Create a copy of CreateGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GenreCopyWith<$Res> get genre {
+  
+  return $GenreCopyWith<$Res>(_self.genre, (value) {
+    return _then(_self.copyWith(genre: value));
+  });
+}
+}
+
+
+/// @nodoc
+mixin _$UpdateGenreResponse {
+
+ Genre get genre;
+/// Create a copy of UpdateGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$UpdateGenreResponseCopyWith<UpdateGenreResponse> get copyWith => _$UpdateGenreResponseCopyWithImpl<UpdateGenreResponse>(this as UpdateGenreResponse, _$identity);
+
+  /// Serializes this UpdateGenreResponse to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UpdateGenreResponse&&(identical(other.genre, genre) || other.genre == genre));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,genre);
+
+@override
+String toString() {
+  return 'UpdateGenreResponse(genre: $genre)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $UpdateGenreResponseCopyWith<$Res>  {
+  factory $UpdateGenreResponseCopyWith(UpdateGenreResponse value, $Res Function(UpdateGenreResponse) _then) = _$UpdateGenreResponseCopyWithImpl;
+@useResult
+$Res call({
+ Genre genre
+});
+
+
+$GenreCopyWith<$Res> get genre;
+
+}
+/// @nodoc
+class _$UpdateGenreResponseCopyWithImpl<$Res>
+    implements $UpdateGenreResponseCopyWith<$Res> {
+  _$UpdateGenreResponseCopyWithImpl(this._self, this._then);
+
+  final UpdateGenreResponse _self;
+  final $Res Function(UpdateGenreResponse) _then;
+
+/// Create a copy of UpdateGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? genre = null,}) {
+  return _then(_self.copyWith(
+genre: null == genre ? _self.genre : genre // ignore: cast_nullable_to_non_nullable
+as Genre,
+  ));
+}
+/// Create a copy of UpdateGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GenreCopyWith<$Res> get genre {
+  
+  return $GenreCopyWith<$Res>(_self.genre, (value) {
+    return _then(_self.copyWith(genre: value));
+  });
+}
+}
+
+
+/// Adds pattern-matching-related methods to [UpdateGenreResponse].
+extension UpdateGenreResponsePatterns on UpdateGenreResponse {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _UpdateGenreResponse value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _UpdateGenreResponse() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _UpdateGenreResponse value)  $default,){
+final _that = this;
+switch (_that) {
+case _UpdateGenreResponse():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _UpdateGenreResponse value)?  $default,){
+final _that = this;
+switch (_that) {
+case _UpdateGenreResponse() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Genre genre)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _UpdateGenreResponse() when $default != null:
+return $default(_that.genre);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Genre genre)  $default,) {final _that = this;
+switch (_that) {
+case _UpdateGenreResponse():
+return $default(_that.genre);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Genre genre)?  $default,) {final _that = this;
+switch (_that) {
+case _UpdateGenreResponse() when $default != null:
+return $default(_that.genre);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _UpdateGenreResponse implements UpdateGenreResponse {
+  const _UpdateGenreResponse({required this.genre});
+  factory _UpdateGenreResponse.fromJson(Map<String, dynamic> json) => _$UpdateGenreResponseFromJson(json);
+
+@override final  Genre genre;
+
+/// Create a copy of UpdateGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$UpdateGenreResponseCopyWith<_UpdateGenreResponse> get copyWith => __$UpdateGenreResponseCopyWithImpl<_UpdateGenreResponse>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$UpdateGenreResponseToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdateGenreResponse&&(identical(other.genre, genre) || other.genre == genre));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,genre);
+
+@override
+String toString() {
+  return 'UpdateGenreResponse(genre: $genre)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$UpdateGenreResponseCopyWith<$Res> implements $UpdateGenreResponseCopyWith<$Res> {
+  factory _$UpdateGenreResponseCopyWith(_UpdateGenreResponse value, $Res Function(_UpdateGenreResponse) _then) = __$UpdateGenreResponseCopyWithImpl;
+@override @useResult
+$Res call({
+ Genre genre
+});
+
+
+@override $GenreCopyWith<$Res> get genre;
+
+}
+/// @nodoc
+class __$UpdateGenreResponseCopyWithImpl<$Res>
+    implements _$UpdateGenreResponseCopyWith<$Res> {
+  __$UpdateGenreResponseCopyWithImpl(this._self, this._then);
+
+  final _UpdateGenreResponse _self;
+  final $Res Function(_UpdateGenreResponse) _then;
+
+/// Create a copy of UpdateGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? genre = null,}) {
+  return _then(_UpdateGenreResponse(
+genre: null == genre ? _self.genre : genre // ignore: cast_nullable_to_non_nullable
+as Genre,
+  ));
+}
+
+/// Create a copy of UpdateGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GenreCopyWith<$Res> get genre {
+  
+  return $GenreCopyWith<$Res>(_self.genre, (value) {
+    return _then(_self.copyWith(genre: value));
+  });
+}
+}
+
+
+/// @nodoc
+mixin _$DeleteGenreResponse {
+
+ bool get success;
+/// Create a copy of DeleteGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DeleteGenreResponseCopyWith<DeleteGenreResponse> get copyWith => _$DeleteGenreResponseCopyWithImpl<DeleteGenreResponse>(this as DeleteGenreResponse, _$identity);
+
+  /// Serializes this DeleteGenreResponse to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DeleteGenreResponse&&(identical(other.success, success) || other.success == success));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,success);
+
+@override
+String toString() {
+  return 'DeleteGenreResponse(success: $success)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $DeleteGenreResponseCopyWith<$Res>  {
+  factory $DeleteGenreResponseCopyWith(DeleteGenreResponse value, $Res Function(DeleteGenreResponse) _then) = _$DeleteGenreResponseCopyWithImpl;
+@useResult
+$Res call({
+ bool success
+});
+
+
+
+
+}
+/// @nodoc
+class _$DeleteGenreResponseCopyWithImpl<$Res>
+    implements $DeleteGenreResponseCopyWith<$Res> {
+  _$DeleteGenreResponseCopyWithImpl(this._self, this._then);
+
+  final DeleteGenreResponse _self;
+  final $Res Function(DeleteGenreResponse) _then;
+
+/// Create a copy of DeleteGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? success = null,}) {
+  return _then(_self.copyWith(
+success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [DeleteGenreResponse].
+extension DeleteGenreResponsePatterns on DeleteGenreResponse {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _DeleteGenreResponse value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _DeleteGenreResponse() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _DeleteGenreResponse value)  $default,){
+final _that = this;
+switch (_that) {
+case _DeleteGenreResponse():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _DeleteGenreResponse value)?  $default,){
+final _that = this;
+switch (_that) {
+case _DeleteGenreResponse() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool success)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _DeleteGenreResponse() when $default != null:
+return $default(_that.success);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool success)  $default,) {final _that = this;
+switch (_that) {
+case _DeleteGenreResponse():
+return $default(_that.success);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool success)?  $default,) {final _that = this;
+switch (_that) {
+case _DeleteGenreResponse() when $default != null:
+return $default(_that.success);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _DeleteGenreResponse implements DeleteGenreResponse {
+  const _DeleteGenreResponse({required this.success});
+  factory _DeleteGenreResponse.fromJson(Map<String, dynamic> json) => _$DeleteGenreResponseFromJson(json);
+
+@override final  bool success;
+
+/// Create a copy of DeleteGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$DeleteGenreResponseCopyWith<_DeleteGenreResponse> get copyWith => __$DeleteGenreResponseCopyWithImpl<_DeleteGenreResponse>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$DeleteGenreResponseToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DeleteGenreResponse&&(identical(other.success, success) || other.success == success));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,success);
+
+@override
+String toString() {
+  return 'DeleteGenreResponse(success: $success)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$DeleteGenreResponseCopyWith<$Res> implements $DeleteGenreResponseCopyWith<$Res> {
+  factory _$DeleteGenreResponseCopyWith(_DeleteGenreResponse value, $Res Function(_DeleteGenreResponse) _then) = __$DeleteGenreResponseCopyWithImpl;
+@override @useResult
+$Res call({
+ bool success
+});
+
+
+
+
+}
+/// @nodoc
+class __$DeleteGenreResponseCopyWithImpl<$Res>
+    implements _$DeleteGenreResponseCopyWith<$Res> {
+  __$DeleteGenreResponseCopyWithImpl(this._self, this._then);
+
+  final _DeleteGenreResponse _self;
+  final $Res Function(_DeleteGenreResponse) _then;
+
+/// Create a copy of DeleteGenreResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? success = null,}) {
+  return _then(_DeleteGenreResponse(
+success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
+mixin _$GetPersonalUserBooksResponse {
+
+ List<PersonalUserBook> get books;
+/// Create a copy of GetPersonalUserBooksResponse
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$GetPersonalUserBooksResponseCopyWith<GetPersonalUserBooksResponse> get copyWith => _$GetPersonalUserBooksResponseCopyWithImpl<GetPersonalUserBooksResponse>(this as GetPersonalUserBooksResponse, _$identity);
+
+  /// Serializes this GetPersonalUserBooksResponse to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GetPersonalUserBooksResponse&&const DeepCollectionEquality().equals(other.books, books));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(books));
+
+@override
+String toString() {
+  return 'GetPersonalUserBooksResponse(books: $books)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $GetPersonalUserBooksResponseCopyWith<$Res>  {
+  factory $GetPersonalUserBooksResponseCopyWith(GetPersonalUserBooksResponse value, $Res Function(GetPersonalUserBooksResponse) _then) = _$GetPersonalUserBooksResponseCopyWithImpl;
+@useResult
+$Res call({
+ List<PersonalUserBook> books
+});
+
+
+
+
+}
+/// @nodoc
+class _$GetPersonalUserBooksResponseCopyWithImpl<$Res>
+    implements $GetPersonalUserBooksResponseCopyWith<$Res> {
+  _$GetPersonalUserBooksResponseCopyWithImpl(this._self, this._then);
+
+  final GetPersonalUserBooksResponse _self;
+  final $Res Function(GetPersonalUserBooksResponse) _then;
+
+/// Create a copy of GetPersonalUserBooksResponse
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? books = null,}) {
+  return _then(_self.copyWith(
+books: null == books ? _self.books : books // ignore: cast_nullable_to_non_nullable
+as List<PersonalUserBook>,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [GetPersonalUserBooksResponse].
+extension GetPersonalUserBooksResponsePatterns on GetPersonalUserBooksResponse {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _GetPersonalUserBooksResponse value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _GetPersonalUserBooksResponse() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _GetPersonalUserBooksResponse value)  $default,){
+final _that = this;
+switch (_that) {
+case _GetPersonalUserBooksResponse():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _GetPersonalUserBooksResponse value)?  $default,){
+final _that = this;
+switch (_that) {
+case _GetPersonalUserBooksResponse() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<PersonalUserBook> books)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _GetPersonalUserBooksResponse() when $default != null:
+return $default(_that.books);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<PersonalUserBook> books)  $default,) {final _that = this;
+switch (_that) {
+case _GetPersonalUserBooksResponse():
+return $default(_that.books);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<PersonalUserBook> books)?  $default,) {final _that = this;
+switch (_that) {
+case _GetPersonalUserBooksResponse() when $default != null:
+return $default(_that.books);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _GetPersonalUserBooksResponse implements GetPersonalUserBooksResponse {
+  const _GetPersonalUserBooksResponse({required final  List<PersonalUserBook> books}): _books = books;
+  factory _GetPersonalUserBooksResponse.fromJson(Map<String, dynamic> json) => _$GetPersonalUserBooksResponseFromJson(json);
+
+ final  List<PersonalUserBook> _books;
+@override List<PersonalUserBook> get books {
+  if (_books is EqualUnmodifiableListView) return _books;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_books);
+}
+
+
+/// Create a copy of GetPersonalUserBooksResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$GetPersonalUserBooksResponseCopyWith<_GetPersonalUserBooksResponse> get copyWith => __$GetPersonalUserBooksResponseCopyWithImpl<_GetPersonalUserBooksResponse>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$GetPersonalUserBooksResponseToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GetPersonalUserBooksResponse&&const DeepCollectionEquality().equals(other._books, _books));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_books));
+
+@override
+String toString() {
+  return 'GetPersonalUserBooksResponse(books: $books)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$GetPersonalUserBooksResponseCopyWith<$Res> implements $GetPersonalUserBooksResponseCopyWith<$Res> {
+  factory _$GetPersonalUserBooksResponseCopyWith(_GetPersonalUserBooksResponse value, $Res Function(_GetPersonalUserBooksResponse) _then) = __$GetPersonalUserBooksResponseCopyWithImpl;
+@override @useResult
+$Res call({
+ List<PersonalUserBook> books
+});
+
+
+
+
+}
+/// @nodoc
+class __$GetPersonalUserBooksResponseCopyWithImpl<$Res>
+    implements _$GetPersonalUserBooksResponseCopyWith<$Res> {
+  __$GetPersonalUserBooksResponseCopyWithImpl(this._self, this._then);
+
+  final _GetPersonalUserBooksResponse _self;
+  final $Res Function(_GetPersonalUserBooksResponse) _then;
+
+/// Create a copy of GetPersonalUserBooksResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? books = null,}) {
+  return _then(_GetPersonalUserBooksResponse(
+books: null == books ? _self._books : books // ignore: cast_nullable_to_non_nullable
+as List<PersonalUserBook>,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
+mixin _$GetPersonalUserBookResponse {
+
+ PersonalUserBook get book;
+/// Create a copy of GetPersonalUserBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$GetPersonalUserBookResponseCopyWith<GetPersonalUserBookResponse> get copyWith => _$GetPersonalUserBookResponseCopyWithImpl<GetPersonalUserBookResponse>(this as GetPersonalUserBookResponse, _$identity);
+
+  /// Serializes this GetPersonalUserBookResponse to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GetPersonalUserBookResponse&&(identical(other.book, book) || other.book == book));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,book);
+
+@override
+String toString() {
+  return 'GetPersonalUserBookResponse(book: $book)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $GetPersonalUserBookResponseCopyWith<$Res>  {
+  factory $GetPersonalUserBookResponseCopyWith(GetPersonalUserBookResponse value, $Res Function(GetPersonalUserBookResponse) _then) = _$GetPersonalUserBookResponseCopyWithImpl;
+@useResult
+$Res call({
+ PersonalUserBook book
+});
+
+
+$PersonalUserBookCopyWith<$Res> get book;
+
+}
+/// @nodoc
+class _$GetPersonalUserBookResponseCopyWithImpl<$Res>
+    implements $GetPersonalUserBookResponseCopyWith<$Res> {
+  _$GetPersonalUserBookResponseCopyWithImpl(this._self, this._then);
+
+  final GetPersonalUserBookResponse _self;
+  final $Res Function(GetPersonalUserBookResponse) _then;
+
+/// Create a copy of GetPersonalUserBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? book = null,}) {
+  return _then(_self.copyWith(
+book: null == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
+as PersonalUserBook,
+  ));
+}
+/// Create a copy of GetPersonalUserBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PersonalUserBookCopyWith<$Res> get book {
+  
+  return $PersonalUserBookCopyWith<$Res>(_self.book, (value) {
+    return _then(_self.copyWith(book: value));
+  });
+}
+}
+
+
+/// Adds pattern-matching-related methods to [GetPersonalUserBookResponse].
+extension GetPersonalUserBookResponsePatterns on GetPersonalUserBookResponse {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _GetPersonalUserBookResponse value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _GetPersonalUserBookResponse() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _GetPersonalUserBookResponse value)  $default,){
+final _that = this;
+switch (_that) {
+case _GetPersonalUserBookResponse():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _GetPersonalUserBookResponse value)?  $default,){
+final _that = this;
+switch (_that) {
+case _GetPersonalUserBookResponse() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PersonalUserBook book)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _GetPersonalUserBookResponse() when $default != null:
+return $default(_that.book);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PersonalUserBook book)  $default,) {final _that = this;
+switch (_that) {
+case _GetPersonalUserBookResponse():
+return $default(_that.book);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PersonalUserBook book)?  $default,) {final _that = this;
+switch (_that) {
+case _GetPersonalUserBookResponse() when $default != null:
+return $default(_that.book);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _GetPersonalUserBookResponse implements GetPersonalUserBookResponse {
+  const _GetPersonalUserBookResponse({required this.book});
+  factory _GetPersonalUserBookResponse.fromJson(Map<String, dynamic> json) => _$GetPersonalUserBookResponseFromJson(json);
+
+@override final  PersonalUserBook book;
+
+/// Create a copy of GetPersonalUserBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$GetPersonalUserBookResponseCopyWith<_GetPersonalUserBookResponse> get copyWith => __$GetPersonalUserBookResponseCopyWithImpl<_GetPersonalUserBookResponse>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$GetPersonalUserBookResponseToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GetPersonalUserBookResponse&&(identical(other.book, book) || other.book == book));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,book);
+
+@override
+String toString() {
+  return 'GetPersonalUserBookResponse(book: $book)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$GetPersonalUserBookResponseCopyWith<$Res> implements $GetPersonalUserBookResponseCopyWith<$Res> {
+  factory _$GetPersonalUserBookResponseCopyWith(_GetPersonalUserBookResponse value, $Res Function(_GetPersonalUserBookResponse) _then) = __$GetPersonalUserBookResponseCopyWithImpl;
+@override @useResult
+$Res call({
+ PersonalUserBook book
+});
+
+
+@override $PersonalUserBookCopyWith<$Res> get book;
+
+}
+/// @nodoc
+class __$GetPersonalUserBookResponseCopyWithImpl<$Res>
+    implements _$GetPersonalUserBookResponseCopyWith<$Res> {
+  __$GetPersonalUserBookResponseCopyWithImpl(this._self, this._then);
+
+  final _GetPersonalUserBookResponse _self;
+  final $Res Function(_GetPersonalUserBookResponse) _then;
+
+/// Create a copy of GetPersonalUserBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? book = null,}) {
+  return _then(_GetPersonalUserBookResponse(
+book: null == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
+as PersonalUserBook,
+  ));
+}
+
+/// Create a copy of GetPersonalUserBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PersonalUserBookCopyWith<$Res> get book {
+  
+  return $PersonalUserBookCopyWith<$Res>(_self.book, (value) {
+    return _then(_self.copyWith(book: value));
+  });
+}
+}
+
+
+/// @nodoc
+mixin _$UpdatePersonalUserBookResponse {
+
+ PersonalUserBook get book;
+/// Create a copy of UpdatePersonalUserBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$UpdatePersonalUserBookResponseCopyWith<UpdatePersonalUserBookResponse> get copyWith => _$UpdatePersonalUserBookResponseCopyWithImpl<UpdatePersonalUserBookResponse>(this as UpdatePersonalUserBookResponse, _$identity);
+
+  /// Serializes this UpdatePersonalUserBookResponse to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UpdatePersonalUserBookResponse&&(identical(other.book, book) || other.book == book));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,book);
+
+@override
+String toString() {
+  return 'UpdatePersonalUserBookResponse(book: $book)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $UpdatePersonalUserBookResponseCopyWith<$Res>  {
+  factory $UpdatePersonalUserBookResponseCopyWith(UpdatePersonalUserBookResponse value, $Res Function(UpdatePersonalUserBookResponse) _then) = _$UpdatePersonalUserBookResponseCopyWithImpl;
+@useResult
+$Res call({
+ PersonalUserBook book
+});
+
+
+$PersonalUserBookCopyWith<$Res> get book;
+
+}
+/// @nodoc
+class _$UpdatePersonalUserBookResponseCopyWithImpl<$Res>
+    implements $UpdatePersonalUserBookResponseCopyWith<$Res> {
+  _$UpdatePersonalUserBookResponseCopyWithImpl(this._self, this._then);
+
+  final UpdatePersonalUserBookResponse _self;
+  final $Res Function(UpdatePersonalUserBookResponse) _then;
+
+/// Create a copy of UpdatePersonalUserBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? book = null,}) {
+  return _then(_self.copyWith(
+book: null == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
+as PersonalUserBook,
+  ));
+}
+/// Create a copy of UpdatePersonalUserBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PersonalUserBookCopyWith<$Res> get book {
+  
+  return $PersonalUserBookCopyWith<$Res>(_self.book, (value) {
+    return _then(_self.copyWith(book: value));
+  });
+}
+}
+
+
+/// Adds pattern-matching-related methods to [UpdatePersonalUserBookResponse].
+extension UpdatePersonalUserBookResponsePatterns on UpdatePersonalUserBookResponse {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _UpdatePersonalUserBookResponse value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _UpdatePersonalUserBookResponse() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _UpdatePersonalUserBookResponse value)  $default,){
+final _that = this;
+switch (_that) {
+case _UpdatePersonalUserBookResponse():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _UpdatePersonalUserBookResponse value)?  $default,){
+final _that = this;
+switch (_that) {
+case _UpdatePersonalUserBookResponse() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PersonalUserBook book)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _UpdatePersonalUserBookResponse() when $default != null:
+return $default(_that.book);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PersonalUserBook book)  $default,) {final _that = this;
+switch (_that) {
+case _UpdatePersonalUserBookResponse():
+return $default(_that.book);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PersonalUserBook book)?  $default,) {final _that = this;
+switch (_that) {
+case _UpdatePersonalUserBookResponse() when $default != null:
+return $default(_that.book);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _UpdatePersonalUserBookResponse implements UpdatePersonalUserBookResponse {
+  const _UpdatePersonalUserBookResponse({required this.book});
+  factory _UpdatePersonalUserBookResponse.fromJson(Map<String, dynamic> json) => _$UpdatePersonalUserBookResponseFromJson(json);
+
+@override final  PersonalUserBook book;
+
+/// Create a copy of UpdatePersonalUserBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$UpdatePersonalUserBookResponseCopyWith<_UpdatePersonalUserBookResponse> get copyWith => __$UpdatePersonalUserBookResponseCopyWithImpl<_UpdatePersonalUserBookResponse>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$UpdatePersonalUserBookResponseToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdatePersonalUserBookResponse&&(identical(other.book, book) || other.book == book));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,book);
+
+@override
+String toString() {
+  return 'UpdatePersonalUserBookResponse(book: $book)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$UpdatePersonalUserBookResponseCopyWith<$Res> implements $UpdatePersonalUserBookResponseCopyWith<$Res> {
+  factory _$UpdatePersonalUserBookResponseCopyWith(_UpdatePersonalUserBookResponse value, $Res Function(_UpdatePersonalUserBookResponse) _then) = __$UpdatePersonalUserBookResponseCopyWithImpl;
+@override @useResult
+$Res call({
+ PersonalUserBook book
+});
+
+
+@override $PersonalUserBookCopyWith<$Res> get book;
+
+}
+/// @nodoc
+class __$UpdatePersonalUserBookResponseCopyWithImpl<$Res>
+    implements _$UpdatePersonalUserBookResponseCopyWith<$Res> {
+  __$UpdatePersonalUserBookResponseCopyWithImpl(this._self, this._then);
+
+  final _UpdatePersonalUserBookResponse _self;
+  final $Res Function(_UpdatePersonalUserBookResponse) _then;
+
+/// Create a copy of UpdatePersonalUserBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? book = null,}) {
+  return _then(_UpdatePersonalUserBookResponse(
+book: null == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
+as PersonalUserBook,
+  ));
+}
+
+/// Create a copy of UpdatePersonalUserBookResponse
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PersonalUserBookCopyWith<$Res> get book {
+  
+  return $PersonalUserBookCopyWith<$Res>(_self.book, (value) {
+    return _then(_self.copyWith(book: value));
+  });
+}
+}
+
+
+/// @nodoc
+mixin _$UpdateMetadataResponse {
+
+ User get user;
+/// Create a copy of UpdateMetadataResponse
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$UpdateMetadataResponseCopyWith<UpdateMetadataResponse> get copyWith => _$UpdateMetadataResponseCopyWithImpl<UpdateMetadataResponse>(this as UpdateMetadataResponse, _$identity);
+
+  /// Serializes this UpdateMetadataResponse to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UpdateMetadataResponse&&(identical(other.user, user) || other.user == user));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,user);
+
+@override
+String toString() {
+  return 'UpdateMetadataResponse(user: $user)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $UpdateMetadataResponseCopyWith<$Res>  {
+  factory $UpdateMetadataResponseCopyWith(UpdateMetadataResponse value, $Res Function(UpdateMetadataResponse) _then) = _$UpdateMetadataResponseCopyWithImpl;
+@useResult
+$Res call({
+ User user
+});
+
+
+$UserCopyWith<$Res> get user;
+
+}
+/// @nodoc
+class _$UpdateMetadataResponseCopyWithImpl<$Res>
+    implements $UpdateMetadataResponseCopyWith<$Res> {
+  _$UpdateMetadataResponseCopyWithImpl(this._self, this._then);
+
+  final UpdateMetadataResponse _self;
+  final $Res Function(UpdateMetadataResponse) _then;
+
+/// Create a copy of UpdateMetadataResponse
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? user = null,}) {
+  return _then(_self.copyWith(
+user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
+as User,
+  ));
+}
+/// Create a copy of UpdateMetadataResponse
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserCopyWith<$Res> get user {
+  
+  return $UserCopyWith<$Res>(_self.user, (value) {
+    return _then(_self.copyWith(user: value));
+  });
+}
+}
+
+
+/// Adds pattern-matching-related methods to [UpdateMetadataResponse].
+extension UpdateMetadataResponsePatterns on UpdateMetadataResponse {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _UpdateMetadataResponse value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _UpdateMetadataResponse() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _UpdateMetadataResponse value)  $default,){
+final _that = this;
+switch (_that) {
+case _UpdateMetadataResponse():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _UpdateMetadataResponse value)?  $default,){
+final _that = this;
+switch (_that) {
+case _UpdateMetadataResponse() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( User user)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _UpdateMetadataResponse() when $default != null:
+return $default(_that.user);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( User user)  $default,) {final _that = this;
+switch (_that) {
+case _UpdateMetadataResponse():
+return $default(_that.user);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( User user)?  $default,) {final _that = this;
+switch (_that) {
+case _UpdateMetadataResponse() when $default != null:
+return $default(_that.user);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _UpdateMetadataResponse implements UpdateMetadataResponse {
+  const _UpdateMetadataResponse({required this.user});
+  factory _UpdateMetadataResponse.fromJson(Map<String, dynamic> json) => _$UpdateMetadataResponseFromJson(json);
+
+@override final  User user;
+
+/// Create a copy of UpdateMetadataResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$UpdateMetadataResponseCopyWith<_UpdateMetadataResponse> get copyWith => __$UpdateMetadataResponseCopyWithImpl<_UpdateMetadataResponse>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$UpdateMetadataResponseToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdateMetadataResponse&&(identical(other.user, user) || other.user == user));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,user);
+
+@override
+String toString() {
+  return 'UpdateMetadataResponse(user: $user)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$UpdateMetadataResponseCopyWith<$Res> implements $UpdateMetadataResponseCopyWith<$Res> {
+  factory _$UpdateMetadataResponseCopyWith(_UpdateMetadataResponse value, $Res Function(_UpdateMetadataResponse) _then) = __$UpdateMetadataResponseCopyWithImpl;
+@override @useResult
+$Res call({
+ User user
+});
+
+
+@override $UserCopyWith<$Res> get user;
+
+}
+/// @nodoc
+class __$UpdateMetadataResponseCopyWithImpl<$Res>
+    implements _$UpdateMetadataResponseCopyWith<$Res> {
+  __$UpdateMetadataResponseCopyWithImpl(this._self, this._then);
+
+  final _UpdateMetadataResponse _self;
+  final $Res Function(_UpdateMetadataResponse) _then;
+
+/// Create a copy of UpdateMetadataResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? user = null,}) {
+  return _then(_UpdateMetadataResponse(
+user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
+as User,
+  ));
+}
+
+/// Create a copy of UpdateMetadataResponse
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserCopyWith<$Res> get user {
+  
+  return $UserCopyWith<$Res>(_self.user, (value) {
+    return _then(_self.copyWith(user: value));
+  });
+}
 }
 
 // dart format on

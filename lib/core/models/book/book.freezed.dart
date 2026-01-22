@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Book {
 
- String get id; String get title; String get author; List<String> get chapterPaths; String? get cover;
+ String get id; String get title; String get author; List<String> get chapterPaths; String? get cover; List<Genre>? get genres;
 /// Create a copy of Book
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $BookCopyWith<Book> get copyWith => _$BookCopyWithImpl<Book>(this as Book, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Book&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.author, author) || other.author == author)&&const DeepCollectionEquality().equals(other.chapterPaths, chapterPaths)&&(identical(other.cover, cover) || other.cover == cover));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Book&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.author, author) || other.author == author)&&const DeepCollectionEquality().equals(other.chapterPaths, chapterPaths)&&(identical(other.cover, cover) || other.cover == cover)&&const DeepCollectionEquality().equals(other.genres, genres));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,author,const DeepCollectionEquality().hash(chapterPaths),cover);
+int get hashCode => Object.hash(runtimeType,id,title,author,const DeepCollectionEquality().hash(chapterPaths),cover,const DeepCollectionEquality().hash(genres));
 
 @override
 String toString() {
-  return 'Book(id: $id, title: $title, author: $author, chapterPaths: $chapterPaths, cover: $cover)';
+  return 'Book(id: $id, title: $title, author: $author, chapterPaths: $chapterPaths, cover: $cover, genres: $genres)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $BookCopyWith<$Res>  {
   factory $BookCopyWith(Book value, $Res Function(Book) _then) = _$BookCopyWithImpl;
 @useResult
 $Res call({
- String id, String title, String author, List<String> chapterPaths, String? cover
+ String id, String title, String author, List<String> chapterPaths, String? cover, List<Genre>? genres
 });
 
 
@@ -65,14 +65,15 @@ class _$BookCopyWithImpl<$Res>
 
 /// Create a copy of Book
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? author = null,Object? chapterPaths = null,Object? cover = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? author = null,Object? chapterPaths = null,Object? cover = freezed,Object? genres = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,author: null == author ? _self.author : author // ignore: cast_nullable_to_non_nullable
 as String,chapterPaths: null == chapterPaths ? _self.chapterPaths : chapterPaths // ignore: cast_nullable_to_non_nullable
 as List<String>,cover: freezed == cover ? _self.cover : cover // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,genres: freezed == genres ? _self.genres : genres // ignore: cast_nullable_to_non_nullable
+as List<Genre>?,
   ));
 }
 
@@ -157,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String author,  List<String> chapterPaths,  String? cover)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String author,  List<String> chapterPaths,  String? cover,  List<Genre>? genres)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Book() when $default != null:
-return $default(_that.id,_that.title,_that.author,_that.chapterPaths,_that.cover);case _:
+return $default(_that.id,_that.title,_that.author,_that.chapterPaths,_that.cover,_that.genres);case _:
   return orElse();
 
 }
@@ -178,10 +179,10 @@ return $default(_that.id,_that.title,_that.author,_that.chapterPaths,_that.cover
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String author,  List<String> chapterPaths,  String? cover)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String author,  List<String> chapterPaths,  String? cover,  List<Genre>? genres)  $default,) {final _that = this;
 switch (_that) {
 case _Book():
-return $default(_that.id,_that.title,_that.author,_that.chapterPaths,_that.cover);case _:
+return $default(_that.id,_that.title,_that.author,_that.chapterPaths,_that.cover,_that.genres);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +199,10 @@ return $default(_that.id,_that.title,_that.author,_that.chapterPaths,_that.cover
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String author,  List<String> chapterPaths,  String? cover)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String author,  List<String> chapterPaths,  String? cover,  List<Genre>? genres)?  $default,) {final _that = this;
 switch (_that) {
 case _Book() when $default != null:
-return $default(_that.id,_that.title,_that.author,_that.chapterPaths,_that.cover);case _:
+return $default(_that.id,_that.title,_that.author,_that.chapterPaths,_that.cover,_that.genres);case _:
   return null;
 
 }
@@ -213,7 +214,7 @@ return $default(_that.id,_that.title,_that.author,_that.chapterPaths,_that.cover
 @JsonSerializable()
 
 class _Book implements Book {
-  const _Book({required this.id, required this.title, required this.author, required final  List<String> chapterPaths, required this.cover}): _chapterPaths = chapterPaths;
+  const _Book({required this.id, required this.title, required this.author, required final  List<String> chapterPaths, this.cover, final  List<Genre>? genres}): _chapterPaths = chapterPaths,_genres = genres;
   factory _Book.fromJson(Map<String, dynamic> json) => _$BookFromJson(json);
 
 @override final  String id;
@@ -227,6 +228,15 @@ class _Book implements Book {
 }
 
 @override final  String? cover;
+ final  List<Genre>? _genres;
+@override List<Genre>? get genres {
+  final value = _genres;
+  if (value == null) return null;
+  if (_genres is EqualUnmodifiableListView) return _genres;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
+
 
 /// Create a copy of Book
 /// with the given fields replaced by the non-null parameter values.
@@ -241,16 +251,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Book&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.author, author) || other.author == author)&&const DeepCollectionEquality().equals(other._chapterPaths, _chapterPaths)&&(identical(other.cover, cover) || other.cover == cover));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Book&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.author, author) || other.author == author)&&const DeepCollectionEquality().equals(other._chapterPaths, _chapterPaths)&&(identical(other.cover, cover) || other.cover == cover)&&const DeepCollectionEquality().equals(other._genres, _genres));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,author,const DeepCollectionEquality().hash(_chapterPaths),cover);
+int get hashCode => Object.hash(runtimeType,id,title,author,const DeepCollectionEquality().hash(_chapterPaths),cover,const DeepCollectionEquality().hash(_genres));
 
 @override
 String toString() {
-  return 'Book(id: $id, title: $title, author: $author, chapterPaths: $chapterPaths, cover: $cover)';
+  return 'Book(id: $id, title: $title, author: $author, chapterPaths: $chapterPaths, cover: $cover, genres: $genres)';
 }
 
 
@@ -261,7 +271,7 @@ abstract mixin class _$BookCopyWith<$Res> implements $BookCopyWith<$Res> {
   factory _$BookCopyWith(_Book value, $Res Function(_Book) _then) = __$BookCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String title, String author, List<String> chapterPaths, String? cover
+ String id, String title, String author, List<String> chapterPaths, String? cover, List<Genre>? genres
 });
 
 
@@ -278,14 +288,15 @@ class __$BookCopyWithImpl<$Res>
 
 /// Create a copy of Book
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? author = null,Object? chapterPaths = null,Object? cover = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? author = null,Object? chapterPaths = null,Object? cover = freezed,Object? genres = freezed,}) {
   return _then(_Book(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,author: null == author ? _self.author : author // ignore: cast_nullable_to_non_nullable
 as String,chapterPaths: null == chapterPaths ? _self._chapterPaths : chapterPaths // ignore: cast_nullable_to_non_nullable
 as List<String>,cover: freezed == cover ? _self.cover : cover // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,genres: freezed == genres ? _self._genres : genres // ignore: cast_nullable_to_non_nullable
+as List<Genre>?,
   ));
 }
 

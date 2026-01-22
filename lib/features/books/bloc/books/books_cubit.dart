@@ -24,7 +24,7 @@ class BooksCubit extends Cubit<BooksState> {
       if (page == 1) {
         emit(state.copyWith(allBooks: []));
       }
-      final books = await _bookService.getBooks(author, title, page.toString());
+      final books = await _bookService.getBooks(author, title, page);
       if (books.isNotEmpty) {
         final updated = List<Book>.from(state.allBooks)..addAll(books);
         emit(state.copyWith(allBooks: updated));
@@ -41,13 +41,13 @@ class BooksCubit extends Cubit<BooksState> {
 
       final q = query.trim();
       if (q.isEmpty) {
-        final books = await _bookService.getBooks(null, null, '1');
+        final books = await _bookService.getBooks(null, null, 1);
         emit(state.copyWith(allBooks: books));
         return;
       }
 
-      final byTitle = await _bookService.getBooks(null, q, '1');
-      final byAuthor = await _bookService.getBooks(q, null, '1');
+      final byTitle = await _bookService.getBooks(null, q, 1);
+      final byAuthor = await _bookService.getBooks(q, null, 1);
 
       final map = <String, Book>{};
       for (final b in byTitle) {

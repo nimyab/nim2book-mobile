@@ -11,12 +11,12 @@ class DictionaryCubit extends Cubit<DictionaryState> {
     emit(state.copyWith(savedWords: _dictService.getAllSavedWords()));
   }
 
-  Future<bool> saveWord(final String word, final List<Definition> def) async {
+  Future<bool> saveWord(final String word, final List<DictionaryWord> words) async {
     emit(state.copyWith(isLoading: true));
-    final ok = await _dictService.saveWord(word, def);
+    final ok = await _dictService.saveWord(word, words);
     if (ok) {
-      final updated = Map<String, List<Definition>>.from(state.savedWords);
-      updated[word] = def;
+      final updated = Map<String, List<DictionaryWord>>.from(state.savedWords);
+      updated[word] = words;
       emit(state.copyWith(savedWords: updated));
     }
     emit(state.copyWith(isLoading: false));
@@ -27,7 +27,7 @@ class DictionaryCubit extends Cubit<DictionaryState> {
     emit(state.copyWith(isLoading: true));
     final ok = await _dictService.deleteWord(word);
     if (ok) {
-      final updated = Map<String, List<Definition>>.from(state.savedWords);
+      final updated = Map<String, List<DictionaryWord>>.from(state.savedWords);
       updated.remove(word);
       emit(state.copyWith(savedWords: updated));
     }
@@ -35,7 +35,7 @@ class DictionaryCubit extends Cubit<DictionaryState> {
     return ok;
   }
 
-  Future<List<Definition>?> getWord(final String word) async {
+  Future<List<DictionaryWord>?> getWord(final String word) async {
     final saved = state.savedWords[word];
     if (saved != null) return saved;
     return _dictService.getWord(word);

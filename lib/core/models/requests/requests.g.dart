@@ -45,13 +45,46 @@ Map<String, dynamic> _$AddFcmTokenRequestToJson(_AddFcmTokenRequest instance) =>
 _LookupRequest _$LookupRequestFromJson(Map<String, dynamic> json) =>
     _LookupRequest(
       text: json['text'] as String,
-      lang: json['lang'] as String,
+      fromLang: json['fromLang'] as String,
+      toLang: json['toLang'] as String,
       ui: json['ui'] as String,
     );
 
 Map<String, dynamic> _$LookupRequestToJson(_LookupRequest instance) =>
     <String, dynamic>{
       'text': instance.text,
-      'lang': instance.lang,
+      'fromLang': instance.fromLang,
+      'toLang': instance.toLang,
       'ui': instance.ui,
     };
+
+_CreateGenreRequest _$CreateGenreRequestFromJson(Map<String, dynamic> json) =>
+    _CreateGenreRequest(name: json['name'] as String);
+
+Map<String, dynamic> _$CreateGenreRequestToJson(_CreateGenreRequest instance) =>
+    <String, dynamic>{'name': instance.name};
+
+_UpdateGenreRequest _$UpdateGenreRequestFromJson(Map<String, dynamic> json) =>
+    _UpdateGenreRequest(id: json['id'] as String, name: json['name'] as String);
+
+Map<String, dynamic> _$UpdateGenreRequestToJson(_UpdateGenreRequest instance) =>
+    <String, dynamic>{'id': instance.id, 'name': instance.name};
+
+_UpdateMetadataRequest _$UpdateMetadataRequestFromJson(
+  Map<String, dynamic> json,
+) => _UpdateMetadataRequest(metadata: json['metadata'] as Map<String, dynamic>);
+
+Map<String, dynamic> _$UpdateMetadataRequestToJson(
+  _UpdateMetadataRequest instance,
+) => <String, dynamic>{'metadata': instance.metadata};
+
+_NotificationTestRequest _$NotificationTestRequestFromJson(
+  Map<String, dynamic> json,
+) => _NotificationTestRequest(
+  title: json['title'] as String?,
+  body: json['body'] as String?,
+);
+
+Map<String, dynamic> _$NotificationTestRequestToJson(
+  _NotificationTestRequest instance,
+) => <String, dynamic>{'title': instance.title, 'body': instance.body};

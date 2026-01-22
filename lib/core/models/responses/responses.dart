@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
+import 'package:nim2book_mobile_flutter/core/models/genre/genre.dart';
 import 'package:nim2book_mobile_flutter/core/models/user/user.dart';
 
 part 'responses.freezed.dart';
@@ -95,6 +96,19 @@ abstract class TranslateBookResponse with _$TranslateBookResponse {
 }
 
 @freezed
+abstract class TranslatePersonalUserBookResponse
+    with _$TranslatePersonalUserBookResponse {
+  const factory TranslatePersonalUserBookResponse({
+    final PersonalUserBook? book,
+    final String? messageAboutTranslate,
+  }) = _TranslatePersonalUserBookResponse;
+
+  factory TranslatePersonalUserBookResponse.fromJson(
+    final Map<String, dynamic> json,
+  ) => _$TranslatePersonalUserBookResponseFromJson(json);
+}
+
+@freezed
 abstract class UpdateBookResponse with _$UpdateBookResponse {
   const factory UpdateBookResponse({required final Book book}) =
       _UpdateBookResponse;
@@ -123,11 +137,98 @@ abstract class DeleteFcmTokenResponse with _$DeleteFcmTokenResponse {
 
 @freezed
 abstract class LookupResponse with _$LookupResponse {
-  const factory LookupResponse({
-    required final List<Definition> def,
-    final Map<String, dynamic>? head,
-  }) = _LookupResponse;
+  const factory LookupResponse({required final List<DictionaryWord> words}) =
+      _LookupResponse;
 
   factory LookupResponse.fromJson(final Map<String, dynamic> json) =>
       _$LookupResponseFromJson(json);
+}
+
+@freezed
+abstract class GetGenresResponse with _$GetGenresResponse {
+  const factory GetGenresResponse({required final List<Genre> genres}) =
+      _GetGenresResponse;
+
+  factory GetGenresResponse.fromJson(final Map<String, dynamic> json) =>
+      _$GetGenresResponseFromJson(json);
+}
+
+@freezed
+abstract class GetGenreResponse with _$GetGenreResponse {
+  const factory GetGenreResponse({required final Genre genre}) =
+      _GetGenreResponse;
+
+  factory GetGenreResponse.fromJson(final Map<String, dynamic> json) =>
+      _$GetGenreResponseFromJson(json);
+}
+
+@freezed
+abstract class CreateGenreResponse with _$CreateGenreResponse {
+  const factory CreateGenreResponse({required final Genre genre}) =
+      _CreateGenreResponse;
+
+  factory CreateGenreResponse.fromJson(final Map<String, dynamic> json) =>
+      _$CreateGenreResponseFromJson(json);
+}
+
+@freezed
+abstract class UpdateGenreResponse with _$UpdateGenreResponse {
+  const factory UpdateGenreResponse({required final Genre genre}) =
+      _UpdateGenreResponse;
+
+  factory UpdateGenreResponse.fromJson(final Map<String, dynamic> json) =>
+      _$UpdateGenreResponseFromJson(json);
+}
+
+@freezed
+abstract class DeleteGenreResponse with _$DeleteGenreResponse {
+  const factory DeleteGenreResponse({required final bool success}) =
+      _DeleteGenreResponse;
+
+  factory DeleteGenreResponse.fromJson(final Map<String, dynamic> json) =>
+      _$DeleteGenreResponseFromJson(json);
+}
+
+@freezed
+abstract class GetPersonalUserBooksResponse
+    with _$GetPersonalUserBooksResponse {
+  const factory GetPersonalUserBooksResponse({
+    required final List<PersonalUserBook> books,
+  }) = _GetPersonalUserBooksResponse;
+
+  factory GetPersonalUserBooksResponse.fromJson(
+    final Map<String, dynamic> json,
+  ) => _$GetPersonalUserBooksResponseFromJson(json);
+}
+
+@freezed
+abstract class GetPersonalUserBookResponse with _$GetPersonalUserBookResponse {
+  const factory GetPersonalUserBookResponse({
+    required final PersonalUserBook book,
+  }) = _GetPersonalUserBookResponse;
+
+  factory GetPersonalUserBookResponse.fromJson(
+    final Map<String, dynamic> json,
+  ) => _$GetPersonalUserBookResponseFromJson(json);
+}
+
+@freezed
+abstract class UpdatePersonalUserBookResponse
+    with _$UpdatePersonalUserBookResponse {
+  const factory UpdatePersonalUserBookResponse({
+    required final PersonalUserBook book,
+  }) = _UpdatePersonalUserBookResponse;
+
+  factory UpdatePersonalUserBookResponse.fromJson(
+    final Map<String, dynamic> json,
+  ) => _$UpdatePersonalUserBookResponseFromJson(json);
+}
+
+@freezed
+abstract class UpdateMetadataResponse with _$UpdateMetadataResponse {
+  const factory UpdateMetadataResponse({required final User user}) =
+      _UpdateMetadataResponse;
+
+  factory UpdateMetadataResponse.fromJson(final Map<String, dynamic> json) =>
+      _$UpdateMetadataResponseFromJson(json);
 }

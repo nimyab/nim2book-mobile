@@ -42,7 +42,26 @@ GoRouter createRouter(final AuthCubit authCubit) {
     refreshListenable: GoRouterRefreshNotifier(authCubit),
     redirect: (context, state) {
       final isAuthenticated = authCubit.state.isAuthenticated;
-      if (!isAuthenticated) return '/login';
+      final isLoading = authCubit.state.isLoading;
+      final currentPath = state.uri.path;
+      final isLoginRoute = currentPath == '/login';
+      final isRegisterRoute = currentPath == '/register';
+
+      // Пока идет загрузка, не делаем редирект
+      if (isLoading) {
+        return null;
+      }
+
+      // Если пользователь авторизован и находится на экране логина/регистрации
+      if (isAuthenticated && (isLoginRoute || isRegisterRoute)) {
+        return '/my-books';
+      }
+
+      // Если пользователь не авторизован и пытается попасть на защищенные страницы
+      if (!isAuthenticated && !isLoginRoute && !isRegisterRoute) {
+        return '/login';
+      }
+
       return null;
     },
     routes: [

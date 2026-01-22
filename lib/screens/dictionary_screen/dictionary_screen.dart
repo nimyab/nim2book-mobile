@@ -63,9 +63,9 @@ class DictionaryScreen extends StatelessWidget {
                       itemCount: savedWords.length,
                       itemBuilder: (final context, final index) {
                         final word = savedWords.keys.elementAt(index);
-                        final definitions = savedWords[word]!;
-                        final transcription = definitions.isNotEmpty
-                            ? definitions.first.ts
+                        final words = savedWords[word]!;
+                        final transcription = words.isNotEmpty
+                            ? words.first.transcription
                             : null;
 
                         return ListTile(
@@ -90,10 +90,11 @@ class DictionaryScreen extends StatelessWidget {
                             ],
                           ),
                           subtitle:
-                              definitions.isNotEmpty &&
-                                  definitions.first.tr.isNotEmpty
+                              words.isNotEmpty &&
+                                  words.first.translations != null &&
+                                  words.first.translations!.isNotEmpty
                               ? Text(
-                                  definitions.first.tr.first.text,
+                                  words.first.translations!.first,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: theme.textTheme.bodyMedium?.copyWith(

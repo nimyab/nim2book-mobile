@@ -3,9 +3,9 @@ import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 class DefinitionCard extends StatelessWidget {
-  final Definition definition;
+  final DictionaryWord word;
 
-  const DefinitionCard({super.key, required this.definition});
+  const DefinitionCard({super.key, required this.word});
 
   String _getPartOfSpeechLabel(final BuildContext context, final String? pos) {
     if (pos == null) return '';
@@ -43,7 +43,7 @@ class DefinitionCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (definition.pos != null) ...[
+          if (word.partOfSpeech != null) ...[
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
@@ -51,7 +51,7 @@ class DefinitionCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Text(
-                _getPartOfSpeechLabel(context, definition.pos),
+                _getPartOfSpeechLabel(context, word.partOfSpeech),
                 style: theme.textTheme.labelSmall?.copyWith(
                   color: theme.colorScheme.primary,
                   fontWeight: FontWeight.w600,
@@ -60,8 +60,8 @@ class DefinitionCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
           ],
-          if (definition.tr.isNotEmpty) ...[
-            ...definition.tr.asMap().entries.map((final entry) {
+          if (word.translations != null && word.translations!.isNotEmpty) ...[
+            ...word.translations!.asMap().entries.map((final entry) {
               final index = entry.key;
               final translation = entry.value;
               return Column(
@@ -81,7 +81,7 @@ class DefinitionCard extends StatelessWidget {
                         ),
                         Expanded(
                           child: Text(
-                            translation.text,
+                            translation,
                             style: theme.textTheme.bodyLarge?.copyWith(
                               color: theme.colorScheme.onSurface,
                               fontWeight: FontWeight.w500,
@@ -91,80 +91,60 @@ class DefinitionCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if (translation.mean != null &&
-                      translation.mean!.isNotEmpty) ...[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10, bottom: 8),
-                      child: Text(
-                        translation.mean!
-                            .map((final meaning) => meaning.text)
-                            .join(', '),
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          fontStyle: FontStyle.italic,
-                          color: theme.colorScheme.onSurface.withValues(
-                            alpha: 0.8,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                  if (translation.ex != null && translation.ex!.isNotEmpty) ...[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16, bottom: 12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            l10n.examplesLabel,
-                            style: theme.textTheme.labelMedium?.copyWith(
-                              color: theme.colorScheme.onSurface.withValues(
-                                alpha: 0.7,
-                              ),
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          ...translation.ex!.map(
-                            (final example) => Container(
-                              margin: const EdgeInsets.only(bottom: 6),
-                              padding: const EdgeInsets.all(8),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    example.text,
-                                    style: theme.textTheme.bodyMedium?.copyWith(
-                                      color: theme.colorScheme.onSurface,
-                                      fontStyle: FontStyle.italic,
-                                    ),
-                                  ),
-                                  if (example.tr != null &&
-                                      example.tr!.isNotEmpty) ...[
-                                    const SizedBox(height: 2),
-                                    ...example.tr!.map(
-                                      (final exampleTranslation) => Text(
-                                        '→ ${exampleTranslation.text}',
-                                        style: theme.textTheme.bodySmall
-                                            ?.copyWith(
-                                              color: theme.colorScheme.onSurface
-                                                  .withValues(alpha: 0.7),
-                                            ),
-                                      ),
-                                    ),
-                                  ],
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                  if (index < definition.tr.length - 1)
+                  if (index < word.translations!.length - 1)
                     const SizedBox(height: 8),
                 ],
               );
             }),
+          ],
+          if (word.examples != null && word.examples!.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.examplesLabel,
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: theme.colorScheme.onSurface.withValues(
+                        alpha: 0.7,
+                      ),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  ...word.examples!.map(
+                    (final example) => Container(
+                      margin: const EdgeInsets.only(bottom: 6),
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            example.text,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.onSurface,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                          if (example.translatedText.isNotEmpty) ...[
+                            const SizedBox(height: 2),
+                            Text(
+                              '→ ${example.translatedText}',
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.colorScheme.onSurface
+                                    .withValues(alpha: 0.7),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ],
       ),

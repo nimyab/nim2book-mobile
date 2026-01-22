@@ -42,7 +42,7 @@ class BookService {
   Future<List<Book>> getBooks(
     final String? author,
     final String? title,
-    final String page,
+    final int page,
   ) async {
     final cacheKey = 'books_list_${author ?? ''}_${title ?? ''}_$page';
 

@@ -97,6 +97,22 @@ Map<String, dynamic> _$TranslateBookResponseToJson(
   'messageAboutTranslate': instance.messageAboutTranslate,
 };
 
+_TranslatePersonalUserBookResponse _$TranslatePersonalUserBookResponseFromJson(
+  Map<String, dynamic> json,
+) => _TranslatePersonalUserBookResponse(
+  book: json['book'] == null
+      ? null
+      : PersonalUserBook.fromJson(json['book'] as Map<String, dynamic>),
+  messageAboutTranslate: json['messageAboutTranslate'] as String?,
+);
+
+Map<String, dynamic> _$TranslatePersonalUserBookResponseToJson(
+  _TranslatePersonalUserBookResponse instance,
+) => <String, dynamic>{
+  'book': instance.book,
+  'messageAboutTranslate': instance.messageAboutTranslate,
+};
+
 _UpdateBookResponse _$UpdateBookResponseFromJson(Map<String, dynamic> json) =>
     _UpdateBookResponse(
       book: Book.fromJson(json['book'] as Map<String, dynamic>),
@@ -122,11 +138,95 @@ Map<String, dynamic> _$DeleteFcmTokenResponseToJson(
 
 _LookupResponse _$LookupResponseFromJson(Map<String, dynamic> json) =>
     _LookupResponse(
-      def: (json['def'] as List<dynamic>)
-          .map((e) => Definition.fromJson(e as Map<String, dynamic>))
+      words: (json['words'] as List<dynamic>)
+          .map((e) => DictionaryWord.fromJson(e as Map<String, dynamic>))
           .toList(),
-      head: json['head'] as Map<String, dynamic>?,
     );
 
 Map<String, dynamic> _$LookupResponseToJson(_LookupResponse instance) =>
-    <String, dynamic>{'def': instance.def, 'head': instance.head};
+    <String, dynamic>{'words': instance.words};
+
+_GetGenresResponse _$GetGenresResponseFromJson(Map<String, dynamic> json) =>
+    _GetGenresResponse(
+      genres: (json['genres'] as List<dynamic>)
+          .map((e) => Genre.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$GetGenresResponseToJson(_GetGenresResponse instance) =>
+    <String, dynamic>{'genres': instance.genres};
+
+_GetGenreResponse _$GetGenreResponseFromJson(Map<String, dynamic> json) =>
+    _GetGenreResponse(
+      genre: Genre.fromJson(json['genre'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$GetGenreResponseToJson(_GetGenreResponse instance) =>
+    <String, dynamic>{'genre': instance.genre};
+
+_CreateGenreResponse _$CreateGenreResponseFromJson(Map<String, dynamic> json) =>
+    _CreateGenreResponse(
+      genre: Genre.fromJson(json['genre'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$CreateGenreResponseToJson(
+  _CreateGenreResponse instance,
+) => <String, dynamic>{'genre': instance.genre};
+
+_UpdateGenreResponse _$UpdateGenreResponseFromJson(Map<String, dynamic> json) =>
+    _UpdateGenreResponse(
+      genre: Genre.fromJson(json['genre'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$UpdateGenreResponseToJson(
+  _UpdateGenreResponse instance,
+) => <String, dynamic>{'genre': instance.genre};
+
+_DeleteGenreResponse _$DeleteGenreResponseFromJson(Map<String, dynamic> json) =>
+    _DeleteGenreResponse(success: json['success'] as bool);
+
+Map<String, dynamic> _$DeleteGenreResponseToJson(
+  _DeleteGenreResponse instance,
+) => <String, dynamic>{'success': instance.success};
+
+_GetPersonalUserBooksResponse _$GetPersonalUserBooksResponseFromJson(
+  Map<String, dynamic> json,
+) => _GetPersonalUserBooksResponse(
+  books: (json['books'] as List<dynamic>)
+      .map((e) => PersonalUserBook.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
+
+Map<String, dynamic> _$GetPersonalUserBooksResponseToJson(
+  _GetPersonalUserBooksResponse instance,
+) => <String, dynamic>{'books': instance.books};
+
+_GetPersonalUserBookResponse _$GetPersonalUserBookResponseFromJson(
+  Map<String, dynamic> json,
+) => _GetPersonalUserBookResponse(
+  book: PersonalUserBook.fromJson(json['book'] as Map<String, dynamic>),
+);
+
+Map<String, dynamic> _$GetPersonalUserBookResponseToJson(
+  _GetPersonalUserBookResponse instance,
+) => <String, dynamic>{'book': instance.book};
+
+_UpdatePersonalUserBookResponse _$UpdatePersonalUserBookResponseFromJson(
+  Map<String, dynamic> json,
+) => _UpdatePersonalUserBookResponse(
+  book: PersonalUserBook.fromJson(json['book'] as Map<String, dynamic>),
+);
+
+Map<String, dynamic> _$UpdatePersonalUserBookResponseToJson(
+  _UpdatePersonalUserBookResponse instance,
+) => <String, dynamic>{'book': instance.book};
+
+_UpdateMetadataResponse _$UpdateMetadataResponseFromJson(
+  Map<String, dynamic> json,
+) => _UpdateMetadataResponse(
+  user: User.fromJson(json['user'] as Map<String, dynamic>),
+);
+
+Map<String, dynamic> _$UpdateMetadataResponseToJson(
+  _UpdateMetadataResponse instance,
+) => <String, dynamic>{'user': instance.user};

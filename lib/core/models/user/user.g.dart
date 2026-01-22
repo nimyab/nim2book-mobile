@@ -35,6 +35,32 @@ Map<String, dynamic> _$EmailPasswordAccountToJson(
   _EmailPasswordAccount instance,
 ) => <String, dynamic>{'id': instance.id, 'email': instance.email};
 
+_PersonalUserBook _$PersonalUserBookFromJson(Map<String, dynamic> json) =>
+    _PersonalUserBook(
+      id: json['id'] as String,
+      title: json['title'] as String,
+      author: json['author'] as String,
+      chapterPaths: (json['chapterPaths'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
+      userId: json['userId'] as String,
+      cover: json['cover'] as String?,
+      genres: (json['genres'] as List<dynamic>?)
+          ?.map((e) => Genre.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$PersonalUserBookToJson(_PersonalUserBook instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'title': instance.title,
+      'author': instance.author,
+      'chapterPaths': instance.chapterPaths,
+      'userId': instance.userId,
+      'cover': instance.cover,
+      'genres': instance.genres,
+    };
+
 _User _$UserFromJson(Map<String, dynamic> json) => _User(
   id: json['id'] as String,
   isAdmin: json['isAdmin'] as bool,
@@ -47,6 +73,10 @@ _User _$UserFromJson(Map<String, dynamic> json) => _User(
       : EmailPasswordAccount.fromJson(
           json['emailPasswordAccount'] as Map<String, dynamic>,
         ),
+  metadata: json['metadata'] as Map<String, dynamic>?,
+  personalUserBooks: (json['personalUserBooks'] as List<dynamic>?)
+      ?.map((e) => PersonalUserBook.fromJson(e as Map<String, dynamic>))
+      .toList(),
 );
 
 Map<String, dynamic> _$UserToJson(_User instance) => <String, dynamic>{
@@ -55,4 +85,6 @@ Map<String, dynamic> _$UserToJson(_User instance) => <String, dynamic>{
   'isVIP': instance.isVIP,
   'googleAccount': instance.googleAccount,
   'emailPasswordAccount': instance.emailPasswordAccount,
+  'metadata': instance.metadata,
+  'personalUserBooks': instance.personalUserBooks,
 };

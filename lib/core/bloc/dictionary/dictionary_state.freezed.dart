@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DictionaryState {
 
- Map<String, List<Definition>> get savedWords; bool get isLoading;
+ Map<String, List<DictionaryWord>> get savedWords; bool get isLoading;
 /// Create a copy of DictionaryState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $DictionaryStateCopyWith<$Res>  {
   factory $DictionaryStateCopyWith(DictionaryState value, $Res Function(DictionaryState) _then) = _$DictionaryStateCopyWithImpl;
 @useResult
 $Res call({
- Map<String, List<Definition>> savedWords, bool isLoading
+ Map<String, List<DictionaryWord>> savedWords, bool isLoading
 });
 
 
@@ -65,7 +65,7 @@ class _$DictionaryStateCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? savedWords = null,Object? isLoading = null,}) {
   return _then(_self.copyWith(
 savedWords: null == savedWords ? _self.savedWords : savedWords // ignore: cast_nullable_to_non_nullable
-as Map<String, List<Definition>>,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as Map<String, List<DictionaryWord>>,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -151,7 +151,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Map<String, List<Definition>> savedWords,  bool isLoading)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Map<String, List<DictionaryWord>> savedWords,  bool isLoading)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DictionaryState() when $default != null:
 return $default(_that.savedWords,_that.isLoading);case _:
@@ -172,7 +172,7 @@ return $default(_that.savedWords,_that.isLoading);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Map<String, List<Definition>> savedWords,  bool isLoading)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Map<String, List<DictionaryWord>> savedWords,  bool isLoading)  $default,) {final _that = this;
 switch (_that) {
 case _DictionaryState():
 return $default(_that.savedWords,_that.isLoading);case _:
@@ -192,7 +192,7 @@ return $default(_that.savedWords,_that.isLoading);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Map<String, List<Definition>> savedWords,  bool isLoading)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Map<String, List<DictionaryWord>> savedWords,  bool isLoading)?  $default,) {final _that = this;
 switch (_that) {
 case _DictionaryState() when $default != null:
 return $default(_that.savedWords,_that.isLoading);case _:
@@ -207,11 +207,11 @@ return $default(_that.savedWords,_that.isLoading);case _:
 
 
 class _DictionaryState implements DictionaryState {
-  const _DictionaryState({final  Map<String, List<Definition>> savedWords = const {}, this.isLoading = false}): _savedWords = savedWords;
+  const _DictionaryState({final  Map<String, List<DictionaryWord>> savedWords = const {}, this.isLoading = false}): _savedWords = savedWords;
   
 
- final  Map<String, List<Definition>> _savedWords;
-@override@JsonKey() Map<String, List<Definition>> get savedWords {
+ final  Map<String, List<DictionaryWord>> _savedWords;
+@override@JsonKey() Map<String, List<DictionaryWord>> get savedWords {
   if (_savedWords is EqualUnmodifiableMapView) return _savedWords;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableMapView(_savedWords);
@@ -249,7 +249,7 @@ abstract mixin class _$DictionaryStateCopyWith<$Res> implements $DictionaryState
   factory _$DictionaryStateCopyWith(_DictionaryState value, $Res Function(_DictionaryState) _then) = __$DictionaryStateCopyWithImpl;
 @override @useResult
 $Res call({
- Map<String, List<Definition>> savedWords, bool isLoading
+ Map<String, List<DictionaryWord>> savedWords, bool isLoading
 });
 
 
@@ -269,7 +269,7 @@ class __$DictionaryStateCopyWithImpl<$Res>
 @override @pragma('vm:prefer-inline') $Res call({Object? savedWords = null,Object? isLoading = null,}) {
   return _then(_DictionaryState(
 savedWords: null == savedWords ? _self._savedWords : savedWords // ignore: cast_nullable_to_non_nullable
-as Map<String, List<Definition>>,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as Map<String, List<DictionaryWord>>,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

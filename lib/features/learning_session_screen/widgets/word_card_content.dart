@@ -7,7 +7,7 @@ import 'package:nim2book_mobile_flutter/core/services/tts_service.dart';
 
 class WordCardContent extends StatelessWidget {
   final String word;
-  final List<Definition> definitions;
+  final List<DictionaryWord> definitions;
   final bool showTranslation;
 
   const WordCardContent({
@@ -61,10 +61,10 @@ class WordCardContent extends StatelessWidget {
                     ),
                   ],
                 ),
-                if (definitions.isNotEmpty && definitions.first.ts != null) ...[
+                if (definitions.isNotEmpty && definitions.first.transcription != null) ...[
                   const SizedBox(height: 8),
                   Text(
-                    '[${definitions.first.ts}]',
+                    '[${definitions.first.transcription}]',
                     style: theme.textTheme.bodyLarge?.copyWith(
                       color: theme.colorScheme.onPrimaryContainer.withValues(
                         alpha: 0.8,
@@ -82,8 +82,8 @@ class WordCardContent extends StatelessWidget {
                     thickness: 1,
                   ),
                   ...definitions.map(
-                    (final definition) =>
-                        DefinitionCard(definition: definition),
+                    (final word) =>
+                        DefinitionCard(word: word),
                   ),
                 ] else ...[
                   const SizedBox(height: 80),

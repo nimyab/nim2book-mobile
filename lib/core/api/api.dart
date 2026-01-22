@@ -160,16 +160,28 @@ class ApiClient {
     return MeResponse.fromJson(response.data!);
   }
 
+  Future<UpdateMetadataResponse> updateMetadata(
+    final UpdateMetadataRequest request,
+  ) async {
+    final response = await _dio.put<Map<String, dynamic>>(
+      '/api/v1/user/metadata',
+      data: request.toJson(),
+    );
+    return UpdateMetadataResponse.fromJson(response.data!);
+  }
+
   // Book endpoints
   Future<GetBooksResponse> getBooks({
     final String? author,
     final String? title,
-    required final String page,
+    final String? genreId,
+    required final int page,
   }) async {
     final queryParams = <String, dynamic>{
       'page': page,
       if (author != null) 'author': author,
       if (title != null) 'title': title,
+      if (genreId != null) 'genreId': genreId,
     };
 
     final response = await _dio.get<Map<String, dynamic>>(
@@ -189,26 +201,6 @@ class ApiClient {
       '/api/v1/book/get-chapter/$path',
     );
     return ChapterAlignNode.fromJson(response.data!);
-  }
-
-  Future<TranslateBookResponse> translateBook({
-    required final File file,
-    required final String from,
-    required final String to,
-  }) async {
-    final formData = FormData.fromMap({
-      'file': await MultipartFile.fromFile(file.path),
-      'from': from,
-      'to': to,
-    });
-
-    final response = await _dio.post<Map<String, dynamic>>(
-      '/api/v1/translate/book',
-      data: formData,
-      options: Options(contentType: 'multipart/form-data'),
-    );
-
-    return TranslateBookResponse.fromJson(response.data!);
   }
 
   Future<UpdateBookResponse> updateBook({
@@ -236,6 +228,102 @@ class ApiClient {
     return UpdateBookResponse.fromJson(response.data!);
   }
 
+  // Personal User Book endpoints
+  Future<GetPersonalUserBooksResponse> getPersonalUserBooks({
+    final String? author,
+    final String? title,
+    final String? genreId,
+    required final int page,
+  }) async {
+    final queryParams = <String, dynamic>{
+      'page': page,
+      if (author != null) 'author': author,
+      if (title != null) 'title': title,
+      if (genreId != null) 'genreId': genreId,
+    };
+
+    final response = await _dio.get<Map<String, dynamic>>(
+      '/api/v1/personal-user-book',
+      queryParameters: queryParams,
+    );
+    return GetPersonalUserBooksResponse.fromJson(response.data!);
+  }
+
+  Future<GetPersonalUserBookResponse> getPersonalUserBook(
+    final String id,
+  ) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      '/api/v1/personal-user-book/$id',
+    );
+    return GetPersonalUserBookResponse.fromJson(response.data!);
+  }
+
+  Future<UpdatePersonalUserBookResponse> updatePersonalUserBook({
+    required final String id,
+    final String? title,
+    final String? author,
+    final File? cover,
+  }) async {
+    final formData = FormData();
+
+    if (title != null) formData.fields.add(MapEntry('title', title));
+    if (author != null) formData.fields.add(MapEntry('author', author));
+    if (cover != null) {
+      formData.files.add(
+        MapEntry('cover', await MultipartFile.fromFile(cover.path)),
+      );
+    }
+
+    final response = await _dio.put<Map<String, dynamic>>(
+      '/api/v1/personal-user-book/$id',
+      data: formData,
+      options: Options(contentType: 'multipart/form-data'),
+    );
+
+    return UpdatePersonalUserBookResponse.fromJson(response.data!);
+  }
+
+  // Translate endpoints
+  Future<TranslateBookResponse> translateBook({
+    required final File file,
+    required final String from,
+    required final String to,
+  }) async {
+    final formData = FormData.fromMap({
+      'file': await MultipartFile.fromFile(file.path),
+      'from': from,
+      'to': to,
+    });
+
+    final response = await _dio.post<Map<String, dynamic>>(
+      '/api/v1/translate/book',
+      data: formData,
+      options: Options(contentType: 'multipart/form-data'),
+    );
+
+    return TranslateBookResponse.fromJson(response.data!);
+  }
+
+  Future<TranslatePersonalUserBookResponse> translatePersonalUserBook({
+    required final File file,
+    required final String from,
+    required final String to,
+  }) async {
+    final formData = FormData.fromMap({
+      'file': await MultipartFile.fromFile(file.path),
+      'from': from,
+      'to': to,
+    });
+
+    final response = await _dio.post<Map<String, dynamic>>(
+      '/api/v1/translate/personal-user-book',
+      data: formData,
+      options: Options(contentType: 'multipart/form-data'),
+    );
+
+    return TranslatePersonalUserBookResponse.fromJson(response.data!);
+  }
+
   // Dictionary endpoints
   Future<LookupResponse> lookup(final LookupRequest request) async {
     final response = await _dio.post<Map<String, dynamic>>(
@@ -243,6 +331,17 @@ class ApiClient {
       data: request.toJson(),
     );
     return LookupResponse.fromJson(response.data!);
+  }
+
+  // Genre endpoints
+  Future<GetGenresResponse> getGenres() async {
+    final response = await _dio.get<Map<String, dynamic>>('/api/v1/genre');
+    return GetGenresResponse.fromJson(response.data!);
+  }
+
+  Future<GetGenreResponse> getGenre(final String id) async {
+    final response = await _dio.get<Map<String, dynamic>>('/api/v1/genre/$id');
+    return GetGenreResponse.fromJson(response.data!);
   }
 
   // FCM token endpoints

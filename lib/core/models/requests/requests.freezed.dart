@@ -1336,7 +1336,7 @@ as String,
 /// @nodoc
 mixin _$LookupRequest {
 
- String get text; String get lang; String get ui;
+ String get text; String get fromLang; String get toLang; String get ui;
 /// Create a copy of LookupRequest
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1349,16 +1349,16 @@ $LookupRequestCopyWith<LookupRequest> get copyWith => _$LookupRequestCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LookupRequest&&(identical(other.text, text) || other.text == text)&&(identical(other.lang, lang) || other.lang == lang)&&(identical(other.ui, ui) || other.ui == ui));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LookupRequest&&(identical(other.text, text) || other.text == text)&&(identical(other.fromLang, fromLang) || other.fromLang == fromLang)&&(identical(other.toLang, toLang) || other.toLang == toLang)&&(identical(other.ui, ui) || other.ui == ui));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,text,lang,ui);
+int get hashCode => Object.hash(runtimeType,text,fromLang,toLang,ui);
 
 @override
 String toString() {
-  return 'LookupRequest(text: $text, lang: $lang, ui: $ui)';
+  return 'LookupRequest(text: $text, fromLang: $fromLang, toLang: $toLang, ui: $ui)';
 }
 
 
@@ -1369,7 +1369,7 @@ abstract mixin class $LookupRequestCopyWith<$Res>  {
   factory $LookupRequestCopyWith(LookupRequest value, $Res Function(LookupRequest) _then) = _$LookupRequestCopyWithImpl;
 @useResult
 $Res call({
- String text, String lang, String ui
+ String text, String fromLang, String toLang, String ui
 });
 
 
@@ -1386,10 +1386,11 @@ class _$LookupRequestCopyWithImpl<$Res>
 
 /// Create a copy of LookupRequest
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? text = null,Object? lang = null,Object? ui = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? text = null,Object? fromLang = null,Object? toLang = null,Object? ui = null,}) {
   return _then(_self.copyWith(
 text: null == text ? _self.text : text // ignore: cast_nullable_to_non_nullable
-as String,lang: null == lang ? _self.lang : lang // ignore: cast_nullable_to_non_nullable
+as String,fromLang: null == fromLang ? _self.fromLang : fromLang // ignore: cast_nullable_to_non_nullable
+as String,toLang: null == toLang ? _self.toLang : toLang // ignore: cast_nullable_to_non_nullable
 as String,ui: null == ui ? _self.ui : ui // ignore: cast_nullable_to_non_nullable
 as String,
   ));
@@ -1476,10 +1477,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String text,  String lang,  String ui)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String text,  String fromLang,  String toLang,  String ui)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LookupRequest() when $default != null:
-return $default(_that.text,_that.lang,_that.ui);case _:
+return $default(_that.text,_that.fromLang,_that.toLang,_that.ui);case _:
   return orElse();
 
 }
@@ -1497,10 +1498,10 @@ return $default(_that.text,_that.lang,_that.ui);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String text,  String lang,  String ui)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String text,  String fromLang,  String toLang,  String ui)  $default,) {final _that = this;
 switch (_that) {
 case _LookupRequest():
-return $default(_that.text,_that.lang,_that.ui);case _:
+return $default(_that.text,_that.fromLang,_that.toLang,_that.ui);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1517,10 +1518,10 @@ return $default(_that.text,_that.lang,_that.ui);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String text,  String lang,  String ui)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String text,  String fromLang,  String toLang,  String ui)?  $default,) {final _that = this;
 switch (_that) {
 case _LookupRequest() when $default != null:
-return $default(_that.text,_that.lang,_that.ui);case _:
+return $default(_that.text,_that.fromLang,_that.toLang,_that.ui);case _:
   return null;
 
 }
@@ -1532,11 +1533,12 @@ return $default(_that.text,_that.lang,_that.ui);case _:
 @JsonSerializable()
 
 class _LookupRequest implements LookupRequest {
-  const _LookupRequest({required this.text, required this.lang, required this.ui});
+  const _LookupRequest({required this.text, required this.fromLang, required this.toLang, required this.ui});
   factory _LookupRequest.fromJson(Map<String, dynamic> json) => _$LookupRequestFromJson(json);
 
 @override final  String text;
-@override final  String lang;
+@override final  String fromLang;
+@override final  String toLang;
 @override final  String ui;
 
 /// Create a copy of LookupRequest
@@ -1552,16 +1554,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LookupRequest&&(identical(other.text, text) || other.text == text)&&(identical(other.lang, lang) || other.lang == lang)&&(identical(other.ui, ui) || other.ui == ui));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LookupRequest&&(identical(other.text, text) || other.text == text)&&(identical(other.fromLang, fromLang) || other.fromLang == fromLang)&&(identical(other.toLang, toLang) || other.toLang == toLang)&&(identical(other.ui, ui) || other.ui == ui));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,text,lang,ui);
+int get hashCode => Object.hash(runtimeType,text,fromLang,toLang,ui);
 
 @override
 String toString() {
-  return 'LookupRequest(text: $text, lang: $lang, ui: $ui)';
+  return 'LookupRequest(text: $text, fromLang: $fromLang, toLang: $toLang, ui: $ui)';
 }
 
 
@@ -1572,7 +1574,7 @@ abstract mixin class _$LookupRequestCopyWith<$Res> implements $LookupRequestCopy
   factory _$LookupRequestCopyWith(_LookupRequest value, $Res Function(_LookupRequest) _then) = __$LookupRequestCopyWithImpl;
 @override @useResult
 $Res call({
- String text, String lang, String ui
+ String text, String fromLang, String toLang, String ui
 });
 
 
@@ -1589,12 +1591,1077 @@ class __$LookupRequestCopyWithImpl<$Res>
 
 /// Create a copy of LookupRequest
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? text = null,Object? lang = null,Object? ui = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? text = null,Object? fromLang = null,Object? toLang = null,Object? ui = null,}) {
   return _then(_LookupRequest(
 text: null == text ? _self.text : text // ignore: cast_nullable_to_non_nullable
-as String,lang: null == lang ? _self.lang : lang // ignore: cast_nullable_to_non_nullable
+as String,fromLang: null == fromLang ? _self.fromLang : fromLang // ignore: cast_nullable_to_non_nullable
+as String,toLang: null == toLang ? _self.toLang : toLang // ignore: cast_nullable_to_non_nullable
 as String,ui: null == ui ? _self.ui : ui // ignore: cast_nullable_to_non_nullable
 as String,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
+mixin _$CreateGenreRequest {
+
+ String get name;
+/// Create a copy of CreateGenreRequest
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CreateGenreRequestCopyWith<CreateGenreRequest> get copyWith => _$CreateGenreRequestCopyWithImpl<CreateGenreRequest>(this as CreateGenreRequest, _$identity);
+
+  /// Serializes this CreateGenreRequest to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateGenreRequest&&(identical(other.name, name) || other.name == name));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,name);
+
+@override
+String toString() {
+  return 'CreateGenreRequest(name: $name)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CreateGenreRequestCopyWith<$Res>  {
+  factory $CreateGenreRequestCopyWith(CreateGenreRequest value, $Res Function(CreateGenreRequest) _then) = _$CreateGenreRequestCopyWithImpl;
+@useResult
+$Res call({
+ String name
+});
+
+
+
+
+}
+/// @nodoc
+class _$CreateGenreRequestCopyWithImpl<$Res>
+    implements $CreateGenreRequestCopyWith<$Res> {
+  _$CreateGenreRequestCopyWithImpl(this._self, this._then);
+
+  final CreateGenreRequest _self;
+  final $Res Function(CreateGenreRequest) _then;
+
+/// Create a copy of CreateGenreRequest
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,}) {
+  return _then(_self.copyWith(
+name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [CreateGenreRequest].
+extension CreateGenreRequestPatterns on CreateGenreRequest {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _CreateGenreRequest value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _CreateGenreRequest() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _CreateGenreRequest value)  $default,){
+final _that = this;
+switch (_that) {
+case _CreateGenreRequest():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _CreateGenreRequest value)?  $default,){
+final _that = this;
+switch (_that) {
+case _CreateGenreRequest() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _CreateGenreRequest() when $default != null:
+return $default(_that.name);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name)  $default,) {final _that = this;
+switch (_that) {
+case _CreateGenreRequest():
+return $default(_that.name);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name)?  $default,) {final _that = this;
+switch (_that) {
+case _CreateGenreRequest() when $default != null:
+return $default(_that.name);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _CreateGenreRequest implements CreateGenreRequest {
+  const _CreateGenreRequest({required this.name});
+  factory _CreateGenreRequest.fromJson(Map<String, dynamic> json) => _$CreateGenreRequestFromJson(json);
+
+@override final  String name;
+
+/// Create a copy of CreateGenreRequest
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$CreateGenreRequestCopyWith<_CreateGenreRequest> get copyWith => __$CreateGenreRequestCopyWithImpl<_CreateGenreRequest>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$CreateGenreRequestToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateGenreRequest&&(identical(other.name, name) || other.name == name));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,name);
+
+@override
+String toString() {
+  return 'CreateGenreRequest(name: $name)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$CreateGenreRequestCopyWith<$Res> implements $CreateGenreRequestCopyWith<$Res> {
+  factory _$CreateGenreRequestCopyWith(_CreateGenreRequest value, $Res Function(_CreateGenreRequest) _then) = __$CreateGenreRequestCopyWithImpl;
+@override @useResult
+$Res call({
+ String name
+});
+
+
+
+
+}
+/// @nodoc
+class __$CreateGenreRequestCopyWithImpl<$Res>
+    implements _$CreateGenreRequestCopyWith<$Res> {
+  __$CreateGenreRequestCopyWithImpl(this._self, this._then);
+
+  final _CreateGenreRequest _self;
+  final $Res Function(_CreateGenreRequest) _then;
+
+/// Create a copy of CreateGenreRequest
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,}) {
+  return _then(_CreateGenreRequest(
+name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
+mixin _$UpdateGenreRequest {
+
+ String get id; String get name;
+/// Create a copy of UpdateGenreRequest
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$UpdateGenreRequestCopyWith<UpdateGenreRequest> get copyWith => _$UpdateGenreRequestCopyWithImpl<UpdateGenreRequest>(this as UpdateGenreRequest, _$identity);
+
+  /// Serializes this UpdateGenreRequest to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UpdateGenreRequest&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,name);
+
+@override
+String toString() {
+  return 'UpdateGenreRequest(id: $id, name: $name)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $UpdateGenreRequestCopyWith<$Res>  {
+  factory $UpdateGenreRequestCopyWith(UpdateGenreRequest value, $Res Function(UpdateGenreRequest) _then) = _$UpdateGenreRequestCopyWithImpl;
+@useResult
+$Res call({
+ String id, String name
+});
+
+
+
+
+}
+/// @nodoc
+class _$UpdateGenreRequestCopyWithImpl<$Res>
+    implements $UpdateGenreRequestCopyWith<$Res> {
+  _$UpdateGenreRequestCopyWithImpl(this._self, this._then);
+
+  final UpdateGenreRequest _self;
+  final $Res Function(UpdateGenreRequest) _then;
+
+/// Create a copy of UpdateGenreRequest
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,}) {
+  return _then(_self.copyWith(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [UpdateGenreRequest].
+extension UpdateGenreRequestPatterns on UpdateGenreRequest {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _UpdateGenreRequest value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _UpdateGenreRequest() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _UpdateGenreRequest value)  $default,){
+final _that = this;
+switch (_that) {
+case _UpdateGenreRequest():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _UpdateGenreRequest value)?  $default,){
+final _that = this;
+switch (_that) {
+case _UpdateGenreRequest() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _UpdateGenreRequest() when $default != null:
+return $default(_that.id,_that.name);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name)  $default,) {final _that = this;
+switch (_that) {
+case _UpdateGenreRequest():
+return $default(_that.id,_that.name);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name)?  $default,) {final _that = this;
+switch (_that) {
+case _UpdateGenreRequest() when $default != null:
+return $default(_that.id,_that.name);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _UpdateGenreRequest implements UpdateGenreRequest {
+  const _UpdateGenreRequest({required this.id, required this.name});
+  factory _UpdateGenreRequest.fromJson(Map<String, dynamic> json) => _$UpdateGenreRequestFromJson(json);
+
+@override final  String id;
+@override final  String name;
+
+/// Create a copy of UpdateGenreRequest
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$UpdateGenreRequestCopyWith<_UpdateGenreRequest> get copyWith => __$UpdateGenreRequestCopyWithImpl<_UpdateGenreRequest>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$UpdateGenreRequestToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdateGenreRequest&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,name);
+
+@override
+String toString() {
+  return 'UpdateGenreRequest(id: $id, name: $name)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$UpdateGenreRequestCopyWith<$Res> implements $UpdateGenreRequestCopyWith<$Res> {
+  factory _$UpdateGenreRequestCopyWith(_UpdateGenreRequest value, $Res Function(_UpdateGenreRequest) _then) = __$UpdateGenreRequestCopyWithImpl;
+@override @useResult
+$Res call({
+ String id, String name
+});
+
+
+
+
+}
+/// @nodoc
+class __$UpdateGenreRequestCopyWithImpl<$Res>
+    implements _$UpdateGenreRequestCopyWith<$Res> {
+  __$UpdateGenreRequestCopyWithImpl(this._self, this._then);
+
+  final _UpdateGenreRequest _self;
+  final $Res Function(_UpdateGenreRequest) _then;
+
+/// Create a copy of UpdateGenreRequest
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,}) {
+  return _then(_UpdateGenreRequest(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
+mixin _$UpdateMetadataRequest {
+
+ Map<String, dynamic> get metadata;
+/// Create a copy of UpdateMetadataRequest
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$UpdateMetadataRequestCopyWith<UpdateMetadataRequest> get copyWith => _$UpdateMetadataRequestCopyWithImpl<UpdateMetadataRequest>(this as UpdateMetadataRequest, _$identity);
+
+  /// Serializes this UpdateMetadataRequest to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UpdateMetadataRequest&&const DeepCollectionEquality().equals(other.metadata, metadata));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(metadata));
+
+@override
+String toString() {
+  return 'UpdateMetadataRequest(metadata: $metadata)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $UpdateMetadataRequestCopyWith<$Res>  {
+  factory $UpdateMetadataRequestCopyWith(UpdateMetadataRequest value, $Res Function(UpdateMetadataRequest) _then) = _$UpdateMetadataRequestCopyWithImpl;
+@useResult
+$Res call({
+ Map<String, dynamic> metadata
+});
+
+
+
+
+}
+/// @nodoc
+class _$UpdateMetadataRequestCopyWithImpl<$Res>
+    implements $UpdateMetadataRequestCopyWith<$Res> {
+  _$UpdateMetadataRequestCopyWithImpl(this._self, this._then);
+
+  final UpdateMetadataRequest _self;
+  final $Res Function(UpdateMetadataRequest) _then;
+
+/// Create a copy of UpdateMetadataRequest
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? metadata = null,}) {
+  return _then(_self.copyWith(
+metadata: null == metadata ? _self.metadata : metadata // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [UpdateMetadataRequest].
+extension UpdateMetadataRequestPatterns on UpdateMetadataRequest {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _UpdateMetadataRequest value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _UpdateMetadataRequest() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _UpdateMetadataRequest value)  $default,){
+final _that = this;
+switch (_that) {
+case _UpdateMetadataRequest():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _UpdateMetadataRequest value)?  $default,){
+final _that = this;
+switch (_that) {
+case _UpdateMetadataRequest() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Map<String, dynamic> metadata)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _UpdateMetadataRequest() when $default != null:
+return $default(_that.metadata);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Map<String, dynamic> metadata)  $default,) {final _that = this;
+switch (_that) {
+case _UpdateMetadataRequest():
+return $default(_that.metadata);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Map<String, dynamic> metadata)?  $default,) {final _that = this;
+switch (_that) {
+case _UpdateMetadataRequest() when $default != null:
+return $default(_that.metadata);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _UpdateMetadataRequest implements UpdateMetadataRequest {
+  const _UpdateMetadataRequest({required final  Map<String, dynamic> metadata}): _metadata = metadata;
+  factory _UpdateMetadataRequest.fromJson(Map<String, dynamic> json) => _$UpdateMetadataRequestFromJson(json);
+
+ final  Map<String, dynamic> _metadata;
+@override Map<String, dynamic> get metadata {
+  if (_metadata is EqualUnmodifiableMapView) return _metadata;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_metadata);
+}
+
+
+/// Create a copy of UpdateMetadataRequest
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$UpdateMetadataRequestCopyWith<_UpdateMetadataRequest> get copyWith => __$UpdateMetadataRequestCopyWithImpl<_UpdateMetadataRequest>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$UpdateMetadataRequestToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdateMetadataRequest&&const DeepCollectionEquality().equals(other._metadata, _metadata));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_metadata));
+
+@override
+String toString() {
+  return 'UpdateMetadataRequest(metadata: $metadata)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$UpdateMetadataRequestCopyWith<$Res> implements $UpdateMetadataRequestCopyWith<$Res> {
+  factory _$UpdateMetadataRequestCopyWith(_UpdateMetadataRequest value, $Res Function(_UpdateMetadataRequest) _then) = __$UpdateMetadataRequestCopyWithImpl;
+@override @useResult
+$Res call({
+ Map<String, dynamic> metadata
+});
+
+
+
+
+}
+/// @nodoc
+class __$UpdateMetadataRequestCopyWithImpl<$Res>
+    implements _$UpdateMetadataRequestCopyWith<$Res> {
+  __$UpdateMetadataRequestCopyWithImpl(this._self, this._then);
+
+  final _UpdateMetadataRequest _self;
+  final $Res Function(_UpdateMetadataRequest) _then;
+
+/// Create a copy of UpdateMetadataRequest
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? metadata = null,}) {
+  return _then(_UpdateMetadataRequest(
+metadata: null == metadata ? _self._metadata : metadata // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
+mixin _$NotificationTestRequest {
+
+ String? get title; String? get body;
+/// Create a copy of NotificationTestRequest
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$NotificationTestRequestCopyWith<NotificationTestRequest> get copyWith => _$NotificationTestRequestCopyWithImpl<NotificationTestRequest>(this as NotificationTestRequest, _$identity);
+
+  /// Serializes this NotificationTestRequest to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is NotificationTestRequest&&(identical(other.title, title) || other.title == title)&&(identical(other.body, body) || other.body == body));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,title,body);
+
+@override
+String toString() {
+  return 'NotificationTestRequest(title: $title, body: $body)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $NotificationTestRequestCopyWith<$Res>  {
+  factory $NotificationTestRequestCopyWith(NotificationTestRequest value, $Res Function(NotificationTestRequest) _then) = _$NotificationTestRequestCopyWithImpl;
+@useResult
+$Res call({
+ String? title, String? body
+});
+
+
+
+
+}
+/// @nodoc
+class _$NotificationTestRequestCopyWithImpl<$Res>
+    implements $NotificationTestRequestCopyWith<$Res> {
+  _$NotificationTestRequestCopyWithImpl(this._self, this._then);
+
+  final NotificationTestRequest _self;
+  final $Res Function(NotificationTestRequest) _then;
+
+/// Create a copy of NotificationTestRequest
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? title = freezed,Object? body = freezed,}) {
+  return _then(_self.copyWith(
+title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+as String?,body: freezed == body ? _self.body : body // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [NotificationTestRequest].
+extension NotificationTestRequestPatterns on NotificationTestRequest {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _NotificationTestRequest value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _NotificationTestRequest() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _NotificationTestRequest value)  $default,){
+final _that = this;
+switch (_that) {
+case _NotificationTestRequest():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _NotificationTestRequest value)?  $default,){
+final _that = this;
+switch (_that) {
+case _NotificationTestRequest() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? title,  String? body)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _NotificationTestRequest() when $default != null:
+return $default(_that.title,_that.body);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? title,  String? body)  $default,) {final _that = this;
+switch (_that) {
+case _NotificationTestRequest():
+return $default(_that.title,_that.body);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? title,  String? body)?  $default,) {final _that = this;
+switch (_that) {
+case _NotificationTestRequest() when $default != null:
+return $default(_that.title,_that.body);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _NotificationTestRequest implements NotificationTestRequest {
+  const _NotificationTestRequest({this.title, this.body});
+  factory _NotificationTestRequest.fromJson(Map<String, dynamic> json) => _$NotificationTestRequestFromJson(json);
+
+@override final  String? title;
+@override final  String? body;
+
+/// Create a copy of NotificationTestRequest
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$NotificationTestRequestCopyWith<_NotificationTestRequest> get copyWith => __$NotificationTestRequestCopyWithImpl<_NotificationTestRequest>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$NotificationTestRequestToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NotificationTestRequest&&(identical(other.title, title) || other.title == title)&&(identical(other.body, body) || other.body == body));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,title,body);
+
+@override
+String toString() {
+  return 'NotificationTestRequest(title: $title, body: $body)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$NotificationTestRequestCopyWith<$Res> implements $NotificationTestRequestCopyWith<$Res> {
+  factory _$NotificationTestRequestCopyWith(_NotificationTestRequest value, $Res Function(_NotificationTestRequest) _then) = __$NotificationTestRequestCopyWithImpl;
+@override @useResult
+$Res call({
+ String? title, String? body
+});
+
+
+
+
+}
+/// @nodoc
+class __$NotificationTestRequestCopyWithImpl<$Res>
+    implements _$NotificationTestRequestCopyWith<$Res> {
+  __$NotificationTestRequestCopyWithImpl(this._self, this._then);
+
+  final _NotificationTestRequest _self;
+  final $Res Function(_NotificationTestRequest) _then;
+
+/// Create a copy of NotificationTestRequest
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? title = freezed,Object? body = freezed,}) {
+  return _then(_NotificationTestRequest(
+title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+as String?,body: freezed == body ? _self.body : body // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
