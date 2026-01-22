@@ -9,7 +9,7 @@ import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nim2book_mobile_flutter/features/books/bloc/books/books_cubit.dart';
+import 'package:nim2book_mobile_flutter/core/bloc/books/books_cubit.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 class AddBookScreen extends StatefulWidget {

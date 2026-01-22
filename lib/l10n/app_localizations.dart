@@ -1070,6 +1070,12 @@ abstract class AppLocalizations {
   /// **'Personal Books'**
   String get personalBooks;
 
+  /// Shared books section title
+  ///
+  /// In en, this message translates to:
+  /// **'Shared Books'**
+  String get sharedBooks;
+
   /// Added books section title
   ///
   /// In en, this message translates to:

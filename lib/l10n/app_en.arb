@@ -642,6 +642,8 @@
   "@onboarding": {"description": "Onboarding screen title"},
   "personalBooks": "Personal Books",
   "@personalBooks": {"description": "Personal books section title"},
+  "sharedBooks": "Shared Books",
+  "@sharedBooks": {"description": "Shared books section title"},
   "addedBooks": "Added Books",
   "@addedBooks": {"description": "Added books section title"}
 }

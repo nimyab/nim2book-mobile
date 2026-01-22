@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
+import 'package:nim2book_mobile_flutter/core/bloc/books/books_state.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
 import 'package:nim2book_mobile_flutter/core/services/book_service.dart';
-import 'package:nim2book_mobile_flutter/features/books/bloc/books/books_state.dart';
 
 class BooksCubit extends Cubit<BooksState> {
   final BookService _bookService = GetIt.I.get<BookService>();

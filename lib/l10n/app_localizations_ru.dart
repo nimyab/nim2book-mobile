@@ -554,5 +554,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get personalBooks => 'Личные книги';
 
   @override
+  String get sharedBooks => 'Общие книги';
+
+  @override
   String get addedBooks => 'Добавленные книги';
 }

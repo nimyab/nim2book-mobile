@@ -642,6 +642,8 @@
   "@onboarding": {"description": "Заголовок экрана onboarding"},
   "personalBooks": "Личные книги",
   "@personalBooks": {"description": "Заголовок секции личных книг"},
+  "sharedBooks": "Общие книги",
+  "@sharedBooks": {"description": "Заголовок секции общих книг"},
   "addedBooks": "Добавленные книги",
   "@addedBooks": {"description": "Заголовок секции добавленных книг"}
 }

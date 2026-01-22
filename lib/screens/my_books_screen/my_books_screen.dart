@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nim2book_mobile_flutter/features/books/bloc/books/books_cubit.dart';
+import 'package:nim2book_mobile_flutter/core/bloc/books/books_cubit.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/screens/my_books_screen/widgets/books_section.dart';
 
@@ -26,9 +26,9 @@ class MyBooksScreen extends StatelessWidget {
                 onAddTap: () => context.push('/add-book'),
               ),
               BooksSection(
-                title: l10n.addedBooks,
+                title: l10n.sharedBooks,
                 books: booksState.myBooks,
-                onAddTap: () => context.push('/books'),
+                onAddTap: () => context.go('/books'),
               ),
             ],
           ),

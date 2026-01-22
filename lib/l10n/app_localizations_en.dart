@@ -551,5 +551,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get personalBooks => 'Personal Books';
 
   @override
+  String get sharedBooks => 'Shared Books';
+
+  @override
   String get addedBooks => 'Added Books';
 }

@@ -56,19 +56,21 @@ class ApiClient {
                   'Bearer ${_tokenService.accessToken}';
               final response = await _dio.fetch<Object?>(error.requestOptions);
 
-              handler.resolve(response);
-            } catch (refreshError) {
-              await _tokenService.clearTokens();
-              handler.next(error);
-            } finally {
               // Обрабатываем отложенные запросы
               for (final pendingRequest in _pendingRequests) {
                 pendingRequest.headers['Authorization'] =
                     'Bearer ${_tokenService.accessToken}';
-                handler.resolve(await _dio.fetch<Object?>(pendingRequest));
+                // Отложенные запросы выполняются, но не через handler
+                await _dio.fetch<Object?>(pendingRequest);
               }
               _pendingRequests.clear();
 
+              handler.resolve(response);
+            } catch (refreshError) {
+              _pendingRequests.clear();
+              await _tokenService.clearTokens();
+              handler.next(error);
+            } finally {
               _isRefreshing = false;
             }
           } else {
