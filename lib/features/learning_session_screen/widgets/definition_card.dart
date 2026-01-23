@@ -1,36 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
+import 'package:nim2book_mobile_flutter/core/utils/part_of_speech_localizer.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 class DefinitionCard extends StatelessWidget {
   final DictionaryWord word;
 
   const DefinitionCard({super.key, required this.word});
-
-  String _getPartOfSpeechLabel(final BuildContext context, final String? pos) {
-    if (pos == null) return '';
-    final localizations = AppLocalizations.of(context)!;
-    switch (pos.toLowerCase()) {
-      case 'noun':
-        return localizations.posNoun;
-      case 'verb':
-        return localizations.posVerb;
-      case 'adjective':
-        return localizations.posAdjective;
-      case 'adverb':
-        return localizations.posAdverb;
-      case 'pronoun':
-        return localizations.posPronoun;
-      case 'preposition':
-        return localizations.posPreposition;
-      case 'conjunction':
-        return localizations.posConjunction;
-      case 'participle':
-        return localizations.posParticiple;
-      default:
-        return pos;
-    }
-  }
 
   @override
   Widget build(final BuildContext context) {
@@ -43,7 +19,7 @@ class DefinitionCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (word.partOfSpeech != null) ...[
+          ...[
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
@@ -51,7 +27,7 @@ class DefinitionCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Text(
-                _getPartOfSpeechLabel(context, word.partOfSpeech),
+                PartOfSpeechLocalizer.getLabel(l10n, word.partOfSpeech),
                 style: theme.textTheme.labelSmall?.copyWith(
                   color: theme.colorScheme.primary,
                   fontWeight: FontWeight.w600,
@@ -60,8 +36,8 @@ class DefinitionCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
           ],
-          if (word.translations != null && word.translations!.isNotEmpty) ...[
-            ...word.translations!.asMap().entries.map((final entry) {
+          if (word.translations.isNotEmpty) ...[
+            ...word.translations.asMap().entries.map((final entry) {
               final index = entry.key;
               final translation = entry.value;
               return Column(
@@ -91,13 +67,13 @@ class DefinitionCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if (index < word.translations!.length - 1)
+                  if (index < word.translations.length - 1)
                     const SizedBox(height: 8),
                 ],
               );
             }),
           ],
-          if (word.examples != null && word.examples!.isNotEmpty) ...[
+          if (word.examples.isNotEmpty) ...[
             const SizedBox(height: 12),
             Padding(
               padding: const EdgeInsets.only(left: 16),
@@ -107,14 +83,12 @@ class DefinitionCard extends StatelessWidget {
                   Text(
                     l10n.examplesLabel,
                     style: theme.textTheme.labelMedium?.copyWith(
-                      color: theme.colorScheme.onSurface.withValues(
-                        alpha: 0.7,
-                      ),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(height: 4),
-                  ...word.examples!.map(
+                  ...word.examples.map(
                     (final example) => Container(
                       margin: const EdgeInsets.only(bottom: 6),
                       padding: const EdgeInsets.all(8),
@@ -133,8 +107,9 @@ class DefinitionCard extends StatelessWidget {
                             Text(
                               '→ ${example.translatedText}',
                               style: theme.textTheme.bodySmall?.copyWith(
-                                color: theme.colorScheme.onSurface
-                                    .withValues(alpha: 0.7),
+                                color: theme.colorScheme.onSurface.withValues(
+                                  alpha: 0.7,
+                                ),
                               ),
                             ),
                           ],

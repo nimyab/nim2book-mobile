@@ -11,10 +11,10 @@ class BooksCubit extends Cubit<BooksState> {
 
   BooksCubit() : super(const BooksState());
 
-  Future<void> initialize() async {
+  void initialize() {
     getMyBooks();
     getPersonalBooks();
-    await getBooks(null, null, 1);
+    getBooks(null, null, 1);
   }
 
   Future<void> getBooks(

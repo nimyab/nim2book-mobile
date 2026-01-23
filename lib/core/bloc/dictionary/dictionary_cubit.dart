@@ -11,24 +11,43 @@ class DictionaryCubit extends Cubit<DictionaryState> {
     emit(state.copyWith(savedWords: _dictService.getAllSavedWords()));
   }
 
-  Future<bool> saveWord(final String word, final List<DictionaryWord> words) async {
+  Future<bool> saveWordWithPos(
+    final String word,
+    final DictionaryWord wordData,
+  ) async {
     emit(state.copyWith(isLoading: true));
-    final ok = await _dictService.saveWord(word, words);
+    final ok = await _dictService.saveWordWithPos(word, wordData);
     if (ok) {
       final updated = Map<String, List<DictionaryWord>>.from(state.savedWords);
-      updated[word] = words;
+      if (!updated.containsKey(word)) {
+        updated[word] = [];
+      }
+      // Remove existing word with same partOfSpeech if any
+      updated[word]!.removeWhere(
+        (w) => w.partOfSpeech == wordData.partOfSpeech,
+      );
+      // Add new word
+      updated[word]!.add(wordData);
       emit(state.copyWith(savedWords: updated));
     }
     emit(state.copyWith(isLoading: false));
     return ok;
   }
 
-  Future<bool> deleteWord(final String word) async {
+  Future<bool> deleteWordWithPos(
+    final String word,
+    final String partOfSpeech,
+  ) async {
     emit(state.copyWith(isLoading: true));
-    final ok = await _dictService.deleteWord(word);
+    final ok = await _dictService.deleteWordWithPos(word, partOfSpeech);
     if (ok) {
       final updated = Map<String, List<DictionaryWord>>.from(state.savedWords);
-      updated.remove(word);
+      if (updated.containsKey(word)) {
+        updated[word]!.removeWhere((w) => w.partOfSpeech == partOfSpeech);
+        if (updated[word]!.isEmpty) {
+          updated.remove(word);
+        }
+      }
       emit(state.copyWith(savedWords: updated));
     }
     emit(state.copyWith(isLoading: false));
@@ -41,5 +60,19 @@ class DictionaryCubit extends Cubit<DictionaryState> {
     return _dictService.getWord(word);
   }
 
-  bool checkWordInDict(final String word) => state.savedWords[word] != null;
+  Future<List<DictionaryWord>?> getWordFromServer(final String word) async {
+    final wordFromServer = await _dictService.getWord(word);
+    if (wordFromServer != null) return wordFromServer;
+
+    final saved = state.savedWords[word];
+    if (saved != null) return saved;
+
+    return null;
+  }
+
+  bool checkWordWithPosInDict(final String word, final String? partOfSpeech) {
+    final words = state.savedWords[word];
+    if (words == null) return false;
+    return words.any((w) => w.partOfSpeech == partOfSpeech);
+  }
 }

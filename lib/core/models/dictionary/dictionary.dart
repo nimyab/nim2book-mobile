@@ -10,10 +10,10 @@ abstract class DictionaryWord with _$DictionaryWord {
     required final String text,
     required final String fromLangCode,
     required final String toLangCode,
-    final String? partOfSpeech,
+    required final String partOfSpeech,
+    required final List<String> translations,
     final String? transcription,
-    final List<String>? translations,
-    final List<DictionaryExample>? examples,
+    required final List<DictionaryExample> examples,
   }) = _DictionaryWord;
 
   factory DictionaryWord.fromJson(final Map<String, dynamic> json) =>

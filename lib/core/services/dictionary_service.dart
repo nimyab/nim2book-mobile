@@ -7,7 +7,8 @@ import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
-String _getWordKey(final String word) => 'dictionary_word_$word';
+String _getWordKey(final String word, final String partOfSpeech) =>
+    'dictionary_word_${word}_$partOfSpeech';
 
 const _fromLang = 'en';
 const _toLang = 'ru';
@@ -18,53 +19,67 @@ class DictionaryService {
   final _apiClient = GetIt.I.get<ApiClient>();
   final _sharedPreferences = GetIt.I.get<SharedPreferences>();
 
-  Future<bool> saveWord(final String word, final List<DictionaryWord> words) async {
+  Future<bool> saveWordWithPos(
+    final String word,
+    final DictionaryWord wordData,
+  ) async {
     try {
-      final wordJson = words
-          .map((final w) => jsonEncode(w.toJson()))
-          .toList();
-      return _sharedPreferences.setStringList(_getWordKey(word), wordJson);
+      final wordJson = jsonEncode(wordData.toJson());
+      return _sharedPreferences.setString(
+        _getWordKey(word, wordData.partOfSpeech),
+        wordJson,
+      );
     } catch (e) {
-      _logger.error('Error saving word $word: $e');
+      _logger.error(
+        'Error saving word $word with pos ${wordData.partOfSpeech}: $e',
+      );
       return false;
     }
   }
 
-  Future<bool> deleteWord(final String word) async {
+  Future<bool> deleteWordWithPos(
+    final String word,
+    final String partOfSpeech,
+  ) async {
     try {
-      return _sharedPreferences.remove(_getWordKey(word));
+      return _sharedPreferences.remove(_getWordKey(word, partOfSpeech));
     } catch (e) {
-      _logger.error('Error deleting word $word: $e');
+      _logger.error('Error deleting word $word with pos $partOfSpeech: $e');
       return false;
     }
   }
 
-  List<DictionaryWord>? _getWordFromSharedPreferences(final String key) {
+  DictionaryWord? _getSingleWordFromSharedPreferences(final String key) {
     try {
-      final wordJsonList = _sharedPreferences.getStringList(key);
-      if (wordJsonList == null) return null;
-      return wordJsonList
-          .map((final json) => DictionaryWord.fromJson(jsonDecode(json)))
-          .toList();
+      final wordJson = _sharedPreferences.getString(key);
+      if (wordJson == null) return null;
+      return DictionaryWord.fromJson(jsonDecode(wordJson));
     } catch (e) {
-      _logger.error('Error retrieving word $key: $e');
+      _logger.error('Error retrieving single word $key: $e');
       return null;
     }
   }
 
   Future<List<DictionaryWord>?> getWord(final String word) async {
-    final savedWordInfo = _getWordFromSharedPreferences(_getWordKey(word));
-    if (savedWordInfo != null) return savedWordInfo;
-
     try {
       final response = await _apiClient.lookup(
-        LookupRequest(text: word, fromLang: _fromLang, toLang: _toLang, ui: _ui),
+        LookupRequest(
+          text: word,
+          fromLang: _fromLang,
+          toLang: _toLang,
+          ui: _ui,
+        ),
       );
       return response.words;
     } catch (e) {
       _logger.error(e);
-      return savedWordInfo;
+      return null;
     }
+  }
+
+  bool checkWordWithPosInDict(final String word, final String partOfSpeech) {
+    final key = _getWordKey(word, partOfSpeech);
+    return _sharedPreferences.containsKey(key);
   }
 
   Map<String, List<DictionaryWord>> getAllSavedWords() {
@@ -74,9 +89,20 @@ class DictionaryService {
 
       for (var key in keys) {
         if (key.startsWith('dictionary_word_')) {
-          final word = key.substring('dictionary_word_'.length);
-          final words = _getWordFromSharedPreferences(key);
-          if (words != null) allWords[word] = words;
+          final singleWord = _getSingleWordFromSharedPreferences(key);
+          if (singleWord != null) {
+            final word = singleWord.text;
+            if (!allWords.containsKey(word)) {
+              allWords[word] = [];
+            }
+            // Check if this word+pos combination already exists
+            final exists = allWords[word]!.any(
+              (w) => w.partOfSpeech == singleWord.partOfSpeech,
+            );
+            if (!exists) {
+              allWords[word]!.add(singleWord);
+            }
+          }
         }
       }
 

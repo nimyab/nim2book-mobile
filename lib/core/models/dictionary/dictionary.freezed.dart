@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DictionaryWord {
 
- String get id; String get text; String get fromLangCode; String get toLangCode; String? get partOfSpeech; String? get transcription; List<String>? get translations; List<DictionaryExample>? get examples;
+ String get id; String get text; String get fromLangCode; String get toLangCode; String get partOfSpeech; List<String> get translations; String? get transcription; List<DictionaryExample> get examples;
 /// Create a copy of DictionaryWord
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $DictionaryWordCopyWith<DictionaryWord> get copyWith => _$DictionaryWordCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DictionaryWord&&(identical(other.id, id) || other.id == id)&&(identical(other.text, text) || other.text == text)&&(identical(other.fromLangCode, fromLangCode) || other.fromLangCode == fromLangCode)&&(identical(other.toLangCode, toLangCode) || other.toLangCode == toLangCode)&&(identical(other.partOfSpeech, partOfSpeech) || other.partOfSpeech == partOfSpeech)&&(identical(other.transcription, transcription) || other.transcription == transcription)&&const DeepCollectionEquality().equals(other.translations, translations)&&const DeepCollectionEquality().equals(other.examples, examples));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DictionaryWord&&(identical(other.id, id) || other.id == id)&&(identical(other.text, text) || other.text == text)&&(identical(other.fromLangCode, fromLangCode) || other.fromLangCode == fromLangCode)&&(identical(other.toLangCode, toLangCode) || other.toLangCode == toLangCode)&&(identical(other.partOfSpeech, partOfSpeech) || other.partOfSpeech == partOfSpeech)&&const DeepCollectionEquality().equals(other.translations, translations)&&(identical(other.transcription, transcription) || other.transcription == transcription)&&const DeepCollectionEquality().equals(other.examples, examples));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,text,fromLangCode,toLangCode,partOfSpeech,transcription,const DeepCollectionEquality().hash(translations),const DeepCollectionEquality().hash(examples));
+int get hashCode => Object.hash(runtimeType,id,text,fromLangCode,toLangCode,partOfSpeech,const DeepCollectionEquality().hash(translations),transcription,const DeepCollectionEquality().hash(examples));
 
 @override
 String toString() {
-  return 'DictionaryWord(id: $id, text: $text, fromLangCode: $fromLangCode, toLangCode: $toLangCode, partOfSpeech: $partOfSpeech, transcription: $transcription, translations: $translations, examples: $examples)';
+  return 'DictionaryWord(id: $id, text: $text, fromLangCode: $fromLangCode, toLangCode: $toLangCode, partOfSpeech: $partOfSpeech, translations: $translations, transcription: $transcription, examples: $examples)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $DictionaryWordCopyWith<$Res>  {
   factory $DictionaryWordCopyWith(DictionaryWord value, $Res Function(DictionaryWord) _then) = _$DictionaryWordCopyWithImpl;
 @useResult
 $Res call({
- String id, String text, String fromLangCode, String toLangCode, String? partOfSpeech, String? transcription, List<String>? translations, List<DictionaryExample>? examples
+ String id, String text, String fromLangCode, String toLangCode, String partOfSpeech, List<String> translations, String? transcription, List<DictionaryExample> examples
 });
 
 
@@ -65,17 +65,17 @@ class _$DictionaryWordCopyWithImpl<$Res>
 
 /// Create a copy of DictionaryWord
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? text = null,Object? fromLangCode = null,Object? toLangCode = null,Object? partOfSpeech = freezed,Object? transcription = freezed,Object? translations = freezed,Object? examples = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? text = null,Object? fromLangCode = null,Object? toLangCode = null,Object? partOfSpeech = null,Object? translations = null,Object? transcription = freezed,Object? examples = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,text: null == text ? _self.text : text // ignore: cast_nullable_to_non_nullable
 as String,fromLangCode: null == fromLangCode ? _self.fromLangCode : fromLangCode // ignore: cast_nullable_to_non_nullable
 as String,toLangCode: null == toLangCode ? _self.toLangCode : toLangCode // ignore: cast_nullable_to_non_nullable
-as String,partOfSpeech: freezed == partOfSpeech ? _self.partOfSpeech : partOfSpeech // ignore: cast_nullable_to_non_nullable
-as String?,transcription: freezed == transcription ? _self.transcription : transcription // ignore: cast_nullable_to_non_nullable
-as String?,translations: freezed == translations ? _self.translations : translations // ignore: cast_nullable_to_non_nullable
-as List<String>?,examples: freezed == examples ? _self.examples : examples // ignore: cast_nullable_to_non_nullable
-as List<DictionaryExample>?,
+as String,partOfSpeech: null == partOfSpeech ? _self.partOfSpeech : partOfSpeech // ignore: cast_nullable_to_non_nullable
+as String,translations: null == translations ? _self.translations : translations // ignore: cast_nullable_to_non_nullable
+as List<String>,transcription: freezed == transcription ? _self.transcription : transcription // ignore: cast_nullable_to_non_nullable
+as String?,examples: null == examples ? _self.examples : examples // ignore: cast_nullable_to_non_nullable
+as List<DictionaryExample>,
   ));
 }
 
@@ -160,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String text,  String fromLangCode,  String toLangCode,  String? partOfSpeech,  String? transcription,  List<String>? translations,  List<DictionaryExample>? examples)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String text,  String fromLangCode,  String toLangCode,  String partOfSpeech,  List<String> translations,  String? transcription,  List<DictionaryExample> examples)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DictionaryWord() when $default != null:
-return $default(_that.id,_that.text,_that.fromLangCode,_that.toLangCode,_that.partOfSpeech,_that.transcription,_that.translations,_that.examples);case _:
+return $default(_that.id,_that.text,_that.fromLangCode,_that.toLangCode,_that.partOfSpeech,_that.translations,_that.transcription,_that.examples);case _:
   return orElse();
 
 }
@@ -181,10 +181,10 @@ return $default(_that.id,_that.text,_that.fromLangCode,_that.toLangCode,_that.pa
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String text,  String fromLangCode,  String toLangCode,  String? partOfSpeech,  String? transcription,  List<String>? translations,  List<DictionaryExample>? examples)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String text,  String fromLangCode,  String toLangCode,  String partOfSpeech,  List<String> translations,  String? transcription,  List<DictionaryExample> examples)  $default,) {final _that = this;
 switch (_that) {
 case _DictionaryWord():
-return $default(_that.id,_that.text,_that.fromLangCode,_that.toLangCode,_that.partOfSpeech,_that.transcription,_that.translations,_that.examples);case _:
+return $default(_that.id,_that.text,_that.fromLangCode,_that.toLangCode,_that.partOfSpeech,_that.translations,_that.transcription,_that.examples);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -201,10 +201,10 @@ return $default(_that.id,_that.text,_that.fromLangCode,_that.toLangCode,_that.pa
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String text,  String fromLangCode,  String toLangCode,  String? partOfSpeech,  String? transcription,  List<String>? translations,  List<DictionaryExample>? examples)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String text,  String fromLangCode,  String toLangCode,  String partOfSpeech,  List<String> translations,  String? transcription,  List<DictionaryExample> examples)?  $default,) {final _that = this;
 switch (_that) {
 case _DictionaryWord() when $default != null:
-return $default(_that.id,_that.text,_that.fromLangCode,_that.toLangCode,_that.partOfSpeech,_that.transcription,_that.translations,_that.examples);case _:
+return $default(_that.id,_that.text,_that.fromLangCode,_that.toLangCode,_that.partOfSpeech,_that.translations,_that.transcription,_that.examples);case _:
   return null;
 
 }
@@ -216,31 +216,27 @@ return $default(_that.id,_that.text,_that.fromLangCode,_that.toLangCode,_that.pa
 @JsonSerializable()
 
 class _DictionaryWord implements DictionaryWord {
-  const _DictionaryWord({required this.id, required this.text, required this.fromLangCode, required this.toLangCode, this.partOfSpeech, this.transcription, final  List<String>? translations, final  List<DictionaryExample>? examples}): _translations = translations,_examples = examples;
+  const _DictionaryWord({required this.id, required this.text, required this.fromLangCode, required this.toLangCode, required this.partOfSpeech, required final  List<String> translations, this.transcription, required final  List<DictionaryExample> examples}): _translations = translations,_examples = examples;
   factory _DictionaryWord.fromJson(Map<String, dynamic> json) => _$DictionaryWordFromJson(json);
 
 @override final  String id;
 @override final  String text;
 @override final  String fromLangCode;
 @override final  String toLangCode;
-@override final  String? partOfSpeech;
-@override final  String? transcription;
- final  List<String>? _translations;
-@override List<String>? get translations {
-  final value = _translations;
-  if (value == null) return null;
+@override final  String partOfSpeech;
+ final  List<String> _translations;
+@override List<String> get translations {
   if (_translations is EqualUnmodifiableListView) return _translations;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(value);
+  return EqualUnmodifiableListView(_translations);
 }
 
- final  List<DictionaryExample>? _examples;
-@override List<DictionaryExample>? get examples {
-  final value = _examples;
-  if (value == null) return null;
+@override final  String? transcription;
+ final  List<DictionaryExample> _examples;
+@override List<DictionaryExample> get examples {
   if (_examples is EqualUnmodifiableListView) return _examples;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(value);
+  return EqualUnmodifiableListView(_examples);
 }
 
 
@@ -257,16 +253,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DictionaryWord&&(identical(other.id, id) || other.id == id)&&(identical(other.text, text) || other.text == text)&&(identical(other.fromLangCode, fromLangCode) || other.fromLangCode == fromLangCode)&&(identical(other.toLangCode, toLangCode) || other.toLangCode == toLangCode)&&(identical(other.partOfSpeech, partOfSpeech) || other.partOfSpeech == partOfSpeech)&&(identical(other.transcription, transcription) || other.transcription == transcription)&&const DeepCollectionEquality().equals(other._translations, _translations)&&const DeepCollectionEquality().equals(other._examples, _examples));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DictionaryWord&&(identical(other.id, id) || other.id == id)&&(identical(other.text, text) || other.text == text)&&(identical(other.fromLangCode, fromLangCode) || other.fromLangCode == fromLangCode)&&(identical(other.toLangCode, toLangCode) || other.toLangCode == toLangCode)&&(identical(other.partOfSpeech, partOfSpeech) || other.partOfSpeech == partOfSpeech)&&const DeepCollectionEquality().equals(other._translations, _translations)&&(identical(other.transcription, transcription) || other.transcription == transcription)&&const DeepCollectionEquality().equals(other._examples, _examples));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,text,fromLangCode,toLangCode,partOfSpeech,transcription,const DeepCollectionEquality().hash(_translations),const DeepCollectionEquality().hash(_examples));
+int get hashCode => Object.hash(runtimeType,id,text,fromLangCode,toLangCode,partOfSpeech,const DeepCollectionEquality().hash(_translations),transcription,const DeepCollectionEquality().hash(_examples));
 
 @override
 String toString() {
-  return 'DictionaryWord(id: $id, text: $text, fromLangCode: $fromLangCode, toLangCode: $toLangCode, partOfSpeech: $partOfSpeech, transcription: $transcription, translations: $translations, examples: $examples)';
+  return 'DictionaryWord(id: $id, text: $text, fromLangCode: $fromLangCode, toLangCode: $toLangCode, partOfSpeech: $partOfSpeech, translations: $translations, transcription: $transcription, examples: $examples)';
 }
 
 
@@ -277,7 +273,7 @@ abstract mixin class _$DictionaryWordCopyWith<$Res> implements $DictionaryWordCo
   factory _$DictionaryWordCopyWith(_DictionaryWord value, $Res Function(_DictionaryWord) _then) = __$DictionaryWordCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String text, String fromLangCode, String toLangCode, String? partOfSpeech, String? transcription, List<String>? translations, List<DictionaryExample>? examples
+ String id, String text, String fromLangCode, String toLangCode, String partOfSpeech, List<String> translations, String? transcription, List<DictionaryExample> examples
 });
 
 
@@ -294,17 +290,17 @@ class __$DictionaryWordCopyWithImpl<$Res>
 
 /// Create a copy of DictionaryWord
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? text = null,Object? fromLangCode = null,Object? toLangCode = null,Object? partOfSpeech = freezed,Object? transcription = freezed,Object? translations = freezed,Object? examples = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? text = null,Object? fromLangCode = null,Object? toLangCode = null,Object? partOfSpeech = null,Object? translations = null,Object? transcription = freezed,Object? examples = null,}) {
   return _then(_DictionaryWord(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,text: null == text ? _self.text : text // ignore: cast_nullable_to_non_nullable
 as String,fromLangCode: null == fromLangCode ? _self.fromLangCode : fromLangCode // ignore: cast_nullable_to_non_nullable
 as String,toLangCode: null == toLangCode ? _self.toLangCode : toLangCode // ignore: cast_nullable_to_non_nullable
-as String,partOfSpeech: freezed == partOfSpeech ? _self.partOfSpeech : partOfSpeech // ignore: cast_nullable_to_non_nullable
-as String?,transcription: freezed == transcription ? _self.transcription : transcription // ignore: cast_nullable_to_non_nullable
-as String?,translations: freezed == translations ? _self._translations : translations // ignore: cast_nullable_to_non_nullable
-as List<String>?,examples: freezed == examples ? _self._examples : examples // ignore: cast_nullable_to_non_nullable
-as List<DictionaryExample>?,
+as String,partOfSpeech: null == partOfSpeech ? _self.partOfSpeech : partOfSpeech // ignore: cast_nullable_to_non_nullable
+as String,translations: null == translations ? _self._translations : translations // ignore: cast_nullable_to_non_nullable
+as List<String>,transcription: freezed == transcription ? _self.transcription : transcription // ignore: cast_nullable_to_non_nullable
+as String?,examples: null == examples ? _self._examples : examples // ignore: cast_nullable_to_non_nullable
+as List<DictionaryExample>,
   ));
 }
 

@@ -12,13 +12,13 @@ _DictionaryWord _$DictionaryWordFromJson(Map<String, dynamic> json) =>
       text: json['text'] as String,
       fromLangCode: json['fromLangCode'] as String,
       toLangCode: json['toLangCode'] as String,
-      partOfSpeech: json['partOfSpeech'] as String?,
-      transcription: json['transcription'] as String?,
-      translations: (json['translations'] as List<dynamic>?)
-          ?.map((e) => e as String)
+      partOfSpeech: json['partOfSpeech'] as String,
+      translations: (json['translations'] as List<dynamic>)
+          .map((e) => e as String)
           .toList(),
-      examples: (json['examples'] as List<dynamic>?)
-          ?.map((e) => DictionaryExample.fromJson(e as Map<String, dynamic>))
+      transcription: json['transcription'] as String?,
+      examples: (json['examples'] as List<dynamic>)
+          .map((e) => DictionaryExample.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -29,8 +29,8 @@ Map<String, dynamic> _$DictionaryWordToJson(_DictionaryWord instance) =>
       'fromLangCode': instance.fromLangCode,
       'toLangCode': instance.toLangCode,
       'partOfSpeech': instance.partOfSpeech,
-      'transcription': instance.transcription,
       'translations': instance.translations,
+      'transcription': instance.transcription,
       'examples': instance.examples,
     };
 
