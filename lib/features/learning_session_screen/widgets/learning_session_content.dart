@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_cubit.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
+import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/bloc/learning_session/learning_session_cubit.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/bloc/learning_session/learning_session_state.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/word_card.dart';
@@ -91,14 +93,25 @@ class _LearningSessionContentState extends State<LearningSessionContent> {
           );
         }
 
-        final words = sessionState.sessionWords;
+        final identifiers = sessionState.sessionWords;
         final safeIndex = sessionState.currentWordIndex.clamp(
           0,
-          words.isNotEmpty ? words.length - 1 : 0,
+          identifiers.isNotEmpty ? identifiers.length - 1 : 0,
         );
-        final currentWord = words.isNotEmpty ? words[safeIndex] : '';
-        final currentDefinitions = currentWord.isNotEmpty
-            ? (savedWords[currentWord] ?? <DictionaryWord>[])
+        final currentIdentifier = identifiers.isNotEmpty
+            ? identifiers[safeIndex]
+            : '';
+
+        // Извлекаем слово и находим конкретный DictionaryWord по идентификатору
+        final srsService = GetIt.I.get<SrsService>();
+        final currentWord = currentIdentifier.isNotEmpty
+            ? srsService.extractWord(currentIdentifier)
+            : '';
+        final currentDictionaryWord = currentIdentifier.isNotEmpty
+            ? srsService.findWordByIdentifier(currentIdentifier, savedWords)
+            : null;
+        final currentDefinitions = currentDictionaryWord != null
+            ? [currentDictionaryWord]
             : <DictionaryWord>[];
 
         return SafeArea(
@@ -106,13 +119,13 @@ class _LearningSessionContentState extends State<LearningSessionContent> {
             padding: const EdgeInsets.all(24.0),
             child: Column(
               children: [
-                WordProgressIndicator(word: currentWord),
+                WordProgressIndicator(word: currentIdentifier),
                 const SizedBox(height: 16),
                 Expanded(
                   child: Center(
                     child: WordCard(
                       key: ValueKey(
-                        '$currentWord-${sessionState.currentWordIndex}',
+                        '$currentIdentifier-${sessionState.currentWordIndex}',
                       ),
                       word: currentWord,
                       definitions: currentDefinitions,

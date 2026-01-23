@@ -22,7 +22,7 @@ class DictionaryScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            if (savedWords.isNotEmpty) ReviewDueHeader(words: savedWords.keys),
+            if (savedWords.isNotEmpty) ReviewDueHeader(savedWords: savedWords),
             Expanded(
               child: savedWords.isEmpty
                   ? const EmptyDictionaryState()

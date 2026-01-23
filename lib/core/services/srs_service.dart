@@ -1,12 +1,73 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
+import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
 import 'package:nim2book_mobile_flutter/features/srs/logic/srs_scheduler_sm2.dart';
 import 'package:nim2book_mobile_flutter/features/srs/models/srs_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-String _srsKey(final String word) => 'srs_item_$word';
+/// Создаёт ключ для хранения SRS элемента
+/// identifier - это либо просто слово, либо word_partOfSpeech
+String _srsKey(final String identifier) => 'srs_item_$identifier';
+
+/// Создаёт уникальный идентификатор из слова и части речи
+/// Формат: "word_partOfSpeech" или "word" если часть речи null
+String _createIdentifier(String word, String? partOfSpeech) {
+  if (partOfSpeech == null || partOfSpeech.isEmpty) {
+    return word;
+  }
+  return '${word}_$partOfSpeech';
+}
+
+/// Создаёт идентификатор из DictionaryWord
+String _identifierFromDictionaryWord(DictionaryWord word) {
+  return _createIdentifier(word.text, word.partOfSpeech);
+}
+
+/// Извлекает слово из идентификатора
+String _extractWord(String identifier) {
+  final parts = identifier.split('_');
+  return parts.first;
+}
+
+/// Извлекает часть речи из идентификатора
+/// Возвращает null если часть речи не указана
+String? _extractPartOfSpeech(String identifier) {
+  final parts = identifier.split('_');
+  if (parts.length < 2) return null;
+  return parts.sublist(1).join('_');
+}
+
+/// Создаёт список идентификаторов из `Map<String, List<DictionaryWord>>`
+List<String> _identifiersFromSavedWords(
+  Map<String, List<DictionaryWord>> savedWords,
+) {
+  final identifiers = <String>[];
+  for (final entry in savedWords.entries) {
+    for (final word in entry.value) {
+      identifiers.add(_identifierFromDictionaryWord(word));
+    }
+  }
+  return identifiers;
+}
+
+/// Находит DictionaryWord по идентификатору в savedWords
+DictionaryWord? _findWordByIdentifier(
+  String identifier,
+  Map<String, List<DictionaryWord>> savedWords,
+) {
+  final word = _extractWord(identifier);
+  final partOfSpeech = _extractPartOfSpeech(identifier);
+  final words = savedWords[word];
+  if (words == null) return null;
+
+  return words.firstWhere(
+    (w) => w.partOfSpeech == partOfSpeech,
+    orElse: () => words.first,
+  );
+}
 
 class SrsService {
   final SharedPreferences _sharedPreferences = GetIt.I.get<SharedPreferences>();
@@ -158,19 +219,26 @@ class SrsService {
     }
   }
 
-  SrsItem getOrCreateItem(final String word) {
-    final jsonStr = _sharedPreferences.getString(_srsKey(word));
+  /// Получает или создаёт SRS элемент для идентификатора (word или word_partOfSpeech)
+  SrsItem getOrCreateItem(final String identifier) {
+    final jsonStr = _sharedPreferences.getString(_srsKey(identifier));
     if (jsonStr == null) {
-      final item = SrsItem.initial(word);
-      _sharedPreferences.setString(_srsKey(word), jsonEncode(item.toJson()));
+      final item = SrsItem.initial(identifier);
+      _sharedPreferences.setString(
+        _srsKey(identifier),
+        jsonEncode(item.toJson()),
+      );
       return item;
     }
     try {
       final jsonMap = jsonDecode(jsonStr) as Map<String, dynamic>;
       return SrsItem.fromJson(jsonMap);
     } catch (_) {
-      final item = SrsItem.initial(word);
-      _sharedPreferences.setString(_srsKey(word), jsonEncode(item.toJson()));
+      final item = SrsItem.initial(identifier);
+      _sharedPreferences.setString(
+        _srsKey(identifier),
+        jsonEncode(item.toJson()),
+      );
       return item;
     }
   }
@@ -179,8 +247,9 @@ class SrsService {
     _sharedPreferences.setString(_srsKey(item.word), jsonEncode(item.toJson()));
   }
 
-  SrsItem updateWithRating(final String word, final SrsRating rating) {
-    final item = getOrCreateItem(word);
+  /// Обновляет рейтинг для идентификатора (word или word_partOfSpeech)
+  SrsItem updateWithRating(final String identifier, final SrsRating rating) {
+    final item = getOrCreateItem(identifier);
     final wasNeverReviewed = item.lastReviewedAt == null;
     final updated = _scheduler.updateOnRating(item, rating);
     // Если слово изучено впервые — увеличиваем дневной счётчик новых слов
@@ -192,11 +261,12 @@ class SrsService {
     return updated;
   }
 
-  int getDueCount(final Iterable<String> words, {final DateTime? now}) {
+  /// Получает количество идентификаторов к повторению
+  int getDueCount(final Iterable<String> identifiers, {final DateTime? now}) {
     final n = now ?? DateTime.now();
     var count = 0;
-    for (final word in words) {
-      final item = getOrCreateItem(word);
+    for (final identifier in identifiers) {
+      final item = getOrCreateItem(identifier);
       if (!item.nextReviewAt.isAfter(n)) {
         count++;
       }
@@ -204,21 +274,22 @@ class SrsService {
     return count;
   }
 
+  /// Получает список идентификаторов к повторению (с учётом лимита новых слов)
   List<String> getDueWords(
-    final Iterable<String> words, {
+    final Iterable<String> identifiers, {
     final DateTime? now,
   }) {
     final n = now ?? DateTime.now();
-    final reviewDue = <String>[]; // уже изученные слова к повторению
-    final newDue = <String>[]; // совершенно новые слова
+    final reviewDue = <String>[]; // уже изученные элементы к повторению
+    final newDue = <String>[]; // совершенно новые элементы
 
-    for (final word in words) {
-      final item = getOrCreateItem(word);
+    for (final identifier in identifiers) {
+      final item = getOrCreateItem(identifier);
       if (!item.nextReviewAt.isAfter(n)) {
         if (item.lastReviewedAt == null) {
-          newDue.add(word);
+          newDue.add(identifier);
         } else {
-          reviewDue.add(word);
+          reviewDue.add(identifier);
         }
       }
     }
@@ -234,5 +305,82 @@ class SrsService {
         : const <String>[];
 
     return [...reviewDue, ...limitedNew];
+  }
+
+  /// Создаёт список идентификаторов из сохранённых слов
+  List<String> getIdentifiersFromSavedWords(
+    Map<String, List<DictionaryWord>> savedWords,
+  ) {
+    return _identifiersFromSavedWords(savedWords);
+  }
+
+  /// Находит DictionaryWord по идентификатору
+  DictionaryWord? findWordByIdentifier(
+    String identifier,
+    Map<String, List<DictionaryWord>> savedWords,
+  ) {
+    return _findWordByIdentifier(identifier, savedWords);
+  }
+
+  /// Извлекает слово из идентификатора
+  String extractWord(String identifier) {
+    return _extractWord(identifier);
+  }
+
+  /// Создаёт идентификатор из DictionaryWord
+  String createIdentifier(DictionaryWord word) {
+    return _identifierFromDictionaryWord(word);
+  }
+
+  /// Мигрирует старые SRS данные (по словам) на новый формат (по идентификаторам)
+  /// Должен вызываться при старте приложения если в словаре есть слова с частями речи
+  Future<void> migrateLegacySrsData(
+    Map<String, List<DictionaryWord>> savedWords,
+  ) async {
+    for (final entry in savedWords.entries) {
+      final word = entry.key;
+      final dictionaryWords = entry.value;
+
+      // Проверяем, есть ли старая запись для этого слова
+      final legacyKey = _srsKey(word);
+      final legacyJson = _sharedPreferences.getString(legacyKey);
+
+      if (legacyJson != null && dictionaryWords.isNotEmpty) {
+        try {
+          // Читаем старую запись
+          final jsonMap = jsonDecode(legacyJson) as Map<String, dynamic>;
+          final legacyItem = SrsItem.fromJson(jsonMap);
+
+          // Для каждой части речи создаём новую запись с тем же прогрессом
+          for (final dictionaryWord in dictionaryWords) {
+            final identifier = _identifierFromDictionaryWord(dictionaryWord);
+            final newKey = _srsKey(identifier);
+
+            // Проверяем, не существует ли уже новая запись
+            if (!_sharedPreferences.containsKey(newKey)) {
+              // Создаём новый элемент с данными из старой записи
+              final newItem = SrsItem(
+                word: identifier,
+                easiness: legacyItem.easiness,
+                intervalDays: legacyItem.intervalDays,
+                repetition: legacyItem.repetition,
+                lastReviewedAt: legacyItem.lastReviewedAt,
+                nextReviewAt: legacyItem.nextReviewAt,
+              );
+              _sharedPreferences.setString(
+                newKey,
+                jsonEncode(newItem.toJson()),
+              );
+            }
+          }
+
+          // Удаляем старую запись после успешной миграции
+          unawaited(_sharedPreferences.remove(legacyKey));
+        } catch (e) {
+          // Игнорируем ошибки миграции для конкретного слова
+          debugPrint('Error migrating SRS data for word "$word": $e');
+        }
+      }
+    }
   }
 }

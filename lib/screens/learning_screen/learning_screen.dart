@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_cubit.dart';
 import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
+
 import 'package:nim2book_mobile_flutter/features/srs/logic/srs_stats_utils.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/widgets/stats_bar_chart.dart';
@@ -115,8 +116,9 @@ class _LearningScreenState extends State<LearningScreen> {
     final theme = Theme.of(context);
     final srs = GetIt.I.get<SrsService>();
     final now = DateTime.now();
-    final items = savedWords.keys
-        .map((final w) => srs.getOrCreateItem(w))
+    final allIdentifiers = srs.getIdentifiersFromSavedWords(savedWords);
+    final items = allIdentifiers
+        .map((final identifier) => srs.getOrCreateItem(identifier))
         .toList();
     var usedToday = srs.getDailyNewCount(now: now);
     final dailyLimit = srs.getDailyNewLimit();
@@ -134,7 +136,7 @@ class _LearningScreenState extends State<LearningScreen> {
     final newDueLimited = availableSlots > 0
         ? newDueCount.clamp(0, availableSlots)
         : 0;
-    final mixedDueCount = srs.getDueWords(savedWords.keys.toList()).length;
+    final mixedDueCount = srs.getDueWords(allIdentifiers).length;
 
     final hasNew = newDueLimited > 0;
     final hasReview = reviewDueCount > 0;

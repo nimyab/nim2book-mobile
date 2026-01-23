@@ -3,12 +3,24 @@ import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_state.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
 import 'package:nim2book_mobile_flutter/core/services/dictionary_service.dart';
+import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
 
 class DictionaryCubit extends Cubit<DictionaryState> {
   final DictionaryService _dictService = GetIt.I.get<DictionaryService>();
+  final SrsService _srsService = GetIt.I.get<SrsService>();
 
   DictionaryCubit() : super(const DictionaryState()) {
-    emit(state.copyWith(savedWords: _dictService.getAllSavedWords()));
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    final savedWords = _dictService.getAllSavedWords();
+    emit(state.copyWith(savedWords: savedWords));
+
+    // Мигрируем старые SRS данные на новый формат (word -> word_partOfSpeech)
+    if (savedWords.isNotEmpty) {
+      await _srsService.migrateLegacySrsData(savedWords);
+    }
   }
 
   Future<bool> saveWordWithPos(

@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
 import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
+
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 class ReviewDueHeader extends StatelessWidget {
-  final Iterable<String> words;
+  final Map<String, List<DictionaryWord>> savedWords;
 
-  const ReviewDueHeader({super.key, required this.words});
+  const ReviewDueHeader({super.key, required this.savedWords});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final srs = GetIt.I.get<SrsService>();
-    final count = srs.getDueCount(words);
+    final identifiers = srs.getIdentifiersFromSavedWords(savedWords);
+    final count = srs.getDueCount(identifiers);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),

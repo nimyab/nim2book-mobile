@@ -27,12 +27,7 @@ class LearningSessionScreen extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final savedWords = context
-        .read<DictionaryCubit>()
-        .state
-        .savedWords
-        .keys
-        .toList();
+    final savedWords = context.read<DictionaryCubit>().state.savedWords;
 
     return BlocProvider(
       create: (final context) =>

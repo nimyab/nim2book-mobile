@@ -4,10 +4,11 @@ import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
 import 'package:nim2book_mobile_flutter/features/srs/models/srs_item.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/bloc/learning_session/learning_session_state.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/learning_session_content.dart';
+import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
 
 class LearningSessionCubit extends Cubit<LearningSessionState> {
   final LearningMode mode;
-  final List<String> allSavedWords;
+  final Map<String, List<DictionaryWord>> allSavedWords;
   final SrsService _srsService = GetIt.I.get<SrsService>();
 
   LearningSessionCubit({required this.mode, required this.allSavedWords})
@@ -15,48 +16,51 @@ class LearningSessionCubit extends Cubit<LearningSessionState> {
 
   void initializeSession() {
     final now = DateTime.now();
-    List<String> words;
+    final allIdentifiers = _srsService.getIdentifiersFromSavedWords(
+      allSavedWords,
+    );
+    List<String> identifiers;
     var isEmpty = false;
 
     switch (mode) {
       case LearningMode.mixed:
-        words = _srsService.getDueWords(allSavedWords);
-        isEmpty = words.isEmpty;
+        identifiers = _srsService.getDueWords(allIdentifiers);
+        isEmpty = identifiers.isEmpty;
         break;
       case LearningMode.reviewOnly:
         final reviewDue = <String>[];
-        for (final w in allSavedWords) {
-          final item = _srsService.getOrCreateItem(w);
+        for (final identifier in allIdentifiers) {
+          final item = _srsService.getOrCreateItem(identifier);
           if (!item.nextReviewAt.isAfter(now) && item.lastReviewedAt != null) {
-            reviewDue.add(w);
+            reviewDue.add(identifier);
           }
         }
-        words = reviewDue;
-        isEmpty = words.isEmpty;
+        identifiers = reviewDue;
+        isEmpty = identifiers.isEmpty;
         break;
       case LearningMode.newOnly:
         final newDue = <String>[];
-        for (final w in allSavedWords) {
-          final item = _srsService.getOrCreateItem(w);
+        for (final identifier in allIdentifiers) {
+          final item = _srsService.getOrCreateItem(identifier);
           if (!item.nextReviewAt.isAfter(now) && item.lastReviewedAt == null) {
-            newDue.add(w);
+            newDue.add(identifier);
           }
         }
         final used = _srsService.getDailyNewCount(now: now);
         final limit = _srsService.getDailyNewLimit();
         final slots = (limit - used).clamp(0, limit);
-        words = slots > 0 ? newDue.take(slots).toList() : <String>[];
-        isEmpty = words.isEmpty;
+        identifiers = slots > 0 ? newDue.take(slots).toList() : <String>[];
+        isEmpty = identifiers.isEmpty;
         break;
     }
 
     emit(
       state.copyWith(
-        sessionWords: words,
+        sessionWords: identifiers,
         currentWordIndex: 0,
         sessionEmpty: isEmpty,
         totalWordsStudied: 0,
-        initialSessionSize: words.length,
+        initialSessionSize: identifiers.length,
       ),
     );
   }
@@ -81,13 +85,13 @@ class LearningSessionCubit extends Cubit<LearningSessionState> {
       return;
     }
 
-    final word = state.sessionWords[state.currentWordIndex];
-    _srsService.updateWithRating(word, rating);
+    final identifier = state.sessionWords[state.currentWordIndex];
+    _srsService.updateWithRating(identifier, rating);
 
     final updatedWords = List<String>.from(state.sessionWords);
 
     if (rating == SrsRating.good) {
-      // Слово выучено - удаляем из сессии
+      // Элемент выучен - удаляем из сессии
       updatedWords.removeAt(state.currentWordIndex);
 
       final newTotalStudied = state.totalWordsStudied + 1;
@@ -99,9 +103,9 @@ class LearningSessionCubit extends Cubit<LearningSessionState> {
         ),
       );
     } else {
-      // Слово не выучено - перемещаем в конец списка
-      final currentWord = updatedWords.removeAt(state.currentWordIndex);
-      updatedWords.add(currentWord);
+      // Элемент не выучен - перемещаем в конец списка
+      final currentIdentifier = updatedWords.removeAt(state.currentWordIndex);
+      updatedWords.add(currentIdentifier);
 
       emit(state.copyWith(sessionWords: updatedWords));
     }
