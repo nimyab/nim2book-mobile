@@ -25,7 +25,17 @@ class ApiClient {
     _dio.interceptors.add(
       TalkerDioLogger(
         talker: GetIt.I.get<Talker>(),
-        settings: const TalkerDioLoggerSettings(printRequestHeaders: true),
+        settings: TalkerDioLoggerSettings(
+          printRequestHeaders: true,
+          responseFilter: (response) {
+            final uri = response.realUri.toString();
+            final flag =
+                uri.contains('/chapters/') ||
+                uri.contains('/book') ||
+                uri.contains('/personal-user-book');
+            return !flag;
+          },
+        ),
       ),
     );
 
