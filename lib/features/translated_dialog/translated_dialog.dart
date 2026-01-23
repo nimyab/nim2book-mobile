@@ -27,7 +27,7 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
       setState(() {
         _isLoading = true;
       });
-      final words = await context.read<DictionaryCubit>().getWordFromServer(
+      final words = await context.read<DictionaryCubit>().getWordServiceFirst(
         widget.phrase,
       );
       if (words != null) _words.addAll(words);

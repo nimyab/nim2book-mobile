@@ -23,8 +23,6 @@ class _LearningScreenState extends State<LearningScreen> {
   VoidCallback? _srsDailyNewListener;
   static const bool isMock = false;
 
-  // Сессионные карточки убраны из этого экрана
-
   @override
   void initState() {
     super.initState();

@@ -54,23 +54,19 @@ class DictionaryCubit extends Cubit<DictionaryState> {
     return ok;
   }
 
-  Future<List<DictionaryWord>?> getWord(final String word) async {
+  Future<List<DictionaryWord>?> getWordLocalFirst(final String word) async {
     final saved = state.savedWords[word];
     if (saved != null) return saved;
     return _dictService.getWord(word);
   }
 
-  Future<List<DictionaryWord>?> getWordFromServer(final String word) async {
+  Future<List<DictionaryWord>?> getWordServiceFirst(final String word) async {
     final wordFromServer = await _dictService.getWord(word);
     if (wordFromServer != null) return wordFromServer;
-
-    final saved = state.savedWords[word];
-    if (saved != null) return saved;
-
-    return null;
+    return state.savedWords[word];
   }
 
-  bool checkWordWithPosInDict(final String word, final String? partOfSpeech) {
+  bool checkWordWithPosInDict(final String word, final String partOfSpeech) {
     final words = state.savedWords[word];
     if (words == null) return false;
     return words.any((w) => w.partOfSpeech == partOfSpeech);
