@@ -67,9 +67,8 @@ abstract class LookupRequest with _$LookupRequest {
 
 @freezed
 abstract class CreateGenreRequest with _$CreateGenreRequest {
-  const factory CreateGenreRequest({
-    required final String name,
-  }) = _CreateGenreRequest;
+  const factory CreateGenreRequest({required final String name}) =
+      _CreateGenreRequest;
 
   factory CreateGenreRequest.fromJson(final Map<String, dynamic> json) =>
       _$CreateGenreRequestFromJson(json);
