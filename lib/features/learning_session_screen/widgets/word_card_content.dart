@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
+import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/definition_card.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/core/services/tts_service.dart';
 
 class WordCardContent extends StatelessWidget {
-  final String word;
-  final List<DictionaryWord> definitions;
+  final DictionaryCard card;
   final bool showTranslation;
 
   const WordCardContent({
     super.key,
-    required this.word,
-    required this.definitions,
+    required this.card,
     required this.showTranslation,
   });
 
@@ -36,7 +34,7 @@ class WordCardContent extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 56),
                       child: Text(
-                        word,
+                        card.wordData.text,
                         style: theme.textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: theme.colorScheme.onSurface,
@@ -54,17 +52,17 @@ class WordCardContent extends StatelessWidget {
                             color: theme.colorScheme.primary,
                           ),
                           onPressed: () {
-                            GetIt.I.get<TtsService>().speak(word);
+                            GetIt.I.get<TtsService>().speak(card.wordData.text);
                           },
                         ),
                       ),
                     ),
                   ],
                 ),
-                if (definitions.isNotEmpty && definitions.first.transcription != null) ...[
+                if (card.wordData.transcription != null) ...[
                   const SizedBox(height: 8),
                   Text(
-                    '[${definitions.first.transcription}]',
+                    '[${card.wordData.transcription}]',
                     style: theme.textTheme.bodyLarge?.copyWith(
                       color: theme.colorScheme.onPrimaryContainer.withValues(
                         alpha: 0.8,
@@ -81,10 +79,7 @@ class WordCardContent extends StatelessWidget {
                     ),
                     thickness: 1,
                   ),
-                  ...definitions.map(
-                    (final word) =>
-                        DefinitionCard(word: word),
-                  ),
+                  DefinitionCard(word: card.wordData),
                 ] else ...[
                   const SizedBox(height: 80),
                   Center(

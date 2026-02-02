@@ -16,7 +16,7 @@ class BookmarkButton extends StatelessWidget {
 
     return BlocBuilder<DictionaryCubit, DictionaryState>(
       builder: (context, state) {
-        final isInDict = context.read<DictionaryCubit>().checkWordWithPosInDict(
+        final isInDict = context.read<DictionaryCubit>().checkWordInDict(
           phrase,
           word.partOfSpeech,
         );
@@ -31,12 +31,12 @@ class BookmarkButton extends StatelessWidget {
           constraints: const BoxConstraints(),
           onPressed: () {
             if (isInDict) {
-              context.read<DictionaryCubit>().deleteWordWithPos(
+              context.read<DictionaryCubit>().deleteWord(
                 phrase,
                 word.partOfSpeech,
               );
             } else {
-              context.read<DictionaryCubit>().saveWordWithPos(phrase, word);
+              context.read<DictionaryCubit>().saveWord(phrase, word);
             }
           },
         );

@@ -5,7 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_cubit.dart';
-import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
+import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
+import 'package:nim2book_mobile_flutter/core/services/statistic_service.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
 
 import 'package:nim2book_mobile_flutter/features/srs/logic/srs_stats_utils.dart';
@@ -21,27 +22,27 @@ class LearningScreen extends StatefulWidget {
 
 class _LearningScreenState extends State<LearningScreen> {
   StatsPeriod _period = StatsPeriod.last7;
-  VoidCallback? _srsDailyNewListener;
+  VoidCallback? _statisticDailyNewListener;
   static const bool isMock = false;
 
   @override
   void initState() {
     super.initState();
     // Слушаем счётчик новых слов, чтобы кнопки режимов обновлялись
-    final srs = GetIt.I.get<SrsService>();
-    _srsDailyNewListener = () {
+    final statistic = GetIt.I.get<StatisticService>();
+    _statisticDailyNewListener = () {
       if (!mounted) return;
       setState(() {});
     };
-    srs.dailyNewCountNotifier.addListener(_srsDailyNewListener!);
+    statistic.dailyNewCountNotifier.addListener(_statisticDailyNewListener!);
   }
 
   @override
   void dispose() {
-    final srs = GetIt.I.get<SrsService>();
-    final listener = _srsDailyNewListener;
+    final statistic = GetIt.I.get<StatisticService>();
+    final listener = _statisticDailyNewListener;
     if (listener != null) {
-      srs.dailyNewCountNotifier.removeListener(listener);
+      statistic.dailyNewCountNotifier.removeListener(listener);
     }
     super.dispose();
   }
@@ -110,66 +111,64 @@ class _LearningScreenState extends State<LearningScreen> {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final savedWords = context.select(
-      (final DictionaryCubit c) => c.state.savedWords,
+    final savedCards = context.select(
+      (final DictionaryCubit c) => c.state.savedCards,
     );
     final theme = Theme.of(context);
-    final srs = GetIt.I.get<SrsService>();
+    final statistic = GetIt.I.get<StatisticService>();
     final now = DateTime.now();
-    final allIdentifiers = srs.getIdentifiersFromSavedWords(savedWords);
-    final items = allIdentifiers
-        .map((final identifier) => srs.getOrCreateItem(identifier))
-        .toList();
-    var usedToday = srs.getDailyNewCount(now: now);
-    final dailyLimit = srs.getDailyNewLimit();
-    final availableSlots = (dailyLimit - usedToday).clamp(0, dailyLimit);
-    final reviewDueCount = items
-        .where(
-          (final i) => i.lastReviewedAt != null && !i.nextReviewAt.isAfter(now),
-        )
+
+    // Преобразуем Map в плоский список карточек
+    final allCards = savedCards.values.expand((cards) => cards).toList();
+
+    var usedToday = statistic.getDailyNewCount(now: now);
+    final dailyLimit = statistic.getDailyNewLimit();
+
+    final reviewDueCount = statistic.getReviewDueCount(allCards, now: now);
+    final newDueLimited = statistic.getNewDueCount(allCards, now: now);
+    final mixedDueCount = statistic
+        .getDueCardsWithLimit(allCards, now: now)
         .length;
-    final newDueCount = items
-        .where(
-          (final i) => i.lastReviewedAt == null && !i.nextReviewAt.isAfter(now),
-        )
-        .length;
-    final newDueLimited = availableSlots > 0
-        ? newDueCount.clamp(0, availableSlots)
-        : 0;
-    final mixedDueCount = srs.getDueWords(allIdentifiers).length;
 
     final hasNew = newDueLimited > 0;
     final hasReview = reviewDueCount > 0;
     final hasMixed = mixedDueCount > 0;
 
-    var learnedTotal = items.where((final i) => i.repetition >= 3).length;
-    var repeatedTotal = items.where((final i) => i.repetition >= 1).length;
-    var knownTotal = items.where((final i) => i.repetition >= 8).length;
+    var learnedTotal = statistic.countLearnedCards(allCards);
+    var repeatedTotal = statistic.countRepeatedCards(allCards);
+    var knownTotal = statistic.countKnownCards(allCards);
 
-    final periodRange = computeRange(items, now, _period);
+    final periodRange = computeRangeForCards(allCards, now, _period);
     final bucketDays = periodRange.bucketDays;
     var buckets = buildBuckets(periodRange.start, periodRange.end, bucketDays);
-    var learnedByBucket = countLearnedByBucket(items, buckets, bucketDays);
-    var repeatedByBucket = countByBucket(items, buckets, bucketDays);
-    var knownByBucket = countKnownByBucket(items, buckets, bucketDays);
+    var learnedByBucket = countLearnedByBucketForCards(
+      allCards,
+      buckets,
+      bucketDays,
+      statistic,
+    );
+    var repeatedByBucket = countByBucketForCards(
+      allCards,
+      buckets,
+      bucketDays,
+      statistic,
+    );
+    var knownByBucket = countKnownByBucketForCards(
+      allCards,
+      buckets,
+      bucketDays,
+      statistic,
+    );
 
-    var periodFirstLearned = items.where((final i) {
-      final d = i.lastReviewedAt;
-      if (d == null) return false;
-      return isInRange(d, periodRange.start, periodRange.end) &&
-          i.repetition >= 3;
-    }).length;
-    var periodRepeated = items.where((final i) {
-      final d = i.lastReviewedAt;
-      if (d == null) return false;
-      return isInRange(d, periodRange.start, periodRange.end);
-    }).length;
-    var periodKnown = items.where((final i) {
-      final d = i.lastReviewedAt;
-      if (d == null) return false;
-      return isInRange(d, periodRange.start, periodRange.end) &&
-          i.repetition >= 8;
-    }).length;
+    var periodFirstLearned = statistic
+        .getCardsLearnedInPeriod(allCards, periodRange.start, periodRange.end)
+        .length;
+    var periodRepeated = statistic
+        .getCardsRepeatedInPeriod(allCards, periodRange.start, periodRange.end)
+        .length;
+    var periodKnown = statistic
+        .getCardsKnownInPeriod(allCards, periodRange.start, periodRange.end)
+        .length;
 
     if (isMock) {
       final today = DateTime(now.year, now.month, now.day);
@@ -610,5 +609,90 @@ class _LearningScreenState extends State<LearningScreen> {
         ),
       ),
     );
+  }
+
+  StatsRange computeRangeForCards(
+    final List<DictionaryCard> cards,
+    final DateTime now,
+    final StatsPeriod period,
+  ) {
+    final today = DateTime(now.year, now.month, now.day);
+    switch (period) {
+      case StatsPeriod.last7:
+        return StatsRange(today.subtract(const Duration(days: 6)), today, 1);
+      case StatsPeriod.last30:
+        return StatsRange(today.subtract(const Duration(days: 29)), today, 1);
+      case StatsPeriod.last90:
+        return StatsRange(today.subtract(const Duration(days: 89)), today, 1);
+      case StatsPeriod.thisYear:
+        final start = DateTime(today.year, 1, 1);
+        final diff = today.difference(start).inDays + 1;
+        return StatsRange(start, today, diff > 90 ? 7 : 1);
+      case StatsPeriod.allTime:
+        final reviewedDates = cards
+            .map((final c) => c.fsrsCard.lastReview)
+            .whereType<DateTime>()
+            .toList();
+        if (reviewedDates.isEmpty) {
+          final start = today.subtract(const Duration(days: 89));
+          return StatsRange(start, today, 7);
+        }
+        reviewedDates.sort((final a, final b) => a.compareTo(b));
+        final start = DateTime(
+          reviewedDates.first.year,
+          reviewedDates.first.month,
+          reviewedDates.first.day,
+        );
+        final diff = today.difference(start).inDays + 1;
+        return StatsRange(start, today, diff > 90 ? 7 : 1);
+    }
+  }
+
+  List<int> countByBucketForCards(
+    final List<DictionaryCard> cards,
+    final List<DateTime> buckets,
+    final int bucketDays,
+    final StatisticService statistic,
+  ) {
+    final counts = List<int>.filled(buckets.length, 0);
+    for (var i = 0; i < buckets.length; i++) {
+      final start = buckets[i];
+      final end = start.add(Duration(days: bucketDays - 1));
+      final c = statistic.getCardsRepeatedInPeriod(cards, start, end).length;
+      counts[i] = c;
+    }
+    return counts;
+  }
+
+  List<int> countLearnedByBucketForCards(
+    final List<DictionaryCard> cards,
+    final List<DateTime> buckets,
+    final int bucketDays,
+    final StatisticService statistic,
+  ) {
+    final counts = List<int>.filled(buckets.length, 0);
+    for (var i = 0; i < buckets.length; i++) {
+      final start = buckets[i];
+      final end = start.add(Duration(days: bucketDays - 1));
+      final c = statistic.getCardsLearnedInPeriod(cards, start, end).length;
+      counts[i] = c;
+    }
+    return counts;
+  }
+
+  List<int> countKnownByBucketForCards(
+    final List<DictionaryCard> cards,
+    final List<DateTime> buckets,
+    final int bucketDays,
+    final StatisticService statistic,
+  ) {
+    final counts = List<int>.filled(buckets.length, 0);
+    for (var i = 0; i < buckets.length; i++) {
+      final start = buckets[i];
+      final end = start.add(Duration(days: bucketDays - 1));
+      final c = statistic.getCardsKnownInPeriod(cards, start, end).length;
+      counts[i] = c;
+    }
+    return counts;
   }
 }

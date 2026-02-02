@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
-import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_cubit.dart';
-import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
-import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/bloc/learning_session/learning_session_cubit.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/bloc/learning_session/learning_session_state.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/word_card.dart';
@@ -72,11 +68,7 @@ class _LearningSessionContentState extends State<LearningSessionContent> {
         }
       },
       builder: (final context, final sessionState) {
-        final savedWords = context.select(
-          (final DictionaryCubit c) => c.state.savedWords,
-        );
-
-        if (sessionState.sessionWords.isEmpty) {
+        if (sessionState.sessionCards.isEmpty) {
           final cubit = context.read<LearningSessionCubit>();
           return Center(
             child: Text(
@@ -93,42 +85,24 @@ class _LearningSessionContentState extends State<LearningSessionContent> {
           );
         }
 
-        final identifiers = sessionState.sessionWords;
+        final cards = sessionState.sessionCards;
         final safeIndex = sessionState.currentWordIndex.clamp(
           0,
-          identifiers.isNotEmpty ? identifiers.length - 1 : 0,
+          cards.isNotEmpty ? cards.length - 1 : 0,
         );
-        final currentIdentifier = identifiers.isNotEmpty
-            ? identifiers[safeIndex]
-            : '';
-
-        // Извлекаем слово и находим конкретный DictionaryWord по идентификатору
-        final srsService = GetIt.I.get<SrsService>();
-        final currentWord = currentIdentifier.isNotEmpty
-            ? srsService.extractWord(currentIdentifier)
-            : '';
-        final currentDictionaryWord = currentIdentifier.isNotEmpty
-            ? srsService.findWordByIdentifier(currentIdentifier, savedWords)
-            : null;
-        final currentDefinitions = currentDictionaryWord != null
-            ? [currentDictionaryWord]
-            : <DictionaryWord>[];
+        final currentCard = cards.isNotEmpty ? cards[safeIndex] : cards.first;
 
         return SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(24.0),
             child: Column(
               children: [
-                WordProgressIndicator(word: currentIdentifier),
+                WordProgressIndicator(card: currentCard),
                 const SizedBox(height: 16),
                 Expanded(
                   child: Center(
                     child: WordCard(
-                      key: ValueKey(
-                        '$currentIdentifier-${sessionState.currentWordIndex}',
-                      ),
-                      word: currentWord,
-                      definitions: currentDefinitions,
+                      card: currentCard,
                       showTranslation: sessionState.showTranslation,
                       onToggleTranslation: _toggleTranslation,
                       onKnow: _handleKnow,

@@ -2,85 +2,78 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_state.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
+import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
 import 'package:nim2book_mobile_flutter/core/services/dictionary_service.dart';
-import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
 
 class DictionaryCubit extends Cubit<DictionaryState> {
-  final DictionaryService _dictService = GetIt.I.get<DictionaryService>();
-  final SrsService _srsService = GetIt.I.get<SrsService>();
+  final _dictService = GetIt.I.get<DictionaryService>();
 
   DictionaryCubit() : super(const DictionaryState()) {
     _initialize();
   }
 
   Future<void> _initialize() async {
-    final savedWords = _dictService.getAllSavedWords();
-    emit(state.copyWith(savedWords: savedWords));
-
-    // Мигрируем старые SRS данные на новый формат (word -> word_partOfSpeech)
-    if (savedWords.isNotEmpty) {
-      await _srsService.migrateLegacySrsData(savedWords);
-    }
+    final savedCards = _dictService.getMapDictionaryCard();
+    emit(state.copyWith(savedCards: savedCards));
   }
 
-  Future<bool> saveWordWithPos(
+  Future<bool> saveWord(
     final String word,
     final DictionaryWord wordData,
   ) async {
     emit(state.copyWith(isLoading: true));
-    final ok = await _dictService.saveWordWithPos(word, wordData);
-    if (ok) {
-      final updated = Map<String, List<DictionaryWord>>.from(state.savedWords);
+    final dictionaryCard = await _dictService.saveWord(wordData);
+    if (dictionaryCard != null) {
+      final updated = Map<String, List<DictionaryCard>>.from(state.savedCards);
       if (!updated.containsKey(word)) {
         updated[word] = [];
       }
       // Remove existing word with same partOfSpeech if any
       updated[word]!.removeWhere(
-        (w) => w.partOfSpeech == wordData.partOfSpeech,
+        (w) => w.wordData.partOfSpeech == wordData.partOfSpeech,
       );
       // Add new word
-      updated[word]!.add(wordData);
-      emit(state.copyWith(savedWords: updated));
+      updated[word]!.add(dictionaryCard);
+      emit(state.copyWith(savedCards: updated));
     }
     emit(state.copyWith(isLoading: false));
-    return ok;
+    return dictionaryCard != null;
   }
 
-  Future<bool> deleteWordWithPos(
-    final String word,
-    final String partOfSpeech,
-  ) async {
+  Future<bool> deleteWord(final String word, final String partOfSpeech) async {
     emit(state.copyWith(isLoading: true));
-    final ok = await _dictService.deleteWordWithPos(word, partOfSpeech);
+    final ok = await _dictService.deleteWord(word, partOfSpeech);
     if (ok) {
-      final updated = Map<String, List<DictionaryWord>>.from(state.savedWords);
+      final updated = Map<String, List<DictionaryCard>>.from(state.savedCards);
       if (updated.containsKey(word)) {
-        updated[word]!.removeWhere((w) => w.partOfSpeech == partOfSpeech);
+        updated[word]!.removeWhere(
+          (w) => w.wordData.partOfSpeech == partOfSpeech,
+        );
         if (updated[word]!.isEmpty) {
           updated.remove(word);
         }
       }
-      emit(state.copyWith(savedWords: updated));
+      emit(state.copyWith(savedCards: updated));
     }
     emit(state.copyWith(isLoading: false));
     return ok;
   }
 
   Future<List<DictionaryWord>?> getWordLocalFirst(final String word) async {
-    final saved = state.savedWords[word];
-    if (saved != null) return saved;
+    final saved = state.savedCards[word];
+    if (saved != null) return saved.map((e) => e.wordData).toList();
     return _dictService.getWord(word);
   }
 
   Future<List<DictionaryWord>?> getWordServiceFirst(final String word) async {
     final wordFromServer = await _dictService.getWord(word);
     if (wordFromServer != null) return wordFromServer;
-    return state.savedWords[word];
+    return state.savedCards[word]?.map((e) => e.wordData).toList();
   }
 
-  bool checkWordWithPosInDict(final String word, final String partOfSpeech) {
-    final words = state.savedWords[word];
+  bool checkWordInDict(final String word, final String partOfSpeech) {
+    final words = state.savedCards[word];
     if (words == null) return false;
-    return words.any((w) => w.partOfSpeech == partOfSpeech);
+    return words.any((w) => w.wordData.partOfSpeech == partOfSpeech);
   }
 }

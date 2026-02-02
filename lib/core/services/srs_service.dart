@@ -71,7 +71,7 @@ DictionaryWord? _findWordByIdentifier(
 
 class SrsService {
   final SharedPreferences _sharedPreferences = GetIt.I.get<SharedPreferences>();
-  final SrsSchedulerSM2 _scheduler = const SrsSchedulerSM2();
+  final _scheduler = const SrsSchedulerSM2();
 
   // Наблюдаемый счётчик новых слов за день для авто‑обновления UI
   late final ValueNotifier<int> dailyNewCountNotifier = ValueNotifier<int>(
@@ -330,57 +330,5 @@ class SrsService {
   /// Создаёт идентификатор из DictionaryWord
   String createIdentifier(DictionaryWord word) {
     return _identifierFromDictionaryWord(word);
-  }
-
-  /// Мигрирует старые SRS данные (по словам) на новый формат (по идентификаторам)
-  /// Должен вызываться при старте приложения если в словаре есть слова с частями речи
-  Future<void> migrateLegacySrsData(
-    Map<String, List<DictionaryWord>> savedWords,
-  ) async {
-    for (final entry in savedWords.entries) {
-      final word = entry.key;
-      final dictionaryWords = entry.value;
-
-      // Проверяем, есть ли старая запись для этого слова
-      final legacyKey = _srsKey(word);
-      final legacyJson = _sharedPreferences.getString(legacyKey);
-
-      if (legacyJson != null && dictionaryWords.isNotEmpty) {
-        try {
-          // Читаем старую запись
-          final jsonMap = jsonDecode(legacyJson) as Map<String, dynamic>;
-          final legacyItem = SrsItem.fromJson(jsonMap);
-
-          // Для каждой части речи создаём новую запись с тем же прогрессом
-          for (final dictionaryWord in dictionaryWords) {
-            final identifier = _identifierFromDictionaryWord(dictionaryWord);
-            final newKey = _srsKey(identifier);
-
-            // Проверяем, не существует ли уже новая запись
-            if (!_sharedPreferences.containsKey(newKey)) {
-              // Создаём новый элемент с данными из старой записи
-              final newItem = SrsItem(
-                word: identifier,
-                easiness: legacyItem.easiness,
-                intervalDays: legacyItem.intervalDays,
-                repetition: legacyItem.repetition,
-                lastReviewedAt: legacyItem.lastReviewedAt,
-                nextReviewAt: legacyItem.nextReviewAt,
-              );
-              _sharedPreferences.setString(
-                newKey,
-                jsonEncode(newItem.toJson()),
-              );
-            }
-          }
-
-          // Удаляем старую запись после успешной миграции
-          unawaited(_sharedPreferences.remove(legacyKey));
-        } catch (e) {
-          // Игнорируем ошибки миграции для конкретного слова
-          debugPrint('Error migrating SRS data for word "$word": $e');
-        }
-      }
-    }
   }
 }

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
+import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/word_card_content.dart';
 
 class WordCard extends StatefulWidget {
-  final String word;
-  final List<DictionaryWord> definitions;
+  final DictionaryCard card;
   final bool showTranslation;
   final VoidCallback onToggleTranslation;
   final VoidCallback onKnow;
@@ -12,8 +11,7 @@ class WordCard extends StatefulWidget {
 
   const WordCard({
     super.key,
-    required this.word,
-    required this.definitions,
+    required this.card,
     required this.showTranslation,
     required this.onToggleTranslation,
     required this.onKnow,
@@ -132,8 +130,7 @@ class _WordCardState extends State<WordCard> with TickerProviderStateMixin {
 
     final staticContent = RepaintBoundary(
       child: WordCardContent(
-        word: widget.word,
-        definitions: widget.definitions,
+        card: widget.card,
         showTranslation: widget.showTranslation,
       ),
     );

@@ -1,66 +1,51 @@
 import 'package:bloc/bloc.dart';
+import 'package:fsrs/fsrs.dart';
 import 'package:get_it/get_it.dart';
-import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
-import 'package:nim2book_mobile_flutter/features/srs/models/srs_item.dart';
+import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
+import 'package:nim2book_mobile_flutter/core/services/dictionary_service.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/bloc/learning_session/learning_session_state.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/learning_session_content.dart';
-import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
 
 class LearningSessionCubit extends Cubit<LearningSessionState> {
   final LearningMode mode;
-  final Map<String, List<DictionaryWord>> allSavedWords;
-  final SrsService _srsService = GetIt.I.get<SrsService>();
+  final Map<String, List<DictionaryCard>> allSavedCards;
+  final _dictionaryService = GetIt.I<DictionaryService>();
 
-  LearningSessionCubit({required this.mode, required this.allSavedWords})
-    : super(const LearningSessionState(sessionWords: [], currentWordIndex: 0));
+  LearningSessionCubit({required this.mode, required this.allSavedCards})
+    : super(const LearningSessionState(sessionCards: [], currentWordIndex: 0));
 
   void initializeSession() {
-    final now = DateTime.now();
-    final allIdentifiers = _srsService.getIdentifiersFromSavedWords(
-      allSavedWords,
-    );
-    List<String> identifiers;
     var isEmpty = false;
+    var sessionCards = <DictionaryCard>[];
 
     switch (mode) {
       case LearningMode.mixed:
-        identifiers = _srsService.getDueWords(allIdentifiers);
-        isEmpty = identifiers.isEmpty;
+        sessionCards = _dictionaryService.getDueCards();
+        isEmpty = sessionCards.isEmpty;
         break;
       case LearningMode.reviewOnly:
-        final reviewDue = <String>[];
-        for (final identifier in allIdentifiers) {
-          final item = _srsService.getOrCreateItem(identifier);
-          if (!item.nextReviewAt.isAfter(now) && item.lastReviewedAt != null) {
-            reviewDue.add(identifier);
-          }
-        }
-        identifiers = reviewDue;
-        isEmpty = identifiers.isEmpty;
+        sessionCards = _dictionaryService
+            .getDueCards()
+            .where((card) => card.fsrsCard.step != 0)
+            .toList();
+        isEmpty = sessionCards.isEmpty;
         break;
       case LearningMode.newOnly:
-        final newDue = <String>[];
-        for (final identifier in allIdentifiers) {
-          final item = _srsService.getOrCreateItem(identifier);
-          if (!item.nextReviewAt.isAfter(now) && item.lastReviewedAt == null) {
-            newDue.add(identifier);
-          }
-        }
-        final used = _srsService.getDailyNewCount(now: now);
-        final limit = _srsService.getDailyNewLimit();
-        final slots = (limit - used).clamp(0, limit);
-        identifiers = slots > 0 ? newDue.take(slots).toList() : <String>[];
-        isEmpty = identifiers.isEmpty;
+        sessionCards = _dictionaryService
+            .getDueCards()
+            .where((card) => card.fsrsCard.step == 0)
+            .toList();
+        isEmpty = sessionCards.isEmpty;
         break;
     }
 
     emit(
       state.copyWith(
-        sessionWords: identifiers,
+        sessionCards: sessionCards,
         currentWordIndex: 0,
         sessionEmpty: isEmpty,
         totalWordsStudied: 0,
-        initialSessionSize: identifiers.length,
+        initialSessionSize: sessionCards.length,
       ),
     );
   }
@@ -71,59 +56,59 @@ class LearningSessionCubit extends Cubit<LearningSessionState> {
     }
   }
 
-  void handleKnow() {
-    _applyRatingAndNext(SrsRating.good);
+  void handleKnow() async {
+    await _applyRatingAndNext(Rating.good);
   }
 
-  void handleDontKnow() {
-    _applyRatingAndNext(SrsRating.again);
+  void handleDontKnow() async {
+    await _applyRatingAndNext(Rating.again);
   }
 
-  void _applyRatingAndNext(final SrsRating rating) {
-    if (state.sessionWords.isEmpty) {
+  Future<void> _applyRatingAndNext(final Rating rating) async {
+    if (state.sessionCards.isEmpty) {
       _completeSession();
       return;
     }
 
-    final identifier = state.sessionWords[state.currentWordIndex];
-    _srsService.updateWithRating(identifier, rating);
+    final identifier = state.sessionCards[state.currentWordIndex];
+    await _dictionaryService.reviewCard(card: identifier, rating: rating);
 
-    final updatedWords = List<String>.from(state.sessionWords);
+    final updatedCards = List<DictionaryCard>.from(state.sessionCards);
 
-    if (rating == SrsRating.good) {
+    if (rating == Rating.good) {
       // Элемент выучен - удаляем из сессии
-      updatedWords.removeAt(state.currentWordIndex);
+      updatedCards.removeAt(state.currentWordIndex);
 
       final newTotalStudied = state.totalWordsStudied + 1;
 
       emit(
         state.copyWith(
           totalWordsStudied: newTotalStudied,
-          sessionWords: updatedWords,
+          sessionCards: updatedCards,
         ),
       );
     } else {
       // Элемент не выучен - перемещаем в конец списка
-      final currentIdentifier = updatedWords.removeAt(state.currentWordIndex);
-      updatedWords.add(currentIdentifier);
+      final currentIdentifier = updatedCards.removeAt(state.currentWordIndex);
+      updatedCards.add(currentIdentifier);
 
-      emit(state.copyWith(sessionWords: updatedWords));
+      emit(state.copyWith(sessionCards: updatedCards));
     }
 
     _nextWord();
   }
 
   void _nextWord() {
-    final words = state.sessionWords;
+    final cards = state.sessionCards;
 
     // Проверяем, завершена ли сессия
-    if (words.isEmpty || state.totalWordsStudied >= state.initialSessionSize) {
+    if (cards.isEmpty || state.totalWordsStudied >= state.initialSessionSize) {
       _completeSession();
       return;
     }
 
     // Убеждаемся, что индекс валиден
-    final safeIndex = state.currentWordIndex >= words.length
+    final safeIndex = state.currentWordIndex >= cards.length
         ? 0
         : state.currentWordIndex;
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
+import 'package:nim2book_mobile_flutter/core/services/statistic_service.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 class DailyNewLimitSwitcher extends StatefulWidget {
@@ -11,8 +11,8 @@ class DailyNewLimitSwitcher extends StatefulWidget {
 }
 
 class _DailyNewLimitSwitcherState extends State<DailyNewLimitSwitcher> {
-  late final SrsService _srs = GetIt.I.get<SrsService>();
-  late int _currentLimit = _srs.getDailyNewLimit();
+  late final StatisticService _statistic = GetIt.I.get<StatisticService>();
+  late int _currentLimit = _statistic.getDailyNewLimit();
   bool _saving = false;
 
   static const List<int> _options = [5, 10, 15, 20, 25, 30];
@@ -55,7 +55,7 @@ class _DailyNewLimitSwitcherState extends State<DailyNewLimitSwitcher> {
                         _saving = true;
                         _currentLimit = v;
                       });
-                      await _srs.setDailyNewLimit(v);
+                      await _statistic.setDailyNewLimit(v);
                       if (mounted) {
                         setState(() {
                           _saving = false;
@@ -64,9 +64,9 @@ class _DailyNewLimitSwitcherState extends State<DailyNewLimitSwitcher> {
                     },
             ),
             ValueListenableBuilder<int>(
-              valueListenable: _srs.dailyNewCountNotifier,
+              valueListenable: _statistic.dailyNewCountNotifier,
               builder: (_, final used, final __) {
-                final total = _srs.getDailyNewLimit();
+                final total = _statistic.getDailyNewLimit();
                 return Text(
                   '$used / $total',
                   style: theme.textTheme.bodySmall?.copyWith(

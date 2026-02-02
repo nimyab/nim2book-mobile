@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LearningSessionState {
 
- List<String> get sessionWords; int get currentWordIndex; bool get showTranslation; bool get sessionEmpty; int get totalWordsStudied; int get initialSessionSize;
+ List<DictionaryCard> get sessionCards; int get currentWordIndex; bool get showTranslation; bool get sessionEmpty; int get totalWordsStudied; int get initialSessionSize;
 /// Create a copy of LearningSessionState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $LearningSessionStateCopyWith<LearningSessionState> get copyWith => _$LearningSe
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LearningSessionState&&const DeepCollectionEquality().equals(other.sessionWords, sessionWords)&&(identical(other.currentWordIndex, currentWordIndex) || other.currentWordIndex == currentWordIndex)&&(identical(other.showTranslation, showTranslation) || other.showTranslation == showTranslation)&&(identical(other.sessionEmpty, sessionEmpty) || other.sessionEmpty == sessionEmpty)&&(identical(other.totalWordsStudied, totalWordsStudied) || other.totalWordsStudied == totalWordsStudied)&&(identical(other.initialSessionSize, initialSessionSize) || other.initialSessionSize == initialSessionSize));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LearningSessionState&&const DeepCollectionEquality().equals(other.sessionCards, sessionCards)&&(identical(other.currentWordIndex, currentWordIndex) || other.currentWordIndex == currentWordIndex)&&(identical(other.showTranslation, showTranslation) || other.showTranslation == showTranslation)&&(identical(other.sessionEmpty, sessionEmpty) || other.sessionEmpty == sessionEmpty)&&(identical(other.totalWordsStudied, totalWordsStudied) || other.totalWordsStudied == totalWordsStudied)&&(identical(other.initialSessionSize, initialSessionSize) || other.initialSessionSize == initialSessionSize));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(sessionWords),currentWordIndex,showTranslation,sessionEmpty,totalWordsStudied,initialSessionSize);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(sessionCards),currentWordIndex,showTranslation,sessionEmpty,totalWordsStudied,initialSessionSize);
 
 @override
 String toString() {
-  return 'LearningSessionState(sessionWords: $sessionWords, currentWordIndex: $currentWordIndex, showTranslation: $showTranslation, sessionEmpty: $sessionEmpty, totalWordsStudied: $totalWordsStudied, initialSessionSize: $initialSessionSize)';
+  return 'LearningSessionState(sessionCards: $sessionCards, currentWordIndex: $currentWordIndex, showTranslation: $showTranslation, sessionEmpty: $sessionEmpty, totalWordsStudied: $totalWordsStudied, initialSessionSize: $initialSessionSize)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $LearningSessionStateCopyWith<$Res>  {
   factory $LearningSessionStateCopyWith(LearningSessionState value, $Res Function(LearningSessionState) _then) = _$LearningSessionStateCopyWithImpl;
 @useResult
 $Res call({
- List<String> sessionWords, int currentWordIndex, bool showTranslation, bool sessionEmpty, int totalWordsStudied, int initialSessionSize
+ List<DictionaryCard> sessionCards, int currentWordIndex, bool showTranslation, bool sessionEmpty, int totalWordsStudied, int initialSessionSize
 });
 
 
@@ -62,10 +62,10 @@ class _$LearningSessionStateCopyWithImpl<$Res>
 
 /// Create a copy of LearningSessionState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? sessionWords = null,Object? currentWordIndex = null,Object? showTranslation = null,Object? sessionEmpty = null,Object? totalWordsStudied = null,Object? initialSessionSize = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? sessionCards = null,Object? currentWordIndex = null,Object? showTranslation = null,Object? sessionEmpty = null,Object? totalWordsStudied = null,Object? initialSessionSize = null,}) {
   return _then(_self.copyWith(
-sessionWords: null == sessionWords ? _self.sessionWords : sessionWords // ignore: cast_nullable_to_non_nullable
-as List<String>,currentWordIndex: null == currentWordIndex ? _self.currentWordIndex : currentWordIndex // ignore: cast_nullable_to_non_nullable
+sessionCards: null == sessionCards ? _self.sessionCards : sessionCards // ignore: cast_nullable_to_non_nullable
+as List<DictionaryCard>,currentWordIndex: null == currentWordIndex ? _self.currentWordIndex : currentWordIndex // ignore: cast_nullable_to_non_nullable
 as int,showTranslation: null == showTranslation ? _self.showTranslation : showTranslation // ignore: cast_nullable_to_non_nullable
 as bool,sessionEmpty: null == sessionEmpty ? _self.sessionEmpty : sessionEmpty // ignore: cast_nullable_to_non_nullable
 as bool,totalWordsStudied: null == totalWordsStudied ? _self.totalWordsStudied : totalWordsStudied // ignore: cast_nullable_to_non_nullable
@@ -155,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<String> sessionWords,  int currentWordIndex,  bool showTranslation,  bool sessionEmpty,  int totalWordsStudied,  int initialSessionSize)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<DictionaryCard> sessionCards,  int currentWordIndex,  bool showTranslation,  bool sessionEmpty,  int totalWordsStudied,  int initialSessionSize)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LearningSessionState() when $default != null:
-return $default(_that.sessionWords,_that.currentWordIndex,_that.showTranslation,_that.sessionEmpty,_that.totalWordsStudied,_that.initialSessionSize);case _:
+return $default(_that.sessionCards,_that.currentWordIndex,_that.showTranslation,_that.sessionEmpty,_that.totalWordsStudied,_that.initialSessionSize);case _:
   return orElse();
 
 }
@@ -176,10 +176,10 @@ return $default(_that.sessionWords,_that.currentWordIndex,_that.showTranslation,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<String> sessionWords,  int currentWordIndex,  bool showTranslation,  bool sessionEmpty,  int totalWordsStudied,  int initialSessionSize)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<DictionaryCard> sessionCards,  int currentWordIndex,  bool showTranslation,  bool sessionEmpty,  int totalWordsStudied,  int initialSessionSize)  $default,) {final _that = this;
 switch (_that) {
 case _LearningSessionState():
-return $default(_that.sessionWords,_that.currentWordIndex,_that.showTranslation,_that.sessionEmpty,_that.totalWordsStudied,_that.initialSessionSize);case _:
+return $default(_that.sessionCards,_that.currentWordIndex,_that.showTranslation,_that.sessionEmpty,_that.totalWordsStudied,_that.initialSessionSize);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,10 +196,10 @@ return $default(_that.sessionWords,_that.currentWordIndex,_that.showTranslation,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<String> sessionWords,  int currentWordIndex,  bool showTranslation,  bool sessionEmpty,  int totalWordsStudied,  int initialSessionSize)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<DictionaryCard> sessionCards,  int currentWordIndex,  bool showTranslation,  bool sessionEmpty,  int totalWordsStudied,  int initialSessionSize)?  $default,) {final _that = this;
 switch (_that) {
 case _LearningSessionState() when $default != null:
-return $default(_that.sessionWords,_that.currentWordIndex,_that.showTranslation,_that.sessionEmpty,_that.totalWordsStudied,_that.initialSessionSize);case _:
+return $default(_that.sessionCards,_that.currentWordIndex,_that.showTranslation,_that.sessionEmpty,_that.totalWordsStudied,_that.initialSessionSize);case _:
   return null;
 
 }
@@ -211,14 +211,14 @@ return $default(_that.sessionWords,_that.currentWordIndex,_that.showTranslation,
 
 
 class _LearningSessionState implements LearningSessionState {
-  const _LearningSessionState({required final  List<String> sessionWords, required this.currentWordIndex, this.showTranslation = false, this.sessionEmpty = false, this.totalWordsStudied = 0, this.initialSessionSize = 0}): _sessionWords = sessionWords;
+  const _LearningSessionState({required final  List<DictionaryCard> sessionCards, required this.currentWordIndex, this.showTranslation = false, this.sessionEmpty = false, this.totalWordsStudied = 0, this.initialSessionSize = 0}): _sessionCards = sessionCards;
   
 
- final  List<String> _sessionWords;
-@override List<String> get sessionWords {
-  if (_sessionWords is EqualUnmodifiableListView) return _sessionWords;
+ final  List<DictionaryCard> _sessionCards;
+@override List<DictionaryCard> get sessionCards {
+  if (_sessionCards is EqualUnmodifiableListView) return _sessionCards;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_sessionWords);
+  return EqualUnmodifiableListView(_sessionCards);
 }
 
 @override final  int currentWordIndex;
@@ -237,16 +237,16 @@ _$LearningSessionStateCopyWith<_LearningSessionState> get copyWith => __$Learnin
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LearningSessionState&&const DeepCollectionEquality().equals(other._sessionWords, _sessionWords)&&(identical(other.currentWordIndex, currentWordIndex) || other.currentWordIndex == currentWordIndex)&&(identical(other.showTranslation, showTranslation) || other.showTranslation == showTranslation)&&(identical(other.sessionEmpty, sessionEmpty) || other.sessionEmpty == sessionEmpty)&&(identical(other.totalWordsStudied, totalWordsStudied) || other.totalWordsStudied == totalWordsStudied)&&(identical(other.initialSessionSize, initialSessionSize) || other.initialSessionSize == initialSessionSize));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LearningSessionState&&const DeepCollectionEquality().equals(other._sessionCards, _sessionCards)&&(identical(other.currentWordIndex, currentWordIndex) || other.currentWordIndex == currentWordIndex)&&(identical(other.showTranslation, showTranslation) || other.showTranslation == showTranslation)&&(identical(other.sessionEmpty, sessionEmpty) || other.sessionEmpty == sessionEmpty)&&(identical(other.totalWordsStudied, totalWordsStudied) || other.totalWordsStudied == totalWordsStudied)&&(identical(other.initialSessionSize, initialSessionSize) || other.initialSessionSize == initialSessionSize));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_sessionWords),currentWordIndex,showTranslation,sessionEmpty,totalWordsStudied,initialSessionSize);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_sessionCards),currentWordIndex,showTranslation,sessionEmpty,totalWordsStudied,initialSessionSize);
 
 @override
 String toString() {
-  return 'LearningSessionState(sessionWords: $sessionWords, currentWordIndex: $currentWordIndex, showTranslation: $showTranslation, sessionEmpty: $sessionEmpty, totalWordsStudied: $totalWordsStudied, initialSessionSize: $initialSessionSize)';
+  return 'LearningSessionState(sessionCards: $sessionCards, currentWordIndex: $currentWordIndex, showTranslation: $showTranslation, sessionEmpty: $sessionEmpty, totalWordsStudied: $totalWordsStudied, initialSessionSize: $initialSessionSize)';
 }
 
 
@@ -257,7 +257,7 @@ abstract mixin class _$LearningSessionStateCopyWith<$Res> implements $LearningSe
   factory _$LearningSessionStateCopyWith(_LearningSessionState value, $Res Function(_LearningSessionState) _then) = __$LearningSessionStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<String> sessionWords, int currentWordIndex, bool showTranslation, bool sessionEmpty, int totalWordsStudied, int initialSessionSize
+ List<DictionaryCard> sessionCards, int currentWordIndex, bool showTranslation, bool sessionEmpty, int totalWordsStudied, int initialSessionSize
 });
 
 
@@ -274,10 +274,10 @@ class __$LearningSessionStateCopyWithImpl<$Res>
 
 /// Create a copy of LearningSessionState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? sessionWords = null,Object? currentWordIndex = null,Object? showTranslation = null,Object? sessionEmpty = null,Object? totalWordsStudied = null,Object? initialSessionSize = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? sessionCards = null,Object? currentWordIndex = null,Object? showTranslation = null,Object? sessionEmpty = null,Object? totalWordsStudied = null,Object? initialSessionSize = null,}) {
   return _then(_LearningSessionState(
-sessionWords: null == sessionWords ? _self._sessionWords : sessionWords // ignore: cast_nullable_to_non_nullable
-as List<String>,currentWordIndex: null == currentWordIndex ? _self.currentWordIndex : currentWordIndex // ignore: cast_nullable_to_non_nullable
+sessionCards: null == sessionCards ? _self._sessionCards : sessionCards // ignore: cast_nullable_to_non_nullable
+as List<DictionaryCard>,currentWordIndex: null == currentWordIndex ? _self.currentWordIndex : currentWordIndex // ignore: cast_nullable_to_non_nullable
 as int,showTranslation: null == showTranslation ? _self.showTranslation : showTranslation // ignore: cast_nullable_to_non_nullable
 as bool,sessionEmpty: null == sessionEmpty ? _self.sessionEmpty : sessionEmpty // ignore: cast_nullable_to_non_nullable
 as bool,totalWordsStudied: null == totalWordsStudied ? _self.totalWordsStudied : totalWordsStudied // ignore: cast_nullable_to_non_nullable

@@ -13,8 +13,8 @@ class DictionaryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final savedWords = context.select(
-      (DictionaryCubit c) => c.state.savedWords,
+    final savedCards = context.select(
+      (DictionaryCubit c) => c.state.savedCards,
     );
 
     return Scaffold(
@@ -22,11 +22,11 @@ class DictionaryScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            if (savedWords.isNotEmpty) ReviewDueHeader(savedWords: savedWords),
+            if (savedCards.isNotEmpty) ReviewDueHeader(savedCards: savedCards),
             Expanded(
-              child: savedWords.isEmpty
+              child: savedCards.isEmpty
                   ? const EmptyDictionaryState()
-                  : DictionaryList(savedWords: savedWords),
+                  : DictionaryList(savedCards: savedCards),
             ),
             const AddWordButton(),
           ],

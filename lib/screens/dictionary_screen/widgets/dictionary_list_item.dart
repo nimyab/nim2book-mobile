@@ -2,21 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_cubit.dart';
-import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
+import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
 import 'package:nim2book_mobile_flutter/core/services/tts_service.dart';
 import 'package:nim2book_mobile_flutter/core/utils/part_of_speech_localizer.dart';
 import 'package:nim2book_mobile_flutter/features/translated_dialog/translated_dialog.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 class DictionaryListItem extends StatelessWidget {
-  final String word;
-  final DictionaryWord wordData;
+  final DictionaryCard cardData;
 
-  const DictionaryListItem({
-    super.key,
-    required this.word,
-    required this.wordData,
-  });
+  const DictionaryListItem({super.key, required this.cardData});
 
   @override
   Widget build(BuildContext context) {
@@ -33,15 +28,15 @@ class DictionaryListItem extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      word,
+                      cardData.wordData.text,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    if (wordData.transcription != null) ...[
+                    if (cardData.wordData.transcription != null) ...[
                       const SizedBox(width: 8),
                       Text(
-                        '[${wordData.transcription}]',
+                        '[${cardData.wordData.transcription}]',
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: theme.colorScheme.primary,
                           fontStyle: FontStyle.italic,
@@ -51,7 +46,10 @@ class DictionaryListItem extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  PartOfSpeechLocalizer.getLabel(l10n, wordData.partOfSpeech),
+                  PartOfSpeechLocalizer.getLabel(
+                    l10n,
+                    cardData.wordData.partOfSpeech,
+                  ),
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.primary,
                     fontWeight: FontWeight.w600,
@@ -62,9 +60,9 @@ class DictionaryListItem extends StatelessWidget {
           ),
         ],
       ),
-      subtitle: wordData.translations.isNotEmpty
+      subtitle: cardData.wordData.translations.isNotEmpty
           ? Text(
-              wordData.translations.first,
+              cardData.wordData.translations.first,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: theme.textTheme.bodyMedium?.copyWith(
@@ -80,7 +78,7 @@ class DictionaryListItem extends StatelessWidget {
             child: IconButton(
               icon: Icon(Icons.volume_up, color: theme.colorScheme.primary),
               onPressed: () {
-                GetIt.I.get<TtsService>().speak(word);
+                GetIt.I.get<TtsService>().speak(cardData.wordData.text);
               },
             ),
           ),
@@ -89,9 +87,9 @@ class DictionaryListItem extends StatelessWidget {
             child: IconButton(
               icon: Icon(Icons.delete_outline, color: theme.colorScheme.error),
               onPressed: () {
-                context.read<DictionaryCubit>().deleteWordWithPos(
-                  word,
-                  wordData.partOfSpeech,
+                context.read<DictionaryCubit>().deleteWord(
+                  cardData.wordData.text,
+                  cardData.wordData.partOfSpeech,
                 );
               },
             ),
@@ -107,7 +105,8 @@ class DictionaryListItem extends StatelessWidget {
       onTap: () {
         showDialog<void>(
           context: context,
-          builder: (context) => TranslatedDialog(phrase: word),
+          builder: (context) =>
+              TranslatedDialog(phrase: cardData.wordData.text),
         );
       },
     );
