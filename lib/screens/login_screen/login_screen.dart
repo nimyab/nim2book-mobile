@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:nim2book_mobile_flutter/core/bloc/auth/auth_cubit.dart';
+import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
-import 'package:talker_flutter/talker_flutter.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _logger = GetIt.I.get<Talker>();
 
   @override
   void dispose() {
@@ -29,10 +26,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(final BuildContext context) {
-    final googleLogin = context.read<AuthCubit>().googleLogin;
-    final isAuthLoading = context.select(
-      (final AuthCubit c) => c.state.isLoading,
+    final authNotifier = ref.read(authNotifierProvider.notifier);
+    final isAuthLoading = ref.watch(
+      authNotifierProvider.select((state) => state.isLoading),
     );
+    final talker = ref.read(talkerProvider);
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
@@ -56,9 +54,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             final idToken = account.authentication.idToken;
 
                             if (idToken != null) {
-                              final success = await googleLogin(idToken);
+                              final success = await authNotifier.googleLogin(
+                                idToken,
+                              );
 
-                              _logger.info(success);
+                              talker.info(success);
 
                               if (context.mounted) {
                                 if (!success) {
@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               }
                             }
                           } catch (e) {
-                            _logger.error(e);
+                            talker.error(e);
                           }
                         },
                   child: Row(

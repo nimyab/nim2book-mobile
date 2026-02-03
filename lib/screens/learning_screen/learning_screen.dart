@@ -1,11 +1,10 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_cubit.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
+import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/core/services/statistic_service.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
 
@@ -13,14 +12,14 @@ import 'package:nim2book_mobile_flutter/features/srs/logic/srs_stats_utils.dart'
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/widgets/stats_bar_chart.dart';
 
-class LearningScreen extends StatefulWidget {
+class LearningScreen extends ConsumerStatefulWidget {
   const LearningScreen({super.key});
 
   @override
-  State<LearningScreen> createState() => _LearningScreenState();
+  ConsumerState<LearningScreen> createState() => _LearningScreenState();
 }
 
-class _LearningScreenState extends State<LearningScreen> {
+class _LearningScreenState extends ConsumerState<LearningScreen> {
   StatsPeriod _period = StatsPeriod.last7;
   VoidCallback? _statisticDailyNewListener;
   static const bool isMock = false;
@@ -29,7 +28,7 @@ class _LearningScreenState extends State<LearningScreen> {
   void initState() {
     super.initState();
     // Слушаем счётчик новых слов, чтобы кнопки режимов обновлялись
-    final statistic = GetIt.I.get<StatisticService>();
+    final statistic = ref.read(statisticServiceProvider);
     _statisticDailyNewListener = () {
       if (!mounted) return;
       setState(() {});
@@ -39,7 +38,7 @@ class _LearningScreenState extends State<LearningScreen> {
 
   @override
   void dispose() {
-    final statistic = GetIt.I.get<StatisticService>();
+    final statistic = ref.read(statisticServiceProvider);
     final listener = _statisticDailyNewListener;
     if (listener != null) {
       statistic.dailyNewCountNotifier.removeListener(listener);
@@ -111,11 +110,10 @@ class _LearningScreenState extends State<LearningScreen> {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final savedCards = context.select(
-      (final DictionaryCubit c) => c.state.savedCards,
-    );
+    final dictionaryState = ref.watch(dictionaryNotifierProvider);
+    final savedCards = dictionaryState.savedCards;
     final theme = Theme.of(context);
-    final statistic = GetIt.I.get<StatisticService>();
+    final statistic = ref.watch(statisticServiceProvider);
     final now = DateTime.now();
 
     // Преобразуем Map в плоский список карточек

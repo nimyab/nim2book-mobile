@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
-import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_cubit.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
+import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/features/translated_dialog/widgets/dialog_header.dart';
 import 'package:nim2book_mobile_flutter/features/translated_dialog/widgets/empty_state.dart';
 import 'package:nim2book_mobile_flutter/features/translated_dialog/widgets/loading_state.dart';
 import 'package:nim2book_mobile_flutter/features/translated_dialog/widgets/word_item.dart';
-import 'package:talker_flutter/talker_flutter.dart';
 
-class TranslatedDialog extends StatefulWidget {
+class TranslatedDialog extends ConsumerStatefulWidget {
   final String phrase;
 
   const TranslatedDialog({super.key, required this.phrase});
 
   @override
-  State<TranslatedDialog> createState() => _TranslatedDialogState();
+  ConsumerState<TranslatedDialog> createState() => _TranslatedDialogState();
 }
 
-class _TranslatedDialogState extends State<TranslatedDialog> {
+class _TranslatedDialogState extends ConsumerState<TranslatedDialog> {
   final List<DictionaryWord> _words = [];
   bool _isLoading = false;
 
@@ -27,16 +25,22 @@ class _TranslatedDialogState extends State<TranslatedDialog> {
       setState(() {
         _isLoading = true;
       });
-      final words = await context.read<DictionaryCubit>().getWordServiceFirst(
-        widget.phrase,
-      );
-      if (words != null) _words.addAll(words);
+      final dictionaryNotifier = ref.read(dictionaryNotifierProvider.notifier);
+      final words = await dictionaryNotifier.getWordServiceFirst(widget.phrase);
+      if (words != null && mounted) {
+        setState(() {
+          _words.addAll(words);
+        });
+      }
     } catch (e) {
-      GetIt.I.get<Talker>().error('Failed to fetch translation: $e');
+      final talker = ref.read(talkerProvider);
+      talker.error('Failed to fetch translation: $e');
     } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 

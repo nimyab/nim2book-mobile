@@ -1,13 +1,14 @@
 import 'dart:ui';
 
-import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocaleService {
   static const String _localeKey = 'selected_locale';
 
-  final SharedPreferences _sharedPreferences = GetIt.I<SharedPreferences>();
+  final SharedPreferences _sharedPreferences;
+
+  LocaleService(this._sharedPreferences);
 
   Locale? getSavedLocale() {
     final localeCode = _sharedPreferences.getString(_localeKey);

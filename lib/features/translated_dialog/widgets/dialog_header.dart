@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:nim2book_mobile_flutter/core/services/tts_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 
-class DialogHeader extends StatelessWidget {
+class DialogHeader extends ConsumerWidget {
   final String phrase;
   final String? transcription;
   final Color headerColor;
@@ -19,7 +19,7 @@ class DialogHeader extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
@@ -37,7 +37,7 @@ class DialogHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 GestureDetector(
-                  onTap: () => GetIt.I.get<TtsService>().speak(phrase),
+                  onTap: () => ref.read(ttsServiceProvider).speak(phrase),
                   child: Text(
                     phrase,
                     style: TextStyle(

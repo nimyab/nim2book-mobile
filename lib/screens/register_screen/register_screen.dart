@@ -1,25 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nim2book_mobile_flutter/core/bloc/auth/auth_cubit.dart';
+import 'package:nim2book_mobile_flutter/core/providers/auth/auth_notifier.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
-class RegisterScreen extends StatefulWidget {
+class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(final BuildContext context) {
-    final register = context.read<AuthCubit>().register;
-    final isAuthLoading = context.select(
-      (final AuthCubit c) => c.state.isLoading,
+    final authNotifier = ref.read(authNotifierProvider.notifier);
+    final isAuthLoading = ref.watch(
+      authNotifierProvider.select((state) => state.isLoading),
     );
     final l10n = AppLocalizations.of(context)!;
 
@@ -60,7 +67,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 onPressed: isAuthLoading
                     ? null
                     : () async {
-                        final success = await register(
+                        final success = await authNotifier.register(
                           _emailController.text,
                           _passwordController.text,
                         );

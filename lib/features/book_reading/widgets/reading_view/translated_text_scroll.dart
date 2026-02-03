@@ -1,34 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading/book_reading_cubit.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/reading_settings/reading_settings_cubit.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/notifiers/book_reading_notifier.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/notifiers/reading_settings_notifier.dart';
 
-class TranslatedTextScroll extends StatefulWidget {
-  const TranslatedTextScroll({super.key, this.controller});
-
+class TranslatedTextScroll extends ConsumerStatefulWidget {
   final ScrollController? controller;
+  final String bookId;
+  final List<ChapterAlignNode> chapters;
+
+  const TranslatedTextScroll({
+    super.key,
+    this.controller,
+    required this.bookId,
+    required this.chapters,
+  });
 
   @override
-  State<TranslatedTextScroll> createState() => _TranslatedTextScrollState();
+  ConsumerState<TranslatedTextScroll> createState() =>
+      _TranslatedTextScrollState();
 }
 
-class _TranslatedTextScrollState extends State<TranslatedTextScroll> {
+class _TranslatedTextScrollState extends ConsumerState<TranslatedTextScroll> {
   int? _lastEnsuredParagraph;
   int? _lastEnsuredWord;
   @override
   Widget build(final BuildContext context) {
-    final translatedFontSize = context.select(
-      (final ReadingSettingsCubit c) => c.state.translatedFontSize,
+    final bookReadingParam = (bookId: widget.bookId, chapters: widget.chapters);
+    final settingsState = ref.watch(readingSettingsNotifierProvider);
+    final translatedFontSize = settingsState.translatedFontSize;
+    final translatedFontFamily = settingsState.translatedFontFamily;
+    final translatedVerticalPadding = settingsState.translatedVerticalPadding;
+    final readingState = ref.watch(
+      bookReadingNotifierProvider(bookReadingParam),
     );
-    final translatedFontFamily = context.select(
-      (final ReadingSettingsCubit c) => c.state.translatedFontFamily,
-    );
-    final translatedVerticalPadding = context.select(
-      (final ReadingSettingsCubit c) => c.state.translatedVerticalPadding,
-    );
-    final readingState = context.watch<BookReadingCubit>().state;
     final theme = Theme.of(context);
     final scrollColors = theme.extension<TranslatedTextScrollColors>()!;
     final readingColors = theme.extension<BookReadingColors>()!;

@@ -1,21 +1,26 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:nim2book_mobile_flutter/core/env/env.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
+import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 
-class VerticalBookCard extends StatelessWidget {
-  final _apiBaseUrl = GetIt.I.get<Env>().apiBaseUrl;
+class VerticalBookCard extends ConsumerWidget {
   final Book book;
   final VoidCallback? onTap;
   final String? heroTag;
 
-  VerticalBookCard({super.key, required this.book, this.onTap, this.heroTag});
+  const VerticalBookCard({
+    super.key,
+    required this.book,
+    this.onTap,
+    this.heroTag,
+  });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final apiBaseUrl = ref.read(envProvider).apiBaseUrl;
     final coverUrl = book.cover != null
-        ? '$_apiBaseUrl/api/v1/file/public?path=${Uri.encodeComponent(book.cover!)}'
+        ? '$apiBaseUrl/api/v1/file/public?path=${Uri.encodeComponent(book.cover!)}'
         : null;
 
     return GestureDetector(

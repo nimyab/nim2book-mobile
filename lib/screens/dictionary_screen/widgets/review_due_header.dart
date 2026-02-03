@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
-import 'package:nim2book_mobile_flutter/core/services/dictionary_service.dart';
+import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
-class ReviewDueHeader extends StatelessWidget {
+class ReviewDueHeader extends ConsumerWidget {
   final Map<String, List<DictionaryCard>> savedCards;
 
   const ReviewDueHeader({super.key, required this.savedCards});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final dictionarySerivice = GetIt.I.get<DictionaryService>();
-    final count = dictionarySerivice.getDueCardsCount();
+    final dictionaryService = ref.read(dictionaryServiceProvider);
+    final count = dictionaryService.getDueCardsCount();
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),

@@ -1,15 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
-import 'package:nim2book_mobile_flutter/core/services/book_service.dart';
-import 'package:nim2book_mobile_flutter/core/bloc/books/books_cubit.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
-class BookScreen extends StatefulWidget {
+class BookScreen extends ConsumerStatefulWidget {
   final String bookId;
   final String? heroTag;
   final Book? initialBook;
@@ -22,21 +19,22 @@ class BookScreen extends StatefulWidget {
   });
 
   @override
-  State<BookScreen> createState() => _BookScreenState();
+  ConsumerState<BookScreen> createState() => _BookScreenState();
 }
 
-class _BookScreenState extends State<BookScreen> {
-  final _apiBaseUrl = GetIt.I.get<Env>().apiBaseUrl;
-  final bookService = GetIt.I.get<BookService>();
+class _BookScreenState extends ConsumerState<BookScreen> {
   Book? book;
   bool isLoading = true;
 
   void _loadBook() async {
+    final bookService = ref.read(bookServiceProvider);
     final fetchedBook = await bookService.getBook(widget.bookId);
-    setState(() {
-      book = fetchedBook;
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        book = fetchedBook;
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -53,7 +51,8 @@ class _BookScreenState extends State<BookScreen> {
 
   @override
   Widget build(final BuildContext context) {
-    final booksState = context.watch<BooksCubit>().state;
+    final booksState = ref.watch(booksNotifierProvider);
+    final env = ref.watch(envProvider);
     final l10n = AppLocalizations.of(context)!;
 
     final currentBook = book;
@@ -63,7 +62,7 @@ class _BookScreenState extends State<BookScreen> {
         : false;
 
     final coverUrl = currentBook?.cover != null
-        ? '$_apiBaseUrl/api/v1/file/public?path=${Uri.encodeComponent(currentBook!.cover!)}'
+        ? '${env.apiBaseUrl}/api/v1/file/public?path=${Uri.encodeComponent(currentBook!.cover!)}'
         : null;
 
     final Widget coverHero = Hero(
@@ -127,8 +126,9 @@ class _BookScreenState extends State<BookScreen> {
               ),
               if (!isMyBook)
                 ElevatedButton.icon(
-                  onPressed: () =>
-                      context.read<BooksCubit>().addMyBook(currentBook),
+                  onPressed: () => ref
+                      .read(booksNotifierProvider.notifier)
+                      .addMyBook(currentBook),
                   icon: const Icon(Icons.add),
                   label: Text(l10n.addToMyBooks),
                 )
@@ -144,8 +144,9 @@ class _BookScreenState extends State<BookScreen> {
                       label: Text(l10n.readBook),
                     ),
                     OutlinedButton.icon(
-                      onPressed: () =>
-                          context.read<BooksCubit>().removeMyBook(currentBook),
+                      onPressed: () => ref
+                          .read(booksNotifierProvider.notifier)
+                          .removeMyBook(currentBook),
                       icon: const Icon(Icons.delete_outline),
                       label: Text(l10n.delete),
                     ),

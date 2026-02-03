@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading/book_reading_cubit.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/notifiers/book_reading_notifier.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 class SearchResult {
@@ -20,15 +20,17 @@ class SearchResult {
   });
 }
 
-class SearchSheet extends StatefulWidget {
+class SearchSheet extends ConsumerStatefulWidget {
+  final String bookId;
   final List<ChapterAlignNode> chapters;
-  const SearchSheet({super.key, required this.chapters});
+
+  const SearchSheet({super.key, required this.bookId, required this.chapters});
 
   @override
-  State<SearchSheet> createState() => _SearchSheetState();
+  ConsumerState<SearchSheet> createState() => _SearchSheetState();
 }
 
-class _SearchSheetState extends State<SearchSheet> {
+class _SearchSheetState extends ConsumerState<SearchSheet> {
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   List<SearchResult> _results = [];
@@ -175,13 +177,20 @@ class _SearchSheetState extends State<SearchSheet> {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 onTap: () {
-                                  final cubit = context
-                                      .read<BookReadingCubit>();
+                                  final bookReadingParam = (
+                                    bookId: widget.bookId,
+                                    chapters: widget.chapters,
+                                  );
+                                  final notifier = ref.read(
+                                    bookReadingNotifierProvider(
+                                      bookReadingParam,
+                                    ).notifier,
+                                  );
                                   Navigator.of(context).pop();
-                                  cubit.goToChapter(r.chapterIndex);
+                                  notifier.goToChapter(r.chapterIndex);
                                   if (r.paragraphIndex >= 0 &&
                                       r.wordIndex >= 0) {
-                                    cubit.selectWord(
+                                    notifier.selectWord(
                                       r.paragraphIndex,
                                       r.wordIndex,
                                     );

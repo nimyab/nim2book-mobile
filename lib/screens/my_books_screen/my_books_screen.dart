@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nim2book_mobile_flutter/core/bloc/books/books_cubit.dart';
+import 'package:nim2book_mobile_flutter/core/providers/book/books_notifier.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/screens/my_books_screen/widgets/books_section.dart';
 
-class MyBooksScreen extends StatelessWidget {
+class MyBooksScreen extends ConsumerWidget {
   const MyBooksScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final booksState = context.watch<BooksCubit>().state;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final booksState = ref.watch(booksNotifierProvider);
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(

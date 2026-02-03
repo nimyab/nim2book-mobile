@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ReadingSettingsService {
@@ -18,7 +17,9 @@ class ReadingSettingsService {
   static const _translatedFontFamilyKey = 'translated_font_family';
   static const _translatedVerticalPaddingKey = 'translated_vertical_padding';
 
-  final SharedPreferences _prefs = GetIt.I.get<SharedPreferences>();
+  final SharedPreferences _prefs;
+
+  ReadingSettingsService(this._prefs);
 
   String? getFontFamily() => _prefs.getString(_fontFamilyKey);
   Future<void> setFontFamily(final String value) =>

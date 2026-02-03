@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nim2book_mobile_flutter/core/bloc/theme/theme_cubit.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nim2book_mobile_flutter/core/providers/theme/theme_notifier.dart';
 import 'package:nim2book_mobile_flutter/core/services/theme_service.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
-class ThemeSwitcher extends StatelessWidget {
+class ThemeSwitcher extends ConsumerWidget {
   const ThemeSwitcher({super.key});
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(final BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final currentTheme = context.select(
-      (final ThemeCubit c) => c.state.currentTheme,
+    final currentTheme = ref.watch(
+      themeNotifierProvider.select((state) => state.currentTheme),
     );
+    final themeNotifier = ref.read(themeNotifierProvider.notifier);
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -27,7 +29,7 @@ class ThemeSwitcher extends StatelessWidget {
               ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             DropdownButtonFormField<AppTheme>(
-              initialValue: currentTheme,
+              value: currentTheme,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 contentPadding: EdgeInsets.symmetric(
@@ -42,16 +44,14 @@ class ThemeSwitcher extends StatelessWidget {
                     children: [
                       Icon(_getThemeIcon(theme), size: 20),
                       const SizedBox(width: 8),
-                      Text(
-                        context.read<ThemeCubit>().getThemeName(theme, l10n),
-                      ),
+                      Text(themeNotifier.getThemeName(theme, l10n)),
                     ],
                   ),
                 );
               }).toList(),
               onChanged: (final AppTheme? value) {
                 if (value != null) {
-                  context.read<ThemeCubit>().setTheme(value);
+                  themeNotifier.setTheme(value);
                 }
               },
             ),
@@ -73,22 +73,21 @@ class ThemeSwitcher extends StatelessWidget {
   }
 }
 
-class ThemeSwitcherTile extends StatelessWidget {
+class ThemeSwitcherTile extends ConsumerWidget {
   const ThemeSwitcherTile({super.key});
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(final BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final currentTheme = context.select(
-      (final ThemeCubit c) => c.state.currentTheme,
+    final currentTheme = ref.watch(
+      themeNotifierProvider.select((state) => state.currentTheme),
     );
+    final themeNotifier = ref.read(themeNotifierProvider.notifier);
 
     return ListTile(
       leading: const Icon(Icons.palette),
       title: Text(l10n.theme),
-      subtitle: Text(
-        context.read<ThemeCubit>().getThemeName(currentTheme, l10n),
-      ),
+      subtitle: Text(themeNotifier.getThemeName(currentTheme, l10n)),
       trailing: DropdownButton<AppTheme>(
         value: currentTheme,
         underline: const SizedBox(),
@@ -100,14 +99,14 @@ class ThemeSwitcherTile extends StatelessWidget {
               children: [
                 Icon(_getThemeIcon(theme), size: 16),
                 const SizedBox(width: 8),
-                Text(context.read<ThemeCubit>().getThemeName(theme, l10n)),
+                Text(themeNotifier.getThemeName(theme, l10n)),
               ],
             ),
           );
         }).toList(),
         onChanged: (final AppTheme? value) {
           if (value != null) {
-            context.read<ThemeCubit>().setTheme(value);
+            themeNotifier.setTheme(value);
           }
         },
       ),

@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
-import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StatisticService {
-  final SharedPreferences _sharedPreferences = GetIt.I.get<SharedPreferences>();
+  final SharedPreferences _sharedPreferences;
+
+  StatisticService(this._sharedPreferences);
 
   // Дневной лимит новых слов
   static const int _defaultMaxNewPerDay = 15;

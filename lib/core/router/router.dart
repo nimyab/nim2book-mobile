@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nim2book_mobile_flutter/core/bloc/auth/auth_cubit.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
+import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/screens/add_book_screen/add_book_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/book_screen/book_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/books_screen/books_screen.dart';
@@ -26,23 +26,19 @@ class BookRouteExtra {
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
-class GoRouterRefreshNotifier extends ChangeNotifier {
-  GoRouterRefreshNotifier(final AuthCubit authCubit) {
-    authCubit.stream.listen((_) {
-      notifyListeners();
-    });
-  }
-}
+// Provider для роутера
+final routerProvider = Provider<GoRouter>((ref) {
+  final authState = ref.watch(authNotifierProvider);
+  final talker = ref.watch(talkerProvider);
 
-GoRouter createRouter(final AuthCubit authCubit) {
   return GoRouter(
     initialLocation: '/my-books',
     navigatorKey: _rootNavigatorKey,
-    observers: [TalkerRouteObserver(GetIt.I.get<Talker>())],
-    refreshListenable: GoRouterRefreshNotifier(authCubit),
+    observers: [TalkerRouteObserver(talker)],
+    refreshListenable: _GoRouterRefreshNotifier(ref),
     redirect: (context, state) {
-      final isAuthenticated = authCubit.state.isAuthenticated;
-      final isLoading = authCubit.state.isLoading;
+      final isAuthenticated = authState.isAuthenticated;
+      final isLoading = authState.isLoading;
       final currentPath = state.uri.path;
       final isLoginRoute = currentPath == '/login';
       final isRegisterRoute = currentPath == '/register';
@@ -124,22 +120,22 @@ GoRouter createRouter(final AuthCubit authCubit) {
       GoRoute(
         path: '/learning-session',
         name: 'learning-session',
-        redirect: (_, _) => '/learning-session/mixed',
+        redirect: (_, __) => '/learning-session/mixed',
         routes: [
           GoRoute(
-            path: '/new',
+            path: 'new',
             name: 'learning-session-new',
             builder: (final context, final state) =>
                 const LearningSessionScreen(mode: LearningMode.newOnly),
           ),
           GoRoute(
-            path: '/review',
+            path: 'review',
             name: 'learning-session-review',
             builder: (final context, final state) =>
                 const LearningSessionScreen(mode: LearningMode.reviewOnly),
           ),
           GoRoute(
-            path: '/mixed',
+            path: 'mixed',
             name: 'learning-session-mixed',
             builder: (final context, final state) =>
                 const LearningSessionScreen(mode: LearningMode.mixed),
@@ -196,4 +192,19 @@ GoRouter createRouter(final AuthCubit authCubit) {
       ),
     ],
   );
+});
+
+// Notifier для обновления роутера при изменении состояния auth
+class _GoRouterRefreshNotifier extends ChangeNotifier {
+  _GoRouterRefreshNotifier(this._ref) {
+    _ref.listen(authNotifierProvider, (_, __) => notifyListeners());
+  }
+
+  final Ref _ref;
+
+  @override
+  void dispose() {
+    // Ref автоматически управляет подписками
+    super.dispose();
+  }
 }

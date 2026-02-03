@@ -1,22 +1,22 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nim2book_mobile_flutter/core/bloc/auth/auth_cubit.dart';
+import 'package:nim2book_mobile_flutter/core/providers/auth/auth_notifier.dart';
+import 'package:nim2book_mobile_flutter/core/providers/book/books_notifier.dart';
 import 'package:nim2book_mobile_flutter/core/router/router.dart';
-import 'package:nim2book_mobile_flutter/core/bloc/books/books_cubit.dart';
 import 'package:nim2book_mobile_flutter/features/books/widgets/book_card.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
-class BooksScreen extends StatefulWidget {
+class BooksScreen extends ConsumerStatefulWidget {
   const BooksScreen({super.key});
 
   @override
-  State<BooksScreen> createState() => _BooksScreenState();
+  ConsumerState<BooksScreen> createState() => _BooksScreenState();
 }
 
-class _BooksScreenState extends State<BooksScreen> {
+class _BooksScreenState extends ConsumerState<BooksScreen> {
   final TextEditingController _searchController = TextEditingController();
   Timer? _debounce;
 
@@ -30,10 +30,11 @@ class _BooksScreenState extends State<BooksScreen> {
     _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 300), () {
       final q = value.trim();
+      final booksNotifier = ref.read(booksNotifierProvider.notifier);
       if (q.isEmpty) {
-        context.read<BooksCubit>().getBooks(null, null, 1);
+        booksNotifier.getBooks(null, null, 1);
       } else {
-        context.read<BooksCubit>().searchBooks(q);
+        booksNotifier.searchBooks(q);
       }
     });
   }
@@ -49,12 +50,14 @@ class _BooksScreenState extends State<BooksScreen> {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final isAuthenticated = context.select(
-      (final AuthCubit c) => c.state.isAuthenticated,
+    final isAuthenticated = ref.watch(
+      authNotifierProvider.select((state) => state.isAuthenticated),
     );
-    final isVIP = context.select((final AuthCubit c) => c.state.isVIP);
+    final isVIP = ref.watch(
+      authNotifierProvider.select((state) => state.isVIP),
+    );
 
-    final booksState = context.watch<BooksCubit>().state;
+    final booksState = ref.watch(booksNotifierProvider);
     final books = booksState.allBooks;
     final isFetching = booksState.isFetching;
 

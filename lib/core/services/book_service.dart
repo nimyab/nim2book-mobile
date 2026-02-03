@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
@@ -13,9 +12,11 @@ const String _addedBooksKey = 'added_books';
 String _chapterKey(final String path) => 'book_chapter_$path';
 
 class BookService {
-  final _logger = GetIt.I.get<Talker>();
-  final _apiClient = GetIt.I.get<ApiClient>();
-  final _sharedPreferences = GetIt.I.get<SharedPreferences>();
+  final Talker _logger;
+  final ApiClient _apiClient;
+  final SharedPreferences _sharedPreferences;
+
+  BookService(this._logger, this._apiClient, this._sharedPreferences);
 
   Future<Book?> getBook(final String bookId) async {
     final cacheKey = 'book_$bookId';

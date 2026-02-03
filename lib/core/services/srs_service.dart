@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
 import 'package:nim2book_mobile_flutter/features/srs/logic/srs_scheduler_sm2.dart';
 import 'package:nim2book_mobile_flutter/features/srs/models/srs_item.dart';
@@ -70,8 +69,10 @@ DictionaryWord? _findWordByIdentifier(
 }
 
 class SrsService {
-  final SharedPreferences _sharedPreferences = GetIt.I.get<SharedPreferences>();
+  final SharedPreferences _sharedPreferences;
   final _scheduler = const SrsSchedulerSM2();
+
+  SrsService(this._sharedPreferences);
 
   // Наблюдаемый счётчик новых слов за день для авто‑обновления UI
   late final ValueNotifier<int> dailyNewCountNotifier = ValueNotifier<int>(

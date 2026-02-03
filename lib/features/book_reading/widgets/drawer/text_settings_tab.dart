@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/reading_settings/reading_settings_cubit.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/notifiers/reading_settings_notifier.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
-class TextSettingsTab extends StatefulWidget {
+class TextSettingsTab extends ConsumerStatefulWidget {
   const TextSettingsTab({super.key});
 
   @override
-  State<TextSettingsTab> createState() => _TextSettingsTabState();
+  ConsumerState<TextSettingsTab> createState() => _TextSettingsTabState();
 }
 
-class _TextSettingsTabState extends State<TextSettingsTab> {
+class _TextSettingsTabState extends ConsumerState<TextSettingsTab> {
   double? _localFontSize;
   double? _localLineHeight;
   double? _localSidePadding;
@@ -23,7 +23,7 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final settings = context.select((final ReadingSettingsCubit c) => c.state);
+    final settings = ref.watch(readingSettingsNotifierProvider);
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -60,14 +60,14 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                             child: Text('Roboto'),
                           ),
                         ],
-                        onChanged: (final v) => context
-                            .read<ReadingSettingsCubit>()
+                        onChanged: (final v) => ref
+                            .read(readingSettingsNotifierProvider.notifier)
                             .setFontFamily(v ?? 'System'),
                       ),
                     ),
                     TextButton(
-                      onPressed: () => context
-                          .read<ReadingSettingsCubit>()
+                      onPressed: () => ref
+                          .read(readingSettingsNotifierProvider.notifier)
                           .setFontFamily('System'),
                       child: Text(l10n.reset),
                     ),
@@ -102,14 +102,14 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                             child: Text(l10n.alignJustify),
                           ),
                         ],
-                        onChanged: (final v) => context
-                            .read<ReadingSettingsCubit>()
+                        onChanged: (final v) => ref
+                            .read(readingSettingsNotifierProvider.notifier)
                             .setTextAlign(v ?? TextAlign.justify),
                       ),
                     ),
                     TextButton(
-                      onPressed: () => context
-                          .read<ReadingSettingsCubit>()
+                      onPressed: () => ref
+                          .read(readingSettingsNotifierProvider.notifier)
                           .setTextAlign(TextAlign.justify),
                       child: Text(l10n.reset),
                     ),
@@ -137,7 +137,9 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                         onChanged: (final v) =>
                             setState(() => _localFontSize = v),
                         onChangeEnd: (final v) {
-                          context.read<ReadingSettingsCubit>().setFontSize(v);
+                          ref
+                              .read(readingSettingsNotifierProvider.notifier)
+                              .setFontSize(v);
                           setState(() => _localFontSize = null);
                         },
                       ),
@@ -145,7 +147,9 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                     TextButton(
                       onPressed: () {
                         setState(() => _localFontSize = null);
-                        context.read<ReadingSettingsCubit>().setFontSize(24);
+                        ref
+                            .read(readingSettingsNotifierProvider.notifier)
+                            .setFontSize(24);
                       },
                       child: Text(l10n.reset),
                     ),
@@ -172,8 +176,8 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                           Colors.amberAccent.shade100,
                         ])
                           GestureDetector(
-                            onTap: () => context
-                                .read<ReadingSettingsCubit>()
+                            onTap: () => ref
+                                .read(readingSettingsNotifierProvider.notifier)
                                 .setBackgroundColor(c),
                             child: CircleAvatar(
                               radius: 14,
@@ -190,8 +194,8 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                       ],
                     ),
                     TextButton(
-                      onPressed: () => context
-                          .read<ReadingSettingsCubit>()
+                      onPressed: () => ref
+                          .read(readingSettingsNotifierProvider.notifier)
                           .setBackgroundColor(theme.colorScheme.surface),
                       child: Text(l10n.reset),
                     ),
@@ -218,8 +222,8 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                           Colors.brown,
                         ])
                           GestureDetector(
-                            onTap: () => context
-                                .read<ReadingSettingsCubit>()
+                            onTap: () => ref
+                                .read(readingSettingsNotifierProvider.notifier)
                                 .setTextColor(c),
                             child: CircleAvatar(
                               radius: 14,
@@ -238,11 +242,9 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                       ],
                     ),
                     TextButton(
-                      onPressed: () =>
-                          context.read<ReadingSettingsCubit>().setTextColor(
-                            theme.textTheme.bodyLarge?.color ??
-                                theme.colorScheme.onSurface,
-                          ),
+                      onPressed: () => ref
+                          .read(readingSettingsNotifierProvider.notifier)
+                          .setBackgroundColor(theme.colorScheme.surface),
                       child: Text(l10n.reset),
                     ),
                   ],
@@ -271,7 +273,9 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                         onChanged: (final v) =>
                             setState(() => _localLineHeight = v),
                         onChangeEnd: (final v) {
-                          context.read<ReadingSettingsCubit>().setLineHeight(v);
+                          ref
+                              .read(readingSettingsNotifierProvider.notifier)
+                              .setLineHeight(v);
                           setState(() => _localLineHeight = null);
                         },
                       ),
@@ -279,7 +283,9 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                     TextButton(
                       onPressed: () {
                         setState(() => _localLineHeight = null);
-                        context.read<ReadingSettingsCubit>().setLineHeight(1.3);
+                        ref
+                            .read(readingSettingsNotifierProvider.notifier)
+                            .setLineHeight(1.3);
                       },
                       child: Text(l10n.reset),
                     ),
@@ -307,9 +313,9 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                         onChanged: (final v) =>
                             setState(() => _localSidePadding = v),
                         onChangeEnd: (final v) {
-                          context.read<ReadingSettingsCubit>().setSidePadding(
-                            v,
-                          );
+                          ref
+                              .read(readingSettingsNotifierProvider.notifier)
+                              .setSidePadding(v);
                           setState(() => _localSidePadding = null);
                         },
                       ),
@@ -317,7 +323,9 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                     TextButton(
                       onPressed: () {
                         setState(() => _localSidePadding = null);
-                        context.read<ReadingSettingsCubit>().setSidePadding(10);
+                        ref
+                            .read(readingSettingsNotifierProvider.notifier)
+                            .setSidePadding(10);
                       },
                       child: Text(l10n.reset),
                     ),
@@ -347,8 +355,8 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                         onChanged: (final v) =>
                             setState(() => _localFirstLineIndent = v),
                         onChangeEnd: (final v) {
-                          context
-                              .read<ReadingSettingsCubit>()
+                          ref
+                              .read(readingSettingsNotifierProvider.notifier)
                               .setFirstLineIndentEm(v);
                           setState(() => _localFirstLineIndent = null);
                         },
@@ -357,8 +365,8 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                     TextButton(
                       onPressed: () {
                         setState(() => _localFirstLineIndent = null);
-                        context
-                            .read<ReadingSettingsCubit>()
+                        ref
+                            .read(readingSettingsNotifierProvider.notifier)
                             .setFirstLineIndentEm(1.5);
                       },
                       child: Text(l10n.reset),
@@ -389,8 +397,8 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                         onChanged: (final v) =>
                             setState(() => _localParagraphSpacing = v),
                         onChangeEnd: (final v) {
-                          context
-                              .read<ReadingSettingsCubit>()
+                          ref
+                              .read(readingSettingsNotifierProvider.notifier)
                               .setParagraphSpacing(v);
                           setState(() => _localParagraphSpacing = null);
                         },
@@ -399,8 +407,8 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                     TextButton(
                       onPressed: () {
                         setState(() => _localParagraphSpacing = null);
-                        context
-                            .read<ReadingSettingsCubit>()
+                        ref
+                            .read(readingSettingsNotifierProvider.notifier)
                             .setParagraphSpacing(7);
                       },
                       child: Text(l10n.reset),
@@ -437,8 +445,8 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                         onChanged: (final v) =>
                             setState(() => _localTranslatedVerticalPadding = v),
                         onChangeEnd: (final v) {
-                          context
-                              .read<ReadingSettingsCubit>()
+                          ref
+                              .read(readingSettingsNotifierProvider.notifier)
                               .setTranslatedVerticalPadding(v);
                           setState(
                             () => _localTranslatedVerticalPadding = null,
@@ -449,8 +457,8 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                     TextButton(
                       onPressed: () {
                         setState(() => _localTranslatedVerticalPadding = null);
-                        context
-                            .read<ReadingSettingsCubit>()
+                        ref
+                            .read(readingSettingsNotifierProvider.notifier)
                             .setTranslatedVerticalPadding(5);
                       },
                       child: Text(l10n.reset),
@@ -486,14 +494,14 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                             child: Text('Roboto'),
                           ),
                         ],
-                        onChanged: (final v) => context
-                            .read<ReadingSettingsCubit>()
+                        onChanged: (final v) => ref
+                            .read(readingSettingsNotifierProvider.notifier)
                             .setTranslatedFontFamily(v ?? 'System'),
                       ),
                     ),
                     TextButton(
-                      onPressed: () => context
-                          .read<ReadingSettingsCubit>()
+                      onPressed: () => ref
+                          .read(readingSettingsNotifierProvider.notifier)
                           .setTranslatedFontFamily('System'),
                       child: Text(l10n.reset),
                     ),
@@ -524,8 +532,8 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                         onChanged: (final v) =>
                             setState(() => _localTranslatedFontSize = v),
                         onChangeEnd: (final v) {
-                          context
-                              .read<ReadingSettingsCubit>()
+                          ref
+                              .read(readingSettingsNotifierProvider.notifier)
                               .setTranslatedFontSize(v);
                           setState(() => _localTranslatedFontSize = null);
                         },
@@ -534,8 +542,8 @@ class _TextSettingsTabState extends State<TextSettingsTab> {
                     TextButton(
                       onPressed: () {
                         setState(() => _localTranslatedFontSize = null);
-                        context
-                            .read<ReadingSettingsCubit>()
+                        ref
+                            .read(readingSettingsNotifierProvider.notifier)
                             .setTranslatedFontSize(20);
                       },
                       child: Text(l10n.reset),

@@ -1,21 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/core/services/statistic_service.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
-class DailyNewLimitSwitcher extends StatefulWidget {
+class DailyNewLimitSwitcher extends ConsumerStatefulWidget {
   const DailyNewLimitSwitcher({super.key});
 
   @override
-  State<DailyNewLimitSwitcher> createState() => _DailyNewLimitSwitcherState();
+  ConsumerState<DailyNewLimitSwitcher> createState() =>
+      _DailyNewLimitSwitcherState();
 }
 
-class _DailyNewLimitSwitcherState extends State<DailyNewLimitSwitcher> {
-  late final StatisticService _statistic = GetIt.I.get<StatisticService>();
-  late int _currentLimit = _statistic.getDailyNewLimit();
+class _DailyNewLimitSwitcherState extends ConsumerState<DailyNewLimitSwitcher> {
+  late final StatisticService _statistic;
+  late int _currentLimit;
   bool _saving = false;
 
   static const List<int> _options = [5, 10, 15, 20, 25, 30];
+
+  @override
+  void initState() {
+    super.initState();
+    _statistic = ref.read(statisticServiceProvider);
+    _currentLimit = _statistic.getDailyNewLimit();
+  }
 
   @override
   Widget build(final BuildContext context) {
@@ -38,7 +47,7 @@ class _DailyNewLimitSwitcherState extends State<DailyNewLimitSwitcher> {
           children: [
             Text(l10n.dailyNewWordsLimit, style: theme.textTheme.titleMedium),
             DropdownButtonFormField<int>(
-              initialValue: dropdownValue,
+              value: dropdownValue,
               items: _options
                   .map(
                     (final v) => DropdownMenuItem<int>(

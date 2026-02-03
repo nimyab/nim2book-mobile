@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_cubit.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nim2book_mobile_flutter/core/providers/dictionary/dictionary_notifier.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
-import 'package:nim2book_mobile_flutter/features/learning_session_screen/bloc/learning_session/learning_session_cubit.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/learning_session_content.dart';
 
 export 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/learning_session_content.dart'
     show LearningMode;
 
-class LearningSessionScreen extends StatelessWidget {
+class LearningSessionScreen extends ConsumerWidget {
   final LearningMode mode;
 
   const LearningSessionScreen({super.key, required this.mode});
@@ -26,17 +25,14 @@ class LearningSessionScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(final BuildContext context) {
-    final savedCards = context.read<DictionaryCubit>().state.savedCards;
+  Widget build(final BuildContext context, WidgetRef ref) {
+    final savedCards = ref.watch(
+      dictionaryNotifierProvider.select((state) => state.savedCards),
+    );
 
-    return BlocProvider(
-      create: (final context) =>
-          LearningSessionCubit(mode: mode, allSavedCards: savedCards)
-            ..initializeSession(),
-      child: Scaffold(
-        appBar: AppBar(title: Text(_getTitle(context)), centerTitle: true),
-        body: const LearningSessionContent(),
-      ),
+    return Scaffold(
+      appBar: AppBar(title: Text(_getTitle(context)), centerTitle: true),
+      body: LearningSessionContent(mode: mode, savedCards: savedCards),
     );
   }
 }

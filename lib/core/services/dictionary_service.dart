@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:fsrs/fsrs.dart';
-import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
 import 'package:nim2book_mobile_flutter/core/models/requests/requests.dart';
@@ -14,10 +13,12 @@ const _toLang = 'ru';
 const _ui = 'ru';
 
 class DictionaryService {
-  final _logger = GetIt.I.get<Talker>();
-  final _apiClient = GetIt.I.get<ApiClient>();
-  final _sharedPreferences = GetIt.I.get<SharedPreferences>();
+  final Talker _logger;
+  final ApiClient _apiClient;
+  final SharedPreferences _sharedPreferences;
   final _scheduler = Scheduler();
+
+  DictionaryService(this._logger, this._apiClient, this._sharedPreferences);
 
   static const _dictionaryPrefix = 'dictionary_card_';
 

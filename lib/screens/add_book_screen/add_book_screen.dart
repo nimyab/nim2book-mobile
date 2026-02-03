@@ -3,28 +3,23 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nim2book_mobile_flutter/core/api/api.dart';
-import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nim2book_mobile_flutter/core/bloc/books/books_cubit.dart';
+import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
-class AddBookScreen extends StatefulWidget {
+class AddBookScreen extends ConsumerStatefulWidget {
   final Book? initialBook;
   const AddBookScreen({super.key, this.initialBook});
 
   @override
-  State<AddBookScreen> createState() => _AddBookScreenState();
+  ConsumerState<AddBookScreen> createState() => _AddBookScreenState();
 }
 
-class _AddBookScreenState extends State<AddBookScreen> {
+class _AddBookScreenState extends ConsumerState<AddBookScreen> {
   PlatformFile? _selectedFile;
   bool _isUploading = false;
-  final _apiClient = GetIt.I.get<ApiClient>();
-  final _apiBaseUrl = GetIt.I.get<Env>().apiBaseUrl;
   String? _initialCoverUrl;
 
   @override
@@ -32,8 +27,9 @@ class _AddBookScreenState extends State<AddBookScreen> {
     super.initState();
     final book = widget.initialBook;
     if (book?.cover != null) {
+      final apiBaseUrl = ref.read(envProvider).apiBaseUrl;
       _initialCoverUrl =
-          '$_apiBaseUrl/api/v1/file/public?path=${Uri.encodeComponent(book!.cover!)}';
+          '$apiBaseUrl/api/v1/file/public?path=${Uri.encodeComponent(book!.cover!)}';
       // Предзагрузка обложки для мгновенного отображения
       precacheImage(CachedNetworkImageProvider(_initialCoverUrl!), context);
     }
@@ -78,8 +74,10 @@ class _AddBookScreenState extends State<AddBookScreen> {
       _isUploading = true;
     });
 
+    final apiClient = ref.read(apiClientProvider);
+
     try {
-      final response = await _apiClient.translateBook(
+      final response = await apiClient.translateBook(
         file: File(_selectedFile!.path!),
         from: 'en',
         to: 'ru',
@@ -87,8 +85,9 @@ class _AddBookScreenState extends State<AddBookScreen> {
       if (!mounted) return;
       if (response.book != null) {
         final book = response.book!;
+        final apiBaseUrl = ref.read(envProvider).apiBaseUrl;
         final coverUrl = book.cover != null
-            ? '$_apiBaseUrl/api/v1/file/public?path=${Uri.encodeComponent(book.cover!)}'
+            ? '$apiBaseUrl/api/v1/file/public?path=${Uri.encodeComponent(book.cover!)}'
             : null;
         if (coverUrl != null) {
           await precacheImage(CachedNetworkImageProvider(coverUrl), context);
@@ -213,7 +212,9 @@ class _AddBookScreenState extends State<AddBookScreen> {
                   ? null
                   : () {
                       _uploadBook((final book) {
-                        context.read<BooksCubit>().addMyBook(book);
+                        ref
+                            .read(booksNotifierProvider.notifier)
+                            .addMyBook(book);
                         context.go('/my-books');
                       });
                     },

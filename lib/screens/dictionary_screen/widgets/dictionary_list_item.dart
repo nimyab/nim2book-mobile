@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
-import 'package:nim2book_mobile_flutter/core/bloc/dictionary/dictionary_cubit.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
-import 'package:nim2book_mobile_flutter/core/services/tts_service.dart';
+import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/core/utils/part_of_speech_localizer.dart';
 import 'package:nim2book_mobile_flutter/features/translated_dialog/translated_dialog.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
-class DictionaryListItem extends StatelessWidget {
+class DictionaryListItem extends ConsumerWidget {
   final DictionaryCard cardData;
 
   const DictionaryListItem({super.key, required this.cardData});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
+    final ttsService = ref.read(ttsServiceProvider);
+    final dictionaryNotifier = ref.read(dictionaryNotifierProvider.notifier);
 
     return ListTile(
       title: Row(
@@ -78,7 +78,7 @@ class DictionaryListItem extends StatelessWidget {
             child: IconButton(
               icon: Icon(Icons.volume_up, color: theme.colorScheme.primary),
               onPressed: () {
-                GetIt.I.get<TtsService>().speak(cardData.wordData.text);
+                ttsService.speak(cardData.wordData.text);
               },
             ),
           ),
@@ -87,7 +87,7 @@ class DictionaryListItem extends StatelessWidget {
             child: IconButton(
               icon: Icon(Icons.delete_outline, color: theme.colorScheme.error),
               onPressed: () {
-                context.read<DictionaryCubit>().deleteWord(
+                dictionaryNotifier.deleteWord(
                   cardData.wordData.text,
                   cardData.wordData.partOfSpeech,
                 );

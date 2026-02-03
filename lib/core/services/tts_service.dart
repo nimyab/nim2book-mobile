@@ -1,11 +1,12 @@
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:get_it/get_it.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class TtsService {
   final FlutterTts _tts = FlutterTts();
   bool _hasInit = false;
-  final _logger = GetIt.I.get<Talker>();
+  final Talker _logger;
+
+  TtsService(this._logger);
 
   Future<void> _ensureInit({final String? language}) async {
     if (!_hasInit) {

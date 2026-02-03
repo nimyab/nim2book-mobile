@@ -1,24 +1,32 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading/book_reading_cubit.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/reading_settings/reading_settings_cubit.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/notifiers/book_reading_notifier.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/notifiers/reading_settings_notifier.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/services/chapter_converter.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/models/word_item.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/original_paragraph.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/select_chapter_buttons.dart';
 
-class OriginalTextScroll extends StatefulWidget {
-  const OriginalTextScroll({super.key, this.translatedScrollController});
-
+class OriginalTextScroll extends ConsumerStatefulWidget {
   final ScrollController? translatedScrollController;
+  final String bookId;
+  final List<ChapterAlignNode> chapters;
+
+  const OriginalTextScroll({
+    super.key,
+    this.translatedScrollController,
+    required this.bookId,
+    required this.chapters,
+  });
 
   @override
-  State<OriginalTextScroll> createState() => _OriginalTextScrollState();
+  ConsumerState<OriginalTextScroll> createState() => _OriginalTextScrollState();
 }
 
-class _OriginalTextScrollState extends State<OriginalTextScroll> {
+class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
   late final ScrollController _scrollController;
   Timer? _debounceTimer;
   bool _isInitialized = false;
@@ -36,8 +44,14 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
     super.initState();
 
     // Инициализируем контроллер сразу с нужной позицией, чтобы избежать скачка
-    final readingState = context.read<BookReadingCubit>().state;
-    final initialOffset = context.read<BookReadingCubit>().getChapterProgress(
+    final bookReadingParam = (bookId: widget.bookId, chapters: widget.chapters);
+    final notifier = ref.read(
+      bookReadingNotifierProvider(bookReadingParam).notifier,
+    );
+    final readingState = ref.read(
+      bookReadingNotifierProvider(bookReadingParam),
+    );
+    final initialOffset = notifier.getChapterProgress(
       readingState.currentChapterIndex,
     );
     _scrollController = ScrollController(initialScrollOffset: initialOffset);
@@ -65,9 +79,16 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
     _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 200), () {
       if (_scrollController.hasClients) {
-        final cubit = context.read<BookReadingCubit>();
-        cubit.setChapterProgress(
-          cubit.state.currentChapterIndex,
+        final bookReadingParam = (
+          bookId: widget.bookId,
+          chapters: widget.chapters,
+        );
+        final notifier = ref.read(
+          bookReadingNotifierProvider(bookReadingParam).notifier,
+        );
+        final state = ref.read(bookReadingNotifierProvider(bookReadingParam));
+        notifier.setChapterProgress(
+          state.currentChapterIndex,
           _scrollController.offset,
         );
       }
@@ -76,16 +97,14 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
 
   @override
   Widget build(final BuildContext context) {
-    final sidePadding = context.select(
-      (final ReadingSettingsCubit c) => c.state.sidePadding,
+    final bookReadingParam = (bookId: widget.bookId, chapters: widget.chapters);
+    final settingsState = ref.watch(readingSettingsNotifierProvider);
+    final sidePadding = settingsState.sidePadding;
+    final paragraphSpacing = settingsState.paragraphSpacing;
+    final fontSize = settingsState.fontSize;
+    final readingState = ref.watch(
+      bookReadingNotifierProvider(bookReadingParam),
     );
-    final paragraphSpacing = context.select(
-      (final ReadingSettingsCubit c) => c.state.paragraphSpacing,
-    );
-    final fontSize = context.select(
-      (final ReadingSettingsCubit c) => c.state.fontSize,
-    );
-    final readingState = context.watch<BookReadingCubit>().state;
     final currentChapterIndex = readingState.currentChapterIndex;
     final currentChapter = readingState.chapters[currentChapterIndex];
     final paragraphCount = currentChapter.content.length;
@@ -176,7 +195,10 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
           }
 
           if (index == paragraphCount + 1) {
-            return const SelectChapterButtons();
+            return SelectChapterButtons(
+              bookId: widget.bookId,
+              chapters: widget.chapters,
+            );
           }
 
           final paragraphIndex = index - 1;
@@ -197,7 +219,8 @@ class _OriginalTextScrollState extends State<OriginalTextScroll> {
                 selectedParagraphIndex:
                     readingState.selectedParagraphIndex ?? -1,
                 selectedWordIndex: readingState.selectedWordIndex ?? -1,
-                selectWord: context.read<BookReadingCubit>().selectWord,
+                bookId: widget.bookId,
+                chapters: widget.chapters,
               ),
             ),
           );

@@ -1,23 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading/book_reading_cubit.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/reading_settings/reading_settings_cubit.dart';
+import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/notifiers/book_reading_notifier.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/notifiers/reading_settings_notifier.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 const double bookAppBarHeight = 64;
 
-class BookReadingBar extends StatelessWidget implements PreferredSizeWidget {
+class BookReadingBar extends ConsumerWidget implements PreferredSizeWidget {
   final Book book;
+  final String bookId;
+  final List<ChapterAlignNode> chapters;
 
-  const BookReadingBar({super.key, required this.book});
+  const BookReadingBar({
+    super.key,
+    required this.book,
+    required this.bookId,
+    required this.chapters,
+  });
 
   @override
   Size get preferredSize => const Size.fromHeight(bookAppBarHeight);
 
   @override
-  Widget build(final BuildContext context) {
-    final readingState = context.watch<BookReadingCubit>().state;
+  Widget build(final BuildContext context, WidgetRef ref) {
+    final bookReadingParam = (bookId: bookId, chapters: chapters);
+    final readingState = ref.watch(
+      bookReadingNotifierProvider(bookReadingParam),
+    );
     final theme = Theme.of(context);
     final total = readingState.chapters.length;
     final percent = total == 0
@@ -50,21 +61,21 @@ class BookReadingBar extends StatelessWidget implements PreferredSizeWidget {
           message: AppLocalizations.of(context)!.translate,
           child: IconButton(
             icon: Icon(
-              context.select(
-                    (final ReadingSettingsCubit c) =>
-                        c.state.isTranslatedVisible,
+              ref.watch(
+                    readingSettingsNotifierProvider.select(
+                      (state) => state.isTranslatedVisible,
+                    ),
                   )
                   ? Icons.keyboard_arrow_up
                   : Icons.keyboard_arrow_down,
             ),
             onPressed: () {
-              final visible = context
-                  .read<ReadingSettingsCubit>()
-                  .state
+              final visible = ref
+                  .read(readingSettingsNotifierProvider)
                   .isTranslatedVisible;
-              context.read<ReadingSettingsCubit>().setTranslatedVisible(
-                value: !visible,
-              );
+              ref
+                  .read(readingSettingsNotifierProvider.notifier)
+                  .setTranslatedVisible(value: !visible);
             },
           ),
         ),

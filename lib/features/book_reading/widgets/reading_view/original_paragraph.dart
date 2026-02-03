@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/reading_settings/reading_settings_cubit.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/notifiers/book_reading_notifier.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/notifiers/reading_settings_notifier.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/models/word_item.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/original_paragraph_painter.dart';
 import 'package:nim2book_mobile_flutter/features/translated_dialog/translated_dialog.dart';
 
-class OriginalParagraph extends StatefulWidget {
+class OriginalParagraph extends ConsumerStatefulWidget {
   final List<WordItem> paragraph;
   final int paragraphIndex;
-  final void Function(int paragraphIndex, int wordIndex) selectWord;
   final int selectedParagraphIndex;
   final int selectedWordIndex;
+  final String bookId;
+  final List<ChapterAlignNode> chapters;
 
   const OriginalParagraph({
     super.key,
@@ -20,14 +23,15 @@ class OriginalParagraph extends StatefulWidget {
     required this.paragraphIndex,
     required this.selectedParagraphIndex,
     required this.selectedWordIndex,
-    required this.selectWord,
+    required this.bookId,
+    required this.chapters,
   });
 
   @override
-  State<OriginalParagraph> createState() => _OriginalParagraphState();
+  ConsumerState<OriginalParagraph> createState() => _OriginalParagraphState();
 }
 
-class _OriginalParagraphState extends State<OriginalParagraph> {
+class _OriginalParagraphState extends ConsumerState<OriginalParagraph> {
   late String _paragraphText;
   late List<_WordRange> _wordRanges;
   TextPainter? _tp;
@@ -77,7 +81,13 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
     if (wordItem.paragraphIndex != null && wordItem.wordIndex != null) {
       if (!(widget.selectedParagraphIndex == wordItem.paragraphIndex &&
           widget.selectedWordIndex == wordItem.wordIndex)) {
-        widget.selectWord(wordItem.paragraphIndex!, wordItem.wordIndex!);
+        final bookReadingParam = (
+          bookId: widget.bookId,
+          chapters: widget.chapters,
+        );
+        ref
+            .read(bookReadingNotifierProvider(bookReadingParam).notifier)
+            .selectWord(wordItem.paragraphIndex!, wordItem.wordIndex!);
       } else {
         final regExp = RegExp(r'^[\\W_]*(.*?)[\\W_]*$');
         final match = regExp.firstMatch(wordItem.wordText);
@@ -104,24 +114,13 @@ class _OriginalParagraphState extends State<OriginalParagraph> {
 
   @override
   Widget build(final BuildContext context) {
-    final fontFamily = context.select(
-      (final ReadingSettingsCubit c) => c.state.fontFamily,
-    );
-    final fontSize = context.select(
-      (final ReadingSettingsCubit c) => c.state.fontSize,
-    );
-    final lineHeight = context.select(
-      (final ReadingSettingsCubit c) => c.state.lineHeight,
-    );
-    final textColor = context.select(
-      (final ReadingSettingsCubit c) => c.state.textColor,
-    );
-    final textAlign = context.select(
-      (final ReadingSettingsCubit c) => c.state.textAlign,
-    );
-    final firstLineIndentEm = context.select(
-      (final ReadingSettingsCubit c) => c.state.firstLineIndentEm,
-    );
+    final settingsState = ref.watch(readingSettingsNotifierProvider);
+    final fontFamily = settingsState.fontFamily;
+    final fontSize = settingsState.fontSize;
+    final lineHeight = settingsState.lineHeight;
+    final textColor = settingsState.textColor;
+    final textAlign = settingsState.textAlign;
+    final firstLineIndentEm = settingsState.firstLineIndentEm;
     final readingColors = Theme.of(context).extension<BookReadingColors>()!;
 
     final baseStyle = TextStyle(

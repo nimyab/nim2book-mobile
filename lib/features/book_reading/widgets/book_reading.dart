@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading/book_reading_cubit.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading/book_reading_state.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/loading_book/loading_book_cubit.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/loading_book/loading_book_state.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/reading_settings/reading_settings_cubit.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/notifiers/book_reading_notifier.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/notifiers/loading_book_notifier.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/notifiers/reading_settings_notifier.dart';
+
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/book_reading_bar.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/drawer/reading_drawer.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/original_text_scroll.dart';
@@ -12,20 +11,28 @@ import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_vi
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/widgets/circular_progress_with_percentage.dart';
 
-class BookReading extends StatefulWidget {
-  const BookReading({super.key});
+class BookReading extends ConsumerStatefulWidget {
+  final String bookId;
+
+  const BookReading({super.key, required this.bookId});
 
   @override
-  State<BookReading> createState() => _BookReadingState();
+  ConsumerState<BookReading> createState() => _BookReadingState();
 }
 
-class _BookReadingState extends State<BookReading>
+class _BookReadingState extends ConsumerState<BookReading>
     with TickerProviderStateMixin {
   final ScrollController _translatedController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+    // Load book data when widget initializes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref
+          .read(loadingBookNotifierProvider(widget.bookId).notifier)
+          .getBookData();
+    });
   }
 
   @override
@@ -37,7 +44,7 @@ class _BookReadingState extends State<BookReading>
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final loadingState = context.watch<LoadingBookCubit>().state;
+    final loadingState = ref.watch(loadingBookNotifierProvider(widget.bookId));
     final book = loadingState.book;
 
     if (loadingState.isLoading) {
@@ -58,85 +65,86 @@ class _BookReadingState extends State<BookReading>
       );
     }
 
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<ReadingSettingsCubit>(
-          create: (_) => ReadingSettingsCubit(Theme.of(context)),
-        ),
-        BlocProvider<BookReadingCubit>(
-          create: (_) =>
-              BookReadingCubit(bookId: book.id, chapters: loadingState.chapters)
-                ..initialize(),
-        ),
-      ],
-      child: BlocListener<LoadingBookCubit, LoadingBookState>(
-        listenWhen: (final previous, final current) =>
-            previous.chapters != current.chapters,
-        listener: (final context, final state) {
-          context.read<BookReadingCubit>().setChapters(state.chapters);
-        },
-        child: BlocListener<BookReadingCubit, BookReadingState>(
-          // Переносим побочные эффекты из build: реагируем на изменения выделения
-          listenWhen: (final prev, final curr) =>
-              prev.selectedParagraphIndex != curr.selectedParagraphIndex ||
-              prev.selectedWordIndex != curr.selectedWordIndex,
-          listener: (final context, final readingState) {
-            final selParagraph = readingState.selectedParagraphIndex;
-            final selWord = readingState.selectedWordIndex;
-            context.read<ReadingSettingsCubit>().applySelection(
-              selParagraph,
-              selWord,
+    // Create the provider parameter for book reading notifier
+    final bookReadingParam = (bookId: book.id, chapters: loadingState.chapters);
+
+    // Watch reading state and settings
+    final readingState = ref.watch(
+      bookReadingNotifierProvider(bookReadingParam),
+    );
+    final settingsState = ref.watch(readingSettingsNotifierProvider);
+
+    // Initialize book reading notifier if needed
+    if (!readingState.prefsLoaded) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref
+            .read(bookReadingNotifierProvider(bookReadingParam).notifier)
+            .initialize();
+      });
+    }
+
+    // Handle selection changes for translated text
+    ref.listen(bookReadingNotifierProvider(bookReadingParam), (
+      previous,
+      current,
+    ) {
+      if (previous?.selectedParagraphIndex != current.selectedParagraphIndex ||
+          previous?.selectedWordIndex != current.selectedWordIndex) {
+        ref
+            .read(readingSettingsNotifierProvider.notifier)
+            .applySelection(
+              current.selectedParagraphIndex,
+              current.selectedWordIndex,
             );
-          },
-          child: Scaffold(
-            appBar: BookReadingBar(book: book),
-            endDrawer: const ReadingDrawer(),
-            body: BlocBuilder<BookReadingCubit, BookReadingState>(
-              builder: (final context, final readingState) {
-                final index = readingState.currentChapterIndex;
-                final isTranslatedVisible = context.select(
-                  (final ReadingSettingsCubit c) => c.state.isTranslatedVisible,
-                );
-                final bgColor = context.select(
-                  (final ReadingSettingsCubit c) => c.state.backgroundColor,
-                );
-                if (!readingState.prefsLoaded) {
-                  return ColoredBox(
-                    color: bgColor,
-                    child: const SizedBox.expand(),
-                  );
-                }
-                return ColoredBox(
-                  color: bgColor,
-                  child: Column(
-                    children: [
-                      AnimatedSize(
-                        duration: const Duration(milliseconds: 250),
-                        curve: Curves.easeInOut,
-                        child: ClipRect(
-                          child: Align(
-                            heightFactor: isTranslatedVisible ? 1.0 : 0.0,
-                            child: TranslatedTextScroll(
-                              key: ValueKey(index),
-                              controller: _translatedController,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: OriginalTextScroll(
-                          key: ValueKey(index),
-                          translatedScrollController: _translatedController,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
+      }
+    });
+
+    final index = readingState.currentChapterIndex;
+    final isTranslatedVisible = settingsState.isTranslatedVisible;
+    final bgColor = settingsState.backgroundColor;
+
+    return Scaffold(
+      appBar: BookReadingBar(
+        book: book,
+        bookId: widget.bookId,
+        chapters: loadingState.chapters,
       ),
+      endDrawer: ReadingDrawer(
+        bookId: widget.bookId,
+        chapters: loadingState.chapters,
+      ),
+      body: !readingState.prefsLoaded
+          ? ColoredBox(color: bgColor, child: const SizedBox.expand())
+          : ColoredBox(
+              color: bgColor,
+              child: Column(
+                children: [
+                  AnimatedSize(
+                    duration: const Duration(milliseconds: 250),
+                    curve: Curves.easeInOut,
+                    child: ClipRect(
+                      child: Align(
+                        heightFactor: isTranslatedVisible ? 1.0 : 0.0,
+                        child: TranslatedTextScroll(
+                          key: ValueKey(index),
+                          controller: _translatedController,
+                          bookId: widget.bookId,
+                          chapters: loadingState.chapters,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: OriginalTextScroll(
+                      key: ValueKey(index),
+                      translatedScrollController: _translatedController,
+                      bookId: widget.bookId,
+                      chapters: loadingState.chapters,
+                    ),
+                  ),
+                ],
+              ),
+            ),
     );
   }
 }

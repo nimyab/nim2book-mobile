@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/definition_card.dart';
-import 'package:get_it/get_it.dart';
-import 'package:nim2book_mobile_flutter/core/services/tts_service.dart';
+import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 
-class WordCardContent extends StatelessWidget {
+class WordCardContent extends ConsumerWidget {
   final DictionaryCard card;
   final bool showTranslation;
 
@@ -16,7 +16,7 @@ class WordCardContent extends StatelessWidget {
   });
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(final BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
@@ -52,7 +52,9 @@ class WordCardContent extends StatelessWidget {
                             color: theme.colorScheme.primary,
                           ),
                           onPressed: () {
-                            GetIt.I.get<TtsService>().speak(card.wordData.text);
+                            ref
+                                .read(ttsServiceProvider)
+                                .speak(card.wordData.text);
                           },
                         ),
                       ),

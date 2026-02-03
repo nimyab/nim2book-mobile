@@ -1,14 +1,13 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/models/requests/requests.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class FcmTokenService {
-  final _apiClient = GetIt.I<ApiClient>();
-  final _logger = GetIt.I.get<Talker>();
+  final ApiClient _apiClient;
+  final Talker _logger;
 
-  FcmTokenService() {
+  FcmTokenService(this._apiClient, this._logger) {
     _initializeFirebaseMessaging();
   }
 

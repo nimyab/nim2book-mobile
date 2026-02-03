@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/bloc/book_reading/book_reading_cubit.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/notifiers/book_reading_notifier.dart';
+import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 
-class SelectChapterButtons extends StatelessWidget {
-  const SelectChapterButtons({super.key});
+class SelectChapterButtons extends ConsumerWidget {
+  final String bookId;
+  final List<ChapterAlignNode> chapters;
+
+  const SelectChapterButtons({
+    super.key,
+    required this.bookId,
+    required this.chapters,
+  });
 
   @override
-  Widget build(final BuildContext context) {
-    final readingState = context.watch<BookReadingCubit>().state;
+  Widget build(final BuildContext context, WidgetRef ref) {
+    final bookReadingParam = (bookId: bookId, chapters: chapters);
+    final readingState = ref.watch(
+      bookReadingNotifierProvider(bookReadingParam),
+    );
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -15,13 +26,16 @@ class SelectChapterButtons extends StatelessWidget {
       children: [
         if (readingState.currentChapterIndex > 0)
           IconButton.filledTonal(
-            onPressed: () =>
-                context.read<BookReadingCubit>().goToPreviousChapter(),
+            onPressed: () => ref
+                .read(bookReadingNotifierProvider(bookReadingParam).notifier)
+                .goToPreviousChapter(),
             icon: const Icon(Icons.arrow_back),
           ),
         if (readingState.currentChapterIndex < readingState.chapters.length - 1)
           IconButton.filledTonal(
-            onPressed: () => context.read<BookReadingCubit>().goToNextChapter(),
+            onPressed: () => ref
+                .read(bookReadingNotifierProvider(bookReadingParam).notifier)
+                .goToNextChapter(),
             icon: const Icon(Icons.arrow_forward),
           ),
       ],

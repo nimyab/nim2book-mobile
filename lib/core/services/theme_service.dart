@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -8,7 +7,9 @@ enum AppTheme { light, dark, system }
 class ThemeService {
   static const String _themeKey = 'app_theme';
 
-  final SharedPreferences _sharedPreferences = GetIt.I<SharedPreferences>();
+  final SharedPreferences _sharedPreferences;
+
+  ThemeService(this._sharedPreferences);
 
   AppTheme get currentTheme {
     final themeIndex = _sharedPreferences.getInt(_themeKey);

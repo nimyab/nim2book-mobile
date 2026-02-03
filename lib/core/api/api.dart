@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:get_it/get_it.dart';
 import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:nim2book_mobile_flutter/core/models/requests/requests.dart';
@@ -12,19 +11,27 @@ import 'package:talker_dio_logger/talker_dio_logger_settings.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class ApiClient {
-  final _tokenService = GetIt.I.get<TokenService>();
+  final TokenService _tokenService;
+  final Env _env;
+  final Talker _talker;
 
   late final Dio _dio;
 
   bool _isRefreshing = false;
   final List<RequestOptions> _pendingRequests = [];
 
-  ApiClient() {
-    _dio = Dio(BaseOptions(baseUrl: GetIt.I.get<Env>().apiBaseUrl));
+  ApiClient({
+    required TokenService tokenService,
+    required Env env,
+    required Talker talker,
+  }) : _tokenService = tokenService,
+       _env = env,
+       _talker = talker {
+    _dio = Dio(BaseOptions(baseUrl: _env.apiBaseUrl));
 
     _dio.interceptors.add(
       TalkerDioLogger(
-        talker: GetIt.I.get<Talker>(),
+        talker: _talker,
         settings: TalkerDioLoggerSettings(
           printRequestHeaders: true,
           responseFilter: (response) {
