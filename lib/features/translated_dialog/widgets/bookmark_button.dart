@@ -13,11 +13,9 @@ class BookmarkButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final dictionaryNotifier = ref.read(dictionaryNotifierProvider.notifier);
-    final isInDict = ref.watch(
-      dictionaryNotifierProvider.select(
-        (state) =>
-            dictionaryNotifier.checkWordInDict(phrase, word.partOfSpeech),
-      ),
+    final isInDict = dictionaryNotifier.checkWordInDict(
+      phrase,
+      word.partOfSpeech,
     );
 
     return IconButton(

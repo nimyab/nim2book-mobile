@@ -5,8 +5,7 @@ part 'dictionary_state.freezed.dart';
 
 @freezed
 sealed class DictionaryState with _$DictionaryState {
-  const factory DictionaryState.loading() = _DictionaryStateLoading;
-  const factory DictionaryState.cards({
+  const factory DictionaryState({
     @Default({}) final Map<String, List<DictionaryCard>> savedCards,
-  }) = _DictionaryStateCards;
+  }) = _DictionaryState;
 }

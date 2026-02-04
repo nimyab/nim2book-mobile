@@ -11,26 +11,17 @@ class DictionaryNotifier extends Notifier<DictionaryState> {
   @override
   DictionaryState build() {
     _dictService = ref.read(dictionaryServiceProvider);
-    _initialize();
-    return const DictionaryState.loading();
-  }
-
-  Future<void> _initialize() async {
     final savedCards = _dictService.getMapDictionaryCard();
-    state = DictionaryState.cards(savedCards: savedCards);
+    return DictionaryState(savedCards: savedCards);
   }
 
   Future<bool> saveWord(
     final String word,
     final DictionaryWord wordData,
   ) async {
-    final currentState = state;
-    state = const DictionaryState.loading();
     final dictionaryCard = await _dictService.saveWord(wordData);
     if (dictionaryCard != null) {
-      final updated = Map<String, List<DictionaryCard>>.from(
-        currentState.when(loading: () => {}, cards: (savedCards) => savedCards),
-      );
+      final updated = Map<String, List<DictionaryCard>>.from(state.savedCards);
       if (!updated.containsKey(word)) {
         updated[word] = [];
       }
@@ -40,21 +31,15 @@ class DictionaryNotifier extends Notifier<DictionaryState> {
       );
       // Add new word
       updated[word]!.add(dictionaryCard);
-      state = DictionaryState.cards(savedCards: updated);
-    } else {
-      state = currentState;
+      state = DictionaryState(savedCards: updated);
     }
     return dictionaryCard != null;
   }
 
   Future<bool> deleteWord(final String word, final String partOfSpeech) async {
-    final currentState = state;
-    state = const DictionaryState.loading();
     final ok = await _dictService.deleteWord(word, partOfSpeech);
     if (ok) {
-      final updated = Map<String, List<DictionaryCard>>.from(
-        currentState.when(loading: () => {}, cards: (savedCards) => savedCards),
-      );
+      final updated = Map<String, List<DictionaryCard>>.from(state.savedCards);
       if (updated.containsKey(word)) {
         updated[word]!.removeWhere(
           (w) => w.wordData.partOfSpeech == partOfSpeech,
@@ -63,44 +48,27 @@ class DictionaryNotifier extends Notifier<DictionaryState> {
           updated.remove(word);
         }
       }
-      state = DictionaryState.cards(savedCards: updated);
-    } else {
-      state = currentState;
+      state = DictionaryState(savedCards: updated);
     }
     return ok;
   }
 
   Future<List<DictionaryWord>?> getWordLocalFirst(final String word) async {
-    return state.when(
-      loading: () => null,
-      cards: (savedCards) {
-        final saved = savedCards[word];
-        if (saved != null) return saved.map((e) => e.wordData).toList();
-        return _dictService.getWord(word);
-      },
-    );
+    final saved = state.savedCards[word];
+    if (saved != null) return saved.map((e) => e.wordData).toList();
+    return _dictService.getWord(word);
   }
 
   Future<List<DictionaryWord>?> getWordServiceFirst(final String word) async {
-    return state.when(
-      loading: () => null,
-      cards: (savedCards) async {
-        final wordFromServer = await _dictService.getWord(word);
-        if (wordFromServer != null) return wordFromServer;
-        return savedCards[word]?.map((e) => e.wordData).toList();
-      },
-    );
+    final wordFromServer = await _dictService.getWord(word);
+    if (wordFromServer != null) return wordFromServer;
+    return state.savedCards[word]?.map((e) => e.wordData).toList();
   }
 
   bool checkWordInDict(final String word, final String partOfSpeech) {
-    return state.when(
-      loading: () => false,
-      cards: (savedCards) {
-        final words = savedCards[word];
-        if (words == null) return false;
-        return words.any((w) => w.wordData.partOfSpeech == partOfSpeech);
-      },
-    );
+    final words = state.savedCards[word];
+    if (words == null) return false;
+    return words.any((w) => w.wordData.partOfSpeech == partOfSpeech);
   }
 }
 
@@ -109,14 +77,10 @@ final dictionaryNotifierProvider =
       DictionaryNotifier.new,
     );
 
-final isLoadingDictionaryProvider = Provider<bool>((ref) {
-  final state = ref.watch(dictionaryNotifierProvider);
-  return state.maybeWhen(loading: () => true, orElse: () => false);
-});
-
 final dictionaryCardsProvider = Provider<Map<String, List<DictionaryCard>>>((
   ref,
 ) {
-  final state = ref.watch(dictionaryNotifierProvider);
-  return state.maybeWhen(cards: (savedCards) => savedCards, orElse: () => {});
+  return ref.watch(
+    dictionaryNotifierProvider.select((state) => state.savedCards),
+  );
 });
