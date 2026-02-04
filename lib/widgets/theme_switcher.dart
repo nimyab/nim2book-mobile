@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nim2book_mobile_flutter/core/providers/theme/theme_notifier.dart';
+import 'package:nim2book_mobile_flutter/core/providers/theme/theme_provider.dart';
 import 'package:nim2book_mobile_flutter/core/services/theme_service.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 

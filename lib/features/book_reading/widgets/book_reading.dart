@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/providers/book_reading/book_reading_notifier.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/providers/loading_book/loading_book_notifier.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/providers/reading_settings/reading_settings_notifier.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/providers/book_reading/book_reading_provider.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/providers/loading_book/loading_book_provider.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/providers/reading_settings/reading_settings_provider.dart';
 
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/book_reading_bar.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/drawer/reading_drawer.dart';

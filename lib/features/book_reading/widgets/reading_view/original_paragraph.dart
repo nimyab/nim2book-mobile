@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/models/word_item.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/providers/book_reading/book_reading_notifier.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/providers/reading_settings/reading_settings_notifier.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/providers/book_reading/book_reading_provider.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/providers/reading_settings/reading_settings_provider.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/original_paragraph_painter.dart';
 import 'package:nim2book_mobile_flutter/features/translated_dialog/translated_dialog.dart';
 

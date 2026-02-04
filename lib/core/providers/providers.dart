@@ -15,16 +15,6 @@ import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/tts_service.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/services/reading_settings_service.dart';
 
-// Export domain providers
-export 'locale/locale.dart';
-export 'theme/theme.dart';
-export 'notifications/notifications.dart';
-export 'statistics/statistics.dart';
-export 'srs/srs.dart';
-export 'reading/reading.dart';
-export 'tts/tts.dart';
-export 'onboarding/onboarding.dart';
-
 // Environment provider
 final envProvider = Provider<Env>((ref) {
   throw UnimplementedError('envProvider must be overridden');
