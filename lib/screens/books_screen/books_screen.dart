@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/providers/auth/auth_provider.dart';
-import 'package:nim2book_mobile_flutter/core/providers/book/books_notifier.dart';
+import 'package:nim2book_mobile_flutter/core/providers/book/books_provider.dart';
 import 'package:nim2book_mobile_flutter/core/router/router.dart';
 import 'package:nim2book_mobile_flutter/features/books/widgets/book_card.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
@@ -52,9 +52,8 @@ class _BooksScreenState extends ConsumerState<BooksScreen> {
     final theme = Theme.of(context);
     final isAuthenticated = ref.watch(isAuthenticatedProvider);
     final isVIP = ref.watch(isVIPProvider);
-    final booksState = ref.watch(booksNotifierProvider);
-    final books = booksState.allBooks;
-    final isFetching = booksState.isFetching;
+    final allBooks = ref.watch(allBooksProvider);
+    final isFetching = ref.watch(isBooksFetchingProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.books)),
@@ -86,16 +85,16 @@ class _BooksScreenState extends ConsumerState<BooksScreen> {
                 Expanded(
                   child: isFetching
                       ? const Center(child: CircularProgressIndicator())
-                      : books.isEmpty
+                      : allBooks.isEmpty
                       ? Center(child: Text(l10n.noBooksFound))
                       : Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: ListView.separated(
                             separatorBuilder: (final context, final index) =>
                                 const SizedBox(height: 15),
-                            itemCount: books.length,
+                            itemCount: allBooks.length,
                             itemBuilder: (final context, final index) {
-                              final book = books[index];
+                              final book = allBooks[index];
                               final tag = 'book-cover-${book.id}-books';
                               return BookCard(
                                 key: ValueKey(book.id),

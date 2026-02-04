@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$BooksState {
 
- List<Book> get allBooks; List<Book> get myBooks; List<PersonalUserBook> get personalBooks; bool get isFetching;
+ List<Book> get allBooks; List<Book> get savedBooks; List<PersonalUserBook> get personalBooks; bool get isFetching;
 /// Create a copy of BooksState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $BooksStateCopyWith<BooksState> get copyWith => _$BooksStateCopyWithImpl<BooksSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is BooksState&&const DeepCollectionEquality().equals(other.allBooks, allBooks)&&const DeepCollectionEquality().equals(other.myBooks, myBooks)&&const DeepCollectionEquality().equals(other.personalBooks, personalBooks)&&(identical(other.isFetching, isFetching) || other.isFetching == isFetching));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is BooksState&&const DeepCollectionEquality().equals(other.allBooks, allBooks)&&const DeepCollectionEquality().equals(other.savedBooks, savedBooks)&&const DeepCollectionEquality().equals(other.personalBooks, personalBooks)&&(identical(other.isFetching, isFetching) || other.isFetching == isFetching));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(allBooks),const DeepCollectionEquality().hash(myBooks),const DeepCollectionEquality().hash(personalBooks),isFetching);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(allBooks),const DeepCollectionEquality().hash(savedBooks),const DeepCollectionEquality().hash(personalBooks),isFetching);
 
 @override
 String toString() {
-  return 'BooksState(allBooks: $allBooks, myBooks: $myBooks, personalBooks: $personalBooks, isFetching: $isFetching)';
+  return 'BooksState(allBooks: $allBooks, savedBooks: $savedBooks, personalBooks: $personalBooks, isFetching: $isFetching)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $BooksStateCopyWith<$Res>  {
   factory $BooksStateCopyWith(BooksState value, $Res Function(BooksState) _then) = _$BooksStateCopyWithImpl;
 @useResult
 $Res call({
- List<Book> allBooks, List<Book> myBooks, List<PersonalUserBook> personalBooks, bool isFetching
+ List<Book> allBooks, List<Book> savedBooks, List<PersonalUserBook> personalBooks, bool isFetching
 });
 
 
@@ -62,10 +62,10 @@ class _$BooksStateCopyWithImpl<$Res>
 
 /// Create a copy of BooksState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? allBooks = null,Object? myBooks = null,Object? personalBooks = null,Object? isFetching = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? allBooks = null,Object? savedBooks = null,Object? personalBooks = null,Object? isFetching = null,}) {
   return _then(_self.copyWith(
 allBooks: null == allBooks ? _self.allBooks : allBooks // ignore: cast_nullable_to_non_nullable
-as List<Book>,myBooks: null == myBooks ? _self.myBooks : myBooks // ignore: cast_nullable_to_non_nullable
+as List<Book>,savedBooks: null == savedBooks ? _self.savedBooks : savedBooks // ignore: cast_nullable_to_non_nullable
 as List<Book>,personalBooks: null == personalBooks ? _self.personalBooks : personalBooks // ignore: cast_nullable_to_non_nullable
 as List<PersonalUserBook>,isFetching: null == isFetching ? _self.isFetching : isFetching // ignore: cast_nullable_to_non_nullable
 as bool,
@@ -115,10 +115,7 @@ return $default(_that);case _:
 final _that = this;
 switch (_that) {
 case _BooksState():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -153,10 +150,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<Book> allBooks,  List<Book> myBooks,  List<PersonalUserBook> personalBooks,  bool isFetching)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<Book> allBooks,  List<Book> savedBooks,  List<PersonalUserBook> personalBooks,  bool isFetching)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _BooksState() when $default != null:
-return $default(_that.allBooks,_that.myBooks,_that.personalBooks,_that.isFetching);case _:
+return $default(_that.allBooks,_that.savedBooks,_that.personalBooks,_that.isFetching);case _:
   return orElse();
 
 }
@@ -174,13 +171,10 @@ return $default(_that.allBooks,_that.myBooks,_that.personalBooks,_that.isFetchin
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<Book> allBooks,  List<Book> myBooks,  List<PersonalUserBook> personalBooks,  bool isFetching)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<Book> allBooks,  List<Book> savedBooks,  List<PersonalUserBook> personalBooks,  bool isFetching)  $default,) {final _that = this;
 switch (_that) {
 case _BooksState():
-return $default(_that.allBooks,_that.myBooks,_that.personalBooks,_that.isFetching);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that.allBooks,_that.savedBooks,_that.personalBooks,_that.isFetching);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -194,10 +188,10 @@ return $default(_that.allBooks,_that.myBooks,_that.personalBooks,_that.isFetchin
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<Book> allBooks,  List<Book> myBooks,  List<PersonalUserBook> personalBooks,  bool isFetching)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<Book> allBooks,  List<Book> savedBooks,  List<PersonalUserBook> personalBooks,  bool isFetching)?  $default,) {final _that = this;
 switch (_that) {
 case _BooksState() when $default != null:
-return $default(_that.allBooks,_that.myBooks,_that.personalBooks,_that.isFetching);case _:
+return $default(_that.allBooks,_that.savedBooks,_that.personalBooks,_that.isFetching);case _:
   return null;
 
 }
@@ -209,7 +203,7 @@ return $default(_that.allBooks,_that.myBooks,_that.personalBooks,_that.isFetchin
 
 
 class _BooksState implements BooksState {
-  const _BooksState({final  List<Book> allBooks = const [], final  List<Book> myBooks = const [], final  List<PersonalUserBook> personalBooks = const [], this.isFetching = false}): _allBooks = allBooks,_myBooks = myBooks,_personalBooks = personalBooks;
+  const _BooksState({final  List<Book> allBooks = const [], final  List<Book> savedBooks = const [], final  List<PersonalUserBook> personalBooks = const [], this.isFetching = false}): _allBooks = allBooks,_savedBooks = savedBooks,_personalBooks = personalBooks;
   
 
  final  List<Book> _allBooks;
@@ -219,11 +213,11 @@ class _BooksState implements BooksState {
   return EqualUnmodifiableListView(_allBooks);
 }
 
- final  List<Book> _myBooks;
-@override@JsonKey() List<Book> get myBooks {
-  if (_myBooks is EqualUnmodifiableListView) return _myBooks;
+ final  List<Book> _savedBooks;
+@override@JsonKey() List<Book> get savedBooks {
+  if (_savedBooks is EqualUnmodifiableListView) return _savedBooks;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_myBooks);
+  return EqualUnmodifiableListView(_savedBooks);
 }
 
  final  List<PersonalUserBook> _personalBooks;
@@ -245,16 +239,16 @@ _$BooksStateCopyWith<_BooksState> get copyWith => __$BooksStateCopyWithImpl<_Boo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BooksState&&const DeepCollectionEquality().equals(other._allBooks, _allBooks)&&const DeepCollectionEquality().equals(other._myBooks, _myBooks)&&const DeepCollectionEquality().equals(other._personalBooks, _personalBooks)&&(identical(other.isFetching, isFetching) || other.isFetching == isFetching));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BooksState&&const DeepCollectionEquality().equals(other._allBooks, _allBooks)&&const DeepCollectionEquality().equals(other._savedBooks, _savedBooks)&&const DeepCollectionEquality().equals(other._personalBooks, _personalBooks)&&(identical(other.isFetching, isFetching) || other.isFetching == isFetching));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_allBooks),const DeepCollectionEquality().hash(_myBooks),const DeepCollectionEquality().hash(_personalBooks),isFetching);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_allBooks),const DeepCollectionEquality().hash(_savedBooks),const DeepCollectionEquality().hash(_personalBooks),isFetching);
 
 @override
 String toString() {
-  return 'BooksState(allBooks: $allBooks, myBooks: $myBooks, personalBooks: $personalBooks, isFetching: $isFetching)';
+  return 'BooksState(allBooks: $allBooks, savedBooks: $savedBooks, personalBooks: $personalBooks, isFetching: $isFetching)';
 }
 
 
@@ -265,7 +259,7 @@ abstract mixin class _$BooksStateCopyWith<$Res> implements $BooksStateCopyWith<$
   factory _$BooksStateCopyWith(_BooksState value, $Res Function(_BooksState) _then) = __$BooksStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<Book> allBooks, List<Book> myBooks, List<PersonalUserBook> personalBooks, bool isFetching
+ List<Book> allBooks, List<Book> savedBooks, List<PersonalUserBook> personalBooks, bool isFetching
 });
 
 
@@ -282,10 +276,10 @@ class __$BooksStateCopyWithImpl<$Res>
 
 /// Create a copy of BooksState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? allBooks = null,Object? myBooks = null,Object? personalBooks = null,Object? isFetching = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? allBooks = null,Object? savedBooks = null,Object? personalBooks = null,Object? isFetching = null,}) {
   return _then(_BooksState(
 allBooks: null == allBooks ? _self._allBooks : allBooks // ignore: cast_nullable_to_non_nullable
-as List<Book>,myBooks: null == myBooks ? _self._myBooks : myBooks // ignore: cast_nullable_to_non_nullable
+as List<Book>,savedBooks: null == savedBooks ? _self._savedBooks : savedBooks // ignore: cast_nullable_to_non_nullable
 as List<Book>,personalBooks: null == personalBooks ? _self._personalBooks : personalBooks // ignore: cast_nullable_to_non_nullable
 as List<PersonalUserBook>,isFetching: null == isFetching ? _self.isFetching : isFetching // ignore: cast_nullable_to_non_nullable
 as bool,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
+import 'package:nim2book_mobile_flutter/core/providers/book/books_provider.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
@@ -51,14 +52,14 @@ class _BookScreenState extends ConsumerState<BookScreen> {
 
   @override
   Widget build(final BuildContext context) {
-    final booksState = ref.watch(booksNotifierProvider);
+    final savedBooks = ref.watch(savedBooksProvider);
     final env = ref.watch(envProvider);
     final l10n = AppLocalizations.of(context)!;
 
     final currentBook = book;
     final isLoading = this.isLoading;
-    final isMyBook = currentBook != null
-        ? booksState.myBooks.any((final b) => b.id == currentBook.id)
+    final isSavedBook = currentBook != null
+        ? savedBooks.any((final b) => b.id == currentBook.id)
         : false;
 
     final coverUrl = currentBook?.cover != null
@@ -124,7 +125,7 @@ class _BookScreenState extends ConsumerState<BookScreen> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              if (!isMyBook)
+              if (!isSavedBook)
                 ElevatedButton.icon(
                   onPressed: () => ref
                       .read(booksNotifierProvider.notifier)

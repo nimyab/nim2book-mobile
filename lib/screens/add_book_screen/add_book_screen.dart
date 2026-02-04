@@ -5,13 +5,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
+import 'package:nim2book_mobile_flutter/core/providers/book/books_provider.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 class AddBookScreen extends ConsumerStatefulWidget {
-  final Book? initialBook;
-  const AddBookScreen({super.key, this.initialBook});
+  const AddBookScreen({super.key});
 
   @override
   ConsumerState<AddBookScreen> createState() => _AddBookScreenState();
@@ -21,19 +20,6 @@ class _AddBookScreenState extends ConsumerState<AddBookScreen> {
   PlatformFile? _selectedFile;
   bool _isUploading = false;
   String? _initialCoverUrl;
-
-  @override
-  void initState() {
-    super.initState();
-    final book = widget.initialBook;
-    if (book?.cover != null) {
-      final apiBaseUrl = ref.read(envProvider).apiBaseUrl;
-      _initialCoverUrl =
-          '$apiBaseUrl/api/v1/file/public?path=${Uri.encodeComponent(book!.cover!)}';
-      // Предзагрузка обложки для мгновенного отображения
-      precacheImage(CachedNetworkImageProvider(_initialCoverUrl!), context);
-    }
-  }
 
   Future<void> _pickFile() async {
     final l10n = AppLocalizations.of(context)!;
@@ -58,9 +44,7 @@ class _AddBookScreenState extends ConsumerState<AddBookScreen> {
     }
   }
 
-  Future<void> _uploadBook(
-    final void Function(Book book) callbackWithBook,
-  ) async {
+  Future<void> _uploadBook(void Function() callback) async {
     final l10n = AppLocalizations.of(context)!;
 
     if (_selectedFile == null) {
@@ -77,7 +61,7 @@ class _AddBookScreenState extends ConsumerState<AddBookScreen> {
     final apiClient = ref.read(apiClientProvider);
 
     try {
-      final response = await apiClient.translateBook(
+      final response = await apiClient.translatePersonalUserBook(
         file: File(_selectedFile!.path!),
         from: 'en',
         to: 'ru',
@@ -92,7 +76,7 @@ class _AddBookScreenState extends ConsumerState<AddBookScreen> {
         if (coverUrl != null) {
           await precacheImage(CachedNetworkImageProvider(coverUrl), context);
         }
-        callbackWithBook(book);
+        callback();
         return;
       }
       if (response.messageAboutTranslate != null) {
@@ -211,10 +195,10 @@ class _AddBookScreenState extends ConsumerState<AddBookScreen> {
               onPressed: _isUploading
                   ? null
                   : () {
-                      _uploadBook((final book) {
+                      _uploadBook(() {
                         ref
                             .read(booksNotifierProvider.notifier)
-                            .addMyBook(book);
+                            .getPersonalBooks();
                         context.go('/my-books');
                       });
                     },

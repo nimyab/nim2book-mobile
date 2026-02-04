@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
+import 'package:nim2book_mobile_flutter/core/models/personal_user_book/personal_user_book.dart';
 import 'package:nim2book_mobile_flutter/core/providers/book/books_state.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
@@ -45,7 +46,6 @@ class BooksNotifier extends Notifier<BooksState> {
   Future<void> searchBooks(final String query) async {
     try {
       state = state.copyWith(isFetching: true);
-      state = state.copyWith(allBooks: []);
 
       final q = query.trim();
       if (q.isEmpty) {
@@ -72,24 +72,24 @@ class BooksNotifier extends Notifier<BooksState> {
   }
 
   void getMyBooks() {
-    final my = _bookService.getAddedBooks();
-    state = state.copyWith(myBooks: my);
+    final savedBooks = _bookService.getAddedBooks();
+    state = state.copyWith(savedBooks: savedBooks);
   }
 
   Future<void> addMyBook(final Book book) async {
     final ok = await _bookService.addBook(book);
     if (ok) {
-      final updated = List<Book>.from(state.myBooks)..add(book);
-      state = state.copyWith(myBooks: updated);
+      final updated = List<Book>.from(state.savedBooks)..add(book);
+      state = state.copyWith(savedBooks: updated);
     }
   }
 
   Future<void> removeMyBook(final Book book) async {
     final ok = await _bookService.removeBook(book);
     if (ok) {
-      final updated = List<Book>.from(state.myBooks)
+      final updated = List<Book>.from(state.savedBooks)
         ..removeWhere((final b) => b.id == book.id);
-      state = state.copyWith(myBooks: updated);
+      state = state.copyWith(savedBooks: updated);
     }
   }
 
@@ -107,3 +107,23 @@ class BooksNotifier extends Notifier<BooksState> {
 final booksNotifierProvider = NotifierProvider<BooksNotifier, BooksState>(
   BooksNotifier.new,
 );
+
+final savedBooksProvider = Provider<List<Book>>((final ref) {
+  final booksState = ref.watch(booksNotifierProvider);
+  return booksState.savedBooks;
+});
+
+final personalBooksProvider = Provider<List<PersonalUserBook>>((final ref) {
+  final booksState = ref.watch(booksNotifierProvider);
+  return booksState.personalBooks;
+});
+
+final allBooksProvider = Provider<List<Book>>((final ref) {
+  final booksState = ref.watch(booksNotifierProvider);
+  return booksState.allBooks;
+});
+
+final isBooksFetchingProvider = Provider<bool>((final ref) {
+  final booksState = ref.watch(booksNotifierProvider);
+  return booksState.isFetching;
+});

@@ -5,10 +5,10 @@ import 'package:nim2book_mobile_flutter/core/models/personal_user_book/personal_
 part 'books_state.freezed.dart';
 
 @freezed
-abstract class BooksState with _$BooksState {
+sealed class BooksState with _$BooksState {
   const factory BooksState({
     @Default([]) final List<Book> allBooks,
-    @Default([]) final List<Book> myBooks,
+    @Default([]) final List<Book> savedBooks,
     @Default([]) final List<PersonalUserBook> personalBooks,
     @Default(false) final bool isFetching,
   }) = _BooksState;

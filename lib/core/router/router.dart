@@ -177,9 +177,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/add-book',
         name: 'add-book',
-        builder: (final context, final state) => AddBookScreen(
-          initialBook: state.extra is Book ? state.extra as Book : null,
-        ),
+        builder: (final context, final state) => const AddBookScreen(),
       ),
 
       GoRoute(
