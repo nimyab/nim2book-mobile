@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
+import 'package:nim2book_mobile_flutter/core/providers/dictionary/dictionary_provider.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/core/services/statistic_service.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
@@ -110,8 +111,7 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final dictionaryState = ref.watch(dictionaryNotifierProvider);
-    final savedCards = dictionaryState.savedCards;
+    final savedCards = ref.watch(dictionaryCardsProvider);
     final theme = Theme.of(context);
     final statistic = ref.watch(statisticServiceProvider);
     final now = DateTime.now();

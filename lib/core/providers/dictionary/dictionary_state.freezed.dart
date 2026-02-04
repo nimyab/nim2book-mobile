@@ -14,62 +14,30 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DictionaryState {
 
- Map<String, List<DictionaryCard>> get savedCards; bool get isLoading;
-/// Create a copy of DictionaryState
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$DictionaryStateCopyWith<DictionaryState> get copyWith => _$DictionaryStateCopyWithImpl<DictionaryState>(this as DictionaryState, _$identity);
+
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DictionaryState&&const DeepCollectionEquality().equals(other.savedCards, savedCards)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DictionaryState);
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(savedCards),isLoading);
+int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'DictionaryState(savedCards: $savedCards, isLoading: $isLoading)';
+  return 'DictionaryState()';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $DictionaryStateCopyWith<$Res>  {
-  factory $DictionaryStateCopyWith(DictionaryState value, $Res Function(DictionaryState) _then) = _$DictionaryStateCopyWithImpl;
-@useResult
-$Res call({
- Map<String, List<DictionaryCard>> savedCards, bool isLoading
-});
-
-
-
-
-}
-/// @nodoc
-class _$DictionaryStateCopyWithImpl<$Res>
-    implements $DictionaryStateCopyWith<$Res> {
-  _$DictionaryStateCopyWithImpl(this._self, this._then);
-
-  final DictionaryState _self;
-  final $Res Function(DictionaryState) _then;
-
-/// Create a copy of DictionaryState
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? savedCards = null,Object? isLoading = null,}) {
-  return _then(_self.copyWith(
-savedCards: null == savedCards ? _self.savedCards : savedCards // ignore: cast_nullable_to_non_nullable
-as Map<String, List<DictionaryCard>>,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,
-  ));
-}
-
+class $DictionaryStateCopyWith<$Res>  {
+$DictionaryStateCopyWith(DictionaryState _, $Res Function(DictionaryState) __);
 }
 
 
@@ -87,11 +55,12 @@ extension DictionaryStatePatterns on DictionaryState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _DictionaryState value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _DictionaryStateLoading value)?  loading,TResult Function( _DictionaryStateCards value)?  cards,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _DictionaryState() when $default != null:
-return $default(_that);case _:
+case _DictionaryStateLoading() when loading != null:
+return loading(_that);case _DictionaryStateCards() when cards != null:
+return cards(_that);case _:
   return orElse();
 
 }
@@ -109,14 +78,12 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _DictionaryState value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _DictionaryStateLoading value)  loading,required TResult Function( _DictionaryStateCards value)  cards,}){
 final _that = this;
 switch (_that) {
-case _DictionaryState():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+case _DictionaryStateLoading():
+return loading(_that);case _DictionaryStateCards():
+return cards(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -130,11 +97,12 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _DictionaryState value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _DictionaryStateLoading value)?  loading,TResult? Function( _DictionaryStateCards value)?  cards,}){
 final _that = this;
 switch (_that) {
-case _DictionaryState() when $default != null:
-return $default(_that);case _:
+case _DictionaryStateLoading() when loading != null:
+return loading(_that);case _DictionaryStateCards() when cards != null:
+return cards(_that);case _:
   return null;
 
 }
@@ -151,10 +119,11 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Map<String, List<DictionaryCard>> savedCards,  bool isLoading)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function( Map<String, List<DictionaryCard>> savedCards)?  cards,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _DictionaryState() when $default != null:
-return $default(_that.savedCards,_that.isLoading);case _:
+case _DictionaryStateLoading() when loading != null:
+return loading();case _DictionaryStateCards() when cards != null:
+return cards(_that.savedCards);case _:
   return orElse();
 
 }
@@ -172,13 +141,11 @@ return $default(_that.savedCards,_that.isLoading);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Map<String, List<DictionaryCard>> savedCards,  bool isLoading)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function( Map<String, List<DictionaryCard>> savedCards)  cards,}) {final _that = this;
 switch (_that) {
-case _DictionaryState():
-return $default(_that.savedCards,_that.isLoading);case _:
-  throw StateError('Unexpected subclass');
-
-}
+case _DictionaryStateLoading():
+return loading();case _DictionaryStateCards():
+return cards(_that.savedCards);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -192,10 +159,11 @@ return $default(_that.savedCards,_that.isLoading);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Map<String, List<DictionaryCard>> savedCards,  bool isLoading)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function( Map<String, List<DictionaryCard>> savedCards)?  cards,}) {final _that = this;
 switch (_that) {
-case _DictionaryState() when $default != null:
-return $default(_that.savedCards,_that.isLoading);case _:
+case _DictionaryStateLoading() when loading != null:
+return loading();case _DictionaryStateCards() when cards != null:
+return cards(_that.savedCards);case _:
   return null;
 
 }
@@ -206,50 +174,81 @@ return $default(_that.savedCards,_that.isLoading);case _:
 /// @nodoc
 
 
-class _DictionaryState implements DictionaryState {
-  const _DictionaryState({final  Map<String, List<DictionaryCard>> savedCards = const {}, this.isLoading = false}): _savedCards = savedCards;
+class _DictionaryStateLoading implements DictionaryState {
+  const _DictionaryStateLoading();
   
 
- final  Map<String, List<DictionaryCard>> _savedCards;
-@override@JsonKey() Map<String, List<DictionaryCard>> get savedCards {
-  if (_savedCards is EqualUnmodifiableMapView) return _savedCards;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableMapView(_savedCards);
-}
 
-@override@JsonKey() final  bool isLoading;
 
-/// Create a copy of DictionaryState
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$DictionaryStateCopyWith<_DictionaryState> get copyWith => __$DictionaryStateCopyWithImpl<_DictionaryState>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DictionaryState&&const DeepCollectionEquality().equals(other._savedCards, _savedCards)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DictionaryStateLoading);
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_savedCards),isLoading);
+int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'DictionaryState(savedCards: $savedCards, isLoading: $isLoading)';
+  return 'DictionaryState.loading()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _DictionaryStateCards implements DictionaryState {
+  const _DictionaryStateCards({final  Map<String, List<DictionaryCard>> savedCards = const {}}): _savedCards = savedCards;
+  
+
+ final  Map<String, List<DictionaryCard>> _savedCards;
+@JsonKey() Map<String, List<DictionaryCard>> get savedCards {
+  if (_savedCards is EqualUnmodifiableMapView) return _savedCards;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_savedCards);
+}
+
+
+/// Create a copy of DictionaryState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$DictionaryStateCardsCopyWith<_DictionaryStateCards> get copyWith => __$DictionaryStateCardsCopyWithImpl<_DictionaryStateCards>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DictionaryStateCards&&const DeepCollectionEquality().equals(other._savedCards, _savedCards));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_savedCards));
+
+@override
+String toString() {
+  return 'DictionaryState.cards(savedCards: $savedCards)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$DictionaryStateCopyWith<$Res> implements $DictionaryStateCopyWith<$Res> {
-  factory _$DictionaryStateCopyWith(_DictionaryState value, $Res Function(_DictionaryState) _then) = __$DictionaryStateCopyWithImpl;
-@override @useResult
+abstract mixin class _$DictionaryStateCardsCopyWith<$Res> implements $DictionaryStateCopyWith<$Res> {
+  factory _$DictionaryStateCardsCopyWith(_DictionaryStateCards value, $Res Function(_DictionaryStateCards) _then) = __$DictionaryStateCardsCopyWithImpl;
+@useResult
 $Res call({
- Map<String, List<DictionaryCard>> savedCards, bool isLoading
+ Map<String, List<DictionaryCard>> savedCards
 });
 
 
@@ -257,20 +256,19 @@ $Res call({
 
 }
 /// @nodoc
-class __$DictionaryStateCopyWithImpl<$Res>
-    implements _$DictionaryStateCopyWith<$Res> {
-  __$DictionaryStateCopyWithImpl(this._self, this._then);
+class __$DictionaryStateCardsCopyWithImpl<$Res>
+    implements _$DictionaryStateCardsCopyWith<$Res> {
+  __$DictionaryStateCardsCopyWithImpl(this._self, this._then);
 
-  final _DictionaryState _self;
-  final $Res Function(_DictionaryState) _then;
+  final _DictionaryStateCards _self;
+  final $Res Function(_DictionaryStateCards) _then;
 
 /// Create a copy of DictionaryState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? savedCards = null,Object? isLoading = null,}) {
-  return _then(_DictionaryState(
+@pragma('vm:prefer-inline') $Res call({Object? savedCards = null,}) {
+  return _then(_DictionaryStateCards(
 savedCards: null == savedCards ? _self._savedCards : savedCards // ignore: cast_nullable_to_non_nullable
-as Map<String, List<DictionaryCard>>,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,
+as Map<String, List<DictionaryCard>>,
   ));
 }
 

@@ -4,9 +4,9 @@ import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_c
 part 'dictionary_state.freezed.dart';
 
 @freezed
-abstract class DictionaryState with _$DictionaryState {
-  const factory DictionaryState({
+sealed class DictionaryState with _$DictionaryState {
+  const factory DictionaryState.loading() = _DictionaryStateLoading;
+  const factory DictionaryState.cards({
     @Default({}) final Map<String, List<DictionaryCard>> savedCards,
-    @Default(false) final bool isLoading,
-  }) = _DictionaryState;
+  }) = _DictionaryStateCards;
 }

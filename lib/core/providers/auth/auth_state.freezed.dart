@@ -61,13 +61,13 @@ extension AuthStatePatterns on AuthState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( AuthStateStart value)?  start,TResult Function( AuthStateLoading value)?  loading,TResult Function( AuthStateAuthenticated value)?  authenticated,TResult Function( AuthStateUnauthenticated value)?  unauthenticated,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _AuthStateStart value)?  start,TResult Function( _AuthStateLoading value)?  loading,TResult Function( _AuthStateAuthenticated value)?  authenticated,TResult Function( _AuthStateUnauthenticated value)?  unauthenticated,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case AuthStateStart() when start != null:
-return start(_that);case AuthStateLoading() when loading != null:
-return loading(_that);case AuthStateAuthenticated() when authenticated != null:
-return authenticated(_that);case AuthStateUnauthenticated() when unauthenticated != null:
+case _AuthStateStart() when start != null:
+return start(_that);case _AuthStateLoading() when loading != null:
+return loading(_that);case _AuthStateAuthenticated() when authenticated != null:
+return authenticated(_that);case _AuthStateUnauthenticated() when unauthenticated != null:
 return unauthenticated(_that);case _:
   return orElse();
 
@@ -86,13 +86,13 @@ return unauthenticated(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( AuthStateStart value)  start,required TResult Function( AuthStateLoading value)  loading,required TResult Function( AuthStateAuthenticated value)  authenticated,required TResult Function( AuthStateUnauthenticated value)  unauthenticated,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _AuthStateStart value)  start,required TResult Function( _AuthStateLoading value)  loading,required TResult Function( _AuthStateAuthenticated value)  authenticated,required TResult Function( _AuthStateUnauthenticated value)  unauthenticated,}){
 final _that = this;
 switch (_that) {
-case AuthStateStart():
-return start(_that);case AuthStateLoading():
-return loading(_that);case AuthStateAuthenticated():
-return authenticated(_that);case AuthStateUnauthenticated():
+case _AuthStateStart():
+return start(_that);case _AuthStateLoading():
+return loading(_that);case _AuthStateAuthenticated():
+return authenticated(_that);case _AuthStateUnauthenticated():
 return unauthenticated(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
@@ -107,13 +107,13 @@ return unauthenticated(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( AuthStateStart value)?  start,TResult? Function( AuthStateLoading value)?  loading,TResult? Function( AuthStateAuthenticated value)?  authenticated,TResult? Function( AuthStateUnauthenticated value)?  unauthenticated,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _AuthStateStart value)?  start,TResult? Function( _AuthStateLoading value)?  loading,TResult? Function( _AuthStateAuthenticated value)?  authenticated,TResult? Function( _AuthStateUnauthenticated value)?  unauthenticated,}){
 final _that = this;
 switch (_that) {
-case AuthStateStart() when start != null:
-return start(_that);case AuthStateLoading() when loading != null:
-return loading(_that);case AuthStateAuthenticated() when authenticated != null:
-return authenticated(_that);case AuthStateUnauthenticated() when unauthenticated != null:
+case _AuthStateStart() when start != null:
+return start(_that);case _AuthStateLoading() when loading != null:
+return loading(_that);case _AuthStateAuthenticated() when authenticated != null:
+return authenticated(_that);case _AuthStateUnauthenticated() when unauthenticated != null:
 return unauthenticated(_that);case _:
   return null;
 
@@ -133,10 +133,10 @@ return unauthenticated(_that);case _:
 
 @optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  start,TResult Function()?  loading,TResult Function( User user)?  authenticated,TResult Function()?  unauthenticated,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case AuthStateStart() when start != null:
-return start();case AuthStateLoading() when loading != null:
-return loading();case AuthStateAuthenticated() when authenticated != null:
-return authenticated(_that.user);case AuthStateUnauthenticated() when unauthenticated != null:
+case _AuthStateStart() when start != null:
+return start();case _AuthStateLoading() when loading != null:
+return loading();case _AuthStateAuthenticated() when authenticated != null:
+return authenticated(_that.user);case _AuthStateUnauthenticated() when unauthenticated != null:
 return unauthenticated();case _:
   return orElse();
 
@@ -157,10 +157,10 @@ return unauthenticated();case _:
 
 @optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  start,required TResult Function()  loading,required TResult Function( User user)  authenticated,required TResult Function()  unauthenticated,}) {final _that = this;
 switch (_that) {
-case AuthStateStart():
-return start();case AuthStateLoading():
-return loading();case AuthStateAuthenticated():
-return authenticated(_that.user);case AuthStateUnauthenticated():
+case _AuthStateStart():
+return start();case _AuthStateLoading():
+return loading();case _AuthStateAuthenticated():
+return authenticated(_that.user);case _AuthStateUnauthenticated():
 return unauthenticated();}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -177,10 +177,10 @@ return unauthenticated();}
 
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  start,TResult? Function()?  loading,TResult? Function( User user)?  authenticated,TResult? Function()?  unauthenticated,}) {final _that = this;
 switch (_that) {
-case AuthStateStart() when start != null:
-return start();case AuthStateLoading() when loading != null:
-return loading();case AuthStateAuthenticated() when authenticated != null:
-return authenticated(_that.user);case AuthStateUnauthenticated() when unauthenticated != null:
+case _AuthStateStart() when start != null:
+return start();case _AuthStateLoading() when loading != null:
+return loading();case _AuthStateAuthenticated() when authenticated != null:
+return authenticated(_that.user);case _AuthStateUnauthenticated() when unauthenticated != null:
 return unauthenticated();case _:
   return null;
 
@@ -192,8 +192,8 @@ return unauthenticated();case _:
 /// @nodoc
 
 
-class AuthStateStart with DiagnosticableTreeMixin implements AuthState {
-  const AuthStateStart();
+class _AuthStateStart with DiagnosticableTreeMixin implements AuthState {
+  const _AuthStateStart();
   
 
 
@@ -209,7 +209,7 @@ void debugFillProperties(DiagnosticPropertiesBuilder properties) {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthStateStart);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthStateStart);
 }
 
 
@@ -230,8 +230,8 @@ String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
 /// @nodoc
 
 
-class AuthStateLoading with DiagnosticableTreeMixin implements AuthState {
-  const AuthStateLoading();
+class _AuthStateLoading with DiagnosticableTreeMixin implements AuthState {
+  const _AuthStateLoading();
   
 
 
@@ -247,7 +247,7 @@ void debugFillProperties(DiagnosticPropertiesBuilder properties) {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthStateLoading);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthStateLoading);
 }
 
 
@@ -268,8 +268,8 @@ String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
 /// @nodoc
 
 
-class AuthStateAuthenticated with DiagnosticableTreeMixin implements AuthState {
-  const AuthStateAuthenticated({required this.user});
+class _AuthStateAuthenticated with DiagnosticableTreeMixin implements AuthState {
+  const _AuthStateAuthenticated({required this.user});
   
 
  final  User user;
@@ -278,7 +278,7 @@ class AuthStateAuthenticated with DiagnosticableTreeMixin implements AuthState {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$AuthStateAuthenticatedCopyWith<AuthStateAuthenticated> get copyWith => _$AuthStateAuthenticatedCopyWithImpl<AuthStateAuthenticated>(this, _$identity);
+_$AuthStateAuthenticatedCopyWith<_AuthStateAuthenticated> get copyWith => __$AuthStateAuthenticatedCopyWithImpl<_AuthStateAuthenticated>(this, _$identity);
 
 
 @override
@@ -290,7 +290,7 @@ void debugFillProperties(DiagnosticPropertiesBuilder properties) {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthStateAuthenticated&&(identical(other.user, user) || other.user == user));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthStateAuthenticated&&(identical(other.user, user) || other.user == user));
 }
 
 
@@ -306,8 +306,8 @@ String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
 }
 
 /// @nodoc
-abstract mixin class $AuthStateAuthenticatedCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
-  factory $AuthStateAuthenticatedCopyWith(AuthStateAuthenticated value, $Res Function(AuthStateAuthenticated) _then) = _$AuthStateAuthenticatedCopyWithImpl;
+abstract mixin class _$AuthStateAuthenticatedCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
+  factory _$AuthStateAuthenticatedCopyWith(_AuthStateAuthenticated value, $Res Function(_AuthStateAuthenticated) _then) = __$AuthStateAuthenticatedCopyWithImpl;
 @useResult
 $Res call({
  User user
@@ -318,17 +318,17 @@ $UserCopyWith<$Res> get user;
 
 }
 /// @nodoc
-class _$AuthStateAuthenticatedCopyWithImpl<$Res>
-    implements $AuthStateAuthenticatedCopyWith<$Res> {
-  _$AuthStateAuthenticatedCopyWithImpl(this._self, this._then);
+class __$AuthStateAuthenticatedCopyWithImpl<$Res>
+    implements _$AuthStateAuthenticatedCopyWith<$Res> {
+  __$AuthStateAuthenticatedCopyWithImpl(this._self, this._then);
 
-  final AuthStateAuthenticated _self;
-  final $Res Function(AuthStateAuthenticated) _then;
+  final _AuthStateAuthenticated _self;
+  final $Res Function(_AuthStateAuthenticated) _then;
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? user = null,}) {
-  return _then(AuthStateAuthenticated(
+  return _then(_AuthStateAuthenticated(
 user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as User,
   ));
@@ -349,8 +349,8 @@ $UserCopyWith<$Res> get user {
 /// @nodoc
 
 
-class AuthStateUnauthenticated with DiagnosticableTreeMixin implements AuthState {
-  const AuthStateUnauthenticated();
+class _AuthStateUnauthenticated with DiagnosticableTreeMixin implements AuthState {
+  const _AuthStateUnauthenticated();
   
 
 
@@ -366,7 +366,7 @@ void debugFillProperties(DiagnosticPropertiesBuilder properties) {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthStateUnauthenticated);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthStateUnauthenticated);
 }
 
 

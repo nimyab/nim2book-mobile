@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nim2book_mobile_flutter/core/providers/dictionary/dictionary_notifier.dart';
+import 'package:nim2book_mobile_flutter/core/providers/dictionary/dictionary_provider.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/screens/dictionary_screen/widgets/add_word_button.dart';
 import 'package:nim2book_mobile_flutter/screens/dictionary_screen/widgets/dictionary_list.dart';
@@ -13,9 +13,7 @@ class DictionaryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final savedCards = ref.watch(
-      dictionaryNotifierProvider.select((state) => state.savedCards),
-    );
+    final savedCards = ref.watch(dictionaryCardsProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.dictionary), centerTitle: true),

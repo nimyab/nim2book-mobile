@@ -16,7 +16,6 @@ import 'package:nim2book_mobile_flutter/core/services/tts_service.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/services/reading_settings_service.dart';
 
 // Export domain providers
-export 'dictionary/dictionary.dart';
 export 'locale/locale.dart';
 export 'theme/theme.dart';
 export 'notifications/notifications.dart';

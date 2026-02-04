@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
-import 'package:nim2book_mobile_flutter/core/providers/dictionary/dictionary_notifier.dart';
+import 'package:nim2book_mobile_flutter/core/providers/dictionary/dictionary_provider.dart';
 
 class BookmarkButton extends ConsumerWidget {
   final String phrase;
