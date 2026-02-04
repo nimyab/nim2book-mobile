@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
+import 'package:nim2book_mobile_flutter/core/providers/auth/auth_provider.dart';
+import 'package:nim2book_mobile_flutter/core/providers/auth/auth_state.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/screens/add_book_screen/add_book_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/book_screen/book_screen.dart';
@@ -37,28 +39,23 @@ final routerProvider = Provider<GoRouter>((ref) {
     observers: [TalkerRouteObserver(talker)],
     refreshListenable: _GoRouterRefreshNotifier(ref),
     redirect: (context, state) {
-      final isAuthenticated = authState.isAuthenticated;
-      final isLoading = authState.isLoading;
-      final currentPath = state.uri.path;
-      final isLoginRoute = currentPath == '/login';
-      final isRegisterRoute = currentPath == '/register';
+      final isLoginRoute = state.uri.path == '/login';
 
-      // Пока идет загрузка, не делаем редирект
-      if (isLoading) {
-        return null;
-      }
-
-      // Если пользователь авторизован и находится на экране логина/регистрации
-      if (isAuthenticated && (isLoginRoute || isRegisterRoute)) {
-        return '/my-books';
-      }
-
-      // Если пользователь не авторизован и пытается попасть на защищенные страницы
-      if (!isAuthenticated && !isLoginRoute && !isRegisterRoute) {
-        return '/login';
-      }
-
-      return null;
+      return authState.when(
+        authenticated: (user) {
+          if (isLoginRoute) return '/my-books';
+          return null;
+        },
+        loading: () => null,
+        unauthenticated: () {
+          if (!isLoginRoute) return '/login';
+          return null;
+        },
+        start: () {
+          if (!isLoginRoute) return '/login';
+          return null;
+        },
+      );
     },
     routes: [
       GoRoute(

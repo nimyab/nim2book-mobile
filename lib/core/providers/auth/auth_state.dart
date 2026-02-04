@@ -1,18 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nim2book_mobile_flutter/core/models/user/user.dart';
 
 part 'auth_state.freezed.dart';
 
 @freezed
-abstract class AuthState with _$AuthState {
-  const AuthState._();
-
-  const factory AuthState({
-    final User? user,
-    @Default(false) final bool isLoading,
-  }) = _AuthState;
-
-  bool get isAuthenticated => user != null && !isLoading;
-  bool get isAdmin => user?.isAdmin ?? false;
-  bool get isVIP => user?.isVIP ?? false;
+sealed class AuthState with _$AuthState {
+  const factory AuthState.start() = AuthStateStart;
+  const factory AuthState.loading() = AuthStateLoading;
+  const factory AuthState.authenticated({required User user}) =
+      AuthStateAuthenticated;
+  const factory AuthState.unauthenticated() = AuthStateUnauthenticated;
 }

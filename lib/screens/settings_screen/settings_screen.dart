@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nim2book_mobile_flutter/core/providers/auth/auth_notifier.dart';
+import 'package:nim2book_mobile_flutter/core/providers/auth/auth_provider.dart';
 import 'package:nim2book_mobile_flutter/features/user_profile/widgets/user_profile.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/widgets/daily_new_limit_switcher.dart';
@@ -13,12 +13,8 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(final BuildContext context, WidgetRef ref) {
-    final isAuthenticated = ref.watch(
-      authNotifierProvider.select((state) => state.isAuthenticated),
-    );
-    final isAuthLoading = ref.watch(
-      authNotifierProvider.select((state) => state.isLoading),
-    );
+    final isAuthenticated = ref.watch(isAuthenticatedProvider);
+    final isAuthLoading = ref.watch(isAuthLoadingProvider);
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(

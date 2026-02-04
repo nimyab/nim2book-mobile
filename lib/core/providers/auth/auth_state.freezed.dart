@@ -12,76 +12,38 @@ part of 'auth_state.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$AuthState {
-
- User? get user; bool get isLoading;
-/// Create a copy of AuthState
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$AuthStateCopyWith<AuthState> get copyWith => _$AuthStateCopyWithImpl<AuthState>(this as AuthState, _$identity);
+mixin _$AuthState implements DiagnosticableTreeMixin {
 
 
+
+
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+  properties
+    ..add(DiagnosticsProperty('type', 'AuthState'))
+    ;
+}
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthState&&(identical(other.user, user) || other.user == user)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthState);
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,user,isLoading);
+int get hashCode => runtimeType.hashCode;
 
 @override
-String toString() {
-  return 'AuthState(user: $user, isLoading: $isLoading)';
+String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+  return 'AuthState()';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $AuthStateCopyWith<$Res>  {
-  factory $AuthStateCopyWith(AuthState value, $Res Function(AuthState) _then) = _$AuthStateCopyWithImpl;
-@useResult
-$Res call({
- User? user, bool isLoading
-});
-
-
-$UserCopyWith<$Res>? get user;
-
-}
-/// @nodoc
-class _$AuthStateCopyWithImpl<$Res>
-    implements $AuthStateCopyWith<$Res> {
-  _$AuthStateCopyWithImpl(this._self, this._then);
-
-  final AuthState _self;
-  final $Res Function(AuthState) _then;
-
-/// Create a copy of AuthState
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? user = freezed,Object? isLoading = null,}) {
-  return _then(_self.copyWith(
-user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as User?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,
-  ));
-}
-/// Create a copy of AuthState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$UserCopyWith<$Res>? get user {
-    if (_self.user == null) {
-    return null;
-  }
-
-  return $UserCopyWith<$Res>(_self.user!, (value) {
-    return _then(_self.copyWith(user: value));
-  });
-}
+class $AuthStateCopyWith<$Res>  {
+$AuthStateCopyWith(AuthState _, $Res Function(AuthState) __);
 }
 
 
@@ -99,11 +61,14 @@ extension AuthStatePatterns on AuthState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _AuthState value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( AuthStateStart value)?  start,TResult Function( AuthStateLoading value)?  loading,TResult Function( AuthStateAuthenticated value)?  authenticated,TResult Function( AuthStateUnauthenticated value)?  unauthenticated,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _AuthState() when $default != null:
-return $default(_that);case _:
+case AuthStateStart() when start != null:
+return start(_that);case AuthStateLoading() when loading != null:
+return loading(_that);case AuthStateAuthenticated() when authenticated != null:
+return authenticated(_that);case AuthStateUnauthenticated() when unauthenticated != null:
+return unauthenticated(_that);case _:
   return orElse();
 
 }
@@ -121,14 +86,14 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _AuthState value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( AuthStateStart value)  start,required TResult Function( AuthStateLoading value)  loading,required TResult Function( AuthStateAuthenticated value)  authenticated,required TResult Function( AuthStateUnauthenticated value)  unauthenticated,}){
 final _that = this;
 switch (_that) {
-case _AuthState():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+case AuthStateStart():
+return start(_that);case AuthStateLoading():
+return loading(_that);case AuthStateAuthenticated():
+return authenticated(_that);case AuthStateUnauthenticated():
+return unauthenticated(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -142,11 +107,14 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _AuthState value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( AuthStateStart value)?  start,TResult? Function( AuthStateLoading value)?  loading,TResult? Function( AuthStateAuthenticated value)?  authenticated,TResult? Function( AuthStateUnauthenticated value)?  unauthenticated,}){
 final _that = this;
 switch (_that) {
-case _AuthState() when $default != null:
-return $default(_that);case _:
+case AuthStateStart() when start != null:
+return start(_that);case AuthStateLoading() when loading != null:
+return loading(_that);case AuthStateAuthenticated() when authenticated != null:
+return authenticated(_that);case AuthStateUnauthenticated() when unauthenticated != null:
+return unauthenticated(_that);case _:
   return null;
 
 }
@@ -163,10 +131,13 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( User? user,  bool isLoading)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  start,TResult Function()?  loading,TResult Function( User user)?  authenticated,TResult Function()?  unauthenticated,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _AuthState() when $default != null:
-return $default(_that.user,_that.isLoading);case _:
+case AuthStateStart() when start != null:
+return start();case AuthStateLoading() when loading != null:
+return loading();case AuthStateAuthenticated() when authenticated != null:
+return authenticated(_that.user);case AuthStateUnauthenticated() when unauthenticated != null:
+return unauthenticated();case _:
   return orElse();
 
 }
@@ -184,13 +155,13 @@ return $default(_that.user,_that.isLoading);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( User? user,  bool isLoading)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  start,required TResult Function()  loading,required TResult Function( User user)  authenticated,required TResult Function()  unauthenticated,}) {final _that = this;
 switch (_that) {
-case _AuthState():
-return $default(_that.user,_that.isLoading);case _:
-  throw StateError('Unexpected subclass');
-
-}
+case AuthStateStart():
+return start();case AuthStateLoading():
+return loading();case AuthStateAuthenticated():
+return authenticated(_that.user);case AuthStateUnauthenticated():
+return unauthenticated();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -204,10 +175,13 @@ return $default(_that.user,_that.isLoading);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( User? user,  bool isLoading)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  start,TResult? Function()?  loading,TResult? Function( User user)?  authenticated,TResult? Function()?  unauthenticated,}) {final _that = this;
 switch (_that) {
-case _AuthState() when $default != null:
-return $default(_that.user,_that.isLoading);case _:
+case AuthStateStart() when start != null:
+return start();case AuthStateLoading() when loading != null:
+return loading();case AuthStateAuthenticated() when authenticated != null:
+return authenticated(_that.user);case AuthStateUnauthenticated() when unauthenticated != null:
+return unauthenticated();case _:
   return null;
 
 }
@@ -218,65 +192,145 @@ return $default(_that.user,_that.isLoading);case _:
 /// @nodoc
 
 
-class _AuthState extends AuthState {
-  const _AuthState({this.user, this.isLoading = false}): super._();
+class AuthStateStart with DiagnosticableTreeMixin implements AuthState {
+  const AuthStateStart();
   
 
-@override final  User? user;
-@override@JsonKey() final  bool isLoading;
-
-/// Create a copy of AuthState
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$AuthStateCopyWith<_AuthState> get copyWith => __$AuthStateCopyWithImpl<_AuthState>(this, _$identity);
 
 
+
+
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+  properties
+    ..add(DiagnosticsProperty('type', 'AuthState.start'))
+    ;
+}
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthState&&(identical(other.user, user) || other.user == user)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthStateStart);
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,user,isLoading);
+int get hashCode => runtimeType.hashCode;
 
 @override
-String toString() {
-  return 'AuthState(user: $user, isLoading: $isLoading)';
+String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+  return 'AuthState.start()';
 }
 
 
 }
+
+
+
 
 /// @nodoc
-abstract mixin class _$AuthStateCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
-  factory _$AuthStateCopyWith(_AuthState value, $Res Function(_AuthState) _then) = __$AuthStateCopyWithImpl;
-@override @useResult
-$Res call({
- User? user, bool isLoading
-});
 
 
-@override $UserCopyWith<$Res>? get user;
+class AuthStateLoading with DiagnosticableTreeMixin implements AuthState {
+  const AuthStateLoading();
+  
+
+
+
+
+
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+  properties
+    ..add(DiagnosticsProperty('type', 'AuthState.loading'))
+    ;
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthStateLoading);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+  return 'AuthState.loading()';
+}
+
 
 }
-/// @nodoc
-class __$AuthStateCopyWithImpl<$Res>
-    implements _$AuthStateCopyWith<$Res> {
-  __$AuthStateCopyWithImpl(this._self, this._then);
 
-  final _AuthState _self;
-  final $Res Function(_AuthState) _then;
+
+
+
+/// @nodoc
+
+
+class AuthStateAuthenticated with DiagnosticableTreeMixin implements AuthState {
+  const AuthStateAuthenticated({required this.user});
+  
+
+ final  User user;
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? user = freezed,Object? isLoading = null,}) {
-  return _then(_AuthState(
-user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as User?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$AuthStateAuthenticatedCopyWith<AuthStateAuthenticated> get copyWith => _$AuthStateAuthenticatedCopyWithImpl<AuthStateAuthenticated>(this, _$identity);
+
+
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+  properties
+    ..add(DiagnosticsProperty('type', 'AuthState.authenticated'))
+    ..add(DiagnosticsProperty('user', user));
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthStateAuthenticated&&(identical(other.user, user) || other.user == user));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,user);
+
+@override
+String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+  return 'AuthState.authenticated(user: $user)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $AuthStateAuthenticatedCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
+  factory $AuthStateAuthenticatedCopyWith(AuthStateAuthenticated value, $Res Function(AuthStateAuthenticated) _then) = _$AuthStateAuthenticatedCopyWithImpl;
+@useResult
+$Res call({
+ User user
+});
+
+
+$UserCopyWith<$Res> get user;
+
+}
+/// @nodoc
+class _$AuthStateAuthenticatedCopyWithImpl<$Res>
+    implements $AuthStateAuthenticatedCopyWith<$Res> {
+  _$AuthStateAuthenticatedCopyWithImpl(this._self, this._then);
+
+  final AuthStateAuthenticated _self;
+  final $Res Function(AuthStateAuthenticated) _then;
+
+/// Create a copy of AuthState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? user = null,}) {
+  return _then(AuthStateAuthenticated(
+user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
+as User,
   ));
 }
 
@@ -284,15 +338,50 @@ as bool,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$UserCopyWith<$Res>? get user {
-    if (_self.user == null) {
-    return null;
-  }
-
-  return $UserCopyWith<$Res>(_self.user!, (value) {
+$UserCopyWith<$Res> get user {
+  
+  return $UserCopyWith<$Res>(_self.user, (value) {
     return _then(_self.copyWith(user: value));
   });
 }
 }
+
+/// @nodoc
+
+
+class AuthStateUnauthenticated with DiagnosticableTreeMixin implements AuthState {
+  const AuthStateUnauthenticated();
+  
+
+
+
+
+
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+  properties
+    ..add(DiagnosticsProperty('type', 'AuthState.unauthenticated'))
+    ;
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthStateUnauthenticated);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+  return 'AuthState.unauthenticated()';
+}
+
+
+}
+
+
+
 
 // dart format on

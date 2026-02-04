@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:nim2book_mobile_flutter/core/providers/auth/auth_provider.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
@@ -27,9 +28,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(final BuildContext context) {
     final authNotifier = ref.read(authNotifierProvider.notifier);
-    final isAuthLoading = ref.watch(
-      authNotifierProvider.select((state) => state.isLoading),
-    );
+    final isAuthLoading = ref.watch(isAuthLoadingProvider);
     final talker = ref.read(talkerProvider);
     final l10n = AppLocalizations.of(context)!;
 
