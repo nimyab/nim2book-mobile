@@ -28,17 +28,23 @@ class BookRouteExtra {
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
+final authStateListenableProvider = Provider<Listenable>((ref) {
+  return _AuthStateNotifier(ref);
+});
+
 // Provider для роутера
 final routerProvider = Provider<GoRouter>((ref) {
-  final authState = ref.watch(authNotifierProvider);
+  ref.keepAlive();
   final talker = ref.watch(talkerProvider);
+  final authListenable = ref.watch(authStateListenableProvider);
 
   return GoRouter(
     initialLocation: '/my-books',
     navigatorKey: _rootNavigatorKey,
     observers: [TalkerRouteObserver(talker)],
-    refreshListenable: _GoRouterRefreshNotifier(ref),
+    refreshListenable: authListenable,
     redirect: (context, state) {
+      final authState = ref.read(authNotifierProvider);
       final isLoginRoute = state.uri.path == '/login';
 
       return authState.when(
@@ -190,16 +196,10 @@ final routerProvider = Provider<GoRouter>((ref) {
 });
 
 // Notifier для обновления роутера при изменении состояния auth
-class _GoRouterRefreshNotifier extends ChangeNotifier {
-  _GoRouterRefreshNotifier(this._ref) {
+class _AuthStateNotifier extends ChangeNotifier {
+  _AuthStateNotifier(this._ref) {
     _ref.listen(authNotifierProvider, (_, __) => notifyListeners());
   }
 
   final Ref _ref;
-
-  @override
-  void dispose() {
-    // Ref автоматически управляет подписками
-    super.dispose();
-  }
 }

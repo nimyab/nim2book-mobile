@@ -31,7 +31,7 @@ class LanguageSwitcher extends ConsumerWidget {
               ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             DropdownButtonFormField<Locale>(
-              value: currentLocale,
+              initialValue: currentLocale,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 contentPadding: EdgeInsets.symmetric(
