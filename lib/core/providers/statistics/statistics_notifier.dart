@@ -3,7 +3,7 @@ import 'package:nim2book_mobile_flutter/core/providers/statistics/statistics_sta
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/core/services/statistic_service.dart';
 
-class StatisticsNotifier extends AutoDisposeNotifier<StatisticsState> {
+class StatisticsNotifier extends Notifier<StatisticsState> {
   late final StatisticService _statisticService;
 
   @override
@@ -71,6 +71,6 @@ class StatisticsNotifier extends AutoDisposeNotifier<StatisticsState> {
 }
 
 final statisticsNotifierProvider =
-    AutoDisposeNotifierProvider<StatisticsNotifier, StatisticsState>(
+    NotifierProvider.autoDispose<StatisticsNotifier, StatisticsState>(
       StatisticsNotifier.new,
     );

@@ -121,10 +121,7 @@ return $default(_that);case _:
 final _that = this;
 switch (_that) {
 case _ReadingState():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -183,10 +180,7 @@ return $default(_that.fontSize,_that.lineHeight,_that.fontFamily,_that.sidePaddi
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double fontSize,  double lineHeight,  String fontFamily,  double sidePadding,  double firstLineIndentEm,  double paragraphSpacing,  TextAlign textAlign,  Color? backgroundColor,  Color? textColor,  bool isLoading)  $default,) {final _that = this;
 switch (_that) {
 case _ReadingState():
-return $default(_that.fontSize,_that.lineHeight,_that.fontFamily,_that.sidePadding,_that.firstLineIndentEm,_that.paragraphSpacing,_that.textAlign,_that.backgroundColor,_that.textColor,_that.isLoading);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that.fontSize,_that.lineHeight,_that.fontFamily,_that.sidePadding,_that.firstLineIndentEm,_that.paragraphSpacing,_that.textAlign,_that.backgroundColor,_that.textColor,_that.isLoading);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///

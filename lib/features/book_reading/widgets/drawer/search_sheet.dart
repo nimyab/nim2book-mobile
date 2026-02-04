@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/notifiers/book_reading_notifier.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/providers/book_reading/book_reading_notifier.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 class SearchResult {

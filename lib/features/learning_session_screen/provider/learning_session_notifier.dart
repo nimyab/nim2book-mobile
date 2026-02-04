@@ -3,23 +3,20 @@ import 'package:fsrs/fsrs.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/core/services/dictionary_service.dart';
-import 'package:nim2book_mobile_flutter/features/learning_session_screen/states/learning_session_state.dart';
+import 'package:nim2book_mobile_flutter/features/learning_session_screen/provider/learning_session_state.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/learning_session_content.dart';
 
-class LearningSessionNotifier
-    extends
-        FamilyNotifier<
-          LearningSessionState,
-          ({LearningMode mode, Map<String, List<DictionaryCard>> allSavedCards})
-        > {
+class LearningSessionNotifier extends Notifier<LearningSessionState> {
+  LearningSessionNotifier(this.arg);
+
+  final ({LearningMode mode, Map<String, List<DictionaryCard>> allSavedCards})
+  arg;
   late final DictionaryService _dictionaryService;
   late final LearningMode mode;
   late final Map<String, List<DictionaryCard>> allSavedCards;
 
   @override
-  LearningSessionState build(
-    ({LearningMode mode, Map<String, List<DictionaryCard>> allSavedCards}) arg,
-  ) {
+  LearningSessionState build() {
     mode = arg.mode;
     allSavedCards = arg.allSavedCards;
     _dictionaryService = ref.read(dictionaryServiceProvider);

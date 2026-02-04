@@ -118,10 +118,7 @@ return $default(_that);case _:
 final _that = this;
 switch (_that) {
 case _SrsState():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -180,10 +177,7 @@ return $default(_that.dueWords,_that.totalDueCount,_that.reviewedToday,_that.cur
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<String> dueWords,  int totalDueCount,  int reviewedToday,  int currentStreak,  int longestStreak,  int dailyLimit,  bool isLoading)  $default,) {final _that = this;
 switch (_that) {
 case _SrsState():
-return $default(_that.dueWords,_that.totalDueCount,_that.reviewedToday,_that.currentStreak,_that.longestStreak,_that.dailyLimit,_that.isLoading);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that.dueWords,_that.totalDueCount,_that.reviewedToday,_that.currentStreak,_that.longestStreak,_that.dailyLimit,_that.isLoading);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///

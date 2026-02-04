@@ -3,7 +3,7 @@ import 'package:nim2book_mobile_flutter/core/providers/tts/tts_state.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/core/services/tts_service.dart';
 
-class TtsNotifier extends AutoDisposeNotifier<TtsState> {
+class TtsNotifier extends Notifier<TtsState> {
   late final TtsService _ttsService;
 
   @override
@@ -50,6 +50,6 @@ class TtsNotifier extends AutoDisposeNotifier<TtsState> {
   String? get currentText => state.currentText;
 }
 
-final ttsNotifierProvider = AutoDisposeNotifierProvider<TtsNotifier, TtsState>(
+final ttsNotifierProvider = NotifierProvider.autoDispose<TtsNotifier, TtsState>(
   TtsNotifier.new,
 );

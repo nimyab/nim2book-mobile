@@ -4,7 +4,7 @@ import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
 import 'package:nim2book_mobile_flutter/features/srs/models/srs_item.dart';
 
-class SrsNotifier extends AutoDisposeNotifier<SrsState> {
+class SrsNotifier extends Notifier<SrsState> {
   late final SrsService _srsService;
 
   @override
@@ -84,6 +84,6 @@ class SrsNotifier extends AutoDisposeNotifier<SrsState> {
   }
 }
 
-final srsNotifierProvider = AutoDisposeNotifierProvider<SrsNotifier, SrsState>(
+final srsNotifierProvider = NotifierProvider.autoDispose<SrsNotifier, SrsState>(
   SrsNotifier.new,
 );

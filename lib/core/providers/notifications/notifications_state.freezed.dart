@@ -118,10 +118,7 @@ return $default(_that);case _:
 final _that = this;
 switch (_that) {
 case _NotificationsState():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -180,10 +177,7 @@ return $default(_that.fcmToken,_that.isTokenRegistered,_that.notificationsEnable
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String fcmToken,  bool isTokenRegistered,  bool notificationsEnabled,  List<Map<String, dynamic>> notifications,  int unreadCount,  bool isLoading,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _NotificationsState():
-return $default(_that.fcmToken,_that.isTokenRegistered,_that.notificationsEnabled,_that.notifications,_that.unreadCount,_that.isLoading,_that.errorMessage);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that.fcmToken,_that.isTokenRegistered,_that.notificationsEnabled,_that.notifications,_that.unreadCount,_that.isLoading,_that.errorMessage);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///

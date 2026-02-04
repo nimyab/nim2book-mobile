@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/states/reading_settings_state.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/providers/reading_settings/reading_settings_state.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/services/reading_settings_service.dart';
 
 class ReadingSettingsNotifier extends Notifier<ReadingSettingsState> {

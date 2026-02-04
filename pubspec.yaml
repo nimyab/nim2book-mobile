@@ -42,7 +42,7 @@ dependencies:
   flutter_dotenv: ^6.0.0
   shared_preferences: ^2.5.3
   dio: ^5.9.0
-  flutter_riverpod: ^2.6.1
+  flutter_riverpod: ^3.2.1
   flutter_secure_storage: ^9.2.4
   go_router: ^16.2.1
   flutter_displaymode: ^0.6.0
@@ -57,8 +57,9 @@ dependencies:
   cached_network_image: ^3.3.1
 
   flutter_tts: ^4.0.2
-  talker_flutter: ^5.1.9
-  talker_dio_logger: ^5.1.9
+  talker_flutter: ^5.1.13
+  talker_riverpod_logger: ^5.1.13
+  talker_dio_logger: ^5.1.13
 
   fsrs: ^2.0.1
 

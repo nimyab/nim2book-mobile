@@ -2,15 +2,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/core/services/book_service.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/states/loading_book_state.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/providers/loading_book/loading_book_state.dart';
 
-class LoadingBookNotifier extends FamilyNotifier<LoadingBookState, String> {
+class LoadingBookNotifier extends Notifier<LoadingBookState> {
+  LoadingBookNotifier(this.bookId);
+
+  final String bookId;
   late final BookService _bookService;
-  late final String bookId;
 
   @override
-  LoadingBookState build(String arg) {
-    bookId = arg;
+  LoadingBookState build() {
     _bookService = ref.read(bookServiceProvider);
     return const LoadingBookState();
   }

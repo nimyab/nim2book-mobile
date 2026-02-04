@@ -1,21 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/states/book_reading_state.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/providers/book_reading/book_reading_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class BookReadingNotifier
-    extends
-        FamilyNotifier<
-          BookReadingState,
-          ({String bookId, List<ChapterAlignNode> chapters})
-        > {
+class BookReadingNotifier extends Notifier<BookReadingState> {
+  BookReadingNotifier(this.arg);
+
+  final ({String bookId, List<ChapterAlignNode> chapters}) arg;
   late final SharedPreferences _prefs;
 
   @override
-  BookReadingState build(
-    ({String bookId, List<ChapterAlignNode> chapters}) arg,
-  ) {
+  BookReadingState build() {
     _prefs = ref.read(sharedPreferencesProvider);
     return BookReadingState(
       bookId: arg.bookId,

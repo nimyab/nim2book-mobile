@@ -4,7 +4,7 @@ import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/core/services/fmc_token_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-class NotificationsNotifier extends AutoDisposeNotifier<NotificationsState> {
+class NotificationsNotifier extends Notifier<NotificationsState> {
   late final FcmTokenService _fcmTokenService;
 
   @override
@@ -135,6 +135,6 @@ class NotificationsNotifier extends AutoDisposeNotifier<NotificationsState> {
 }
 
 final notificationsNotifierProvider =
-    AutoDisposeNotifierProvider<NotificationsNotifier, NotificationsState>(
+    NotifierProvider.autoDispose<NotificationsNotifier, NotificationsState>(
       NotificationsNotifier.new,
     );

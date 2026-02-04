@@ -4,7 +4,7 @@ import 'package:nim2book_mobile_flutter/core/providers/reading/reading_state.dar
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/services/reading_settings_service.dart';
 
-class ReadingNotifier extends AutoDisposeNotifier<ReadingState> {
+class ReadingNotifier extends Notifier<ReadingState> {
   late final ReadingSettingsService _readingSettingsService;
 
   @override
@@ -96,6 +96,6 @@ class ReadingNotifier extends AutoDisposeNotifier<ReadingState> {
 }
 
 final readingNotifierProvider =
-    AutoDisposeNotifierProvider<ReadingNotifier, ReadingState>(
+    NotifierProvider.autoDispose<ReadingNotifier, ReadingState>(
       ReadingNotifier.new,
     );

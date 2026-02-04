@@ -15,6 +15,7 @@ import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:talker_flutter/talker_flutter.dart';
+import 'package:talker_riverpod_logger/talker_riverpod_logger.dart';
 
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -61,6 +62,7 @@ void main() async {
         sharedPreferencesProvider.overrideWithValue(sharedPreferences),
         tokenServiceProvider.overrideWithValue(tokenService),
       ],
+      observers: [TalkerRiverpodObserver()],
       child: const Nim2BookApp(),
     ),
   );

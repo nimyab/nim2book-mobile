@@ -3,7 +3,7 @@ import 'package:nim2book_mobile_flutter/core/providers/onboarding/onboarding_sta
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/core/services/onboarding_service.dart';
 
-class OnboardingNotifier extends AutoDisposeNotifier<OnboardingState> {
+class OnboardingNotifier extends Notifier<OnboardingState> {
   late final OnboardingService _onboardingService;
 
   @override
@@ -68,6 +68,6 @@ class OnboardingNotifier extends AutoDisposeNotifier<OnboardingState> {
 }
 
 final onboardingNotifierProvider =
-    AutoDisposeNotifierProvider<OnboardingNotifier, OnboardingState>(
+    NotifierProvider.autoDispose<OnboardingNotifier, OnboardingState>(
       OnboardingNotifier.new,
     );
