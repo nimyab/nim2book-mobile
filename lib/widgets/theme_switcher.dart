@@ -29,7 +29,7 @@ class ThemeSwitcher extends ConsumerWidget {
               ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             DropdownButtonFormField<AppTheme>(
-              value: currentTheme,
+              initialValue: currentTheme,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 contentPadding: EdgeInsets.symmetric(

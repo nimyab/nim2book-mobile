@@ -47,7 +47,7 @@ class _DailyNewLimitSwitcherState extends ConsumerState<DailyNewLimitSwitcher> {
           children: [
             Text(l10n.dailyNewWordsLimit, style: theme.textTheme.titleMedium),
             DropdownButtonFormField<int>(
-              value: dropdownValue,
+              initialValue: dropdownValue,
               items: _options
                   .map(
                     (final v) => DropdownMenuItem<int>(
