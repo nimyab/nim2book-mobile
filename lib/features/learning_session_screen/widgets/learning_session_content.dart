@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
-import 'package:nim2book_mobile_flutter/features/learning_session_screen/provider/learning_session_notifier.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/word_card.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/word_progress_indicator.dart';
+import 'package:nim2book_mobile_flutter/features/learning_session_screen/provider/learning_session_provider.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 enum LearningMode { newOnly, reviewOnly, mixed }
