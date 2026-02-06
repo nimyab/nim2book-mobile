@@ -200,7 +200,7 @@ return $default(_that.savedCards);case _:
 
 
 class _DictionaryState implements DictionaryState {
-  const _DictionaryState({final  List<DictionaryCard> savedCards = const {}}): _savedCards = savedCards;
+  const _DictionaryState({final  List<DictionaryCard> savedCards = const []}): _savedCards = savedCards;
   
 
  final  List<DictionaryCard> _savedCards;

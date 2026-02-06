@@ -17,10 +17,19 @@ class BooksNotifier extends Notifier<BooksState> {
     return const BooksState();
   }
 
-  void initialize() {
-    getMyBooks();
-    getPersonalBooks();
-    getBooks(null, null, 1);
+  Future<void> initialize() async {
+    state = state.copyWith(isFetching: true);
+
+    try {
+      // Load data in parallel
+      await Future.wait([
+        getMyBooks(),
+        getPersonalBooks(),
+        getBooks(null, null, 1),
+      ]);
+    } finally {
+      state = state.copyWith(isFetching: false);
+    }
   }
 
   Future<void> getBooks(
@@ -28,18 +37,13 @@ class BooksNotifier extends Notifier<BooksState> {
     final String? title,
     final int page,
   ) async {
-    try {
-      state = state.copyWith(isFetching: true);
-      if (page == 1) {
-        state = state.copyWith(allBooks: []);
-      }
-      final books = await _bookService.getBooks(author, title, page);
-      if (books.isNotEmpty) {
-        final updated = List<Book>.from(state.allBooks)..addAll(books);
-        state = state.copyWith(allBooks: updated);
-      }
-    } finally {
-      state = state.copyWith(isFetching: false);
+    if (page == 1) {
+      state = state.copyWith(allBooks: [], isFetching: true);
+    }
+    final books = await _bookService.getBooks(author, title, page);
+    if (books.isNotEmpty) {
+      final updated = List<Book>.from(state.allBooks)..addAll(books);
+      state = state.copyWith(allBooks: updated);
     }
   }
 
@@ -71,8 +75,8 @@ class BooksNotifier extends Notifier<BooksState> {
     }
   }
 
-  void getMyBooks() {
-    final savedBooks = _bookService.getAddedBooks();
+  Future<void> getMyBooks() async {
+    final savedBooks = await _bookService.getAddedBooks();
     state = state.copyWith(savedBooks: savedBooks);
   }
 

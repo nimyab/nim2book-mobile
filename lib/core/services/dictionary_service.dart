@@ -9,6 +9,7 @@ import 'package:nim2book_mobile_flutter/core/models/requests/requests.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:drift/drift.dart' as drift;
+import 'package:drift/extensions/json1.dart';
 
 const _fromLang = 'en';
 const _toLang = 'ru';
@@ -90,10 +91,13 @@ class DictionaryService {
 
       if (result == null) return null;
 
-      return DictionaryCard(
-        wordData: DictionaryWord.fromJson(jsonDecode(result.wordDataJson)),
-        fsrsCard: Card.fromMap(jsonDecode(result.fsrsCardJson)),
-      );
+      // Decode JSON off the main thread to avoid UI jank
+      return Future.microtask(() {
+        return DictionaryCard(
+          wordData: DictionaryWord.fromJson(jsonDecode(result.wordDataJson)),
+          fsrsCard: Card.fromMap(jsonDecode(result.fsrsCardJson)),
+        );
+      });
     } catch (e) {
       _logger.error(
         'Error retrieving single word $word with pos $partOfSpeech: $e',
@@ -144,17 +148,15 @@ class DictionaryService {
       final results = await _database
           .select(_database.dictionaryCardsTable)
           .get();
-      final allCards = <DictionaryCard>[];
 
-      for (var result in results) {
-        final card = DictionaryCard(
-          wordData: DictionaryWord.fromJson(jsonDecode(result.wordDataJson)),
-          fsrsCard: Card.fromMap(jsonDecode(result.fsrsCardJson)),
-        );
-        allCards.add(card);
-      }
-
-      return allCards;
+      return Future.microtask(() {
+        return results.map((final result) {
+          return DictionaryCard(
+            wordData: DictionaryWord.fromJson(jsonDecode(result.wordDataJson)),
+            fsrsCard: Card.fromMap(jsonDecode(result.fsrsCardJson)),
+          );
+        }).toList();
+      });
     } catch (e) {
       _logger.error('Error retrieving all words: $e');
       return [];
@@ -169,28 +171,91 @@ class DictionaryService {
   }
 
   /// Получить карточки, которые нужно повторить сейчас
+  /// Получить карточки, которые нужно повторить сейчас
   Future<List<DictionaryCard>> getDueCards({DateTime? now}) async {
-    final reviewTime = now ?? DateTime.now().toUtc();
-    final cards = await getListDictionaryCard();
+    try {
+      // важно сделать сравнение в UTC, чтобы избежать проблем с часовыми поясами
+      final reviewTime = now ?? DateTime.now().toUtc();
+      final reviewTimeIso = reviewTime.toIso8601String();
 
-    return cards.where((card) {
-      return card.fsrsCard.due.isBefore(reviewTime) ||
-          card.fsrsCard.due.isAtSameMomentAs(reviewTime);
-    }).toList();
+      final results =
+          await (_database.select(_database.dictionaryCardsTable)..where(
+                (tbl) => tbl.fsrsCardJson
+                    .jsonExtract<String>(r'$.due')
+                    .isSmallerOrEqualValue(reviewTimeIso),
+              ))
+              .get();
+
+      // Decode JSON off the main thread to avoid UI jank
+      return Future.microtask(() {
+        return results.map((result) {
+          return DictionaryCard(
+            wordData: DictionaryWord.fromJson(jsonDecode(result.wordDataJson)),
+            fsrsCard: Card.fromMap(jsonDecode(result.fsrsCardJson)),
+          );
+        }).toList();
+      });
+    } catch (e) {
+      _logger.error('Error retrieving due cards: $e');
+      return [];
+    }
   }
 
   /// Получить количество карточек для повторения
   Future<int> getDueCardsCount({DateTime? now}) async {
-    final dueCards = await getDueCards(now: now);
-    return dueCards.length;
+    try {
+      // важно сделать сравнение в UTC, чтобы избежать проблем с часовыми поясами
+      final reviewTime = now ?? DateTime.now().toUtc();
+      final reviewTimeIso = reviewTime.toIso8601String();
+
+      final countExpr = _database.dictionaryCardsTable.word.count();
+      final result =
+          await (_database.selectOnly(_database.dictionaryCardsTable)
+                ..addColumns([countExpr])
+                ..where(
+                  _database.dictionaryCardsTable.fsrsCardJson
+                      .jsonExtract<String>(r'$.due')
+                      .isSmallerOrEqualValue(reviewTimeIso),
+                ))
+              .getSingle();
+
+      return result.read(countExpr) ?? 0;
+    } catch (e) {
+      _logger.error('Error counting due cards: $e');
+      return 0;
+    }
   }
 
   /// Получить одну карточку для повторения, которая должна быть повторена первой
   Future<DictionaryCard?> getDueCard(LearningMode mode) async {
-    final dueCards = await getDueCards();
-    if (dueCards.isEmpty) return null;
-    dueCards.sort((a, b) => a.fsrsCard.due.compareTo(b.fsrsCard.due));
-    return dueCards.first;
+    try {
+      // важно сделать сравнение в UTC, чтобы избежать проблем с часовыми поясами
+      final reviewTime = DateTime.now().toUtc();
+      final reviewTimeIso = reviewTime.toIso8601String();
+
+      final dueExpr = _database.dictionaryCardsTable.fsrsCardJson
+          .jsonExtract<String>(r'$.due');
+
+      final result =
+          await (_database.select(_database.dictionaryCardsTable)
+                ..where((tbl) => dueExpr.isSmallerOrEqualValue(reviewTimeIso))
+                ..orderBy([(_) => drift.OrderingTerm.asc(dueExpr)])
+                ..limit(1))
+              .getSingleOrNull();
+
+      if (result == null) return null;
+
+      // Decode JSON off the main thread to avoid UI jank
+      return Future.microtask(() {
+        return DictionaryCard(
+          wordData: DictionaryWord.fromJson(jsonDecode(result.wordDataJson)),
+          fsrsCard: Card.fromMap(jsonDecode(result.fsrsCardJson)),
+        );
+      });
+    } catch (e) {
+      _logger.error('Error retrieving single due card: $e');
+      return null;
+    }
   }
 
   /// Сбросить состояние карточки (вернуть к начальному состоянию)
@@ -219,8 +284,8 @@ class DictionaryService {
   // ============================================================
 
   /// Проверяет, нужно ли повторить карточку сейчас
-  bool isDueCard(DictionaryCard card, {DateTime? now}) {
-    final reviewTime = now ?? DateTime.now().toUtc();
+  bool isDueCard(DictionaryCard card) {
+    final reviewTime = DateTime.now().toUtc();
     return card.fsrsCard.due.isBefore(reviewTime) ||
         card.fsrsCard.due.isAtSameMomentAs(reviewTime);
   }

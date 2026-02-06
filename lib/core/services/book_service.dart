@@ -25,7 +25,9 @@ class BookService {
     try {
       final raw = _sharedPreferences.getString(cacheKey);
       if (raw != null) {
-        cachedBook = Book.fromJson(jsonDecode(raw));
+        cachedBook = await Future.microtask(
+          () => Book.fromJson(jsonDecode(raw)),
+        );
       }
     } catch (_) {}
 
@@ -51,10 +53,12 @@ class BookService {
     try {
       final raw = _sharedPreferences.getString(cacheKey);
       if (raw != null) {
-        final list = jsonDecode(raw) as List<dynamic>;
-        cached = list
-            .map((final e) => Book.fromJson(e as Map<String, dynamic>))
-            .toList();
+        cached = await Future.microtask(() {
+          final list = jsonDecode(raw) as List<dynamic>;
+          return list
+              .map((final e) => Book.fromJson(e as Map<String, dynamic>))
+              .toList();
+        });
       }
     } catch (_) {}
 
@@ -76,18 +80,20 @@ class BookService {
     }
   }
 
-  List<Book> getAddedBooks() {
+  Future<List<Book>> getAddedBooks() async {
     final addedBooksJsonList = _sharedPreferences.getStringList(_addedBooksKey);
     if (addedBooksJsonList == null) {
       return [];
     }
-    return addedBooksJsonList
-        .map((final json) => Book.fromJson(jsonDecode(json)))
-        .toList();
+    return Future.microtask(() {
+      return addedBooksJsonList
+          .map((final json) => Book.fromJson(jsonDecode(json)))
+          .toList();
+    });
   }
 
   Future<bool> addBook(final Book book) async {
-    final addedBooks = getAddedBooks();
+    final addedBooks = await getAddedBooks();
     if (addedBooks.any((final b) => b.id == book.id)) {
       return false;
     }
@@ -102,7 +108,7 @@ class BookService {
   }
 
   Future<bool> removeBook(final Book book) async {
-    final addedBooks = getAddedBooks();
+    final addedBooks = await getAddedBooks();
     final filtered = addedBooks.where((final b) => b.id != book.id).toList();
     final addedBooksJsonList = filtered
         .map((final b) => jsonEncode(b.toJson()))
@@ -123,16 +129,24 @@ class BookService {
 
       final cachedChapter = _sharedPreferences.getString(chapterKey);
       if (cachedChapter != null) {
-        return ChapterAlignNode.fromJson(
-          jsonDecode(_decompressString(cachedChapter)),
-        );
+        // Decompress and decode off the main thread
+        return Future.microtask(() {
+          return ChapterAlignNode.fromJson(
+            jsonDecode(_decompressString(cachedChapter)),
+          );
+        });
       }
 
       final chapter = await _apiClient.getChapter(path);
 
+      // Compress and encode off the main thread
+      final compressed = await Future.microtask(() {
+        return _compressString(jsonEncode(chapter.toJson()));
+      });
+
       final isAdded = await _sharedPreferences.setString(
         chapterKey,
-        _compressString(jsonEncode(chapter.toJson())),
+        compressed,
       );
       if (!isAdded) {
         _logger.warning('Failed to cache chapter at path $path');
