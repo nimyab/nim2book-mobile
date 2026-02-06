@@ -46,6 +46,9 @@ class _LearningSessionContentState
       );
     }
 
+    // Заглушка чтобы ничего не отображалось, пока загружается карточка.
+    if (sessionState.isLoading) return const Center();
+
     final currentCard = sessionState.currentCard!;
 
     return SafeArea(

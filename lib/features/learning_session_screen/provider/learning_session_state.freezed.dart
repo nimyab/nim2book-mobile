@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LearningSessionState {
 
- DictionaryCard? get currentCard; bool get showTranslation;
+ DictionaryCard? get currentCard; bool get isLoading; bool get showTranslation;
 /// Create a copy of LearningSessionState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $LearningSessionStateCopyWith<LearningSessionState> get copyWith => _$LearningSe
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LearningSessionState&&(identical(other.currentCard, currentCard) || other.currentCard == currentCard)&&(identical(other.showTranslation, showTranslation) || other.showTranslation == showTranslation));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LearningSessionState&&(identical(other.currentCard, currentCard) || other.currentCard == currentCard)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.showTranslation, showTranslation) || other.showTranslation == showTranslation));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentCard,showTranslation);
+int get hashCode => Object.hash(runtimeType,currentCard,isLoading,showTranslation);
 
 @override
 String toString() {
-  return 'LearningSessionState(currentCard: $currentCard, showTranslation: $showTranslation)';
+  return 'LearningSessionState(currentCard: $currentCard, isLoading: $isLoading, showTranslation: $showTranslation)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $LearningSessionStateCopyWith<$Res>  {
   factory $LearningSessionStateCopyWith(LearningSessionState value, $Res Function(LearningSessionState) _then) = _$LearningSessionStateCopyWithImpl;
 @useResult
 $Res call({
- DictionaryCard? currentCard, bool showTranslation
+ DictionaryCard? currentCard, bool isLoading, bool showTranslation
 });
 
 
@@ -62,10 +62,11 @@ class _$LearningSessionStateCopyWithImpl<$Res>
 
 /// Create a copy of LearningSessionState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? currentCard = freezed,Object? showTranslation = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? currentCard = freezed,Object? isLoading = null,Object? showTranslation = null,}) {
   return _then(_self.copyWith(
 currentCard: freezed == currentCard ? _self.currentCard : currentCard // ignore: cast_nullable_to_non_nullable
-as DictionaryCard?,showTranslation: null == showTranslation ? _self.showTranslation : showTranslation // ignore: cast_nullable_to_non_nullable
+as DictionaryCard?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,showTranslation: null == showTranslation ? _self.showTranslation : showTranslation // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -163,10 +164,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DictionaryCard? currentCard,  bool showTranslation)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DictionaryCard? currentCard,  bool isLoading,  bool showTranslation)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LearningSessionState() when $default != null:
-return $default(_that.currentCard,_that.showTranslation);case _:
+return $default(_that.currentCard,_that.isLoading,_that.showTranslation);case _:
   return orElse();
 
 }
@@ -184,10 +185,10 @@ return $default(_that.currentCard,_that.showTranslation);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DictionaryCard? currentCard,  bool showTranslation)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DictionaryCard? currentCard,  bool isLoading,  bool showTranslation)  $default,) {final _that = this;
 switch (_that) {
 case _LearningSessionState():
-return $default(_that.currentCard,_that.showTranslation);case _:
+return $default(_that.currentCard,_that.isLoading,_that.showTranslation);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -204,10 +205,10 @@ return $default(_that.currentCard,_that.showTranslation);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DictionaryCard? currentCard,  bool showTranslation)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DictionaryCard? currentCard,  bool isLoading,  bool showTranslation)?  $default,) {final _that = this;
 switch (_that) {
 case _LearningSessionState() when $default != null:
-return $default(_that.currentCard,_that.showTranslation);case _:
+return $default(_that.currentCard,_that.isLoading,_that.showTranslation);case _:
   return null;
 
 }
@@ -219,10 +220,11 @@ return $default(_that.currentCard,_that.showTranslation);case _:
 
 
 class _LearningSessionState implements LearningSessionState {
-  const _LearningSessionState({required this.currentCard, this.showTranslation = false});
+  const _LearningSessionState({required this.currentCard, this.isLoading = false, this.showTranslation = false});
   
 
 @override final  DictionaryCard? currentCard;
+@override@JsonKey() final  bool isLoading;
 @override@JsonKey() final  bool showTranslation;
 
 /// Create a copy of LearningSessionState
@@ -235,16 +237,16 @@ _$LearningSessionStateCopyWith<_LearningSessionState> get copyWith => __$Learnin
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LearningSessionState&&(identical(other.currentCard, currentCard) || other.currentCard == currentCard)&&(identical(other.showTranslation, showTranslation) || other.showTranslation == showTranslation));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LearningSessionState&&(identical(other.currentCard, currentCard) || other.currentCard == currentCard)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.showTranslation, showTranslation) || other.showTranslation == showTranslation));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentCard,showTranslation);
+int get hashCode => Object.hash(runtimeType,currentCard,isLoading,showTranslation);
 
 @override
 String toString() {
-  return 'LearningSessionState(currentCard: $currentCard, showTranslation: $showTranslation)';
+  return 'LearningSessionState(currentCard: $currentCard, isLoading: $isLoading, showTranslation: $showTranslation)';
 }
 
 
@@ -255,7 +257,7 @@ abstract mixin class _$LearningSessionStateCopyWith<$Res> implements $LearningSe
   factory _$LearningSessionStateCopyWith(_LearningSessionState value, $Res Function(_LearningSessionState) _then) = __$LearningSessionStateCopyWithImpl;
 @override @useResult
 $Res call({
- DictionaryCard? currentCard, bool showTranslation
+ DictionaryCard? currentCard, bool isLoading, bool showTranslation
 });
 
 
@@ -272,10 +274,11 @@ class __$LearningSessionStateCopyWithImpl<$Res>
 
 /// Create a copy of LearningSessionState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? currentCard = freezed,Object? showTranslation = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? currentCard = freezed,Object? isLoading = null,Object? showTranslation = null,}) {
   return _then(_LearningSessionState(
 currentCard: freezed == currentCard ? _self.currentCard : currentCard // ignore: cast_nullable_to_non_nullable
-as DictionaryCard?,showTranslation: null == showTranslation ? _self.showTranslation : showTranslation // ignore: cast_nullable_to_non_nullable
+as DictionaryCard?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,showTranslation: null == showTranslation ? _self.showTranslation : showTranslation // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

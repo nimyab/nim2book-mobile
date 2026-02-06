@@ -7,6 +7,7 @@ part 'learning_session_state.freezed.dart';
 abstract class LearningSessionState with _$LearningSessionState {
   const factory LearningSessionState({
     required final DictionaryCard? currentCard,
+    @Default(false) final bool isLoading,
     @Default(false) final bool showTranslation,
   }) = _LearningSessionState;
 }

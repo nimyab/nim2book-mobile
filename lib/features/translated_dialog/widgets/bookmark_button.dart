@@ -12,10 +12,11 @@ class BookmarkButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final dictionaryNotifier = ref.read(dictionaryNotifierProvider.notifier);
+    ref.watch(dictionaryNotifierProvider);
+    final dictionaryProvider = ref.watch(dictionaryNotifierProvider.notifier);
 
     return FutureBuilder<bool>(
-      future: dictionaryNotifier.checkWordInDict(phrase, word.partOfSpeech),
+      future: dictionaryProvider.checkWordInDict(phrase, word.partOfSpeech),
       builder: (context, snapshot) {
         final isInDict = snapshot.data ?? false;
         return IconButton(
@@ -28,9 +29,9 @@ class BookmarkButton extends ConsumerWidget {
           constraints: const BoxConstraints(),
           onPressed: () {
             if (isInDict) {
-              dictionaryNotifier.deleteWord(phrase, word.partOfSpeech);
+              dictionaryProvider.deleteWord(phrase, word.partOfSpeech);
             } else {
-              dictionaryNotifier.saveWord(phrase, word);
+              dictionaryProvider.saveWord(phrase, word);
             }
           },
         );
