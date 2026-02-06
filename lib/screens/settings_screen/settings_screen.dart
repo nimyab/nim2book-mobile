@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/providers/auth/auth_provider.dart';
 import 'package:nim2book_mobile_flutter/features/user_profile/widgets/user_profile.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
-import 'package:nim2book_mobile_flutter/widgets/daily_new_limit_switcher.dart';
 import 'package:nim2book_mobile_flutter/widgets/language_switcher.dart';
 import 'package:nim2book_mobile_flutter/widgets/theme_switcher.dart';
 
@@ -27,11 +26,7 @@ class SettingsScreen extends ConsumerWidget {
                     padding: EdgeInsets.all(16.0),
                     child: Column(
                       spacing: 16,
-                      children: [
-                        LanguageSwitcher(),
-                        ThemeSwitcher(),
-                        DailyNewLimitSwitcher(),
-                      ],
+                      children: [LanguageSwitcher(), ThemeSwitcher()],
                     ),
                   ),
                   Expanded(

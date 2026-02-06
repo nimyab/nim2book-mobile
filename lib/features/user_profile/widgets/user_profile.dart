@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/providers/auth/auth_provider.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
-import 'package:nim2book_mobile_flutter/widgets/daily_new_limit_switcher.dart';
 import 'package:nim2book_mobile_flutter/widgets/language_switcher.dart';
 import 'package:nim2book_mobile_flutter/widgets/theme_switcher.dart';
 
@@ -44,7 +43,6 @@ class UserProfile extends ConsumerWidget {
             ),
             const ThemeSwitcher(),
             const LanguageSwitcher(),
-            const DailyNewLimitSwitcher(),
             ElevatedButton(
               onPressed: isLoading
                   ? null

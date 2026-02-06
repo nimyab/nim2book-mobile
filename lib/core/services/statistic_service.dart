@@ -16,7 +16,6 @@ class StatisticService {
   // Префиксы для дневной статистики
   static const String _learnedPrefix = 'stats_learned_';
   static const String _repeatedPrefix = 'stats_repeated_';
-  static const String _knownPrefix = 'stats_known_';
 
   bool _isSameCalendarDay(final DateTime a, final DateTime b) {
     return a.year == b.year && a.month == b.month && a.day == b.day;
@@ -29,7 +28,7 @@ class StatisticService {
   // ЗАПИСЬ СТАТИСТИКИ ПО ДНЯМ
   // ============================================================
 
-  /// Записать, что карточка была заучена (впервые достигла step >= 3)
+  /// Записать, что карточка была заучена (перешла из State.Learning в State.Review)
   Future<void> recordCardLearned(final DateTime date) async {
     final key = '$_learnedPrefix${_dateKey(date)}';
     final current = _sharedPreferences.getInt(key) ?? 0;
@@ -38,18 +37,9 @@ class StatisticService {
     _registerStudyToday();
   }
 
-  /// Записать, что карточка была повторена
+  /// Записать, что карточка была повторена (пользователь ответил Rating.Good)
   Future<void> recordCardRepeated(final DateTime date) async {
     final key = '$_repeatedPrefix${_dateKey(date)}';
-    final current = _sharedPreferences.getInt(key) ?? 0;
-    await _sharedPreferences.setInt(key, current + 1);
-    // Помечаем что сегодня учились
-    _registerStudyToday();
-  }
-
-  /// Записать, что карточка стала выученной (впервые достигла step >= 8)
-  Future<void> recordCardKnown(final DateTime date) async {
-    final key = '$_knownPrefix${_dateKey(date)}';
     final current = _sharedPreferences.getInt(key) ?? 0;
     await _sharedPreferences.setInt(key, current + 1);
     // Помечаем что сегодня учились
@@ -69,12 +59,6 @@ class StatisticService {
   /// Получить количество повторенных карточек за дату
   int getRepeatedCountForDate(final DateTime date) {
     final key = '$_repeatedPrefix${_dateKey(date)}';
-    return _sharedPreferences.getInt(key) ?? 0;
-  }
-
-  /// Получить количество выученных карточек за дату
-  int getKnownCountForDate(final DateTime date) {
-    final key = '$_knownPrefix${_dateKey(date)}';
     return _sharedPreferences.getInt(key) ?? 0;
   }
 
@@ -104,19 +88,6 @@ class StatisticService {
     return total;
   }
 
-  /// Получить количество выученных карточек за период
-  int getKnownCountForPeriod(final DateTime start, final DateTime end) {
-    var total = 0;
-    var current = DateTime(start.year, start.month, start.day);
-    final endDay = DateTime(end.year, end.month, end.day);
-
-    while (!current.isAfter(endDay)) {
-      total += getKnownCountForDate(current);
-      current = current.add(const Duration(days: 1));
-    }
-    return total;
-  }
-
   /// Получить статистику по массиву дат (для графиков)
   List<int> getLearnedCountsForDates(final List<DateTime> dates) {
     return dates.map((date) => getLearnedCountForDate(date)).toList();
@@ -125,11 +96,6 @@ class StatisticService {
   /// Получить статистику по массиву дат (для графиков)
   List<int> getRepeatedCountsForDates(final List<DateTime> dates) {
     return dates.map((date) => getRepeatedCountForDate(date)).toList();
-  }
-
-  /// Получить статистику по массиву дат (для графиков)
-  List<int> getKnownCountsForDates(final List<DateTime> dates) {
-    return dates.map((date) => getKnownCountForDate(date)).toList();
   }
 
   // ============================================================

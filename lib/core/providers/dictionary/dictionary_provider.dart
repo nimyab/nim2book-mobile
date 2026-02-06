@@ -15,7 +15,6 @@ class DictionaryNotifier extends Notifier<DictionaryState> {
     _dictionaryService = ref.read(dictionaryServiceProvider);
     return DictionaryState(
       savedCards: _dictionaryService.getMapDictionaryCard(),
-      dailyLimitNewWords: _dictionaryService.getDailyNewLimit(),
     );
   }
 
@@ -93,10 +92,28 @@ class DictionaryNotifier extends Notifier<DictionaryState> {
     return _dictionaryService.getDueCard(mode);
   }
 
-  /// Установить новый лимит новых слов в день
-  Future<void> setDailyNewLimit(int limit) async {
-    await _dictionaryService.setDailyNewLimit(limit);
-    state = state.copyWith(dailyLimitNewWords: limit);
+  /// Подсчитывает количество заученных карточек (в состоянии Review)
+  int countLearnedCards() {
+    return state.savedCards.values
+        .expand((cards) => cards)
+        .where((card) => card.fsrsCard.state == State.review)
+        .length;
+  }
+
+  /// Подсчитывает количество карточек в процессе обучения (Learning)
+  int countLearningCards() {
+    return state.savedCards.values
+        .expand((cards) => cards)
+        .where((card) => card.fsrsCard.state == State.learning)
+        .length;
+  }
+
+  /// Подсчитывает количество карточек на переобучении (Relearning)
+  int countRelearningCards() {
+    return state.savedCards.values
+        .expand((cards) => cards)
+        .where((card) => card.fsrsCard.state == State.relearning)
+        .length;
   }
 }
 

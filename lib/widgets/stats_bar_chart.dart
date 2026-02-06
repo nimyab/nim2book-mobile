@@ -5,28 +5,22 @@ import 'package:intl/intl.dart' as intl;
 class StatsBarChart extends StatelessWidget {
   final List<int> learned;
   final List<int> repeated;
-  final List<int> known;
   final List<DateTime> buckets;
   final Color learnedColor;
   final Color repeatedColor;
-  final Color knownColor;
   final String legendLearnedLabel;
   final String legendRepeatedLabel;
-  final String legendKnownLabel;
   final String? noResultsLabel;
 
   const StatsBarChart({
     super.key,
     required this.learned,
     required this.repeated,
-    required this.known,
     required this.buckets,
     required this.learnedColor,
     required this.repeatedColor,
-    required this.knownColor,
     required this.legendLearnedLabel,
     required this.legendRepeatedLabel,
-    required this.legendKnownLabel,
     this.noResultsLabel,
   });
 
@@ -51,11 +45,9 @@ class StatsBarChart extends StatelessWidget {
           );
     final maxLearned = maxOf(learned);
     final maxRepeated = maxOf(repeated);
-    final maxKnown = maxOf(known);
     final globalMax = [
       maxLearned,
       maxRepeated,
-      maxKnown,
     ].reduce((final a, final b) => a > b ? a : b);
     final chartMaxY = (globalMax == 0 ? 1 : globalMax).toDouble();
     final hasData = buckets.isNotEmpty && globalMax > 0;
@@ -212,17 +204,6 @@ class StatsBarChart extends StatelessWidget {
                             dotData: const FlDotData(show: false),
                             spots: List.generate(buckets.length, (final i) {
                               final y = (i < repeated.length ? repeated[i] : 0)
-                                  .toDouble();
-                              return FlSpot(i.toDouble(), y);
-                            }),
-                          ),
-                          LineChartBarData(
-                            color: knownColor,
-                            isCurved: false,
-                            barWidth: dynamicLineWidth,
-                            dotData: const FlDotData(show: false),
-                            spots: List.generate(buckets.length, (final i) {
-                              final y = (i < known.length ? known[i] : 0)
                                   .toDouble();
                               return FlSpot(i.toDouble(), y);
                             }),

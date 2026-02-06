@@ -6,7 +6,6 @@ part 'dictionary_state.freezed.dart';
 @freezed
 sealed class DictionaryState with _$DictionaryState {
   const factory DictionaryState({
-    required final int dailyLimitNewWords,
     @Default({}) final Map<String, List<DictionaryCard>> savedCards,
   }) = _DictionaryState;
 }

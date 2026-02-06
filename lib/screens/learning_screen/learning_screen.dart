@@ -93,7 +93,9 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
     final theme = Theme.of(context);
     final statistic = ref.watch(statisticServiceProvider);
     final dictionary = ref.watch(dictionaryServiceProvider);
-    final dictionaryState = ref.watch(dictionaryNotifierProvider);
+    final dictionaryStateNotifier = ref.watch(
+      dictionaryNotifierProvider.notifier,
+    );
     final statsState = ref.watch(statisticsNotifierProvider);
     final now = DateTime.now();
 
@@ -101,21 +103,18 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
     final allCards = savedCards.values.expand((cards) => cards).toList();
 
     var usedToday = statsState.dailyNewCount;
-    final dailyLimit = dictionaryState.dailyLimitNewWords;
 
     final reviewDueCount = dictionary.getReviewDueCount(allCards, now: now);
     final newDueLimited = dictionary.getNewDueCount(allCards, now: now);
-    final mixedDueCount = dictionary
-        .getDueCardsWithLimit(allCards, now: now)
-        .length;
 
     final hasNew = newDueLimited > 0;
     final hasReview = reviewDueCount > 0;
-    final hasMixed = mixedDueCount > 0;
 
-    var learnedTotal = dictionary.countLearnedCards(allCards);
-    var repeatedTotal = dictionary.countRepeatedCards(allCards);
-    var knownTotal = dictionary.countKnownCards(allCards);
+    var learnedTotal = dictionaryStateNotifier.countLearnedCards();
+    // Повторенные = все карточки, которые не новые (Review + Relearning)
+    var repeatedTotal =
+        dictionaryStateNotifier.countLearnedCards() +
+        dictionaryStateNotifier.countRelearningCards();
 
     final periodRange = computeRangeForCards(allCards, now, _period);
     final bucketDays = periodRange.bucketDays;
@@ -132,22 +131,12 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
       bucketDays,
       statistic,
     );
-    var knownByBucket = countKnownByBucketForCards(
-      allCards,
-      buckets,
-      bucketDays,
-      statistic,
-    );
 
     var periodFirstLearned = statistic.getLearnedCountForPeriod(
       periodRange.start,
       periodRange.end,
     );
     var periodRepeated = statistic.getRepeatedCountForPeriod(
-      periodRange.start,
-      periodRange.end,
-    );
-    var periodKnown = statistic.getKnownCountForPeriod(
       periodRange.start,
       periodRange.end,
     );
@@ -168,9 +157,6 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
       });
       final repeatedDaily = List<int>.generate(mockDays, (final i) {
         return (learnedDaily[i] ~/ 2) + rnd.nextInt(2);
-      });
-      final knownDaily = List<int>.generate(mockDays, (final i) {
-        return (learnedDaily[i] ~/ 3);
       });
 
       int idxOf(final DateTime d) {
@@ -203,11 +189,6 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
         final e = s.add(Duration(days: bucketDays - 1));
         return sumRange(s, e, repeatedDaily);
       });
-      knownByBucket = List<int>.generate(buckets.length, (final i) {
-        final s = buckets[i];
-        final e = s.add(Duration(days: bucketDays - 1));
-        return sumRange(s, e, knownDaily);
-      });
 
       // Дополнительно мокируем агрегаты для статистики
       final totalLearned = learnedDaily.fold<int>(
@@ -218,7 +199,6 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
         0,
         (final a, final b) => a + b,
       );
-      final totalKnown = knownDaily.fold<int>(0, (final a, final b) => a + b);
 
       final periodLearnedSum = sumRange(
         effectiveStart,
@@ -230,22 +210,15 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
         periodRange.end,
         repeatedDaily,
       );
-      final periodKnownSum = sumRange(
-        effectiveStart,
-        periodRange.end,
-        knownDaily,
-      );
 
       learnedTotal = totalLearned;
       repeatedTotal = totalRepeated;
-      knownTotal = totalKnown;
 
       usedToday = sumRange(today, today, learnedDaily);
 
       // Периодические значения для правой колонки статистики
       periodFirstLearned = periodLearnedSum;
       periodRepeated = periodRepeatedSum;
-      periodKnown = periodKnownSum;
     }
 
     return Scaffold(
@@ -278,7 +251,8 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
                 ),
                 title: Text(l10n.learnNewWords),
                 subtitle: Text(
-                  l10n.learnedTodayProgress(usedToday, dailyLimit),
+                  // TODO
+                  l10n.learnedTodayProgress(usedToday, 15),
                 ),
                 onTap: () {
                   if (!hasNew) {
@@ -322,24 +296,9 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
             const SizedBox(height: 8),
             Card(
               child: ListTile(
-                leading: Icon(
-                  Icons.auto_awesome_motion_outlined,
-                  color: hasMixed
-                      ? null
-                      : theme.colorScheme.onSurfaceVariant.withValues(
-                          alpha: 0.38,
-                        ),
-                ),
+                leading: const Icon(Icons.auto_awesome_motion_outlined),
                 title: Text(l10n.mixedMode),
                 onTap: () {
-                  if (!hasMixed) {
-                    final messenger = ScaffoldMessenger.of(context);
-                    messenger.clearSnackBars();
-                    messenger.showSnackBar(
-                      SnackBar(content: Text(l10n.noMixedSessionAvailable)),
-                    );
-                    return;
-                  }
                   context.push('/learning-session/mixed');
                 },
               ),
@@ -384,7 +343,6 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
                       child: StatsBarChart(
                         learned: learnedByBucket,
                         repeated: repeatedByBucket,
-                        known: knownByBucket,
                         buckets: buckets,
                         learnedColor: Theme.of(
                           context,
@@ -392,12 +350,8 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
                         repeatedColor: Theme.of(
                           context,
                         ).extension<ChartColors>()!.repeated,
-                        knownColor: Theme.of(
-                          context,
-                        ).extension<ChartColors>()!.known,
                         legendLearnedLabel: l10n.chartLegendLearned,
                         legendRepeatedLabel: l10n.chartLegendRepeated,
-                        legendKnownLabel: l10n.chartLegendKnown,
                         noResultsLabel: l10n.noResults,
                       ),
                     ),
@@ -411,7 +365,8 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  l10n.learnedTodayProgress(usedToday, dailyLimit),
+                  // TODO
+                  l10n.learnedTodayProgress(usedToday, 15),
                   style: theme.textTheme.titleMedium,
                 ),
               ),
@@ -541,48 +496,6 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Container(
-                          width: 10,
-                          height: 10,
-                          margin: const EdgeInsets.only(right: 8),
-                          decoration: BoxDecoration(
-                            color: Theme.of(
-                              context,
-                            ).extension<ChartColors>()!.known,
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                        ),
-                        Expanded(
-                          child: Text(
-                            l10n.chartLegendKnown,
-                            style: theme.textTheme.bodyMedium,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 64,
-                          child: Text(
-                            '$knownTotal',
-                            textAlign: TextAlign.right,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 64,
-                          child: Text(
-                            '$periodKnown',
-                            textAlign: TextAlign.right,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),
@@ -657,22 +570,6 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
       final start = buckets[i];
       final end = start.add(Duration(days: bucketDays - 1));
       final c = statistic.getLearnedCountForPeriod(start, end);
-      counts[i] = c;
-    }
-    return counts;
-  }
-
-  List<int> countKnownByBucketForCards(
-    final List<DictionaryCard> cards,
-    final List<DateTime> buckets,
-    final int bucketDays,
-    final StatisticService statistic,
-  ) {
-    final counts = List<int>.filled(buckets.length, 0);
-    for (var i = 0; i < buckets.length; i++) {
-      final start = buckets[i];
-      final end = start.add(Duration(days: bucketDays - 1));
-      final c = statistic.getKnownCountForPeriod(start, end);
       counts[i] = c;
     }
     return counts;
