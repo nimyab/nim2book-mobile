@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$StatisticsState {
 
- int get currentStreak; int get longestStreak; int get dailyNewCount;
+ int get countLearnedCards; int get countLearningCards; int get countRelearningCards;
 /// Create a copy of StatisticsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $StatisticsStateCopyWith<StatisticsState> get copyWith => _$StatisticsStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is StatisticsState&&(identical(other.currentStreak, currentStreak) || other.currentStreak == currentStreak)&&(identical(other.longestStreak, longestStreak) || other.longestStreak == longestStreak)&&(identical(other.dailyNewCount, dailyNewCount) || other.dailyNewCount == dailyNewCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is StatisticsState&&(identical(other.countLearnedCards, countLearnedCards) || other.countLearnedCards == countLearnedCards)&&(identical(other.countLearningCards, countLearningCards) || other.countLearningCards == countLearningCards)&&(identical(other.countRelearningCards, countRelearningCards) || other.countRelearningCards == countRelearningCards));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentStreak,longestStreak,dailyNewCount);
+int get hashCode => Object.hash(runtimeType,countLearnedCards,countLearningCards,countRelearningCards);
 
 @override
 String toString() {
-  return 'StatisticsState(currentStreak: $currentStreak, longestStreak: $longestStreak, dailyNewCount: $dailyNewCount)';
+  return 'StatisticsState(countLearnedCards: $countLearnedCards, countLearningCards: $countLearningCards, countRelearningCards: $countRelearningCards)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $StatisticsStateCopyWith<$Res>  {
   factory $StatisticsStateCopyWith(StatisticsState value, $Res Function(StatisticsState) _then) = _$StatisticsStateCopyWithImpl;
 @useResult
 $Res call({
- int currentStreak, int longestStreak, int dailyNewCount
+ int countLearnedCards, int countLearningCards, int countRelearningCards
 });
 
 
@@ -62,11 +62,11 @@ class _$StatisticsStateCopyWithImpl<$Res>
 
 /// Create a copy of StatisticsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? currentStreak = null,Object? longestStreak = null,Object? dailyNewCount = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? countLearnedCards = null,Object? countLearningCards = null,Object? countRelearningCards = null,}) {
   return _then(_self.copyWith(
-currentStreak: null == currentStreak ? _self.currentStreak : currentStreak // ignore: cast_nullable_to_non_nullable
-as int,longestStreak: null == longestStreak ? _self.longestStreak : longestStreak // ignore: cast_nullable_to_non_nullable
-as int,dailyNewCount: null == dailyNewCount ? _self.dailyNewCount : dailyNewCount // ignore: cast_nullable_to_non_nullable
+countLearnedCards: null == countLearnedCards ? _self.countLearnedCards : countLearnedCards // ignore: cast_nullable_to_non_nullable
+as int,countLearningCards: null == countLearningCards ? _self.countLearningCards : countLearningCards // ignore: cast_nullable_to_non_nullable
+as int,countRelearningCards: null == countRelearningCards ? _self.countRelearningCards : countRelearningCards // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }
@@ -149,10 +149,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int currentStreak,  int longestStreak,  int dailyNewCount)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int countLearnedCards,  int countLearningCards,  int countRelearningCards)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _StatisticsState() when $default != null:
-return $default(_that.currentStreak,_that.longestStreak,_that.dailyNewCount);case _:
+return $default(_that.countLearnedCards,_that.countLearningCards,_that.countRelearningCards);case _:
   return orElse();
 
 }
@@ -170,10 +170,10 @@ return $default(_that.currentStreak,_that.longestStreak,_that.dailyNewCount);cas
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int currentStreak,  int longestStreak,  int dailyNewCount)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int countLearnedCards,  int countLearningCards,  int countRelearningCards)  $default,) {final _that = this;
 switch (_that) {
 case _StatisticsState():
-return $default(_that.currentStreak,_that.longestStreak,_that.dailyNewCount);}
+return $default(_that.countLearnedCards,_that.countLearningCards,_that.countRelearningCards);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -187,10 +187,10 @@ return $default(_that.currentStreak,_that.longestStreak,_that.dailyNewCount);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int currentStreak,  int longestStreak,  int dailyNewCount)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int countLearnedCards,  int countLearningCards,  int countRelearningCards)?  $default,) {final _that = this;
 switch (_that) {
 case _StatisticsState() when $default != null:
-return $default(_that.currentStreak,_that.longestStreak,_that.dailyNewCount);case _:
+return $default(_that.countLearnedCards,_that.countLearningCards,_that.countRelearningCards);case _:
   return null;
 
 }
@@ -202,12 +202,12 @@ return $default(_that.currentStreak,_that.longestStreak,_that.dailyNewCount);cas
 
 
 class _StatisticsState implements StatisticsState {
-  const _StatisticsState({this.currentStreak = 0, this.longestStreak = 0, this.dailyNewCount = 0});
+  const _StatisticsState({this.countLearnedCards = 0, this.countLearningCards = 0, this.countRelearningCards = 0});
   
 
-@override@JsonKey() final  int currentStreak;
-@override@JsonKey() final  int longestStreak;
-@override@JsonKey() final  int dailyNewCount;
+@override@JsonKey() final  int countLearnedCards;
+@override@JsonKey() final  int countLearningCards;
+@override@JsonKey() final  int countRelearningCards;
 
 /// Create a copy of StatisticsState
 /// with the given fields replaced by the non-null parameter values.
@@ -219,16 +219,16 @@ _$StatisticsStateCopyWith<_StatisticsState> get copyWith => __$StatisticsStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StatisticsState&&(identical(other.currentStreak, currentStreak) || other.currentStreak == currentStreak)&&(identical(other.longestStreak, longestStreak) || other.longestStreak == longestStreak)&&(identical(other.dailyNewCount, dailyNewCount) || other.dailyNewCount == dailyNewCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StatisticsState&&(identical(other.countLearnedCards, countLearnedCards) || other.countLearnedCards == countLearnedCards)&&(identical(other.countLearningCards, countLearningCards) || other.countLearningCards == countLearningCards)&&(identical(other.countRelearningCards, countRelearningCards) || other.countRelearningCards == countRelearningCards));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentStreak,longestStreak,dailyNewCount);
+int get hashCode => Object.hash(runtimeType,countLearnedCards,countLearningCards,countRelearningCards);
 
 @override
 String toString() {
-  return 'StatisticsState(currentStreak: $currentStreak, longestStreak: $longestStreak, dailyNewCount: $dailyNewCount)';
+  return 'StatisticsState(countLearnedCards: $countLearnedCards, countLearningCards: $countLearningCards, countRelearningCards: $countRelearningCards)';
 }
 
 
@@ -239,7 +239,7 @@ abstract mixin class _$StatisticsStateCopyWith<$Res> implements $StatisticsState
   factory _$StatisticsStateCopyWith(_StatisticsState value, $Res Function(_StatisticsState) _then) = __$StatisticsStateCopyWithImpl;
 @override @useResult
 $Res call({
- int currentStreak, int longestStreak, int dailyNewCount
+ int countLearnedCards, int countLearningCards, int countRelearningCards
 });
 
 
@@ -256,11 +256,11 @@ class __$StatisticsStateCopyWithImpl<$Res>
 
 /// Create a copy of StatisticsState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? currentStreak = null,Object? longestStreak = null,Object? dailyNewCount = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? countLearnedCards = null,Object? countLearningCards = null,Object? countRelearningCards = null,}) {
   return _then(_StatisticsState(
-currentStreak: null == currentStreak ? _self.currentStreak : currentStreak // ignore: cast_nullable_to_non_nullable
-as int,longestStreak: null == longestStreak ? _self.longestStreak : longestStreak // ignore: cast_nullable_to_non_nullable
-as int,dailyNewCount: null == dailyNewCount ? _self.dailyNewCount : dailyNewCount // ignore: cast_nullable_to_non_nullable
+countLearnedCards: null == countLearnedCards ? _self.countLearnedCards : countLearnedCards // ignore: cast_nullable_to_non_nullable
+as int,countLearningCards: null == countLearningCards ? _self.countLearningCards : countLearningCards // ignore: cast_nullable_to_non_nullable
+as int,countRelearningCards: null == countRelearningCards ? _self.countRelearningCards : countRelearningCards // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }

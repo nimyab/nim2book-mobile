@@ -6,7 +6,6 @@ import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_c
 import 'package:nim2book_mobile_flutter/core/models/learning/learning_mode.dart';
 import 'package:nim2book_mobile_flutter/core/models/requests/requests.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
-import 'package:nim2book_mobile_flutter/core/services/statistic_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
@@ -18,15 +17,9 @@ class DictionaryService {
   final Talker _logger;
   final ApiClient _apiClient;
   final SharedPreferences _sharedPreferences;
-  final StatisticService _statisticService;
   final _scheduler = Scheduler();
 
-  DictionaryService(
-    this._logger,
-    this._apiClient,
-    this._sharedPreferences,
-    this._statisticService,
-  );
+  DictionaryService(this._logger, this._apiClient, this._sharedPreferences);
 
   static const _dictionaryPrefix = 'dictionary_card_';
 
@@ -200,32 +193,12 @@ class DictionaryService {
     required DictionaryCard card,
     required Rating rating,
   }) async {
-    final now = DateTime.now();
-    final oldState = card.fsrsCard.state;
-
     // Используем Scheduler для расчета следующего повторения
     final result = _scheduler.reviewCard(card.fsrsCard, rating);
     final updatedCard = card.copyWith(fsrsCard: result.card);
-    final newState = updatedCard.fsrsCard.state;
 
     // Сохраняем обновленную карточку
     await _updateCard(updatedCard);
-
-    // Записываем статистику
-    // 1. Если карточка была новой и пользователь дал правильный ответ
-    if (oldState == State.learning && rating != Rating.again) {
-      _statisticService.incrementDailyNewCount();
-    }
-
-    // 2. Записываем повторение, если пользователь ответил Good
-    if (rating == Rating.good) {
-      await _statisticService.recordCardRepeated(now);
-    }
-
-    // 3. Если карточка перешла из Learning в Review ("выпустилась")
-    if (oldState == State.learning && newState == State.review) {
-      await _statisticService.recordCardLearned(now);
-    }
 
     return updatedCard;
   }

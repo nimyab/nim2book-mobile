@@ -91,30 +91,6 @@ class DictionaryNotifier extends Notifier<DictionaryState> {
   DictionaryCard? getDueCard(LearningMode mode) {
     return _dictionaryService.getDueCard(mode);
   }
-
-  /// Подсчитывает количество заученных карточек (в состоянии Review)
-  int countLearnedCards() {
-    return state.savedCards.values
-        .expand((cards) => cards)
-        .where((card) => card.fsrsCard.state == State.review)
-        .length;
-  }
-
-  /// Подсчитывает количество карточек в процессе обучения (Learning)
-  int countLearningCards() {
-    return state.savedCards.values
-        .expand((cards) => cards)
-        .where((card) => card.fsrsCard.state == State.learning)
-        .length;
-  }
-
-  /// Подсчитывает количество карточек на переобучении (Relearning)
-  int countRelearningCards() {
-    return state.savedCards.values
-        .expand((cards) => cards)
-        .where((card) => card.fsrsCard.state == State.relearning)
-        .length;
-  }
 }
 
 final dictionaryNotifierProvider =

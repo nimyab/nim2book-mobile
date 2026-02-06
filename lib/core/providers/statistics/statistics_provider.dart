@@ -1,36 +1,39 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fsrs/fsrs.dart';
+import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
+import 'package:nim2book_mobile_flutter/core/providers/dictionary/dictionary_provider.dart';
 import 'package:nim2book_mobile_flutter/core/providers/statistics/statistics_state.dart';
-import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
-import 'package:nim2book_mobile_flutter/core/services/statistic_service.dart';
 
 class StatisticsNotifier extends Notifier<StatisticsState> {
-  late final StatisticService _statisticService;
-
   @override
   StatisticsState build() {
-    _statisticService = ref.watch(statisticServiceProvider);
-    return _loadStatistics();
-  }
-
-  StatisticsState _loadStatistics() {
-    final currentStreak = _statisticService.getStudyStreakDays();
-    final longestStreak = _statisticService.getStudyStreakRecord();
-    final dailyNewCount = _statisticService.getDailyNewCount();
-
+    final cards = ref
+        .watch(dictionaryCardsProvider)
+        .values
+        .expand((cards) => cards)
+        .toList();
     return StatisticsState(
-      currentStreak: currentStreak,
-      longestStreak: longestStreak,
-      dailyNewCount: dailyNewCount,
+      countLearnedCards: _countLearnedCards(cards),
+      countLearningCards: _countLearningCards(cards),
+      countRelearningCards: _countRelearningCards(cards),
     );
   }
 
-  void incrementDailyNewCount() {
-    _statisticService.incrementDailyNewCount();
-    state = _loadStatistics();
+  /// Подсчитывает количество заученных карточек (в состоянии Review)
+  int _countLearnedCards(List<DictionaryCard> cards) {
+    return cards.where((card) => card.fsrsCard.state == State.review).length;
   }
 
-  void refresh() {
-    state = _loadStatistics();
+  /// Подсчитывает количество карточек в процессе обучения (Learning)
+  int _countLearningCards(List<DictionaryCard> cards) {
+    return cards.where((card) => card.fsrsCard.state == State.learning).length;
+  }
+
+  /// Подсчитывает количество карточек на переобучении (Relearning)
+  int _countRelearningCards(List<DictionaryCard> cards) {
+    return cards
+        .where((card) => card.fsrsCard.state == State.relearning)
+        .length;
   }
 }
 

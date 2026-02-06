@@ -8,7 +8,6 @@ import 'package:nim2book_mobile_flutter/core/services/dictionary_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/locale_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/fmc_token_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/onboarding_service.dart';
-import 'package:nim2book_mobile_flutter/core/services/statistic_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/theme_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/tts_service.dart';
@@ -74,15 +73,15 @@ final dictionaryServiceProvider = Provider<DictionaryService>((ref) {
   final talker = ref.watch(talkerProvider);
   final apiClient = ref.watch(apiClientProvider);
   final sharedPreferences = ref.watch(sharedPreferencesProvider);
-  final statisticService = ref.watch(statisticServiceProvider);
-  return DictionaryService(talker, apiClient, sharedPreferences, statisticService);
+  return DictionaryService(talker, apiClient, sharedPreferences);
 });
 
 // StatisticService provider
-final statisticServiceProvider = Provider<StatisticService>((ref) {
-  final sharedPreferences = ref.watch(sharedPreferencesProvider);
-  return StatisticService(sharedPreferences);
-});
+// todo: пока этот провайдер не нужен, так как будет переписываться работа с карточками
+// final statisticServiceProvider = Provider<StatisticService>((ref) {
+//   final sharedPreferences = ref.watch(sharedPreferencesProvider);
+//   return StatisticService(sharedPreferences);
+// });
 
 // ReadingSettingsService provider
 final readingSettingsServiceProvider = Provider<ReadingSettingsService>((ref) {
