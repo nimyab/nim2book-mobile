@@ -1,5 +1,0 @@
-blank_issues_enabled: false
-contact_links:
-  - name: 🔐 Сообщить об уязвимости
-    url: https://github.com/nimyab/nim2book-mobile/security/policy
-    about: Используйте SECURITY.md для приватного репортинга.
