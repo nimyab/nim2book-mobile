@@ -62,6 +62,9 @@ dependencies:
   talker_dio_logger: ^5.1.13
 
   fsrs: ^2.0.1
+  drift: ^2.31.0
+  drift_flutter: ^0.2.8
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
@@ -73,11 +76,12 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
-  build_runner: ^2.7.1
+  build_runner: ^2.11.0
   freezed: ^3.2.0
   json_serializable: ^6.11.0
   custom_lint: ^0.8.1
   flutter_launcher_icons: ^0.14.4
+  drift_dev: ^2.31.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

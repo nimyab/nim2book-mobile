@@ -2,12 +2,13 @@ import 'dart:convert';
 
 import 'package:fsrs/fsrs.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
+import 'package:nim2book_mobile_flutter/core/database/database.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
 import 'package:nim2book_mobile_flutter/core/models/learning/learning_mode.dart';
 import 'package:nim2book_mobile_flutter/core/models/requests/requests.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talker_flutter/talker_flutter.dart';
+import 'package:drift/drift.dart' as drift;
 
 const _fromLang = 'en';
 const _toLang = 'ru';
@@ -16,15 +17,10 @@ const _ui = 'ru';
 class DictionaryService {
   final Talker _logger;
   final ApiClient _apiClient;
-  final SharedPreferences _sharedPreferences;
+  final Database _database;
   final _scheduler = Scheduler();
 
-  DictionaryService(this._logger, this._apiClient, this._sharedPreferences);
-
-  static const _dictionaryPrefix = 'dictionary_card_';
-
-  static String _getWordKey(final String word, final String partOfSpeech) =>
-      '$_dictionaryPrefix${word}_$partOfSpeech';
+  DictionaryService(this._logger, this._apiClient, this._database);
 
   Future<DictionaryCard?> saveWord(final DictionaryWord word) async {
     try {
@@ -44,11 +40,17 @@ class DictionaryService {
 
   Future<bool> _updateCard(final DictionaryCard card) async {
     try {
-      final dictionaryCardJson = jsonEncode(card.toJson());
-      return _sharedPreferences.setString(
-        _getWordKey(card.wordData.text, card.wordData.partOfSpeech),
-        dictionaryCardJson,
-      );
+      await _database
+          .into(_database.dictionaryCardsTable)
+          .insertOnConflictUpdate(
+            DictionaryCardsTableCompanion.insert(
+              word: card.wordData.text,
+              partOfSpeech: card.wordData.partOfSpeech,
+              wordDataJson: jsonEncode(card.wordData.toJson()),
+              fsrsCardJson: jsonEncode(card.fsrsCard.toMap()),
+            ),
+          );
+      return true;
     } catch (e) {
       _logger.error(
         'Error updating card for word ${card.wordData.text} '
@@ -60,20 +62,42 @@ class DictionaryService {
 
   Future<bool> deleteWord(final String word, final String partOfSpeech) async {
     try {
-      return _sharedPreferences.remove(_getWordKey(word, partOfSpeech));
+      await (_database.delete(_database.dictionaryCardsTable)..where(
+            (tbl) =>
+                tbl.word.equals(word) & tbl.partOfSpeech.equals(partOfSpeech),
+          ))
+          .go();
+      return true;
     } catch (e) {
       _logger.error('Error deleting word $word with pos $partOfSpeech: $e');
       return false;
     }
   }
 
-  DictionaryCard? _getDictionaryCard(final String key) {
+  Future<DictionaryCard?> _getDictionaryCard(
+    final String word,
+    final String partOfSpeech,
+  ) async {
     try {
-      final dictionaryCardJson = _sharedPreferences.getString(key);
-      if (dictionaryCardJson == null) return null;
-      return DictionaryCard.fromJson(jsonDecode(dictionaryCardJson));
+      final result =
+          await (_database.select(_database.dictionaryCardsTable)..where(
+                (tbl) => drift.Expression.and([
+                  tbl.word.equals(word),
+                  tbl.partOfSpeech.equals(partOfSpeech),
+                ]),
+              ))
+              .getSingleOrNull();
+
+      if (result == null) return null;
+
+      return DictionaryCard(
+        wordData: DictionaryWord.fromJson(jsonDecode(result.wordDataJson)),
+        fsrsCard: Card.fromMap(jsonDecode(result.fsrsCardJson)),
+      );
     } catch (e) {
-      _logger.error('Error retrieving single word $key: $e');
+      _logger.error(
+        'Error retrieving single word $word with pos $partOfSpeech: $e',
+      );
       return null;
     }
   }
@@ -95,52 +119,39 @@ class DictionaryService {
     }
   }
 
-  bool checkDictionaryCardInDict(final String word, final String partOfSpeech) {
-    final key = _getWordKey(word, partOfSpeech);
-    return _sharedPreferences.containsKey(key);
-  }
-
-  Map<String, List<DictionaryCard>> getMapDictionaryCard() {
+  Future<bool> checkDictionaryCardInDict(
+    final String word,
+    final String partOfSpeech,
+  ) async {
     try {
-      final keys = _sharedPreferences.getKeys();
-      final allCards = <String, List<DictionaryCard>>{};
-
-      for (var key in keys) {
-        if (key.startsWith(_dictionaryPrefix)) {
-          final card = _getDictionaryCard(key);
-          if (card != null) {
-            final word = card.wordData.text;
-            if (!allCards.containsKey(word)) {
-              allCards[word] = [];
-            }
-            // Check if this word+pos combination already exists
-            final exists = allCards[word]!.any(
-              (w) => w.wordData.partOfSpeech == card.wordData.partOfSpeech,
-            );
-            if (!exists) {
-              allCards[word]!.add(card);
-            }
-          }
-        }
-      }
-
-      return allCards;
+      final result =
+          await (_database.select(_database.dictionaryCardsTable)..where(
+                (tbl) => drift.Expression.and([
+                  tbl.word.equals(word),
+                  tbl.partOfSpeech.equals(partOfSpeech),
+                ]),
+              ))
+              .getSingleOrNull();
+      return result != null;
     } catch (e) {
-      _logger.error('Error retrieving all words: $e');
-      return {};
+      _logger.error('Error checking word $word with pos $partOfSpeech: $e');
+      return false;
     }
   }
 
-  List<DictionaryCard> getListDictionaryCard() {
+  Future<List<DictionaryCard>> getListDictionaryCard() async {
     try {
-      final keys = _sharedPreferences.getKeys();
+      final results = await _database
+          .select(_database.dictionaryCardsTable)
+          .get();
       final allCards = <DictionaryCard>[];
 
-      for (var key in keys) {
-        if (key.startsWith(_dictionaryPrefix)) {
-          final card = _getDictionaryCard(key);
-          if (card != null) allCards.add(card);
-        }
+      for (var result in results) {
+        final card = DictionaryCard(
+          wordData: DictionaryWord.fromJson(jsonDecode(result.wordDataJson)),
+          fsrsCard: Card.fromMap(jsonDecode(result.fsrsCardJson)),
+        );
+        allCards.add(card);
       }
 
       return allCards;
@@ -150,18 +161,17 @@ class DictionaryService {
     }
   }
 
-  DictionaryCard? getDictionaryCard(
+  Future<DictionaryCard?> getDictionaryCard(
     final String word,
     final String partOfSpeech,
-  ) {
-    final key = _getWordKey(word, partOfSpeech);
-    return _getDictionaryCard(key);
+  ) async {
+    return _getDictionaryCard(word, partOfSpeech);
   }
 
   /// Получить карточки, которые нужно повторить сейчас
-  List<DictionaryCard> getDueCards({DateTime? now}) {
+  Future<List<DictionaryCard>> getDueCards({DateTime? now}) async {
     final reviewTime = now ?? DateTime.now().toUtc();
-    final cards = getListDictionaryCard();
+    final cards = await getListDictionaryCard();
 
     return cards.where((card) {
       return card.fsrsCard.due.isBefore(reviewTime) ||
@@ -170,13 +180,14 @@ class DictionaryService {
   }
 
   /// Получить количество карточек для повторения
-  int getDueCardsCount({DateTime? now}) {
-    return getDueCards(now: now).length;
+  Future<int> getDueCardsCount({DateTime? now}) async {
+    final dueCards = await getDueCards(now: now);
+    return dueCards.length;
   }
 
   /// Получить одну карточку для повторения, которая должна быть повторена первой
-  DictionaryCard? getDueCard(LearningMode mode) {
-    final dueCards = getDueCards();
+  Future<DictionaryCard?> getDueCard(LearningMode mode) async {
+    final dueCards = await getDueCards();
     if (dueCards.isEmpty) return null;
     dueCards.sort((a, b) => a.fsrsCard.due.compareTo(b.fsrsCard.due));
     return dueCards.first;

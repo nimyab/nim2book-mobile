@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
+import 'package:nim2book_mobile_flutter/core/database/database.dart';
 import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/services/book_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/dictionary_service.dart';
@@ -26,6 +27,11 @@ final talkerProvider = Provider<Talker>((ref) {
 // SharedPreferences provider
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError('talkerProvider must be overridden');
+});
+
+// AppDatabase provider
+final appDatabaseProvider = Provider<Database>((ref) {
+  return Database();
 });
 
 // TokenService provider
@@ -72,8 +78,8 @@ final fcmTokenServiceProvider = Provider<FcmTokenService>((ref) {
 final dictionaryServiceProvider = Provider<DictionaryService>((ref) {
   final talker = ref.watch(talkerProvider);
   final apiClient = ref.watch(apiClientProvider);
-  final sharedPreferences = ref.watch(sharedPreferencesProvider);
-  return DictionaryService(talker, apiClient, sharedPreferences);
+  final database = ref.watch(appDatabaseProvider);
+  return DictionaryService(talker, apiClient, database);
 });
 
 // StatisticService provider

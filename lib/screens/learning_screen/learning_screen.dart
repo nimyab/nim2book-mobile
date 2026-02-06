@@ -30,7 +30,7 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
     final now = DateTime.now();
 
     // Преобразуем Map в плоский список карточек
-    final allCards = savedCards.values.expand((cards) => cards).toList();
+    final allCards = savedCards;
 
     final reviewDueCount = dictionary.getReviewDueCount(allCards, now: now);
     final newDueCount = dictionary.getNewDueCount(allCards, now: now);

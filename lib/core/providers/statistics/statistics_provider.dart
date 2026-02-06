@@ -7,11 +7,8 @@ import 'package:nim2book_mobile_flutter/core/providers/statistics/statistics_sta
 class StatisticsNotifier extends Notifier<StatisticsState> {
   @override
   StatisticsState build() {
-    final cards = ref
-        .watch(dictionaryCardsProvider)
-        .values
-        .expand((cards) => cards)
-        .toList();
+    final cards = ref.watch(dictionaryCardsProvider);
+
     return StatisticsState(
       countLearnedCards: _countLearnedCards(cards),
       countLearningCards: _countLearningCards(cards),

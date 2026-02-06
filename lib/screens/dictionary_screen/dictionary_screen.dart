@@ -20,7 +20,7 @@ class DictionaryScreen extends ConsumerWidget {
       body: SafeArea(
         child: Column(
           children: [
-            if (savedCards.isNotEmpty) ReviewDueHeader(savedCards: savedCards),
+            const ReviewDueHeader(),
             Expanded(
               child: savedCards.isEmpty
                   ? const EmptyDictionaryState()

@@ -13,9 +13,14 @@ class DictionaryNotifier extends Notifier<DictionaryState> {
   @override
   DictionaryState build() {
     _dictionaryService = ref.read(dictionaryServiceProvider);
-    return DictionaryState(
-      savedCards: _dictionaryService.getMapDictionaryCard(),
-    );
+    // Load initial data asynchronously
+    _loadInitialData();
+    return const DictionaryState(savedCards: []);
+  }
+
+  Future<void> _loadInitialData() async {
+    final cards = await _dictionaryService.getListDictionaryCard();
+    state = state.copyWith(savedCards: cards);
   }
 
   Future<bool> saveWord(
@@ -24,17 +29,25 @@ class DictionaryNotifier extends Notifier<DictionaryState> {
   ) async {
     final dictionaryCard = await _dictionaryService.saveWord(wordData);
     if (dictionaryCard != null) {
-      final updated = Map<String, List<DictionaryCard>>.from(state.savedCards);
-      if (!updated.containsKey(word)) {
-        updated[word] = [];
+      if (state.savedCards.any(
+        (e) =>
+            e.wordData.text == wordData.text &&
+            e.wordData.partOfSpeech == wordData.partOfSpeech,
+      )) {
+        // Если карточка уже существует, обновляем её
+        final updatedCards = state.savedCards.map((card) {
+          if (card.wordData.text == wordData.text &&
+              card.wordData.partOfSpeech == wordData.partOfSpeech) {
+            return dictionaryCard;
+          }
+          return card;
+        }).toList();
+        state = state.copyWith(savedCards: updatedCards);
+      } else {
+        // Если карточки нет, добавляем её в список
+        final updated = [...state.savedCards, dictionaryCard];
+        state = state.copyWith(savedCards: updated);
       }
-      // Remove existing word with same partOfSpeech if any
-      updated[word]!.removeWhere(
-        (w) => w.wordData.partOfSpeech == wordData.partOfSpeech,
-      );
-      // Add new word
-      updated[word]!.add(dictionaryCard);
-      state = state.copyWith(savedCards: updated);
     }
     return dictionaryCard != null;
   }
@@ -42,36 +55,42 @@ class DictionaryNotifier extends Notifier<DictionaryState> {
   Future<bool> deleteWord(final String word, final String partOfSpeech) async {
     final ok = await _dictionaryService.deleteWord(word, partOfSpeech);
     if (ok) {
-      final updated = Map<String, List<DictionaryCard>>.from(state.savedCards);
-      if (updated.containsKey(word)) {
-        updated[word]!.removeWhere(
-          (w) => w.wordData.partOfSpeech == partOfSpeech,
-        );
-        if (updated[word]!.isEmpty) {
-          updated.remove(word);
-        }
-      }
+      final updated = state.savedCards
+          .where(
+            (card) =>
+                !(card.wordData.text == word &&
+                    card.wordData.partOfSpeech == partOfSpeech),
+          )
+          .toList();
       state = state.copyWith(savedCards: updated);
     }
     return ok;
   }
 
   Future<List<DictionaryWord>?> getWordLocalFirst(final String word) async {
-    final saved = state.savedCards[word];
-    if (saved != null) return saved.map((e) => e.wordData).toList();
+    final saved = state.savedCards
+        .where((card) => card.wordData.text == word)
+        .toList();
+    if (saved.isNotEmpty) return saved.map((e) => e.wordData).toList();
     return _dictionaryService.getWord(word);
   }
 
   Future<List<DictionaryWord>?> getWordServiceFirst(final String word) async {
     final wordFromServer = await _dictionaryService.getWord(word);
     if (wordFromServer != null) return wordFromServer;
-    return state.savedCards[word]?.map((e) => e.wordData).toList();
+    return state.savedCards
+        .where((card) => card.wordData.text == word)
+        .map((e) => e.wordData)
+        .toList();
   }
 
-  bool checkWordInDict(final String word, final String partOfSpeech) {
-    final words = state.savedCards[word];
-    if (words == null) return false;
-    return words.any((w) => w.wordData.partOfSpeech == partOfSpeech);
+  Future<bool> checkWordInDict(
+    final String word,
+    final String partOfSpeech,
+  ) async {
+    return state.savedCards.any(
+      (w) => w.wordData.partOfSpeech == partOfSpeech && w.wordData.text == word,
+    );
   }
 
   /// Обновить карточку после ответа пользователя на карточку в учебной сессии
@@ -88,7 +107,7 @@ class DictionaryNotifier extends Notifier<DictionaryState> {
   }
 
   /// Получить одну карточку для повторения, которая должна быть повторена первой
-  DictionaryCard? getDueCard(LearningMode mode) {
+  Future<DictionaryCard?> getDueCard(LearningMode mode) async {
     return _dictionaryService.getDueCard(mode);
   }
 }
@@ -98,9 +117,7 @@ final dictionaryNotifierProvider =
       DictionaryNotifier.new,
     );
 
-final dictionaryCardsProvider = Provider<Map<String, List<DictionaryCard>>>((
-  ref,
-) {
+final dictionaryCardsProvider = Provider<List<DictionaryCard>>((ref) {
   return ref.watch(
     dictionaryNotifierProvider.select((state) => state.savedCards),
   );

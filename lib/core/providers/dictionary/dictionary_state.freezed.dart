@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DictionaryState {
 
- Map<String, List<DictionaryCard>> get savedCards;
+ List<DictionaryCard> get savedCards;
 /// Create a copy of DictionaryState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $DictionaryStateCopyWith<$Res>  {
   factory $DictionaryStateCopyWith(DictionaryState value, $Res Function(DictionaryState) _then) = _$DictionaryStateCopyWithImpl;
 @useResult
 $Res call({
- Map<String, List<DictionaryCard>> savedCards
+ List<DictionaryCard> savedCards
 });
 
 
@@ -65,7 +65,7 @@ class _$DictionaryStateCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? savedCards = null,}) {
   return _then(_self.copyWith(
 savedCards: null == savedCards ? _self.savedCards : savedCards // ignore: cast_nullable_to_non_nullable
-as Map<String, List<DictionaryCard>>,
+as List<DictionaryCard>,
   ));
 }
 
@@ -147,7 +147,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Map<String, List<DictionaryCard>> savedCards)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<DictionaryCard> savedCards)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DictionaryState() when $default != null:
 return $default(_that.savedCards);case _:
@@ -168,7 +168,7 @@ return $default(_that.savedCards);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Map<String, List<DictionaryCard>> savedCards)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<DictionaryCard> savedCards)  $default,) {final _that = this;
 switch (_that) {
 case _DictionaryState():
 return $default(_that.savedCards);}
@@ -185,7 +185,7 @@ return $default(_that.savedCards);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Map<String, List<DictionaryCard>> savedCards)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<DictionaryCard> savedCards)?  $default,) {final _that = this;
 switch (_that) {
 case _DictionaryState() when $default != null:
 return $default(_that.savedCards);case _:
@@ -200,14 +200,14 @@ return $default(_that.savedCards);case _:
 
 
 class _DictionaryState implements DictionaryState {
-  const _DictionaryState({final  Map<String, List<DictionaryCard>> savedCards = const {}}): _savedCards = savedCards;
+  const _DictionaryState({final  List<DictionaryCard> savedCards = const {}}): _savedCards = savedCards;
   
 
- final  Map<String, List<DictionaryCard>> _savedCards;
-@override@JsonKey() Map<String, List<DictionaryCard>> get savedCards {
-  if (_savedCards is EqualUnmodifiableMapView) return _savedCards;
+ final  List<DictionaryCard> _savedCards;
+@override@JsonKey() List<DictionaryCard> get savedCards {
+  if (_savedCards is EqualUnmodifiableListView) return _savedCards;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableMapView(_savedCards);
+  return EqualUnmodifiableListView(_savedCards);
 }
 
 
@@ -241,7 +241,7 @@ abstract mixin class _$DictionaryStateCopyWith<$Res> implements $DictionaryState
   factory _$DictionaryStateCopyWith(_DictionaryState value, $Res Function(_DictionaryState) _then) = __$DictionaryStateCopyWithImpl;
 @override @useResult
 $Res call({
- Map<String, List<DictionaryCard>> savedCards
+ List<DictionaryCard> savedCards
 });
 
 
@@ -261,7 +261,7 @@ class __$DictionaryStateCopyWithImpl<$Res>
 @override @pragma('vm:prefer-inline') $Res call({Object? savedCards = null,}) {
   return _then(_DictionaryState(
 savedCards: null == savedCards ? _self._savedCards : savedCards // ignore: cast_nullable_to_non_nullable
-as Map<String, List<DictionaryCard>>,
+as List<DictionaryCard>,
   ));
 }
 

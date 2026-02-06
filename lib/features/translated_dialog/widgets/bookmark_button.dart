@@ -13,25 +13,27 @@ class BookmarkButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final dictionaryNotifier = ref.read(dictionaryNotifierProvider.notifier);
-    final isInDict = dictionaryNotifier.checkWordInDict(
-      phrase,
-      word.partOfSpeech,
-    );
 
-    return IconButton(
-      icon: Icon(isInDict ? Icons.bookmark : Icons.bookmark_border),
-      color: isInDict
-          ? theme.colorScheme.primary
-          : theme.colorScheme.onSurfaceVariant,
-      iconSize: 24,
-      padding: EdgeInsets.zero,
-      constraints: const BoxConstraints(),
-      onPressed: () {
-        if (isInDict) {
-          dictionaryNotifier.deleteWord(phrase, word.partOfSpeech);
-        } else {
-          dictionaryNotifier.saveWord(phrase, word);
-        }
+    return FutureBuilder<bool>(
+      future: dictionaryNotifier.checkWordInDict(phrase, word.partOfSpeech),
+      builder: (context, snapshot) {
+        final isInDict = snapshot.data ?? false;
+        return IconButton(
+          icon: Icon(isInDict ? Icons.bookmark : Icons.bookmark_border),
+          color: isInDict
+              ? theme.colorScheme.primary
+              : theme.colorScheme.onSurfaceVariant,
+          iconSize: 24,
+          padding: EdgeInsets.zero,
+          constraints: const BoxConstraints(),
+          onPressed: () {
+            if (isInDict) {
+              dictionaryNotifier.deleteWord(phrase, word.partOfSpeech);
+            } else {
+              dictionaryNotifier.saveWord(phrase, word);
+            }
+          },
+        );
       },
     );
   }

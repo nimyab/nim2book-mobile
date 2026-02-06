@@ -15,8 +15,14 @@ class LearningSessionNotifier extends Notifier<LearningSessionState> {
   LearningSessionState build() {
     mode = arg.mode;
     _dictionaryNotifier = ref.watch(dictionaryNotifierProvider.notifier);
-    final currentCard = _dictionaryNotifier.getDueCard(mode);
-    return LearningSessionState(currentCard: currentCard);
+    // Load first card asynchronously
+    _loadFirstCard();
+    return const LearningSessionState(currentCard: null);
+  }
+
+  Future<void> _loadFirstCard() async {
+    final currentCard = await _dictionaryNotifier.getDueCard(mode);
+    state = state.copyWith(currentCard: currentCard);
   }
 
   void toggleTranslation() {
@@ -31,7 +37,7 @@ class LearningSessionNotifier extends Notifier<LearningSessionState> {
       card: state.currentCard!,
       rating: Rating.good,
     );
-    final newCard = _dictionaryNotifier.getDueCard(mode);
+    final newCard = await _dictionaryNotifier.getDueCard(mode);
     state = state.copyWith(currentCard: newCard, showTranslation: false);
   }
 
@@ -41,7 +47,7 @@ class LearningSessionNotifier extends Notifier<LearningSessionState> {
       card: state.currentCard!,
       rating: Rating.again,
     );
-    final newCard = _dictionaryNotifier.getDueCard(mode);
+    final newCard = await _dictionaryNotifier.getDueCard(mode);
     state = state.copyWith(currentCard: newCard, showTranslation: false);
   }
 }
