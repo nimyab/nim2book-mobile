@@ -3,13 +3,11 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
 import 'package:nim2book_mobile_flutter/core/providers/dictionary/dictionary_provider.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/core/providers/statistics/statistics_provider.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
 
-import 'package:nim2book_mobile_flutter/features/srs/logic/srs_stats_utils.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 class LearningScreen extends ConsumerStatefulWidget {
@@ -20,69 +18,7 @@ class LearningScreen extends ConsumerStatefulWidget {
 }
 
 class _LearningScreenState extends ConsumerState<LearningScreen> {
-  StatsPeriod _period = StatsPeriod.last7;
   static const bool isMock = false;
-
-  String _periodLabel(final AppLocalizations l10n, final StatsPeriod p) {
-    switch (p) {
-      case StatsPeriod.last7:
-        return l10n.period7Days;
-      case StatsPeriod.last30:
-        return l10n.period30Days;
-      case StatsPeriod.last90:
-        return l10n.period90Days;
-      case StatsPeriod.thisYear:
-        return l10n.periodThisYear;
-      case StatsPeriod.allTime:
-        return l10n.periodAllTime;
-    }
-  }
-
-  void _openPeriodPicker(
-    final BuildContext context,
-    final AppLocalizations l10n,
-  ) {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (final ctx) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  l10n.periodStatsHeader,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 12),
-                DropdownButton<StatsPeriod>(
-                  value: _period,
-                  isExpanded: true,
-                  items: StatsPeriod.values
-                      .where((final p) => p != StatsPeriod.allTime)
-                      .map((final p) {
-                        return DropdownMenuItem(
-                          value: p,
-                          child: Text(_periodLabel(l10n, p)),
-                        );
-                      })
-                      .toList(),
-                  onChanged: (final val) {
-                    if (val == null) return;
-                    setState(() => _period = val);
-                    Navigator.of(ctx).pop();
-                  },
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-      showDragHandle: true,
-    );
-  }
 
   @override
   Widget build(final BuildContext context) {
@@ -234,22 +170,6 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
                           '${l10n.period}: ',
                           style: theme.textTheme.titleMedium,
                         ),
-                        InkWell(
-                          onTap: () => _openPeriodPicker(context, l10n),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 4.0,
-                              vertical: 2.0,
-                            ),
-                            child: Text(
-                              _periodLabel(l10n, _period),
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                color: theme.colorScheme.primary,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ],
@@ -285,14 +205,6 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
                           width: 64,
                           child: Text(
                             l10n.chartLegendTotal,
-                            textAlign: TextAlign.right,
-                            style: theme.textTheme.titleMedium,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 64,
-                          child: Text(
-                            _periodLabel(l10n, _period),
                             textAlign: TextAlign.right,
                             style: theme.textTheme.titleMedium,
                           ),
@@ -369,42 +281,5 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
         ),
       ),
     );
-  }
-
-  StatsRange computeRangeForCards(
-    final List<DictionaryCard> cards,
-    final DateTime now,
-    final StatsPeriod period,
-  ) {
-    final today = DateTime(now.year, now.month, now.day);
-    switch (period) {
-      case StatsPeriod.last7:
-        return StatsRange(today.subtract(const Duration(days: 6)), today, 1);
-      case StatsPeriod.last30:
-        return StatsRange(today.subtract(const Duration(days: 29)), today, 1);
-      case StatsPeriod.last90:
-        return StatsRange(today.subtract(const Duration(days: 89)), today, 1);
-      case StatsPeriod.thisYear:
-        final start = DateTime(today.year, 1, 1);
-        final diff = today.difference(start).inDays + 1;
-        return StatsRange(start, today, diff > 90 ? 7 : 1);
-      case StatsPeriod.allTime:
-        final reviewedDates = cards
-            .map((final c) => c.fsrsCard.lastReview)
-            .whereType<DateTime>()
-            .toList();
-        if (reviewedDates.isEmpty) {
-          final start = today.subtract(const Duration(days: 89));
-          return StatsRange(start, today, 7);
-        }
-        reviewedDates.sort((final a, final b) => a.compareTo(b));
-        final start = DateTime(
-          reviewedDates.first.year,
-          reviewedDates.first.month,
-          reviewedDates.first.day,
-        );
-        final diff = today.difference(start).inDays + 1;
-        return StatsRange(start, today, diff > 90 ? 7 : 1);
-    }
   }
 }
