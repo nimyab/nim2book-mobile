@@ -5,6 +5,7 @@ import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:nim2book_mobile_flutter/core/database/database.dart';
 import 'package:nim2book_mobile_flutter/core/env/env.dart';
 import 'package:nim2book_mobile_flutter/core/providers/auth/auth_provider.dart';
 import 'package:nim2book_mobile_flutter/core/providers/book/books_provider.dart';
@@ -24,6 +25,8 @@ import 'package:talker_riverpod_logger/talker_riverpod_logger.dart';
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+  final database = Database();
 
   // Initialize Intl date symbols for supported locales to avoid web runtime crashes
   // when using DateFormat (e.g., DateFormat.MMMd()).
@@ -65,6 +68,7 @@ void main() async {
         talkerProvider.overrideWithValue(talker),
         sharedPreferencesProvider.overrideWithValue(sharedPreferences),
         tokenServiceProvider.overrideWithValue(tokenService),
+        databaseProvider.overrideWithValue(database),
       ],
       observers: [TalkerRiverpodObserver()],
       child: const Nim2BookApp(),

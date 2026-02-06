@@ -30,8 +30,8 @@ final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
 });
 
 // AppDatabase provider
-final appDatabaseProvider = Provider<Database>((ref) {
-  return Database();
+final databaseProvider = Provider<Database>((ref) {
+  throw UnimplementedError('databaseProvider must be overridden');
 });
 
 // TokenService provider
@@ -78,7 +78,7 @@ final fcmTokenServiceProvider = Provider<FcmTokenService>((ref) {
 final dictionaryServiceProvider = Provider<DictionaryService>((ref) {
   final talker = ref.watch(talkerProvider);
   final apiClient = ref.watch(apiClientProvider);
-  final database = ref.watch(appDatabaseProvider);
+  final database = ref.watch(databaseProvider);
   return DictionaryService(talker, apiClient, database);
 });
 
