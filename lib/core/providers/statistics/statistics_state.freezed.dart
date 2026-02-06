@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$StatisticsState {
 
- int get currentStreak; int get longestStreak; int get dailyNewCount; int get dailyLimit; bool get isLoading;
+ int get currentStreak; int get longestStreak; int get dailyNewCount;
 /// Create a copy of StatisticsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $StatisticsStateCopyWith<StatisticsState> get copyWith => _$StatisticsStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is StatisticsState&&(identical(other.currentStreak, currentStreak) || other.currentStreak == currentStreak)&&(identical(other.longestStreak, longestStreak) || other.longestStreak == longestStreak)&&(identical(other.dailyNewCount, dailyNewCount) || other.dailyNewCount == dailyNewCount)&&(identical(other.dailyLimit, dailyLimit) || other.dailyLimit == dailyLimit)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is StatisticsState&&(identical(other.currentStreak, currentStreak) || other.currentStreak == currentStreak)&&(identical(other.longestStreak, longestStreak) || other.longestStreak == longestStreak)&&(identical(other.dailyNewCount, dailyNewCount) || other.dailyNewCount == dailyNewCount));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentStreak,longestStreak,dailyNewCount,dailyLimit,isLoading);
+int get hashCode => Object.hash(runtimeType,currentStreak,longestStreak,dailyNewCount);
 
 @override
 String toString() {
-  return 'StatisticsState(currentStreak: $currentStreak, longestStreak: $longestStreak, dailyNewCount: $dailyNewCount, dailyLimit: $dailyLimit, isLoading: $isLoading)';
+  return 'StatisticsState(currentStreak: $currentStreak, longestStreak: $longestStreak, dailyNewCount: $dailyNewCount)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $StatisticsStateCopyWith<$Res>  {
   factory $StatisticsStateCopyWith(StatisticsState value, $Res Function(StatisticsState) _then) = _$StatisticsStateCopyWithImpl;
 @useResult
 $Res call({
- int currentStreak, int longestStreak, int dailyNewCount, int dailyLimit, bool isLoading
+ int currentStreak, int longestStreak, int dailyNewCount
 });
 
 
@@ -62,14 +62,12 @@ class _$StatisticsStateCopyWithImpl<$Res>
 
 /// Create a copy of StatisticsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? currentStreak = null,Object? longestStreak = null,Object? dailyNewCount = null,Object? dailyLimit = null,Object? isLoading = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? currentStreak = null,Object? longestStreak = null,Object? dailyNewCount = null,}) {
   return _then(_self.copyWith(
 currentStreak: null == currentStreak ? _self.currentStreak : currentStreak // ignore: cast_nullable_to_non_nullable
 as int,longestStreak: null == longestStreak ? _self.longestStreak : longestStreak // ignore: cast_nullable_to_non_nullable
 as int,dailyNewCount: null == dailyNewCount ? _self.dailyNewCount : dailyNewCount // ignore: cast_nullable_to_non_nullable
-as int,dailyLimit: null == dailyLimit ? _self.dailyLimit : dailyLimit // ignore: cast_nullable_to_non_nullable
-as int,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,
+as int,
   ));
 }
 
@@ -151,10 +149,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int currentStreak,  int longestStreak,  int dailyNewCount,  int dailyLimit,  bool isLoading)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int currentStreak,  int longestStreak,  int dailyNewCount)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _StatisticsState() when $default != null:
-return $default(_that.currentStreak,_that.longestStreak,_that.dailyNewCount,_that.dailyLimit,_that.isLoading);case _:
+return $default(_that.currentStreak,_that.longestStreak,_that.dailyNewCount);case _:
   return orElse();
 
 }
@@ -172,10 +170,10 @@ return $default(_that.currentStreak,_that.longestStreak,_that.dailyNewCount,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int currentStreak,  int longestStreak,  int dailyNewCount,  int dailyLimit,  bool isLoading)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int currentStreak,  int longestStreak,  int dailyNewCount)  $default,) {final _that = this;
 switch (_that) {
 case _StatisticsState():
-return $default(_that.currentStreak,_that.longestStreak,_that.dailyNewCount,_that.dailyLimit,_that.isLoading);}
+return $default(_that.currentStreak,_that.longestStreak,_that.dailyNewCount);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -189,10 +187,10 @@ return $default(_that.currentStreak,_that.longestStreak,_that.dailyNewCount,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int currentStreak,  int longestStreak,  int dailyNewCount,  int dailyLimit,  bool isLoading)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int currentStreak,  int longestStreak,  int dailyNewCount)?  $default,) {final _that = this;
 switch (_that) {
 case _StatisticsState() when $default != null:
-return $default(_that.currentStreak,_that.longestStreak,_that.dailyNewCount,_that.dailyLimit,_that.isLoading);case _:
+return $default(_that.currentStreak,_that.longestStreak,_that.dailyNewCount);case _:
   return null;
 
 }
@@ -204,14 +202,12 @@ return $default(_that.currentStreak,_that.longestStreak,_that.dailyNewCount,_tha
 
 
 class _StatisticsState implements StatisticsState {
-  const _StatisticsState({this.currentStreak = 0, this.longestStreak = 0, this.dailyNewCount = 0, this.dailyLimit = 15, this.isLoading = false});
+  const _StatisticsState({this.currentStreak = 0, this.longestStreak = 0, this.dailyNewCount = 0});
   
 
 @override@JsonKey() final  int currentStreak;
 @override@JsonKey() final  int longestStreak;
 @override@JsonKey() final  int dailyNewCount;
-@override@JsonKey() final  int dailyLimit;
-@override@JsonKey() final  bool isLoading;
 
 /// Create a copy of StatisticsState
 /// with the given fields replaced by the non-null parameter values.
@@ -223,16 +219,16 @@ _$StatisticsStateCopyWith<_StatisticsState> get copyWith => __$StatisticsStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StatisticsState&&(identical(other.currentStreak, currentStreak) || other.currentStreak == currentStreak)&&(identical(other.longestStreak, longestStreak) || other.longestStreak == longestStreak)&&(identical(other.dailyNewCount, dailyNewCount) || other.dailyNewCount == dailyNewCount)&&(identical(other.dailyLimit, dailyLimit) || other.dailyLimit == dailyLimit)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StatisticsState&&(identical(other.currentStreak, currentStreak) || other.currentStreak == currentStreak)&&(identical(other.longestStreak, longestStreak) || other.longestStreak == longestStreak)&&(identical(other.dailyNewCount, dailyNewCount) || other.dailyNewCount == dailyNewCount));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentStreak,longestStreak,dailyNewCount,dailyLimit,isLoading);
+int get hashCode => Object.hash(runtimeType,currentStreak,longestStreak,dailyNewCount);
 
 @override
 String toString() {
-  return 'StatisticsState(currentStreak: $currentStreak, longestStreak: $longestStreak, dailyNewCount: $dailyNewCount, dailyLimit: $dailyLimit, isLoading: $isLoading)';
+  return 'StatisticsState(currentStreak: $currentStreak, longestStreak: $longestStreak, dailyNewCount: $dailyNewCount)';
 }
 
 
@@ -243,7 +239,7 @@ abstract mixin class _$StatisticsStateCopyWith<$Res> implements $StatisticsState
   factory _$StatisticsStateCopyWith(_StatisticsState value, $Res Function(_StatisticsState) _then) = __$StatisticsStateCopyWithImpl;
 @override @useResult
 $Res call({
- int currentStreak, int longestStreak, int dailyNewCount, int dailyLimit, bool isLoading
+ int currentStreak, int longestStreak, int dailyNewCount
 });
 
 
@@ -260,14 +256,12 @@ class __$StatisticsStateCopyWithImpl<$Res>
 
 /// Create a copy of StatisticsState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? currentStreak = null,Object? longestStreak = null,Object? dailyNewCount = null,Object? dailyLimit = null,Object? isLoading = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? currentStreak = null,Object? longestStreak = null,Object? dailyNewCount = null,}) {
   return _then(_StatisticsState(
 currentStreak: null == currentStreak ? _self.currentStreak : currentStreak // ignore: cast_nullable_to_non_nullable
 as int,longestStreak: null == longestStreak ? _self.longestStreak : longestStreak // ignore: cast_nullable_to_non_nullable
 as int,dailyNewCount: null == dailyNewCount ? _self.dailyNewCount : dailyNewCount // ignore: cast_nullable_to_non_nullable
-as int,dailyLimit: null == dailyLimit ? _self.dailyLimit : dailyLimit // ignore: cast_nullable_to_non_nullable
-as int,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,
+as int,
   ));
 }
 

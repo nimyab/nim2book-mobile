@@ -8,7 +8,6 @@ import 'package:nim2book_mobile_flutter/core/services/dictionary_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/locale_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/fmc_token_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/onboarding_service.dart';
-import 'package:nim2book_mobile_flutter/core/services/srs_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/statistic_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/theme_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
@@ -75,13 +74,8 @@ final dictionaryServiceProvider = Provider<DictionaryService>((ref) {
   final talker = ref.watch(talkerProvider);
   final apiClient = ref.watch(apiClientProvider);
   final sharedPreferences = ref.watch(sharedPreferencesProvider);
-  return DictionaryService(talker, apiClient, sharedPreferences);
-});
-
-// SrsService provider
-final srsServiceProvider = Provider<SrsService>((ref) {
-  final sharedPreferences = ref.watch(sharedPreferencesProvider);
-  return SrsService(sharedPreferences);
+  final statisticService = ref.watch(statisticServiceProvider);
+  return DictionaryService(talker, apiClient, sharedPreferences, statisticService);
 });
 
 // StatisticService provider

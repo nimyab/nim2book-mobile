@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DictionaryState {
 
- Map<String, List<DictionaryCard>> get savedCards;
+ int get dailyLimitNewWords; Map<String, List<DictionaryCard>> get savedCards;
 /// Create a copy of DictionaryState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $DictionaryStateCopyWith<DictionaryState> get copyWith => _$DictionaryStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DictionaryState&&const DeepCollectionEquality().equals(other.savedCards, savedCards));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DictionaryState&&(identical(other.dailyLimitNewWords, dailyLimitNewWords) || other.dailyLimitNewWords == dailyLimitNewWords)&&const DeepCollectionEquality().equals(other.savedCards, savedCards));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(savedCards));
+int get hashCode => Object.hash(runtimeType,dailyLimitNewWords,const DeepCollectionEquality().hash(savedCards));
 
 @override
 String toString() {
-  return 'DictionaryState(savedCards: $savedCards)';
+  return 'DictionaryState(dailyLimitNewWords: $dailyLimitNewWords, savedCards: $savedCards)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $DictionaryStateCopyWith<$Res>  {
   factory $DictionaryStateCopyWith(DictionaryState value, $Res Function(DictionaryState) _then) = _$DictionaryStateCopyWithImpl;
 @useResult
 $Res call({
- Map<String, List<DictionaryCard>> savedCards
+ int dailyLimitNewWords, Map<String, List<DictionaryCard>> savedCards
 });
 
 
@@ -62,9 +62,10 @@ class _$DictionaryStateCopyWithImpl<$Res>
 
 /// Create a copy of DictionaryState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? savedCards = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? dailyLimitNewWords = null,Object? savedCards = null,}) {
   return _then(_self.copyWith(
-savedCards: null == savedCards ? _self.savedCards : savedCards // ignore: cast_nullable_to_non_nullable
+dailyLimitNewWords: null == dailyLimitNewWords ? _self.dailyLimitNewWords : dailyLimitNewWords // ignore: cast_nullable_to_non_nullable
+as int,savedCards: null == savedCards ? _self.savedCards : savedCards // ignore: cast_nullable_to_non_nullable
 as Map<String, List<DictionaryCard>>,
   ));
 }
@@ -147,10 +148,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Map<String, List<DictionaryCard>> savedCards)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int dailyLimitNewWords,  Map<String, List<DictionaryCard>> savedCards)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DictionaryState() when $default != null:
-return $default(_that.savedCards);case _:
+return $default(_that.dailyLimitNewWords,_that.savedCards);case _:
   return orElse();
 
 }
@@ -168,10 +169,10 @@ return $default(_that.savedCards);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Map<String, List<DictionaryCard>> savedCards)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int dailyLimitNewWords,  Map<String, List<DictionaryCard>> savedCards)  $default,) {final _that = this;
 switch (_that) {
 case _DictionaryState():
-return $default(_that.savedCards);}
+return $default(_that.dailyLimitNewWords,_that.savedCards);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -185,10 +186,10 @@ return $default(_that.savedCards);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Map<String, List<DictionaryCard>> savedCards)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int dailyLimitNewWords,  Map<String, List<DictionaryCard>> savedCards)?  $default,) {final _that = this;
 switch (_that) {
 case _DictionaryState() when $default != null:
-return $default(_that.savedCards);case _:
+return $default(_that.dailyLimitNewWords,_that.savedCards);case _:
   return null;
 
 }
@@ -200,9 +201,10 @@ return $default(_that.savedCards);case _:
 
 
 class _DictionaryState implements DictionaryState {
-  const _DictionaryState({final  Map<String, List<DictionaryCard>> savedCards = const {}}): _savedCards = savedCards;
+  const _DictionaryState({required this.dailyLimitNewWords, final  Map<String, List<DictionaryCard>> savedCards = const {}}): _savedCards = savedCards;
   
 
+@override final  int dailyLimitNewWords;
  final  Map<String, List<DictionaryCard>> _savedCards;
 @override@JsonKey() Map<String, List<DictionaryCard>> get savedCards {
   if (_savedCards is EqualUnmodifiableMapView) return _savedCards;
@@ -221,16 +223,16 @@ _$DictionaryStateCopyWith<_DictionaryState> get copyWith => __$DictionaryStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DictionaryState&&const DeepCollectionEquality().equals(other._savedCards, _savedCards));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DictionaryState&&(identical(other.dailyLimitNewWords, dailyLimitNewWords) || other.dailyLimitNewWords == dailyLimitNewWords)&&const DeepCollectionEquality().equals(other._savedCards, _savedCards));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_savedCards));
+int get hashCode => Object.hash(runtimeType,dailyLimitNewWords,const DeepCollectionEquality().hash(_savedCards));
 
 @override
 String toString() {
-  return 'DictionaryState(savedCards: $savedCards)';
+  return 'DictionaryState(dailyLimitNewWords: $dailyLimitNewWords, savedCards: $savedCards)';
 }
 
 
@@ -241,7 +243,7 @@ abstract mixin class _$DictionaryStateCopyWith<$Res> implements $DictionaryState
   factory _$DictionaryStateCopyWith(_DictionaryState value, $Res Function(_DictionaryState) _then) = __$DictionaryStateCopyWithImpl;
 @override @useResult
 $Res call({
- Map<String, List<DictionaryCard>> savedCards
+ int dailyLimitNewWords, Map<String, List<DictionaryCard>> savedCards
 });
 
 
@@ -258,9 +260,10 @@ class __$DictionaryStateCopyWithImpl<$Res>
 
 /// Create a copy of DictionaryState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? savedCards = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? dailyLimitNewWords = null,Object? savedCards = null,}) {
   return _then(_DictionaryState(
-savedCards: null == savedCards ? _self._savedCards : savedCards // ignore: cast_nullable_to_non_nullable
+dailyLimitNewWords: null == dailyLimitNewWords ? _self.dailyLimitNewWords : dailyLimitNewWords // ignore: cast_nullable_to_non_nullable
+as int,savedCards: null == savedCards ? _self._savedCards : savedCards // ignore: cast_nullable_to_non_nullable
 as Map<String, List<DictionaryCard>>,
   ));
 }

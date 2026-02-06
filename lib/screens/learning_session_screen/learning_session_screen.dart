@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nim2book_mobile_flutter/core/providers/dictionary/dictionary_provider.dart';
+import 'package:nim2book_mobile_flutter/core/models/learning/learning_mode.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/learning_session_content.dart';
-
-export 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/learning_session_content.dart'
-    show LearningMode;
 
 class LearningSessionScreen extends ConsumerWidget {
   final LearningMode mode;
@@ -26,11 +23,9 @@ class LearningSessionScreen extends ConsumerWidget {
 
   @override
   Widget build(final BuildContext context, WidgetRef ref) {
-    final savedCards = ref.watch(dictionaryCardsProvider);
-
     return Scaffold(
       appBar: AppBar(title: Text(_getTitle(context)), centerTitle: true),
-      body: LearningSessionContent(mode: mode, savedCards: savedCards),
+      body: LearningSessionContent(mode: mode),
     );
   }
 }

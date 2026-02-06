@@ -1,6 +1,3 @@
-import 'package:flutter/foundation.dart';
-import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
-import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StatisticService {
@@ -8,96 +5,144 @@ class StatisticService {
 
   StatisticService(this._sharedPreferences);
 
-  // Дневной лимит новых слов
-  static const int _defaultMaxNewPerDay = 15;
-  static const String _dailyNewCountKey = 'srs_daily_new_count';
-  static const String _dailyNewDateKey = 'srs_daily_new_date';
-  static const String _dailyNewLimitKey = 'srs_daily_new_limit';
+  static const String _dailyNewCountKey = 'statistic_daily_new_count';
+  static const String _dailyNewDateKey = 'statistic_daily_new_date';
 
-  static const String _streakCurrentKey = 'srs_streak_current';
-  static const String _streakRecordKey = 'srs_streak_record';
-  static const String _streakLastDateKey = 'srs_streak_last_date';
+  // Ключи для стриков
+  static const String _streakCurrentKey = 'statistic_streak_current';
+  static const String _streakRecordKey = 'statistic_streak_record';
+  static const String _streakLastDateKey = 'statistic_streak_last_date';
 
-  // Наблюдаемый счётчик новых слов за день для авто‑обновления UI
-  late final ValueNotifier<int> dailyNewCountNotifier = ValueNotifier<int>(
-    _getDailyNewCount(),
-  );
+  // Префиксы для дневной статистики
+  static const String _learnedPrefix = 'stats_learned_';
+  static const String _repeatedPrefix = 'stats_repeated_';
+  static const String _knownPrefix = 'stats_known_';
 
   bool _isSameCalendarDay(final DateTime a, final DateTime b) {
     return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 
-  int _getDailyNewCount({final DateTime? now}) {
-    final n = now ?? DateTime.now();
-    final dateStr = _sharedPreferences.getString(_dailyNewDateKey);
-    final count = _sharedPreferences.getInt(_dailyNewCountKey) ?? 0;
-    if (dateStr == null) {
-      // Инициализация
-      _sharedPreferences.setString(_dailyNewDateKey, n.toIso8601String());
-      _sharedPreferences.setInt(_dailyNewCountKey, 0);
-      return 0;
-    }
-    DateTime storedDate;
-    try {
-      storedDate = DateTime.parse(dateStr);
-    } catch (_) {
-      storedDate = n;
-    }
-    if (!_isSameCalendarDay(storedDate, n)) {
-      // Новый день — сброс счётчика
-      _sharedPreferences.setString(_dailyNewDateKey, n.toIso8601String());
-      _sharedPreferences.setInt(_dailyNewCountKey, 0);
-      return 0;
-    }
-    return count;
+  String _dateKey(final DateTime date) =>
+      date.toIso8601String().substring(0, 10);
+
+  // ============================================================
+  // ЗАПИСЬ СТАТИСТИКИ ПО ДНЯМ
+  // ============================================================
+
+  /// Записать, что карточка была заучена (впервые достигла step >= 3)
+  Future<void> recordCardLearned(final DateTime date) async {
+    final key = '$_learnedPrefix${_dateKey(date)}';
+    final current = _sharedPreferences.getInt(key) ?? 0;
+    await _sharedPreferences.setInt(key, current + 1);
+    // Помечаем что сегодня учились
+    _registerStudyToday();
   }
 
-  // Публичный доступ к дневному счётчику новых слов
-  int getDailyNewCount({final DateTime? now}) => _getDailyNewCount(now: now);
-
-  // Текущий лимит новых слов в день (читается из настроек)
-  int getDailyNewLimit() {
-    return _sharedPreferences.getInt(_dailyNewLimitKey) ?? _defaultMaxNewPerDay;
+  /// Записать, что карточка была повторена
+  Future<void> recordCardRepeated(final DateTime date) async {
+    final key = '$_repeatedPrefix${_dateKey(date)}';
+    final current = _sharedPreferences.getInt(key) ?? 0;
+    await _sharedPreferences.setInt(key, current + 1);
+    // Помечаем что сегодня учились
+    _registerStudyToday();
   }
 
-  // Сохранение нового лимита
-  Future<void> setDailyNewLimit(final int value) async {
-    await _sharedPreferences.setInt(_dailyNewLimitKey, value);
+  /// Записать, что карточка стала выученной (впервые достигла step >= 8)
+  Future<void> recordCardKnown(final DateTime date) async {
+    final key = '$_knownPrefix${_dateKey(date)}';
+    final current = _sharedPreferences.getInt(key) ?? 0;
+    await _sharedPreferences.setInt(key, current + 1);
+    // Помечаем что сегодня учились
+    _registerStudyToday();
   }
 
-  void incrementDailyNewCount({final DateTime? now}) {
-    final n = now ?? DateTime.now();
-    final dateStr = _sharedPreferences.getString(_dailyNewDateKey);
-    if (dateStr == null) {
-      _sharedPreferences.setString(_dailyNewDateKey, n.toIso8601String());
-      _sharedPreferences.setInt(_dailyNewCountKey, 1);
-      dailyNewCountNotifier.value = _getDailyNewCount(now: n);
-      return;
-    }
-    DateTime storedDate;
-    try {
-      storedDate = DateTime.parse(dateStr);
-    } catch (_) {
-      storedDate = n;
-    }
-    if (!_isSameCalendarDay(storedDate, n)) {
-      _sharedPreferences.setString(_dailyNewDateKey, n.toIso8601String());
-      _sharedPreferences.setInt(_dailyNewCountKey, 1);
-      dailyNewCountNotifier.value = _getDailyNewCount(now: n);
-    } else {
-      final prev = _sharedPreferences.getInt(_dailyNewCountKey) ?? 0;
-      _sharedPreferences.setInt(_dailyNewCountKey, prev + 1);
-      dailyNewCountNotifier.value = _getDailyNewCount(now: n);
-    }
+  // ============================================================
+  // ЧТЕНИЕ СТАТИСТИКИ ПО ДНЯМ
+  // ============================================================
+
+  /// Получить количество заученных карточек за дату
+  int getLearnedCountForDate(final DateTime date) {
+    final key = '$_learnedPrefix${_dateKey(date)}';
+    return _sharedPreferences.getInt(key) ?? 0;
   }
 
-  void registerStudyToday({final DateTime? now}) {
-    final n = now ?? DateTime.now();
+  /// Получить количество повторенных карточек за дату
+  int getRepeatedCountForDate(final DateTime date) {
+    final key = '$_repeatedPrefix${_dateKey(date)}';
+    return _sharedPreferences.getInt(key) ?? 0;
+  }
+
+  /// Получить количество выученных карточек за дату
+  int getKnownCountForDate(final DateTime date) {
+    final key = '$_knownPrefix${_dateKey(date)}';
+    return _sharedPreferences.getInt(key) ?? 0;
+  }
+
+  /// Получить количество заученных карточек за период
+  int getLearnedCountForPeriod(final DateTime start, final DateTime end) {
+    var total = 0;
+    var current = DateTime(start.year, start.month, start.day);
+    final endDay = DateTime(end.year, end.month, end.day);
+
+    while (!current.isAfter(endDay)) {
+      total += getLearnedCountForDate(current);
+      current = current.add(const Duration(days: 1));
+    }
+    return total;
+  }
+
+  /// Получить количество повторенных карточек за период
+  int getRepeatedCountForPeriod(final DateTime start, final DateTime end) {
+    var total = 0;
+    var current = DateTime(start.year, start.month, start.day);
+    final endDay = DateTime(end.year, end.month, end.day);
+
+    while (!current.isAfter(endDay)) {
+      total += getRepeatedCountForDate(current);
+      current = current.add(const Duration(days: 1));
+    }
+    return total;
+  }
+
+  /// Получить количество выученных карточек за период
+  int getKnownCountForPeriod(final DateTime start, final DateTime end) {
+    var total = 0;
+    var current = DateTime(start.year, start.month, start.day);
+    final endDay = DateTime(end.year, end.month, end.day);
+
+    while (!current.isAfter(endDay)) {
+      total += getKnownCountForDate(current);
+      current = current.add(const Duration(days: 1));
+    }
+    return total;
+  }
+
+  /// Получить статистику по массиву дат (для графиков)
+  List<int> getLearnedCountsForDates(final List<DateTime> dates) {
+    return dates.map((date) => getLearnedCountForDate(date)).toList();
+  }
+
+  /// Получить статистику по массиву дат (для графиков)
+  List<int> getRepeatedCountsForDates(final List<DateTime> dates) {
+    return dates.map((date) => getRepeatedCountForDate(date)).toList();
+  }
+
+  /// Получить статистику по массиву дат (для графиков)
+  List<int> getKnownCountsForDates(final List<DateTime> dates) {
+    return dates.map((date) => getKnownCountForDate(date)).toList();
+  }
+
+  // ============================================================
+  // СТРИКИ
+  // ============================================================
+
+  /// Зарегистрировать активность за сегодняшний день и обновить стрик
+  void _registerStudyToday() {
+    final n = DateTime.now();
     final lastStr = _sharedPreferences.getString(_streakLastDateKey);
-    var current = _sharedPreferences.getInt(_streakCurrentKey) ?? 0;
-    var record = _sharedPreferences.getInt(_streakRecordKey) ?? 0;
 
     if (lastStr == null) {
+      final record = _sharedPreferences.getInt(_streakRecordKey) ?? 0;
       _sharedPreferences.setString(_streakLastDateKey, n.toIso8601String());
       _sharedPreferences.setInt(_streakCurrentKey, 1);
       if (record < 1) {
@@ -106,266 +151,88 @@ class StatisticService {
       return;
     }
 
-    DateTime last;
-    try {
-      last = DateTime.parse(lastStr);
-    } catch (_) {
-      last = n;
-    }
+    final last = DateTime.tryParse(lastStr) ?? n;
+    if (_isSameCalendarDay(last, n)) return;
 
-    final sameDay = _isSameCalendarDay(last, n);
-    if (sameDay) {
-      return;
-    }
+    var current = _sharedPreferences.getInt(_streakCurrentKey) ?? 0;
+    var record = _sharedPreferences.getInt(_streakRecordKey) ?? 0;
 
-    final yesterday = last.add(const Duration(days: 1));
-    if (_isSameCalendarDay(yesterday, n)) {
-      current += 1;
-    } else {
-      current = 1;
-    }
+    final lastIsYesterday = _isSameCalendarDay(
+      last.add(const Duration(days: 1)),
+      n,
+    );
+    current = lastIsYesterday ? current + 1 : 1;
+
     if (current > record) record = current;
     _sharedPreferences.setString(_streakLastDateKey, n.toIso8601String());
     _sharedPreferences.setInt(_streakCurrentKey, current);
     _sharedPreferences.setInt(_streakRecordKey, record);
   }
 
-  int getStudyStreakDays({final DateTime? now}) {
-    final n = now ?? DateTime.now();
+  /// Получить текущий стрик дней подряд
+  int getStudyStreakDays() {
+    final n = DateTime.now();
+
     final lastStr = _sharedPreferences.getString(_streakLastDateKey);
     if (lastStr == null) return 0;
-    DateTime last;
-    try {
-      last = DateTime.parse(lastStr);
-    } catch (_) {
-      return _sharedPreferences.getInt(_streakCurrentKey) ?? 0;
-    }
+
+    final last = DateTime.tryParse(lastStr);
+    if (last == null) return _sharedPreferences.getInt(_streakCurrentKey) ?? 0;
+
     final current = _sharedPreferences.getInt(_streakCurrentKey) ?? 0;
-    final diff = DateTime(
-      n.year,
-      n.month,
-      n.day,
-    ).difference(DateTime(last.year, last.month, last.day)).inDays;
+    final diff = n.difference(last).inDays;
     if (diff > 1) return 0;
     return current;
   }
 
+  /// Получить рекордный стрик дней подряд
   int getStudyStreakRecord() {
     return _sharedPreferences.getInt(_streakRecordKey) ?? 0;
   }
 
-  /// Создаёт уникальный идентификатор из слова и части речи
-  /// Формат: "word_partOfSpeech" или "word" если часть речи null
-  String createIdentifier(String word, String? partOfSpeech) {
-    if (partOfSpeech == null || partOfSpeech.isEmpty) {
-      return word;
-    }
-    return '${word}_$partOfSpeech';
-  }
+  // ============================================================
+  // ДНЕВНОЙ ЛИМИТ И СЧЕТЧИК НОВЫХ СЛОВ
+  // ============================================================
 
-  /// Создаёт идентификатор из DictionaryWord
-  String identifierFromDictionaryWord(DictionaryWord word) {
-    return createIdentifier(word.text, word.partOfSpeech);
-  }
-
-  /// Извлекает слово из идентификатора
-  String extractWord(String identifier) {
-    final parts = identifier.split('_');
-    return parts.first;
-  }
-
-  /// Извлекает часть речи из идентификатора
-  /// Возвращает null если часть речи не указана
-  String? extractPartOfSpeech(String identifier) {
-    final parts = identifier.split('_');
-    if (parts.length < 2) return null;
-    return parts.sublist(1).join('_');
-  }
-
-  /// Создаёт список идентификаторов из `Map<String, List<DictionaryWord>>`
-  List<String> getIdentifiersFromSavedWords(
-    Map<String, List<DictionaryWord>> savedWords,
-  ) {
-    final identifiers = <String>[];
-    for (final entry in savedWords.entries) {
-      for (final word in entry.value) {
-        identifiers.add(identifierFromDictionaryWord(word));
-      }
-    }
-    return identifiers;
-  }
-
-  /// Находит DictionaryWord по идентификатору в savedWords
-  DictionaryWord? findWordByIdentifier(
-    String identifier,
-    Map<String, List<DictionaryWord>> savedWords,
-  ) {
-    final word = extractWord(identifier);
-    final partOfSpeech = extractPartOfSpeech(identifier);
-    final words = savedWords[word];
-    if (words == null) return null;
-
-    return words.firstWhere(
-      (w) => w.partOfSpeech == partOfSpeech,
-      orElse: () => words.first,
-    );
-  }
-
-  /// Проверяет, является ли карточка новой (никогда не изучалась)
-  bool isNewCard(DictionaryCard card) {
-    // В FSRS карточка новая, если step = 0 (State.newState)
-    return card.fsrsCard.step == 0;
-  }
-
-  /// Проверяет, нужно ли повторить карточку сейчас
-  bool isDueCard(DictionaryCard card, {DateTime? now}) {
-    final reviewTime = now ?? DateTime.now().toUtc();
-    return card.fsrsCard.due.isBefore(reviewTime) ||
-        card.fsrsCard.due.isAtSameMomentAs(reviewTime);
-  }
-
-  /// Получает количество карточек к повторению
-  int getDueCount(final Iterable<DictionaryCard> cards, {final DateTime? now}) {
-    return cards.where((card) => isDueCard(card, now: now)).length;
-  }
-
-  /// Получает карточки к повторению
-  List<DictionaryCard> getDueCards(
-    final Iterable<DictionaryCard> cards, {
-    final DateTime? now,
-  }) {
-    return cards.where((card) => isDueCard(card, now: now)).toList();
-  }
-
-  /// Получает список карточек к повторению (с учётом лимита новых слов)
-  List<DictionaryCard> getDueCardsWithLimit(
-    final Iterable<DictionaryCard> cards, {
-    final DateTime? now,
-  }) {
-    final n = now ?? DateTime.now();
-    final reviewDue = <DictionaryCard>[]; // уже изученные карточки к повторению
-    final newDue = <DictionaryCard>[]; // совершенно новые карточки
-
-    for (final card in cards) {
-      if (isDueCard(card, now: n)) {
-        if (isNewCard(card)) {
-          newDue.add(card);
-        } else {
-          reviewDue.add(card);
-        }
-      }
+  /// Получить количество новых слов, изученных сегодня
+  int getDailyNewCount() {
+    final n = DateTime.now();
+    final dateStr = _sharedPreferences.getString(_dailyNewDateKey);
+    final count = _sharedPreferences.getInt(_dailyNewCountKey) ?? 0;
+    if (dateStr == null) {
+      _sharedPreferences.setString(_dailyNewDateKey, n.toIso8601String());
+      _sharedPreferences.setInt(_dailyNewCountKey, 0);
+      return 0;
     }
 
-    final alreadyStartedToday = _getDailyNewCount(now: n);
-    final maxNewPerDay = getDailyNewLimit();
-    final availableSlots = (maxNewPerDay - alreadyStartedToday).clamp(
-      0,
-      maxNewPerDay,
-    );
-    final limitedNew = availableSlots > 0
-        ? newDue.take(availableSlots).toList()
-        : const <DictionaryCard>[];
+    final storedDate = DateTime.tryParse(dateStr) ?? n;
 
-    return [...reviewDue, ...limitedNew];
+    if (!_isSameCalendarDay(storedDate, n)) {
+      _sharedPreferences.setString(_dailyNewDateKey, n.toIso8601String());
+      _sharedPreferences.setInt(_dailyNewCountKey, 0);
+      return 0;
+    }
+    return count;
   }
 
-  /// Получает количество новых карточек к изучению (с учетом лимита)
-  int getNewDueCount(
-    final Iterable<DictionaryCard> cards, {
-    final DateTime? now,
-  }) {
-    final n = now ?? DateTime.now();
-    final newDue = cards
-        .where((card) => isNewCard(card) && isDueCard(card, now: n))
-        .length;
+  /// Увеличить счетчик новых слов за сегодня
+  void incrementDailyNewCount() {
+    final n = DateTime.now();
+    final dateStr = _sharedPreferences.getString(_dailyNewDateKey);
+    if (dateStr == null) {
+      _sharedPreferences.setString(_dailyNewDateKey, n.toIso8601String());
+      _sharedPreferences.setInt(_dailyNewCountKey, 1);
+      return;
+    }
 
-    final alreadyStartedToday = _getDailyNewCount(now: n);
-    final maxNewPerDay = getDailyNewLimit();
-    final availableSlots = (maxNewPerDay - alreadyStartedToday).clamp(
-      0,
-      maxNewPerDay,
-    );
+    final storedDate = DateTime.tryParse(dateStr) ?? n;
 
-    return availableSlots > 0 ? newDue.clamp(0, availableSlots) : 0;
-  }
-
-  /// Получает количество карточек на повторение (не новых)
-  int getReviewDueCount(
-    final Iterable<DictionaryCard> cards, {
-    final DateTime? now,
-  }) {
-    final n = now ?? DateTime.now();
-    return cards
-        .where((card) => !isNewCard(card) && isDueCard(card, now: n))
-        .length;
-  }
-
-  /// Подсчитывает количество выученных карточек (step >= 3)
-  int countLearnedCards(final Iterable<DictionaryCard> cards) {
-    // В FSRS карточка считается выученной, если она прошла начальные этапы
-    // step показывает количество успешных повторений
-    return cards.where((card) => (card.fsrsCard.step ?? 0) >= 3).length;
-  }
-
-  /// Подсчитывает количество повторенных карточек (step >= 1)
-  int countRepeatedCards(final Iterable<DictionaryCard> cards) {
-    return cards.where((card) => (card.fsrsCard.step ?? 0) >= 1).length;
-  }
-
-  /// Подсчитывает количество хорошо знакомых карточек (step >= 8)
-  int countKnownCards(final Iterable<DictionaryCard> cards) {
-    return cards.where((card) => (card.fsrsCard.step ?? 0) >= 8).length;
-  }
-
-  /// Фильтрует карточки, выученные впервые в указанном периоде
-  Iterable<DictionaryCard> getCardsLearnedInPeriod(
-    final Iterable<DictionaryCard> cards,
-    final DateTime start,
-    final DateTime end,
-  ) {
-    return cards.where((card) {
-      final lastReview = card.fsrsCard.lastReview;
-      if (lastReview == null) return false;
-      final ds = DateTime(lastReview.year, lastReview.month, lastReview.day);
-      final s = DateTime(start.year, start.month, start.day);
-      final e = DateTime(end.year, end.month, end.day);
-      return !ds.isBefore(s) &&
-          !ds.isAfter(e) &&
-          (card.fsrsCard.step ?? 0) >= 3;
-    });
-  }
-
-  /// Фильтрует карточки, повторенные в указанном периоде
-  Iterable<DictionaryCard> getCardsRepeatedInPeriod(
-    final Iterable<DictionaryCard> cards,
-    final DateTime start,
-    final DateTime end,
-  ) {
-    return cards.where((card) {
-      final lastReview = card.fsrsCard.lastReview;
-      if (lastReview == null) return false;
-      final ds = DateTime(lastReview.year, lastReview.month, lastReview.day);
-      final s = DateTime(start.year, start.month, start.day);
-      final e = DateTime(end.year, end.month, end.day);
-      return !ds.isBefore(s) && !ds.isAfter(e);
-    });
-  }
-
-  /// Фильтрует хорошо знакомые карточки, достигшие этого статуса в указанном периоде
-  Iterable<DictionaryCard> getCardsKnownInPeriod(
-    final Iterable<DictionaryCard> cards,
-    final DateTime start,
-    final DateTime end,
-  ) {
-    return cards.where((card) {
-      final lastReview = card.fsrsCard.lastReview;
-      if (lastReview == null) return false;
-      final ds = DateTime(lastReview.year, lastReview.month, lastReview.day);
-      final s = DateTime(start.year, start.month, start.day);
-      final e = DateTime(end.year, end.month, end.day);
-      return !ds.isBefore(s) &&
-          !ds.isAfter(e) &&
-          (card.fsrsCard.step ?? 0) >= 8;
-    });
+    if (!_isSameCalendarDay(storedDate, n)) {
+      _sharedPreferences.setString(_dailyNewDateKey, n.toIso8601String());
+      _sharedPreferences.setInt(_dailyNewCountKey, 1);
+    } else {
+      final prev = _sharedPreferences.getInt(_dailyNewCountKey) ?? 0;
+      _sharedPreferences.setInt(_dailyNewCountKey, prev + 1);
+    }
   }
 }

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
 import 'package:nim2book_mobile_flutter/core/providers/dictionary/dictionary_provider.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
+import 'package:nim2book_mobile_flutter/core/providers/statistics/statistics_provider.dart';
 import 'package:nim2book_mobile_flutter/core/services/statistic_service.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
 
@@ -22,30 +23,7 @@ class LearningScreen extends ConsumerStatefulWidget {
 
 class _LearningScreenState extends ConsumerState<LearningScreen> {
   StatsPeriod _period = StatsPeriod.last7;
-  VoidCallback? _statisticDailyNewListener;
   static const bool isMock = false;
-
-  @override
-  void initState() {
-    super.initState();
-    // Слушаем счётчик новых слов, чтобы кнопки режимов обновлялись
-    final statistic = ref.read(statisticServiceProvider);
-    _statisticDailyNewListener = () {
-      if (!mounted) return;
-      setState(() {});
-    };
-    statistic.dailyNewCountNotifier.addListener(_statisticDailyNewListener!);
-  }
-
-  @override
-  void dispose() {
-    final statistic = ref.read(statisticServiceProvider);
-    final listener = _statisticDailyNewListener;
-    if (listener != null) {
-      statistic.dailyNewCountNotifier.removeListener(listener);
-    }
-    super.dispose();
-  }
 
   String _periodLabel(final AppLocalizations l10n, final StatsPeriod p) {
     switch (p) {
@@ -114,17 +92,20 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
     final savedCards = ref.watch(dictionaryCardsProvider);
     final theme = Theme.of(context);
     final statistic = ref.watch(statisticServiceProvider);
+    final dictionary = ref.watch(dictionaryServiceProvider);
+    final dictionaryState = ref.watch(dictionaryNotifierProvider);
+    final statsState = ref.watch(statisticsNotifierProvider);
     final now = DateTime.now();
 
     // Преобразуем Map в плоский список карточек
     final allCards = savedCards.values.expand((cards) => cards).toList();
 
-    var usedToday = statistic.getDailyNewCount(now: now);
-    final dailyLimit = statistic.getDailyNewLimit();
+    var usedToday = statsState.dailyNewCount;
+    final dailyLimit = dictionaryState.dailyLimitNewWords;
 
-    final reviewDueCount = statistic.getReviewDueCount(allCards, now: now);
-    final newDueLimited = statistic.getNewDueCount(allCards, now: now);
-    final mixedDueCount = statistic
+    final reviewDueCount = dictionary.getReviewDueCount(allCards, now: now);
+    final newDueLimited = dictionary.getNewDueCount(allCards, now: now);
+    final mixedDueCount = dictionary
         .getDueCardsWithLimit(allCards, now: now)
         .length;
 
@@ -132,9 +113,9 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
     final hasReview = reviewDueCount > 0;
     final hasMixed = mixedDueCount > 0;
 
-    var learnedTotal = statistic.countLearnedCards(allCards);
-    var repeatedTotal = statistic.countRepeatedCards(allCards);
-    var knownTotal = statistic.countKnownCards(allCards);
+    var learnedTotal = dictionary.countLearnedCards(allCards);
+    var repeatedTotal = dictionary.countRepeatedCards(allCards);
+    var knownTotal = dictionary.countKnownCards(allCards);
 
     final periodRange = computeRangeForCards(allCards, now, _period);
     final bucketDays = periodRange.bucketDays;
@@ -158,15 +139,18 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
       statistic,
     );
 
-    var periodFirstLearned = statistic
-        .getCardsLearnedInPeriod(allCards, periodRange.start, periodRange.end)
-        .length;
-    var periodRepeated = statistic
-        .getCardsRepeatedInPeriod(allCards, periodRange.start, periodRange.end)
-        .length;
-    var periodKnown = statistic
-        .getCardsKnownInPeriod(allCards, periodRange.start, periodRange.end)
-        .length;
+    var periodFirstLearned = statistic.getLearnedCountForPeriod(
+      periodRange.start,
+      periodRange.end,
+    );
+    var periodRepeated = statistic.getRepeatedCountForPeriod(
+      periodRange.start,
+      periodRange.end,
+    );
+    var periodKnown = statistic.getKnownCountForPeriod(
+      periodRange.start,
+      periodRange.end,
+    );
 
     if (isMock) {
       final today = DateTime(now.year, now.month, now.day);
@@ -656,7 +640,7 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
     for (var i = 0; i < buckets.length; i++) {
       final start = buckets[i];
       final end = start.add(Duration(days: bucketDays - 1));
-      final c = statistic.getCardsRepeatedInPeriod(cards, start, end).length;
+      final c = statistic.getRepeatedCountForPeriod(start, end);
       counts[i] = c;
     }
     return counts;
@@ -672,7 +656,7 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
     for (var i = 0; i < buckets.length; i++) {
       final start = buckets[i];
       final end = start.add(Duration(days: bucketDays - 1));
-      final c = statistic.getCardsLearnedInPeriod(cards, start, end).length;
+      final c = statistic.getLearnedCountForPeriod(start, end);
       counts[i] = c;
     }
     return counts;
@@ -688,7 +672,7 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
     for (var i = 0; i < buckets.length; i++) {
       final start = buckets[i];
       final end = start.add(Duration(days: bucketDays - 1));
-      final c = statistic.getCardsKnownInPeriod(cards, start, end).length;
+      final c = statistic.getKnownCountForPeriod(start, end);
       counts[i] = c;
     }
     return counts;

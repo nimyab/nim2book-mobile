@@ -8,7 +8,5 @@ sealed class StatisticsState with _$StatisticsState {
     @Default(0) int currentStreak,
     @Default(0) int longestStreak,
     @Default(0) int dailyNewCount,
-    @Default(15) int dailyLimit,
-    @Default(false) bool isLoading,
   }) = _StatisticsState;
 }

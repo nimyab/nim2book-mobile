@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fsrs/fsrs.dart';
+import 'package:nim2book_mobile_flutter/core/models/learning/learning_mode.dart';
 import 'package:nim2book_mobile_flutter/core/providers/dictionary/dictionary_state.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
@@ -6,20 +8,22 @@ import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/core/services/dictionary_service.dart';
 
 class DictionaryNotifier extends Notifier<DictionaryState> {
-  late final DictionaryService _dictService;
+  late final DictionaryService _dictionaryService;
 
   @override
   DictionaryState build() {
-    _dictService = ref.read(dictionaryServiceProvider);
-    final savedCards = _dictService.getMapDictionaryCard();
-    return DictionaryState(savedCards: savedCards);
+    _dictionaryService = ref.read(dictionaryServiceProvider);
+    return DictionaryState(
+      savedCards: _dictionaryService.getMapDictionaryCard(),
+      dailyLimitNewWords: _dictionaryService.getDailyNewLimit(),
+    );
   }
 
   Future<bool> saveWord(
     final String word,
     final DictionaryWord wordData,
   ) async {
-    final dictionaryCard = await _dictService.saveWord(wordData);
+    final dictionaryCard = await _dictionaryService.saveWord(wordData);
     if (dictionaryCard != null) {
       final updated = Map<String, List<DictionaryCard>>.from(state.savedCards);
       if (!updated.containsKey(word)) {
@@ -31,13 +35,13 @@ class DictionaryNotifier extends Notifier<DictionaryState> {
       );
       // Add new word
       updated[word]!.add(dictionaryCard);
-      state = DictionaryState(savedCards: updated);
+      state = state.copyWith(savedCards: updated);
     }
     return dictionaryCard != null;
   }
 
   Future<bool> deleteWord(final String word, final String partOfSpeech) async {
-    final ok = await _dictService.deleteWord(word, partOfSpeech);
+    final ok = await _dictionaryService.deleteWord(word, partOfSpeech);
     if (ok) {
       final updated = Map<String, List<DictionaryCard>>.from(state.savedCards);
       if (updated.containsKey(word)) {
@@ -48,7 +52,7 @@ class DictionaryNotifier extends Notifier<DictionaryState> {
           updated.remove(word);
         }
       }
-      state = DictionaryState(savedCards: updated);
+      state = state.copyWith(savedCards: updated);
     }
     return ok;
   }
@@ -56,11 +60,11 @@ class DictionaryNotifier extends Notifier<DictionaryState> {
   Future<List<DictionaryWord>?> getWordLocalFirst(final String word) async {
     final saved = state.savedCards[word];
     if (saved != null) return saved.map((e) => e.wordData).toList();
-    return _dictService.getWord(word);
+    return _dictionaryService.getWord(word);
   }
 
   Future<List<DictionaryWord>?> getWordServiceFirst(final String word) async {
-    final wordFromServer = await _dictService.getWord(word);
+    final wordFromServer = await _dictionaryService.getWord(word);
     if (wordFromServer != null) return wordFromServer;
     return state.savedCards[word]?.map((e) => e.wordData).toList();
   }
@@ -69,6 +73,30 @@ class DictionaryNotifier extends Notifier<DictionaryState> {
     final words = state.savedCards[word];
     if (words == null) return false;
     return words.any((w) => w.wordData.partOfSpeech == partOfSpeech);
+  }
+
+  /// Обновить карточку после ответа пользователя на карточку в учебной сессии
+  Future<DictionaryCard> reviewCard({
+    required DictionaryCard card,
+    required Rating rating,
+  }) async {
+    return _dictionaryService.reviewCard(card: card, rating: rating);
+  }
+
+  /// Сбросить состояние карточки (вернуть к начальному состоянию)
+  Future<void> resetCard(DictionaryCard card) async {
+    return _dictionaryService.resetCard(card);
+  }
+
+  /// Получить одну карточку для повторения, которая должна быть повторена первой
+  DictionaryCard? getDueCard(LearningMode mode) {
+    return _dictionaryService.getDueCard(mode);
+  }
+
+  /// Установить новый лимит новых слов в день
+  Future<void> setDailyNewLimit(int limit) async {
+    await _dictionaryService.setDailyNewLimit(limit);
+    state = state.copyWith(dailyLimitNewWords: limit);
   }
 }
 

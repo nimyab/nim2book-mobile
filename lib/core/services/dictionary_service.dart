@@ -3,22 +3,32 @@ import 'dart:convert';
 import 'package:fsrs/fsrs.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
+import 'package:nim2book_mobile_flutter/core/models/learning/learning_mode.dart';
 import 'package:nim2book_mobile_flutter/core/models/requests/requests.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
+import 'package:nim2book_mobile_flutter/core/services/statistic_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 const _fromLang = 'en';
 const _toLang = 'ru';
 const _ui = 'ru';
+const int _defaultMaxNewPerDay = 15;
+const String _dailyNewLimitKey = 'statistic_daily_new_limit';
 
 class DictionaryService {
   final Talker _logger;
   final ApiClient _apiClient;
   final SharedPreferences _sharedPreferences;
+  final StatisticService _statisticService;
   final _scheduler = Scheduler();
 
-  DictionaryService(this._logger, this._apiClient, this._sharedPreferences);
+  DictionaryService(
+    this._logger,
+    this._apiClient,
+    this._sharedPreferences,
+    this._statisticService,
+  );
 
   static const _dictionaryPrefix = 'dictionary_card_';
 
@@ -157,11 +167,6 @@ class DictionaryService {
     return _getDictionaryCard(key);
   }
 
-  /// Получить вероятность правильного ответа (retrievability)
-  double getCardRetrievability(DictionaryCard card) {
-    return _scheduler.getCardRetrievability(card.fsrsCard);
-  }
-
   /// Получить карточки, которые нужно повторить сейчас
   List<DictionaryCard> getDueCards({DateTime? now}) {
     final reviewTime = now ?? DateTime.now().toUtc();
@@ -176,6 +181,14 @@ class DictionaryService {
   /// Получить количество карточек для повторения
   int getDueCardsCount({DateTime? now}) {
     return getDueCards(now: now).length;
+  }
+
+  /// Получить одну карточку для повторения, которая должна быть повторена первой
+  DictionaryCard? getDueCard(LearningMode mode) {
+    final dueCards = getDueCards();
+    if (dueCards.isEmpty) return null;
+    dueCards.sort((a, b) => a.fsrsCard.due.compareTo(b.fsrsCard.due));
+    return dueCards.first;
   }
 
   /// Обновить карточку когда пользователь знает слово
@@ -199,14 +212,144 @@ class DictionaryService {
     required DictionaryCard card,
     required Rating rating,
   }) async {
+    final now = DateTime.now();
+    final wasNew = isNewCard(card);
+    final oldStep = card.fsrsCard.step ?? 0;
+
     // Используем Scheduler для расчета следующего повторения
     final result = _scheduler.reviewCard(card.fsrsCard, rating);
-
     final updatedCard = card.copyWith(fsrsCard: result.card);
+    final newStep = updatedCard.fsrsCard.step ?? 0;
 
     // Сохраняем обновленную карточку
     await _updateCard(updatedCard);
 
+    // Записываем статистику
+    // 1. Если карточка была новой и пользователь дал правильный ответ
+    if (wasNew && rating != Rating.again) {
+      _statisticService.incrementDailyNewCount();
+    }
+
+    // 2. Всегда записываем повторение
+    await _statisticService.recordCardRepeated(now);
+
+    // 3. Если карточка достигла порога "заучено" (step >= 3)
+    if (oldStep < 3 && newStep >= 3) {
+      await _statisticService.recordCardLearned(now);
+    }
+
+    // 4. Если карточка достигла порога "выучено" (step >= 8)
+    if (oldStep < 8 && newStep >= 8) {
+      await _statisticService.recordCardKnown(now);
+    }
+
     return updatedCard;
+  }
+
+  // ============================================================
+  // ПРОВЕРКА СОСТОЯНИЯ КАРТОЧЕК
+  // ============================================================
+
+  /// Проверяет, является ли карточка новой (никогда не изучалась)
+  bool isNewCard(DictionaryCard card) {
+    return card.fsrsCard.step == 0;
+  }
+
+  /// Проверяет, нужно ли повторить карточку сейчас
+  bool isDueCard(DictionaryCard card, {DateTime? now}) {
+    final reviewTime = now ?? DateTime.now().toUtc();
+    return card.fsrsCard.due.isBefore(reviewTime) ||
+        card.fsrsCard.due.isAtSameMomentAs(reviewTime);
+  }
+
+  // ============================================================
+  // ПОЛУЧЕНИЕ КАРТОЧЕК С УЧЕТОМ ЛИМИТОВ
+  // ============================================================
+
+  /// Получает список карточек к повторению (с учётом лимита новых слов)
+  List<DictionaryCard> getDueCardsWithLimit(
+    final Iterable<DictionaryCard> cards, {
+    final DateTime? now,
+  }) {
+    final reviewDue = <DictionaryCard>[];
+    final newDue = <DictionaryCard>[];
+
+    for (final card in cards) {
+      if (isDueCard(card)) {
+        if (isNewCard(card)) {
+          newDue.add(card);
+        } else {
+          reviewDue.add(card);
+        }
+      }
+    }
+
+    final alreadyStartedToday = _statisticService.getDailyNewCount();
+    final maxNewPerDay = getDailyNewLimit();
+    final availableSlots = (maxNewPerDay - alreadyStartedToday).clamp(
+      0,
+      maxNewPerDay,
+    );
+    final limitedNew = availableSlots > 0
+        ? newDue.take(availableSlots).toList()
+        : const <DictionaryCard>[];
+
+    return [...reviewDue, ...limitedNew];
+  }
+
+  /// Получает количество новых карточек к изучению (с учетом лимита)
+  int getNewDueCount(
+    final Iterable<DictionaryCard> cards, {
+    final DateTime? now,
+  }) {
+    final newDue = cards
+        .where((card) => isNewCard(card) && isDueCard(card))
+        .length;
+
+    final alreadyStartedToday = _statisticService.getDailyNewCount();
+    final maxNewPerDay = getDailyNewLimit();
+    final availableSlots = (maxNewPerDay - alreadyStartedToday).clamp(
+      0,
+      maxNewPerDay,
+    );
+
+    return availableSlots > 0 ? newDue.clamp(0, availableSlots) : 0;
+  }
+
+  /// Получает количество карточек на повторение (не новых)
+  int getReviewDueCount(
+    final Iterable<DictionaryCard> cards, {
+    final DateTime? now,
+  }) {
+    return cards.where((card) => !isNewCard(card) && isDueCard(card)).length;
+  }
+
+  // ============================================================
+  // ПОДСЧЕТ КАРТОЧЕК ПО УРОВНЮ ИЗУЧЕНИЯ
+  // ============================================================
+
+  /// Подсчитывает количество заученных карточек (step >= 3)
+  int countLearnedCards(final Iterable<DictionaryCard> cards) {
+    return cards.where((card) => (card.fsrsCard.step ?? 0) >= 3).length;
+  }
+
+  /// Подсчитывает количество повторенных карточек (step >= 1)
+  int countRepeatedCards(final Iterable<DictionaryCard> cards) {
+    return cards.where((card) => (card.fsrsCard.step ?? 0) >= 1).length;
+  }
+
+  /// Подсчитывает количество хорошо знакомых карточек (step >= 8)
+  int countKnownCards(final Iterable<DictionaryCard> cards) {
+    return cards.where((card) => (card.fsrsCard.step ?? 0) >= 8).length;
+  }
+
+  /// Получить текущий лимит новых слов в день
+  int getDailyNewLimit() {
+    return _sharedPreferences.getInt(_dailyNewLimitKey) ?? _defaultMaxNewPerDay;
+  }
+
+  /// Установить новый лимит новых слов в день
+  Future<void> setDailyNewLimit(final int value) async {
+    await _sharedPreferences.setInt(_dailyNewLimitKey, value);
   }
 }

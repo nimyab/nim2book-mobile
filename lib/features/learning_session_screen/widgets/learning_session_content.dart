@@ -1,22 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
+import 'package:nim2book_mobile_flutter/core/models/learning/learning_mode.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/word_card.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/word_progress_indicator.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/provider/learning_session_provider.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
-enum LearningMode { newOnly, reviewOnly, mixed }
-
 class LearningSessionContent extends ConsumerStatefulWidget {
   final LearningMode mode;
-  final Map<String, List<DictionaryCard>> savedCards;
 
-  const LearningSessionContent({
-    super.key,
-    required this.mode,
-    required this.savedCards,
-  });
+  const LearningSessionContent({super.key, required this.mode});
 
   @override
   ConsumerState<LearningSessionContent> createState() =>
@@ -25,107 +18,19 @@ class LearningSessionContent extends ConsumerStatefulWidget {
 
 class _LearningSessionContentState
     extends ConsumerState<LearningSessionContent> {
-  bool _pendingEmptyNotification = false;
-
-  @override
-  void initState() {
-    super.initState();
-    // Initialize session after first frame
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        final notifier = ref.read(
-          learningSessionNotifierProvider((
-            mode: widget.mode,
-            allSavedCards: widget.savedCards,
-          )).notifier,
-        );
-
-        notifier.initializeSession();
-      }
-    });
-  }
-
-  void _toggleTranslation() {
-    final notifier = ref.read(
-      learningSessionNotifierProvider((
-        mode: widget.mode,
-        allSavedCards: widget.savedCards,
-      )).notifier,
-    );
-    notifier.toggleTranslation();
-  }
-
-  void _handleKnow() {
-    final notifier = ref.read(
-      learningSessionNotifierProvider((
-        mode: widget.mode,
-        allSavedCards: widget.savedCards,
-      )).notifier,
-    );
-    notifier.handleKnow();
-  }
-
-  void _handleDontKnow() {
-    final notifier = ref.read(
-      learningSessionNotifierProvider((
-        mode: widget.mode,
-        allSavedCards: widget.savedCards,
-      )).notifier,
-    );
-    notifier.handleDontKnow();
-  }
-
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
     final sessionState = ref.watch(
-      learningSessionNotifierProvider((
-        mode: widget.mode,
-        allSavedCards: widget.savedCards,
-      )),
+      learningSessionNotifierProvider((mode: widget.mode)),
+    );
+    final sessionNotifier = ref.watch(
+      learningSessionNotifierProvider((mode: widget.mode)).notifier,
     );
 
-    // Listen for empty session changes
-    ref.listen(
-      learningSessionNotifierProvider((
-        mode: widget.mode,
-        allSavedCards: widget.savedCards,
-      )),
-      (previous, next) {
-        if (next.sessionEmpty && !_pendingEmptyNotification) {
-          _pendingEmptyNotification = true;
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (!mounted) return;
-            final messenger = ScaffoldMessenger.of(context);
-            messenger.clearSnackBars();
-            switch (widget.mode) {
-              case LearningMode.newOnly:
-                messenger.showSnackBar(
-                  SnackBar(content: Text(l10n.noNewWordsToday)),
-                );
-                break;
-              case LearningMode.reviewOnly:
-                messenger.showSnackBar(
-                  SnackBar(content: Text(l10n.noReviewWordsDue)),
-                );
-                break;
-              case LearningMode.mixed:
-                messenger.showSnackBar(
-                  SnackBar(content: Text(l10n.noMixedSessionAvailable)),
-                );
-                break;
-            }
-            setState(() {
-              _pendingEmptyNotification = false;
-            });
-          });
-        }
-      },
-    );
-
-    if (sessionState.sessionCards.isEmpty) {
+    if (sessionState.currentCard == null) {
       return Center(
         child: Text(
           switch (widget.mode) {
@@ -141,12 +46,7 @@ class _LearningSessionContentState
       );
     }
 
-    final cards = sessionState.sessionCards;
-    final safeIndex = sessionState.currentWordIndex.clamp(
-      0,
-      cards.isNotEmpty ? cards.length - 1 : 0,
-    );
-    final currentCard = cards.isNotEmpty ? cards[safeIndex] : cards.first;
+    final currentCard = sessionState.currentCard!;
 
     return SafeArea(
       child: Padding(
@@ -160,9 +60,10 @@ class _LearningSessionContentState
                 child: WordCard(
                   card: currentCard,
                   showTranslation: sessionState.showTranslation,
-                  onToggleTranslation: _toggleTranslation,
-                  onKnow: _handleKnow,
-                  onDontKnow: _handleDontKnow,
+                  onToggleTranslation: () =>
+                      sessionNotifier.toggleTranslation(),
+                  onKnow: () => sessionNotifier.handleKnow(),
+                  onDontKnow: () => sessionNotifier.handleDontKnow(),
                 ),
               ),
             ),
@@ -172,7 +73,7 @@ class _LearningSessionContentState
                 children: [
                   Expanded(
                     child: ElevatedButton.icon(
-                      onPressed: _handleDontKnow,
+                      onPressed: () => sessionNotifier.handleDontKnow(),
                       icon: const Icon(Icons.refresh),
                       label: Text(l10n.dontKnow),
                       style: ElevatedButton.styleFrom(
@@ -188,7 +89,7 @@ class _LearningSessionContentState
                   const SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton.icon(
-                      onPressed: _handleKnow,
+                      onPressed: () => sessionNotifier.handleKnow(),
                       icon: const Icon(Icons.check),
                       label: Text(l10n.know),
                       style: ElevatedButton.styleFrom(
