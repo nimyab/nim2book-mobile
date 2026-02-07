@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/book_reading/book_reading_provider.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/providers/loading_book/loading_book_provider.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 class SearchResult {
@@ -22,9 +23,8 @@ class SearchResult {
 
 class SearchSheet extends ConsumerStatefulWidget {
   final String bookId;
-  final List<ChapterAlignNode> chapters;
 
-  const SearchSheet({super.key, required this.bookId, required this.chapters});
+  const SearchSheet({super.key, required this.bookId});
 
   @override
   ConsumerState<SearchSheet> createState() => _SearchSheetState();
@@ -44,7 +44,11 @@ class _SearchSheetState extends ConsumerState<SearchSheet> {
   }
 
   void _performSearch(final String q) {
-    final chapters = widget.chapters;
+    // Get chapters from loading provider
+    final chapters = ref.read(
+      loadingBookNotifierProvider(widget.bookId).select((s) => s.chapters),
+    );
+
     final qTrim = q.trim();
     final qLower = qTrim.toLowerCase();
 
@@ -54,6 +58,9 @@ class _SearchSheetState extends ConsumerState<SearchSheet> {
       if (qTrim.isEmpty) return;
       for (var ci = 0; ci < chapters.length; ci++) {
         final ch = chapters[ci];
+        // Skip chapters that aren't loaded yet
+        if (ch == null) continue;
+
         final title = ch.translatedTitle.isNotEmpty
             ? ch.translatedTitle
             : ch.title;
@@ -177,13 +184,9 @@ class _SearchSheetState extends ConsumerState<SearchSheet> {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 onTap: () {
-                                  final bookReadingParam = (
-                                    bookId: widget.bookId,
-                                    chapters: widget.chapters,
-                                  );
                                   final notifier = ref.read(
                                     bookReadingNotifierProvider(
-                                      bookReadingParam,
+                                      widget.bookId,
                                     ).notifier,
                                   );
                                   Navigator.of(context).pop();

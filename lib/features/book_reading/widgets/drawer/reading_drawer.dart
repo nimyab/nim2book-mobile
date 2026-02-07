@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/reading_settings/reading_settings_provider.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/drawer/chapter_list_tab.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/drawer/drawer_header_actions.dart';
@@ -11,19 +10,14 @@ import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 class ReadingDrawer extends ConsumerWidget {
   final String bookId;
-  final List<ChapterAlignNode> chapters;
 
-  const ReadingDrawer({
-    super.key,
-    required this.bookId,
-    required this.chapters,
-  });
+  const ReadingDrawer({super.key, required this.bookId});
 
   void _openSearchSheet(final BuildContext context) {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      builder: (_) => SearchSheet(bookId: bookId, chapters: chapters),
+      builder: (_) => SearchSheet(bookId: bookId),
     );
   }
 
@@ -76,7 +70,7 @@ class ReadingDrawer extends ConsumerWidget {
               Expanded(
                 child: TabBarView(
                   children: [
-                    ChapterListTab(bookId: bookId, chapters: chapters),
+                    ChapterListTab(bookId: bookId),
                     const TextSettingsTab(),
                   ],
                 ),

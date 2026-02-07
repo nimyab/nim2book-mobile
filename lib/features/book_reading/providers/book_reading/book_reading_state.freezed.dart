@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$BookReadingState {
 
- String get bookId; List<ChapterAlignNode> get chapters; int get currentChapterIndex; int? get selectedParagraphIndex; int? get selectedWordIndex; Map<int, double> get chapterProgress; bool get prefsLoaded;
+ String get bookId; List<ChapterAlignNode?> get chapters; int get currentChapterIndex; int? get selectedParagraphIndex; int? get selectedWordIndex; Map<int, double> get chapterProgress; bool get prefsLoaded;
 /// Create a copy of BookReadingState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $BookReadingStateCopyWith<$Res>  {
   factory $BookReadingStateCopyWith(BookReadingState value, $Res Function(BookReadingState) _then) = _$BookReadingStateCopyWithImpl;
 @useResult
 $Res call({
- String bookId, List<ChapterAlignNode> chapters, int currentChapterIndex, int? selectedParagraphIndex, int? selectedWordIndex, Map<int, double> chapterProgress, bool prefsLoaded
+ String bookId, List<ChapterAlignNode?> chapters, int currentChapterIndex, int? selectedParagraphIndex, int? selectedWordIndex, Map<int, double> chapterProgress, bool prefsLoaded
 });
 
 
@@ -66,7 +66,7 @@ class _$BookReadingStateCopyWithImpl<$Res>
   return _then(_self.copyWith(
 bookId: null == bookId ? _self.bookId : bookId // ignore: cast_nullable_to_non_nullable
 as String,chapters: null == chapters ? _self.chapters : chapters // ignore: cast_nullable_to_non_nullable
-as List<ChapterAlignNode>,currentChapterIndex: null == currentChapterIndex ? _self.currentChapterIndex : currentChapterIndex // ignore: cast_nullable_to_non_nullable
+as List<ChapterAlignNode?>,currentChapterIndex: null == currentChapterIndex ? _self.currentChapterIndex : currentChapterIndex // ignore: cast_nullable_to_non_nullable
 as int,selectedParagraphIndex: freezed == selectedParagraphIndex ? _self.selectedParagraphIndex : selectedParagraphIndex // ignore: cast_nullable_to_non_nullable
 as int?,selectedWordIndex: freezed == selectedWordIndex ? _self.selectedWordIndex : selectedWordIndex // ignore: cast_nullable_to_non_nullable
 as int?,chapterProgress: null == chapterProgress ? _self.chapterProgress : chapterProgress // ignore: cast_nullable_to_non_nullable
@@ -156,7 +156,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String bookId,  List<ChapterAlignNode> chapters,  int currentChapterIndex,  int? selectedParagraphIndex,  int? selectedWordIndex,  Map<int, double> chapterProgress,  bool prefsLoaded)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String bookId,  List<ChapterAlignNode?> chapters,  int currentChapterIndex,  int? selectedParagraphIndex,  int? selectedWordIndex,  Map<int, double> chapterProgress,  bool prefsLoaded)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _BookReadingState() when $default != null:
 return $default(_that.bookId,_that.chapters,_that.currentChapterIndex,_that.selectedParagraphIndex,_that.selectedWordIndex,_that.chapterProgress,_that.prefsLoaded);case _:
@@ -177,7 +177,7 @@ return $default(_that.bookId,_that.chapters,_that.currentChapterIndex,_that.sele
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String bookId,  List<ChapterAlignNode> chapters,  int currentChapterIndex,  int? selectedParagraphIndex,  int? selectedWordIndex,  Map<int, double> chapterProgress,  bool prefsLoaded)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String bookId,  List<ChapterAlignNode?> chapters,  int currentChapterIndex,  int? selectedParagraphIndex,  int? selectedWordIndex,  Map<int, double> chapterProgress,  bool prefsLoaded)  $default,) {final _that = this;
 switch (_that) {
 case _BookReadingState():
 return $default(_that.bookId,_that.chapters,_that.currentChapterIndex,_that.selectedParagraphIndex,_that.selectedWordIndex,_that.chapterProgress,_that.prefsLoaded);case _:
@@ -197,7 +197,7 @@ return $default(_that.bookId,_that.chapters,_that.currentChapterIndex,_that.sele
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String bookId,  List<ChapterAlignNode> chapters,  int currentChapterIndex,  int? selectedParagraphIndex,  int? selectedWordIndex,  Map<int, double> chapterProgress,  bool prefsLoaded)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String bookId,  List<ChapterAlignNode?> chapters,  int currentChapterIndex,  int? selectedParagraphIndex,  int? selectedWordIndex,  Map<int, double> chapterProgress,  bool prefsLoaded)?  $default,) {final _that = this;
 switch (_that) {
 case _BookReadingState() when $default != null:
 return $default(_that.bookId,_that.chapters,_that.currentChapterIndex,_that.selectedParagraphIndex,_that.selectedWordIndex,_that.chapterProgress,_that.prefsLoaded);case _:
@@ -212,12 +212,12 @@ return $default(_that.bookId,_that.chapters,_that.currentChapterIndex,_that.sele
 
 
 class _BookReadingState implements BookReadingState {
-  const _BookReadingState({required this.bookId, required final  List<ChapterAlignNode> chapters, required this.currentChapterIndex, required this.selectedParagraphIndex, required this.selectedWordIndex, required final  Map<int, double> chapterProgress, this.prefsLoaded = false}): _chapters = chapters,_chapterProgress = chapterProgress;
+  const _BookReadingState({required this.bookId, required final  List<ChapterAlignNode?> chapters, required this.currentChapterIndex, required this.selectedParagraphIndex, required this.selectedWordIndex, required final  Map<int, double> chapterProgress, this.prefsLoaded = false}): _chapters = chapters,_chapterProgress = chapterProgress;
   
 
 @override final  String bookId;
- final  List<ChapterAlignNode> _chapters;
-@override List<ChapterAlignNode> get chapters {
+ final  List<ChapterAlignNode?> _chapters;
+@override List<ChapterAlignNode?> get chapters {
   if (_chapters is EqualUnmodifiableListView) return _chapters;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_chapters);
@@ -265,7 +265,7 @@ abstract mixin class _$BookReadingStateCopyWith<$Res> implements $BookReadingSta
   factory _$BookReadingStateCopyWith(_BookReadingState value, $Res Function(_BookReadingState) _then) = __$BookReadingStateCopyWithImpl;
 @override @useResult
 $Res call({
- String bookId, List<ChapterAlignNode> chapters, int currentChapterIndex, int? selectedParagraphIndex, int? selectedWordIndex, Map<int, double> chapterProgress, bool prefsLoaded
+ String bookId, List<ChapterAlignNode?> chapters, int currentChapterIndex, int? selectedParagraphIndex, int? selectedWordIndex, Map<int, double> chapterProgress, bool prefsLoaded
 });
 
 
@@ -286,7 +286,7 @@ class __$BookReadingStateCopyWithImpl<$Res>
   return _then(_BookReadingState(
 bookId: null == bookId ? _self.bookId : bookId // ignore: cast_nullable_to_non_nullable
 as String,chapters: null == chapters ? _self._chapters : chapters // ignore: cast_nullable_to_non_nullable
-as List<ChapterAlignNode>,currentChapterIndex: null == currentChapterIndex ? _self.currentChapterIndex : currentChapterIndex // ignore: cast_nullable_to_non_nullable
+as List<ChapterAlignNode?>,currentChapterIndex: null == currentChapterIndex ? _self.currentChapterIndex : currentChapterIndex // ignore: cast_nullable_to_non_nullable
 as int,selectedParagraphIndex: freezed == selectedParagraphIndex ? _self.selectedParagraphIndex : selectedParagraphIndex // ignore: cast_nullable_to_non_nullable
 as int?,selectedWordIndex: freezed == selectedWordIndex ? _self.selectedWordIndex : selectedWordIndex // ignore: cast_nullable_to_non_nullable
 as int?,chapterProgress: null == chapterProgress ? _self._chapterProgress : chapterProgress // ignore: cast_nullable_to_non_nullable

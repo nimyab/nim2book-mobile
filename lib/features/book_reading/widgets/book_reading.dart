@@ -23,6 +23,7 @@ class BookReading extends ConsumerStatefulWidget {
 class _BookReadingState extends ConsumerState<BookReading>
     with TickerProviderStateMixin {
   final ScrollController _translatedController = ScrollController();
+  bool _listenersInitialized = false;
 
   @override
   void initState() {
@@ -32,6 +33,27 @@ class _BookReadingState extends ConsumerState<BookReading>
       ref
           .read(loadingBookNotifierProvider(widget.bookId).notifier)
           .getBookData();
+    });
+  }
+
+  void _initializeListeners() {
+    if (_listenersInitialized) return;
+    _listenersInitialized = true;
+
+    // Setup listener for selection changes (only once, not in build)
+    ref.listen(bookReadingNotifierProvider(widget.bookId), (
+      previous,
+      current,
+    ) {
+      if (previous?.selectedParagraphIndex != current.selectedParagraphIndex ||
+          previous?.selectedWordIndex != current.selectedWordIndex) {
+        ref
+            .read(readingSettingsNotifierProvider.notifier)
+            .applySelection(
+              current.selectedParagraphIndex,
+              current.selectedWordIndex,
+            );
+      }
     });
   }
 
@@ -65,54 +87,30 @@ class _BookReadingState extends ConsumerState<BookReading>
       );
     }
 
-    // Create the provider parameter for book reading notifier
-    final bookReadingParam = (bookId: book.id, chapters: loadingState.chapters);
+    // Use only bookId as parameter to prevent provider recreation
+    final bookId = widget.bookId;
 
-    // Watch reading state and settings
-    final readingState = ref.watch(
-      bookReadingNotifierProvider(bookReadingParam),
-    );
+    // Watch reading state and settings with select for granular updates
+    final readingState = ref.watch(bookReadingNotifierProvider(bookId));
     final settingsState = ref.watch(readingSettingsNotifierProvider);
+
+    // Initialize listeners once
+    _initializeListeners();
 
     // Initialize book reading notifier if needed
     if (!readingState.prefsLoaded) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref
-            .read(bookReadingNotifierProvider(bookReadingParam).notifier)
-            .initialize();
+        ref.read(bookReadingNotifierProvider(bookId).notifier).initialize();
       });
     }
-
-    // Handle selection changes for translated text
-    ref.listen(bookReadingNotifierProvider(bookReadingParam), (
-      previous,
-      current,
-    ) {
-      if (previous?.selectedParagraphIndex != current.selectedParagraphIndex ||
-          previous?.selectedWordIndex != current.selectedWordIndex) {
-        ref
-            .read(readingSettingsNotifierProvider.notifier)
-            .applySelection(
-              current.selectedParagraphIndex,
-              current.selectedWordIndex,
-            );
-      }
-    });
 
     final index = readingState.currentChapterIndex;
     final isTranslatedVisible = settingsState.isTranslatedVisible;
     final bgColor = settingsState.backgroundColor;
 
     return Scaffold(
-      appBar: BookReadingBar(
-        book: book,
-        bookId: widget.bookId,
-        chapters: loadingState.chapters,
-      ),
-      endDrawer: ReadingDrawer(
-        bookId: widget.bookId,
-        chapters: loadingState.chapters,
-      ),
+      appBar: BookReadingBar(book: book, bookId: widget.bookId),
+      endDrawer: ReadingDrawer(bookId: bookId),
       body: !readingState.prefsLoaded
           ? ColoredBox(color: bgColor, child: const SizedBox.expand())
           : ColoredBox(
@@ -128,8 +126,7 @@ class _BookReadingState extends ConsumerState<BookReading>
                         child: TranslatedTextScroll(
                           key: ValueKey(index),
                           controller: _translatedController,
-                          bookId: widget.bookId,
-                          chapters: loadingState.chapters,
+                          bookId: bookId,
                         ),
                       ),
                     ),
@@ -138,8 +135,7 @@ class _BookReadingState extends ConsumerState<BookReading>
                     child: OriginalTextScroll(
                       key: ValueKey(index),
                       translatedScrollController: _translatedController,
-                      bookId: widget.bookId,
-                      chapters: loadingState.chapters,
+                      bookId: bookId,
                     ),
                   ),
                 ],

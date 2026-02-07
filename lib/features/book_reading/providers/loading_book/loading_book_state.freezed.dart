@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LoadingBookState {
 
- Book? get book; List<ChapterAlignNode> get chapters; double get progress; bool get isLoading;
+ Book? get book; List<ChapterAlignNode?> get chapters; double get progress; bool get isLoading;
 /// Create a copy of LoadingBookState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $LoadingBookStateCopyWith<$Res>  {
   factory $LoadingBookStateCopyWith(LoadingBookState value, $Res Function(LoadingBookState) _then) = _$LoadingBookStateCopyWithImpl;
 @useResult
 $Res call({
- Book? book, List<ChapterAlignNode> chapters, double progress, bool isLoading
+ Book? book, List<ChapterAlignNode?> chapters, double progress, bool isLoading
 });
 
 
@@ -66,7 +66,7 @@ class _$LoadingBookStateCopyWithImpl<$Res>
   return _then(_self.copyWith(
 book: freezed == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
 as Book?,chapters: null == chapters ? _self.chapters : chapters // ignore: cast_nullable_to_non_nullable
-as List<ChapterAlignNode>,progress: null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
+as List<ChapterAlignNode?>,progress: null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
 as double,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
@@ -165,7 +165,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Book? book,  List<ChapterAlignNode> chapters,  double progress,  bool isLoading)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Book? book,  List<ChapterAlignNode?> chapters,  double progress,  bool isLoading)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LoadingBookState() when $default != null:
 return $default(_that.book,_that.chapters,_that.progress,_that.isLoading);case _:
@@ -186,7 +186,7 @@ return $default(_that.book,_that.chapters,_that.progress,_that.isLoading);case _
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Book? book,  List<ChapterAlignNode> chapters,  double progress,  bool isLoading)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Book? book,  List<ChapterAlignNode?> chapters,  double progress,  bool isLoading)  $default,) {final _that = this;
 switch (_that) {
 case _LoadingBookState():
 return $default(_that.book,_that.chapters,_that.progress,_that.isLoading);case _:
@@ -206,7 +206,7 @@ return $default(_that.book,_that.chapters,_that.progress,_that.isLoading);case _
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Book? book,  List<ChapterAlignNode> chapters,  double progress,  bool isLoading)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Book? book,  List<ChapterAlignNode?> chapters,  double progress,  bool isLoading)?  $default,) {final _that = this;
 switch (_that) {
 case _LoadingBookState() when $default != null:
 return $default(_that.book,_that.chapters,_that.progress,_that.isLoading);case _:
@@ -221,12 +221,12 @@ return $default(_that.book,_that.chapters,_that.progress,_that.isLoading);case _
 
 
 class _LoadingBookState implements LoadingBookState {
-  const _LoadingBookState({this.book, final  List<ChapterAlignNode> chapters = const [], this.progress = 0.0, this.isLoading = false}): _chapters = chapters;
+  const _LoadingBookState({this.book, final  List<ChapterAlignNode?> chapters = const [], this.progress = 0.0, this.isLoading = false}): _chapters = chapters;
   
 
 @override final  Book? book;
- final  List<ChapterAlignNode> _chapters;
-@override@JsonKey() List<ChapterAlignNode> get chapters {
+ final  List<ChapterAlignNode?> _chapters;
+@override@JsonKey() List<ChapterAlignNode?> get chapters {
   if (_chapters is EqualUnmodifiableListView) return _chapters;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_chapters);
@@ -265,7 +265,7 @@ abstract mixin class _$LoadingBookStateCopyWith<$Res> implements $LoadingBookSta
   factory _$LoadingBookStateCopyWith(_LoadingBookState value, $Res Function(_LoadingBookState) _then) = __$LoadingBookStateCopyWithImpl;
 @override @useResult
 $Res call({
- Book? book, List<ChapterAlignNode> chapters, double progress, bool isLoading
+ Book? book, List<ChapterAlignNode?> chapters, double progress, bool isLoading
 });
 
 
@@ -286,7 +286,7 @@ class __$LoadingBookStateCopyWithImpl<$Res>
   return _then(_LoadingBookState(
 book: freezed == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
 as Book?,chapters: null == chapters ? _self._chapters : chapters // ignore: cast_nullable_to_non_nullable
-as List<ChapterAlignNode>,progress: null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
+as List<ChapterAlignNode?>,progress: null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
 as double,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,
   ));

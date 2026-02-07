@@ -88,10 +88,10 @@ class _Nim2BookAppState extends ConsumerState<Nim2BookApp> {
   void initState() {
     super.initState();
 
-    // Initialize auth and books
-    Future.microtask(() {
-      ref.read(authNotifierProvider.notifier).initialize();
-      ref.read(booksNotifierProvider.notifier).initialize();
+    // Initialize auth and books sequentially to avoid rebuild cascade
+    Future.microtask(() async {
+      await ref.read(authNotifierProvider.notifier).initialize();
+      await ref.read(booksNotifierProvider.notifier).initialize();
       // Dictionary notifier initializes itself in build()
     });
   }

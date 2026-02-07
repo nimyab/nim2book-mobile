@@ -8,7 +8,7 @@ part 'loading_book_state.freezed.dart';
 abstract class LoadingBookState with _$LoadingBookState {
   const factory LoadingBookState({
     final Book? book,
-    @Default([]) final List<ChapterAlignNode> chapters,
+    @Default([]) final List<ChapterAlignNode?> chapters,
     @Default(0.0) final double progress,
     @Default(false) final bool isLoading,
   }) = _LoadingBookState;

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/models/personal_user_book/personal_user_book.dart';
@@ -21,12 +23,9 @@ class BooksNotifier extends Notifier<BooksState> {
     state = state.copyWith(isFetching: true);
 
     try {
-      // Load data in parallel
-      await Future.wait([
-        getMyBooks(),
-        getPersonalBooks(),
-        getBooks(null, null, 1),
-      ]);
+      await getMyBooks();
+      await getPersonalBooks();
+      await getBooks(null, null, 1);
     } finally {
       state = state.copyWith(isFetching: false);
     }
@@ -81,20 +80,22 @@ class BooksNotifier extends Notifier<BooksState> {
   }
 
   Future<void> addMyBook(final Book book) async {
-    final ok = await _bookService.addBook(book);
-    if (ok) {
-      final updated = List<Book>.from(state.savedBooks)..add(book);
-      state = state.copyWith(savedBooks: updated);
-    }
+    // Update UI immediately, persist in background
+    final updated = List<Book>.from(state.savedBooks)..add(book);
+    state = state.copyWith(savedBooks: updated);
+
+    // Persist without blocking UI
+    unawaited(_bookService.addBook(book));
   }
 
   Future<void> removeMyBook(final Book book) async {
-    final ok = await _bookService.removeBook(book);
-    if (ok) {
-      final updated = List<Book>.from(state.savedBooks)
-        ..removeWhere((final b) => b.id == book.id);
-      state = state.copyWith(savedBooks: updated);
-    }
+    // Update UI immediately, persist in background
+    final updated = List<Book>.from(state.savedBooks)
+      ..removeWhere((final b) => b.id == book.id);
+    state = state.copyWith(savedBooks: updated);
+
+    // Persist without blocking UI
+    unawaited(_bookService.removeBook(book));
   }
 
   Future<void> getPersonalBooks() async {

@@ -14,7 +14,6 @@ class OriginalParagraph extends ConsumerStatefulWidget {
   final int selectedParagraphIndex;
   final int selectedWordIndex;
   final String bookId;
-  final List<ChapterAlignNode> chapters;
 
   const OriginalParagraph({
     super.key,
@@ -23,7 +22,6 @@ class OriginalParagraph extends ConsumerStatefulWidget {
     required this.selectedParagraphIndex,
     required this.selectedWordIndex,
     required this.bookId,
-    required this.chapters,
   });
 
   @override
@@ -49,12 +47,8 @@ class _OriginalParagraphState extends ConsumerState<OriginalParagraph> {
   void _handleWordTap(final int wordIndex) {
     if (!(widget.selectedParagraphIndex == widget.paragraphIndex &&
         widget.selectedWordIndex == wordIndex)) {
-      final bookReadingParam = (
-        bookId: widget.bookId,
-        chapters: widget.chapters,
-      );
       ref
-          .read(bookReadingNotifierProvider(bookReadingParam).notifier)
+          .read(bookReadingNotifierProvider(widget.bookId).notifier)
           .selectWord(widget.paragraphIndex, wordIndex);
     } else {
       // Извлекаем текст слова из оригинальной строки

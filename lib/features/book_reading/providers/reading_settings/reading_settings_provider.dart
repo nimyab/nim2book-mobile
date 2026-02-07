@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
@@ -35,26 +37,30 @@ class ReadingSettingsNotifier extends Notifier<ReadingSettingsState> {
 
   Future<void> setFontFamily(final String value) async {
     if (state.fontFamily == value) return;
-    await _service.setFontFamily(value);
     state = state.copyWith(fontFamily: value);
+    // Fire-and-forget write to avoid blocking UI
+    unawaited(_service.setFontFamily(value));
   }
 
   Future<void> setFontSize(final double value) async {
     if (state.fontSize == value) return;
-    await _service.setFontSize(value);
     state = state.copyWith(fontSize: value);
+    // Fire-and-forget write to avoid blocking UI
+    unawaited(_service.setFontSize(value));
   }
 
   Future<void> setBackgroundColor(final Color value) async {
     if (state.backgroundColor == value) return;
-    await _service.setBackgroundColor(value);
     state = state.copyWith(backgroundColor: value);
+    // Fire-and-forget write to avoid blocking UI
+    unawaited(_service.setBackgroundColor(value));
   }
 
   Future<void> setTextColor(final Color value) async {
     if (state.textColor == value) return;
-    await _service.setTextColor(value);
     state = state.copyWith(textColor: value);
+    // Fire-and-forget write to avoid blocking UI
+    unawaited(_service.setTextColor(value));
   }
 
   void setTranslatedVisible({required final bool value}) {
@@ -100,26 +106,30 @@ class ReadingSettingsNotifier extends Notifier<ReadingSettingsState> {
 
   Future<void> setTextAlign(final TextAlign value) async {
     if (state.textAlign == value) return;
-    await _service.setTextAlign(value);
     state = state.copyWith(textAlign: value);
+    // Fire-and-forget write to avoid blocking UI
+    unawaited(_service.setTextAlign(value));
   }
 
   Future<void> setTranslatedFontSize(final double value) async {
     if (state.translatedFontSize == value) return;
-    await _service.setTranslatedFontSize(value);
     state = state.copyWith(translatedFontSize: value);
+    // Fire-and-forget write to avoid blocking UI
+    unawaited(_service.setTranslatedFontSize(value));
   }
 
   Future<void> setTranslatedFontFamily(final String value) async {
     if (state.translatedFontFamily == value) return;
-    await _service.setTranslatedFontFamily(value);
     state = state.copyWith(translatedFontFamily: value);
+    // Fire-and-forget write to avoid blocking UI
+    unawaited(_service.setTranslatedFontFamily(value));
   }
 
   Future<void> setTranslatedVerticalPadding(final double value) async {
     if (state.translatedVerticalPadding == value) return;
-    await _service.setTranslatedVerticalPadding(value);
     state = state.copyWith(translatedVerticalPadding: value);
+    // Fire-and-forget write to avoid blocking UI
+    unawaited(_service.setTranslatedVerticalPadding(value));
   }
 
   // Обновляет последний выбор и, при необходимости, включает перевод одним эмитом

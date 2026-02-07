@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/book_reading/book_reading_provider.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/providers/loading_book/loading_book_provider.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/reading_settings/reading_settings_provider.dart';
 
 class TranslatedTextScroll extends ConsumerStatefulWidget {
   final ScrollController? controller;
   final String bookId;
-  final List<ChapterAlignNode> chapters;
 
   const TranslatedTextScroll({
     super.key,
     this.controller,
     required this.bookId,
-    required this.chapters,
   });
 
   @override
@@ -28,7 +26,14 @@ class _TranslatedTextScrollState extends ConsumerState<TranslatedTextScroll> {
   int? _lastEnsuredWord;
   @override
   Widget build(final BuildContext context) {
-    final bookReadingParam = (bookId: widget.bookId, chapters: widget.chapters);
+    final bookId = widget.bookId;
+
+    // Get chapters from loading provider
+    final chapters = ref.watch(
+      loadingBookNotifierProvider(bookId).select((s) => s.chapters),
+    );
+
+    final bookReadingParam = bookId;
     final settingsState = ref.watch(readingSettingsNotifierProvider);
     final translatedFontSize = settingsState.translatedFontSize;
     final translatedFontFamily = settingsState.translatedFontFamily;
@@ -42,8 +47,18 @@ class _TranslatedTextScrollState extends ConsumerState<TranslatedTextScroll> {
 
     final selectedParagraphIndex = readingState.selectedParagraphIndex;
     final selectedWordIndex = readingState.selectedWordIndex;
-    final currentChapter =
-        readingState.chapters[readingState.currentChapterIndex];
+
+    final currentChapterIndex = readingState.currentChapterIndex;
+    if (chapters.isEmpty || currentChapterIndex >= chapters.length) {
+      return const Center(child: Text('Chapter not found'));
+    }
+
+    final currentChapter = chapters[currentChapterIndex];
+
+    // Show loading while chapter is being loaded
+    if (currentChapter == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
     final selectedWordNode =
         selectedWordIndex == null || selectedParagraphIndex == null

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -18,7 +19,7 @@ class ApiClient {
   late final Dio _dio;
 
   bool _isRefreshing = false;
-  final List<RequestOptions> _pendingRequests = [];
+  Completer<void>? _refreshCompleter;
 
   ApiClient({
     required TokenService tokenService,
@@ -46,7 +47,7 @@ class ApiClient {
       ),
     );
 
-    // Add auth interceptor
+    // Add auth interceptor with non-blocking refresh mechanism
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (final options, final handler) {
@@ -57,38 +58,44 @@ class ApiClient {
         onError: (final error, final handler) async {
           if (error.response?.statusCode == 401 &&
               _tokenService.refreshToken != null) {
-            // Если уже идет процесс обновления токена, добавляем запрос в очередь
-            if (_isRefreshing) {
-              _pendingRequests.add(error.requestOptions);
-              return;
+            // If refresh is already in progress, wait for it to complete
+            if (_isRefreshing && _refreshCompleter != null) {
+              try {
+                await _refreshCompleter!.future;
+                // Retry the original request with new token
+                error.requestOptions.headers['Authorization'] =
+                    'Bearer ${_tokenService.accessToken}';
+                final response = await _dio.fetch<Object?>(
+                  error.requestOptions,
+                );
+                handler.resolve(response);
+                return;
+              } catch (_) {
+                handler.next(error);
+                return;
+              }
             }
 
+            // Start refresh process
             _isRefreshing = true;
+            _refreshCompleter = Completer<void>();
 
             try {
-              // Обновляем токен
               await _refreshTokens();
+              _refreshCompleter!.complete();
 
+              // Retry the original request with new token
               error.requestOptions.headers['Authorization'] =
                   'Bearer ${_tokenService.accessToken}';
               final response = await _dio.fetch<Object?>(error.requestOptions);
-
-              // Обрабатываем отложенные запросы
-              for (final pendingRequest in _pendingRequests) {
-                pendingRequest.headers['Authorization'] =
-                    'Bearer ${_tokenService.accessToken}';
-                // Отложенные запросы выполняются, но не через handler
-                await _dio.fetch<Object?>(pendingRequest);
-              }
-              _pendingRequests.clear();
-
               handler.resolve(response);
             } catch (refreshError) {
-              _pendingRequests.clear();
+              _refreshCompleter!.completeError(refreshError);
               await _tokenService.clearTokens();
               handler.next(error);
             } finally {
               _isRefreshing = false;
+              _refreshCompleter = null;
             }
           } else {
             handler.next(error);

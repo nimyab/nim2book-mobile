@@ -21,24 +21,29 @@ class TokenService {
     _refreshToken = await _tokenStorage.read(key: _refreshTokenKey);
   }
 
+  /// Sets tokens in memory immediately and persists asynchronously without blocking
   Future<void> setTokens(
     final String accessToken,
     final String refreshToken,
   ) async {
+    // Update in-memory values immediately
     _accessToken = accessToken;
     _refreshToken = refreshToken;
-    await Future.wait([
-      _tokenStorage.write(key: _accessTokenKey, value: accessToken),
-      _tokenStorage.write(key: _refreshTokenKey, value: refreshToken),
-    ]);
+
+    // Persist to storage asynchronously without awaiting to avoid blocking
+    // Using unawaited to explicitly mark fire-and-forget
+    _tokenStorage.write(key: _accessTokenKey, value: accessToken).ignore();
+    _tokenStorage.write(key: _refreshTokenKey, value: refreshToken).ignore();
   }
 
+  /// Clears tokens from memory immediately and storage asynchronously
   Future<void> clearTokens() async {
+    // Clear in-memory values immediately
     _accessToken = null;
     _refreshToken = null;
-    await Future.wait([
-      _tokenStorage.delete(key: _accessTokenKey),
-      _tokenStorage.delete(key: _refreshTokenKey),
-    ]);
+
+    // Delete from storage asynchronously without blocking
+    _tokenStorage.delete(key: _accessTokenKey).ignore();
+    _tokenStorage.delete(key: _refreshTokenKey).ignore();
   }
 }

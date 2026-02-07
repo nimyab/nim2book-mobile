@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
@@ -10,6 +11,21 @@ import 'package:talker_flutter/talker_flutter.dart';
 
 const String _addedBooksKey = 'added_books';
 String _chapterKey(final String path) => 'book_chapter_$path';
+
+// Top-level functions for compute isolates
+Map<String, dynamic> _decompressAndDecodeChapter(String compressed) {
+  final bytes = base64Decode(compressed);
+  final decompressed = gzip.decode(bytes);
+  final json = utf8.decode(decompressed);
+  return jsonDecode(json) as Map<String, dynamic>;
+}
+
+String _encodeAndCompressChapter(Map<String, dynamic> chapterJson) {
+  final json = jsonEncode(chapterJson);
+  final bytes = utf8.encode(json);
+  final compressed = gzip.encode(bytes);
+  return base64Encode(compressed);
+}
 
 class BookService {
   final Talker _logger;
@@ -25,16 +41,22 @@ class BookService {
     try {
       final raw = _sharedPreferences.getString(cacheKey);
       if (raw != null) {
-        cachedBook = await Future.microtask(
-          () => Book.fromJson(jsonDecode(raw)),
-        );
+        // Parse JSON and convert to Book in compute to avoid blocking UI
+        cachedBook = await compute((String data) {
+          final json = jsonDecode(data) as Map<String, dynamic>;
+          return Book.fromJson(json);
+        }, raw);
       }
     } catch (_) {}
 
     try {
       final response = await _apiClient.getBook(bookId);
       final book = response.book;
-      await _sharedPreferences.setString(cacheKey, jsonEncode(book.toJson()));
+      // Cache asynchronously without blocking
+      compute(
+        (Map<String, dynamic> json) => jsonEncode(json),
+        book.toJson(),
+      ).then((encoded) => _sharedPreferences.setString(cacheKey, encoded));
       return book;
     } catch (e) {
       _logger.error('Error fetching book with ID $bookId: $e');
@@ -53,12 +75,13 @@ class BookService {
     try {
       final raw = _sharedPreferences.getString(cacheKey);
       if (raw != null) {
-        cached = await Future.microtask(() {
-          final list = jsonDecode(raw) as List<dynamic>;
-          return list
-              .map((final e) => Book.fromJson(e as Map<String, dynamic>))
+        // Parse and convert to Book objects in compute to avoid blocking UI
+        cached = await compute((String data) {
+          final jsonList = jsonDecode(data) as List<dynamic>;
+          return jsonList
+              .map((e) => Book.fromJson(e as Map<String, dynamic>))
               .toList();
-        });
+        }, raw);
       }
     } catch (_) {}
 
@@ -69,10 +92,11 @@ class BookService {
         page: page,
       );
       final books = response.books;
-      await _sharedPreferences.setString(
-        cacheKey,
-        jsonEncode(books.map((final b) => b.toJson()).toList()),
-      );
+      // Cache asynchronously without blocking
+      compute(
+        (List<Map<String, dynamic>> booksList) => jsonEncode(booksList),
+        books.map((final b) => b.toJson()).toList(),
+      ).then((encoded) => _sharedPreferences.setString(cacheKey, encoded));
       return books;
     } catch (e) {
       _logger.error('Error fetching books: $e');
@@ -85,11 +109,10 @@ class BookService {
     if (addedBooksJsonList == null) {
       return [];
     }
-    return Future.microtask(() {
-      return addedBooksJsonList
-          .map((final json) => Book.fromJson(jsonDecode(json)))
-          .toList();
-    });
+    // Decode JSON in separate isolate to avoid blocking UI
+    return await compute((List<String> jsonList) {
+      return jsonList.map((json) => Book.fromJson(jsonDecode(json))).toList();
+    }, addedBooksJsonList);
   }
 
   Future<bool> addBook(final Book book) async {
@@ -98,9 +121,11 @@ class BookService {
       return false;
     }
     addedBooks.add(book);
-    final addedBooksJsonList = addedBooks
-        .map((final b) => jsonEncode(b.toJson()))
-        .toList();
+    // Encode in compute to avoid blocking UI
+    final addedBooksJsonList = await compute(
+      (List<Book> books) => books.map((b) => jsonEncode(b.toJson())).toList(),
+      addedBooks,
+    );
     return await _sharedPreferences.setStringList(
       _addedBooksKey,
       addedBooksJsonList,
@@ -110,9 +135,11 @@ class BookService {
   Future<bool> removeBook(final Book book) async {
     final addedBooks = await getAddedBooks();
     final filtered = addedBooks.where((final b) => b.id != book.id).toList();
-    final addedBooksJsonList = filtered
-        .map((final b) => jsonEncode(b.toJson()))
-        .toList();
+    // Encode in compute to avoid blocking UI
+    final addedBooksJsonList = await compute(
+      (List<Book> books) => books.map((b) => jsonEncode(b.toJson())).toList(),
+      filtered,
+    );
     final updated = await _sharedPreferences.setStringList(
       _addedBooksKey,
       addedBooksJsonList,
@@ -129,26 +156,27 @@ class BookService {
 
       final cachedChapter = _sharedPreferences.getString(chapterKey);
       if (cachedChapter != null) {
-        // Decompress and decode off the main thread
-        return Future.microtask(() {
-          return ChapterAlignNode.fromJson(
-            jsonDecode(_decompressString(cachedChapter)),
-          );
-        });
+        // Decompress and decode in separate isolate to avoid blocking UI
+        final chapterJson = await compute(
+          _decompressAndDecodeChapter,
+          cachedChapter,
+        );
+        return ChapterAlignNode.fromJson(chapterJson);
       }
 
       final chapter = await _apiClient.getChapter(path);
 
-      // Compress and encode off the main thread
-      final compressed = await Future.microtask(() {
-        return _compressString(jsonEncode(chapter.toJson()));
-      });
+      // Compress and encode in separate isolate without blocking
+      final compressed = await compute(
+        _encodeAndCompressChapter,
+        chapter.toJson(),
+      );
 
-      final isAdded = await _sharedPreferences.setString(
+      final success = await _sharedPreferences.setString(
         chapterKey,
         compressed,
       );
-      if (!isAdded) {
+      if (!success) {
         _logger.warning('Failed to cache chapter at path $path');
       }
 
@@ -157,20 +185,6 @@ class BookService {
       _logger.error('Error fetching chapter at path $path: $e');
     }
     return null;
-  }
-
-  /// Сжимает строку с помощью GZip и возвращает Base64-представление
-  String _compressString(final String input) {
-    final bytes = utf8.encode(input);
-    final compressed = gzip.encode(bytes);
-    return base64Encode(compressed);
-  }
-
-  /// Декодирует Base64 и распаковывает GZip-строку
-  String _decompressString(final String compressed) {
-    final bytes = base64Decode(compressed);
-    final decompressed = gzip.decode(bytes);
-    return utf8.decode(decompressed);
   }
 
   Future<void> _cleanupBookCache(final Book book) async {

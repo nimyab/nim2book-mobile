@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/book_reading/book_reading_provider.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/providers/loading_book/loading_book_provider.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/reading_settings/reading_settings_provider.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/original_paragraph.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/select_chapter_buttons.dart';
@@ -11,13 +11,11 @@ import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_vi
 class OriginalTextScroll extends ConsumerStatefulWidget {
   final ScrollController? translatedScrollController;
   final String bookId;
-  final List<ChapterAlignNode> chapters;
 
   const OriginalTextScroll({
     super.key,
     this.translatedScrollController,
     required this.bookId,
-    required this.chapters,
   });
 
   @override
@@ -40,13 +38,9 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
     super.initState();
 
     // Инициализируем контроллер сразу с нужной позицией, чтобы избежать скачка
-    final bookReadingParam = (bookId: widget.bookId, chapters: widget.chapters);
-    final notifier = ref.read(
-      bookReadingNotifierProvider(bookReadingParam).notifier,
-    );
-    final readingState = ref.read(
-      bookReadingNotifierProvider(bookReadingParam),
-    );
+    final bookId = widget.bookId;
+    final notifier = ref.read(bookReadingNotifierProvider(bookId).notifier);
+    final readingState = ref.read(bookReadingNotifierProvider(bookId));
     final initialOffset = notifier.getChapterProgress(
       readingState.currentChapterIndex,
     );
@@ -75,14 +69,9 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
     _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 200), () {
       if (_scrollController.hasClients) {
-        final bookReadingParam = (
-          bookId: widget.bookId,
-          chapters: widget.chapters,
-        );
-        final notifier = ref.read(
-          bookReadingNotifierProvider(bookReadingParam).notifier,
-        );
-        final state = ref.read(bookReadingNotifierProvider(bookReadingParam));
+        final bookId = widget.bookId;
+        final notifier = ref.read(bookReadingNotifierProvider(bookId).notifier);
+        final state = ref.read(bookReadingNotifierProvider(bookId));
         notifier.setChapterProgress(
           state.currentChapterIndex,
           _scrollController.offset,
@@ -93,16 +82,31 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
 
   @override
   Widget build(final BuildContext context) {
-    final bookReadingParam = (bookId: widget.bookId, chapters: widget.chapters);
+    final bookId = widget.bookId;
+
+    // Get chapters from loading provider
+    final chapters = ref.watch(
+      loadingBookNotifierProvider(bookId).select((s) => s.chapters),
+    );
+
     final settingsState = ref.watch(readingSettingsNotifierProvider);
     final sidePadding = settingsState.sidePadding;
     final paragraphSpacing = settingsState.paragraphSpacing;
     final fontSize = settingsState.fontSize;
-    final readingState = ref.watch(
-      bookReadingNotifierProvider(bookReadingParam),
-    );
+    final readingState = ref.watch(bookReadingNotifierProvider(bookId));
     final currentChapterIndex = readingState.currentChapterIndex;
-    final currentChapter = readingState.chapters[currentChapterIndex];
+
+    if (chapters.isEmpty || currentChapterIndex >= chapters.length) {
+      return const Center(child: Text('Chapter not found'));
+    }
+
+    // Get current chapter (might be null if not loaded yet)
+    final currentChapter = chapters[currentChapterIndex];
+
+    // Show loading while chapter is being loaded
+    if (currentChapter == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
     final paragraphCount = currentChapter.content.length;
     final chapterTitle = currentChapter.title;
 
@@ -180,10 +184,7 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
           }
 
           if (index == paragraphCount + 1) {
-            return SelectChapterButtons(
-              bookId: widget.bookId,
-              chapters: widget.chapters,
-            );
+            return SelectChapterButtons(bookId: bookId);
           }
 
           final paragraphIndex = index - 1;
@@ -203,8 +204,7 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
                 selectedParagraphIndex:
                     readingState.selectedParagraphIndex ?? -1,
                 selectedWordIndex: readingState.selectedWordIndex ?? -1,
-                bookId: widget.bookId,
-                chapters: widget.chapters,
+                bookId: bookId,
               ),
             ),
           );

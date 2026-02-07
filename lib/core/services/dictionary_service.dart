@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:fsrs/fsrs.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/database/database.dart';
@@ -14,6 +15,30 @@ import 'package:drift/extensions/json1.dart';
 const _fromLang = 'en';
 const _toLang = 'ru';
 const _ui = 'ru';
+
+// Top-level functions for compute isolates
+Map<String, dynamic> _encodeCardData(Map<String, dynamic> params) {
+  return {
+    'wordDataJson': jsonEncode(params['wordData']),
+    'fsrsCardJson': jsonEncode(params['fsrsCard']),
+  };
+}
+
+DictionaryCard _decodeDictionaryCard(Map<String, dynamic> params) {
+  return DictionaryCard(
+    wordData: DictionaryWord.fromJson(jsonDecode(params['wordDataJson'])),
+    fsrsCard: Card.fromMap(jsonDecode(params['fsrsCardJson'])),
+  );
+}
+
+List<DictionaryCard> _decodeCardList(List<Map<String, dynamic>> results) {
+  return results.map((result) {
+    return DictionaryCard(
+      wordData: DictionaryWord.fromJson(jsonDecode(result['wordDataJson'])),
+      fsrsCard: Card.fromMap(jsonDecode(result['fsrsCardJson'])),
+    );
+  }).toList();
+}
 
 class DictionaryService {
   final Talker _logger;
@@ -41,14 +66,20 @@ class DictionaryService {
 
   Future<bool> _updateCard(final DictionaryCard card) async {
     try {
+      // Encode JSON in compute isolate to avoid blocking UI
+      final encoded = await compute(_encodeCardData, {
+        'wordData': card.wordData.toJson(),
+        'fsrsCard': card.fsrsCard.toMap(),
+      });
+
       await _database
           .into(_database.dictionaryCardsTable)
           .insertOnConflictUpdate(
             DictionaryCardsTableCompanion.insert(
               word: card.wordData.text,
               partOfSpeech: card.wordData.partOfSpeech,
-              wordDataJson: jsonEncode(card.wordData.toJson()),
-              fsrsCardJson: jsonEncode(card.fsrsCard.toMap()),
+              wordDataJson: encoded['wordDataJson'] as String,
+              fsrsCardJson: encoded['fsrsCardJson'] as String,
             ),
           );
       return true;
@@ -91,12 +122,10 @@ class DictionaryService {
 
       if (result == null) return null;
 
-      // Decode JSON off the main thread to avoid UI jank
-      return Future.microtask(() {
-        return DictionaryCard(
-          wordData: DictionaryWord.fromJson(jsonDecode(result.wordDataJson)),
-          fsrsCard: Card.fromMap(jsonDecode(result.fsrsCardJson)),
-        );
+      // Decode JSON in compute isolate to avoid blocking UI
+      return await compute(_decodeDictionaryCard, {
+        'wordDataJson': result.wordDataJson,
+        'fsrsCardJson': result.fsrsCardJson,
       });
     } catch (e) {
       _logger.error(
@@ -149,14 +178,18 @@ class DictionaryService {
           .select(_database.dictionaryCardsTable)
           .get();
 
-      return Future.microtask(() {
-        return results.map((final result) {
-          return DictionaryCard(
-            wordData: DictionaryWord.fromJson(jsonDecode(result.wordDataJson)),
-            fsrsCard: Card.fromMap(jsonDecode(result.fsrsCardJson)),
-          );
-        }).toList();
-      });
+      // Decode list in compute isolate to avoid blocking UI
+      return await compute(
+        _decodeCardList,
+        results
+            .map(
+              (r) => {
+                'wordDataJson': r.wordDataJson,
+                'fsrsCardJson': r.fsrsCardJson,
+              },
+            )
+            .toList(),
+      );
     } catch (e) {
       _logger.error('Error retrieving all words: $e');
       return [];
@@ -170,7 +203,6 @@ class DictionaryService {
     return _getDictionaryCard(word, partOfSpeech);
   }
 
-  /// Получить карточки, которые нужно повторить сейчас
   /// Получить карточки, которые нужно повторить сейчас
   Future<List<DictionaryCard>> getDueCards({DateTime? now}) async {
     try {
@@ -186,15 +218,18 @@ class DictionaryService {
               ))
               .get();
 
-      // Decode JSON off the main thread to avoid UI jank
-      return Future.microtask(() {
-        return results.map((result) {
-          return DictionaryCard(
-            wordData: DictionaryWord.fromJson(jsonDecode(result.wordDataJson)),
-            fsrsCard: Card.fromMap(jsonDecode(result.fsrsCardJson)),
-          );
-        }).toList();
-      });
+      // Decode list in compute isolate to avoid blocking UI
+      return await compute(
+        _decodeCardList,
+        results
+            .map(
+              (r) => {
+                'wordDataJson': r.wordDataJson,
+                'fsrsCardJson': r.fsrsCardJson,
+              },
+            )
+            .toList(),
+      );
     } catch (e) {
       _logger.error('Error retrieving due cards: $e');
       return [];
@@ -245,12 +280,10 @@ class DictionaryService {
 
       if (result == null) return null;
 
-      // Decode JSON off the main thread to avoid UI jank
-      return Future.microtask(() {
-        return DictionaryCard(
-          wordData: DictionaryWord.fromJson(jsonDecode(result.wordDataJson)),
-          fsrsCard: Card.fromMap(jsonDecode(result.fsrsCardJson)),
-        );
+      // Decode in compute isolate to avoid blocking UI
+      return await compute(_decodeDictionaryCard, {
+        'wordDataJson': result.wordDataJson,
+        'fsrsCardJson': result.fsrsCardJson,
       });
     } catch (e) {
       _logger.error('Error retrieving single due card: $e');
