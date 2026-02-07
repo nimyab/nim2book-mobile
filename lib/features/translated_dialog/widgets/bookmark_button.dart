@@ -12,29 +12,28 @@ class BookmarkButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    ref.watch(dictionaryNotifierProvider);
+    final savedCards = ref.watch(dictionaryCardsProvider);
     final dictionaryProvider = ref.watch(dictionaryNotifierProvider.notifier);
+    final isInDict = savedCards.any(
+      (card) =>
+          card.wordData.text == phrase &&
+          card.wordData.partOfSpeech == word.partOfSpeech,
+    );
 
-    return FutureBuilder<bool>(
-      future: dictionaryProvider.checkWordInDict(phrase, word.partOfSpeech),
-      builder: (context, snapshot) {
-        final isInDict = snapshot.data ?? false;
-        return IconButton(
-          icon: Icon(isInDict ? Icons.bookmark : Icons.bookmark_border),
-          color: isInDict
-              ? theme.colorScheme.primary
-              : theme.colorScheme.onSurfaceVariant,
-          iconSize: 24,
-          padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(),
-          onPressed: () {
-            if (isInDict) {
-              dictionaryProvider.deleteWord(phrase, word.partOfSpeech);
-            } else {
-              dictionaryProvider.saveWord(phrase, word);
-            }
-          },
-        );
+    return IconButton(
+      icon: Icon(isInDict ? Icons.bookmark : Icons.bookmark_border),
+      color: isInDict
+          ? theme.colorScheme.primary
+          : theme.colorScheme.onSurfaceVariant,
+      iconSize: 24,
+      padding: EdgeInsets.zero,
+      constraints: const BoxConstraints(),
+      onPressed: () {
+        if (isInDict) {
+          dictionaryProvider.deleteWord(phrase, word.partOfSpeech);
+        } else {
+          dictionaryProvider.saveWord(phrase, word);
+        }
       },
     );
   }

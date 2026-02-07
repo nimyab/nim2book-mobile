@@ -84,15 +84,6 @@ class DictionaryNotifier extends Notifier<DictionaryState> {
         .toList();
   }
 
-  Future<bool> checkWordInDict(
-    final String word,
-    final String partOfSpeech,
-  ) async {
-    return state.savedCards.any(
-      (w) => w.wordData.partOfSpeech == partOfSpeech && w.wordData.text == word,
-    );
-  }
-
   /// Обновить карточку после ответа пользователя на карточку в учебной сессии
   Future<DictionaryCard> reviewCard({
     required DictionaryCard card,
