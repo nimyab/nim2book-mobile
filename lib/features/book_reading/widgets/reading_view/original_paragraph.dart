@@ -3,14 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/models/word_item.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/book_reading/book_reading_provider.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/reading_settings/reading_settings_provider.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/original_paragraph_painter.dart';
 import 'package:nim2book_mobile_flutter/features/translated_dialog/translated_dialog.dart';
 
 class OriginalParagraph extends ConsumerStatefulWidget {
-  final List<WordItem> paragraph;
+  final ParagraphAlignNode paragraph;
   final int paragraphIndex;
   final int selectedParagraphIndex;
   final int selectedWordIndex;
@@ -32,8 +31,6 @@ class OriginalParagraph extends ConsumerStatefulWidget {
 }
 
 class _OriginalParagraphState extends ConsumerState<OriginalParagraph> {
-  late String _paragraphText;
-  late List<_WordRange> _wordRanges;
   TextPainter? _tp;
   double? _lastMaxWidth;
   String? _lastStyleSig;
@@ -41,73 +38,51 @@ class _OriginalParagraphState extends ConsumerState<OriginalParagraph> {
   double? _lastIndentEm;
 
   @override
-  void initState() {
-    super.initState();
-    _computeTextData();
-  }
-
-  @override
   void didUpdateWidget(covariant final OriginalParagraph oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.paragraph != widget.paragraph) {
-      _computeTextData();
+      // Инвалидируем кэш разметки при изменении текста
+      _tp = null;
     }
   }
 
-  void _computeTextData() {
-    final sb = StringBuffer();
-    final ranges = <_WordRange>[];
-    var cursor = 0;
+  void _handleWordTap(final int wordIndex) {
+    if (!(widget.selectedParagraphIndex == widget.paragraphIndex &&
+        widget.selectedWordIndex == wordIndex)) {
+      final bookReadingParam = (
+        bookId: widget.bookId,
+        chapters: widget.chapters,
+      );
+      ref
+          .read(bookReadingNotifierProvider(bookReadingParam).notifier)
+          .selectWord(widget.paragraphIndex, wordIndex);
+    } else {
+      // Извлекаем текст слова из оригинальной строки
+      final wordAlign = widget.paragraph.aw[wordIndex];
+      final startIndex = wordAlign.iow.first;
+      final endIndex = wordAlign.iow.last;
+      final rawWordText = widget.paragraph.op.substring(startIndex, endIndex);
 
-    for (var i = 0; i < widget.paragraph.length; i++) {
-      final word = widget.paragraph[i].wordText;
-      // Сохраняем диапазон символов для текущего слова
-      ranges.add(_WordRange(cursor, cursor + word.length));
-      sb.write(word);
-      cursor += word.length;
-      if (i != widget.paragraph.length - 1) {
-        sb.write(' ');
-        cursor += 1;
-      }
-    }
-
-    _paragraphText = sb.toString();
-    _wordRanges = ranges;
-    // Инвалидируем кэш разметки при изменении текста
-    _tp = null;
-  }
-
-  void _handleWordTap(final WordItem wordItem) {
-    if (wordItem.paragraphIndex != null && wordItem.wordIndex != null) {
-      if (!(widget.selectedParagraphIndex == wordItem.paragraphIndex &&
-          widget.selectedWordIndex == wordItem.wordIndex)) {
-        final bookReadingParam = (
-          bookId: widget.bookId,
-          chapters: widget.chapters,
-        );
-        ref
-            .read(bookReadingNotifierProvider(bookReadingParam).notifier)
-            .selectWord(wordItem.paragraphIndex!, wordItem.wordIndex!);
-      } else {
-        final regExp = RegExp(r'^[\\W_]*(.*?)[\\W_]*$');
-        final match = regExp.firstMatch(wordItem.wordText);
-        if (match == null) return;
-        final wordText = match.group(1)!;
-        showDialog<void>(
-          context: context,
-          builder: (final context) {
-            return TranslatedDialog(phrase: wordText);
-          },
-        );
-      }
+      final regExp = RegExp(r'^[\\W_]*(.*?)[\\W_]*$');
+      final match = regExp.firstMatch(rawWordText);
+      if (match == null) return;
+      final wordText = match.group(1)!;
+      showDialog<void>(
+        context: context,
+        builder: (final context) {
+          return TranslatedDialog(phrase: wordText);
+        },
+      );
     }
   }
 
-  // Возвращаем индекс слова по смещению в строке абзаца, используя предрасчитанные диапазоны `_wordRanges`.
+  // Возвращаем индекс слова по смещению в строке абзаца, используя индексы из paragraph.aw
   int? _getWordIndexForTextOffset(final int offset) {
-    for (var i = 0; i < _wordRanges.length; i++) {
-      final r = _wordRanges[i];
-      if (offset >= r.start && offset < r.end) return i;
+    for (var i = 0; i < widget.paragraph.aw.length; i++) {
+      final wordAlign = widget.paragraph.aw[i];
+      final start = wordAlign.iow.first;
+      final end = wordAlign.iow.last;
+      if (offset >= start && offset < end) return i;
     }
     return null;
   }
@@ -161,7 +136,7 @@ class _OriginalParagraphState extends ConsumerState<OriginalParagraph> {
               const WidgetSpan(
                 child: SizedBox(),
               ), // placeholder, dimensions below
-              TextSpan(text: _paragraphText, style: style),
+              TextSpan(text: widget.paragraph.op, style: style),
             ],
           );
           final tp = TextPainter(
@@ -188,20 +163,16 @@ class _OriginalParagraphState extends ConsumerState<OriginalParagraph> {
           _lastIndentEm = firstLineIndentEm;
         }
 
-        _WordRange? selectedRange;
+        int? selectionStart;
+        int? selectionEnd;
         if (widget.paragraphIndex == widget.selectedParagraphIndex &&
             widget.selectedWordIndex >= 0 &&
-            widget.selectedWordIndex < _wordRanges.length) {
-          selectedRange = _wordRanges[widget.selectedWordIndex];
+            widget.selectedWordIndex < widget.paragraph.aw.length) {
+          final wordAlign = widget.paragraph.aw[widget.selectedWordIndex];
+          // Сдвигаем диапазон на символы отступа, чтобы подсветка совпадала.
+          selectionStart = wordAlign.iow.first + indentCharCount;
+          selectionEnd = wordAlign.iow.last + indentCharCount;
         }
-
-        // Сдвигаем диапазон на символы отступа, чтобы подсветка совпадала.
-        final selectionStart = selectedRange == null
-            ? null
-            : selectedRange.start + indentCharCount;
-        final selectionEnd = selectedRange == null
-            ? null
-            : selectedRange.end + indentCharCount;
 
         return GestureDetector(
           behavior: HitTestBehavior.deferToChild,
@@ -218,15 +189,15 @@ class _OriginalParagraphState extends ConsumerState<OriginalParagraph> {
 
             // Проверяем границы и игнорируем пробелы между словами.
             if (normalizedOffset < 0 ||
-                normalizedOffset >= _paragraphText.length) {
+                normalizedOffset >= widget.paragraph.op.length) {
               return;
             }
-            if (_paragraphText[normalizedOffset] == ' ') return;
+            if (widget.paragraph.op[normalizedOffset] == ' ') return;
 
             // По смещению ищем индекс слова и обрабатываем нажатие.
             final wordIndex = _getWordIndexForTextOffset(normalizedOffset);
             if (wordIndex != null) {
-              _handleWordTap(widget.paragraph[wordIndex]);
+              _handleWordTap(wordIndex);
             }
           },
           child: SizedBox(
@@ -247,10 +218,4 @@ class _OriginalParagraphState extends ConsumerState<OriginalParagraph> {
       },
     );
   }
-}
-
-class _WordRange {
-  final int start;
-  final int end;
-  const _WordRange(this.start, this.end);
 }

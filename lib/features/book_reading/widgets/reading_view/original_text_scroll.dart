@@ -5,8 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/book_reading/book_reading_provider.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/reading_settings/reading_settings_provider.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/services/chapter_converter.dart';
-import 'package:nim2book_mobile_flutter/features/book_reading/models/word_item.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/original_paragraph.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/select_chapter_buttons.dart';
 
@@ -32,8 +30,6 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
   bool _isInitialized = false;
   final Map<int, GlobalKey> _paragraphKeys = {};
   int _lastScrolledToParagraph = -1;
-  List<List<WordItem>> _convertedParagraphs = const [];
-  int _lastChapterIndexForConvert = -1;
 
   GlobalKey _keyForParagraph(final int index) {
     return _paragraphKeys.putIfAbsent(index, () => GlobalKey());
@@ -109,17 +105,6 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
     final currentChapter = readingState.chapters[currentChapterIndex];
     final paragraphCount = currentChapter.content.length;
     final chapterTitle = currentChapter.title;
-
-    // Предрасчет конвертации абзацев только при смене главы
-    if (_lastChapterIndexForConvert != currentChapterIndex ||
-        _convertedParagraphs.length != paragraphCount) {
-      _convertedParagraphs = List.generate(
-        paragraphCount,
-        (final i) =>
-            ChapterConverter.convertParagraph(currentChapter.content[i], i),
-      );
-      _lastChapterIndexForConvert = currentChapterIndex;
-    }
 
     final selectedParagraph = readingState.selectedParagraphIndex ?? -1;
     final hasWordSelected = readingState.selectedWordIndex != null;
@@ -202,7 +187,6 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
           }
 
           final paragraphIndex = index - 1;
-          final paragraphConverted = _convertedParagraphs[paragraphIndex];
           return Padding(
             padding: EdgeInsets.symmetric(
               horizontal: sidePadding,
@@ -214,7 +198,7 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
                 key: ValueKey(
                   'chapter_${currentChapterIndex}_paragraph_$paragraphIndex',
                 ),
-                paragraph: paragraphConverted,
+                paragraph: currentChapter.content[paragraphIndex],
                 paragraphIndex: paragraphIndex,
                 selectedParagraphIndex:
                     readingState.selectedParagraphIndex ?? -1,
