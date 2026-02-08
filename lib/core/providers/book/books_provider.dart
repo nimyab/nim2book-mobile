@@ -114,21 +114,17 @@ final booksNotifierProvider = NotifierProvider<BooksNotifier, BooksState>(
 );
 
 final savedBooksProvider = Provider<List<Book>>((final ref) {
-  final booksState = ref.watch(booksNotifierProvider);
-  return booksState.savedBooks;
+  return ref.watch(booksNotifierProvider.select((s) => s.savedBooks));
 });
 
 final personalBooksProvider = Provider<List<PersonalUserBook>>((final ref) {
-  final booksState = ref.watch(booksNotifierProvider);
-  return booksState.personalBooks;
+  return ref.watch(booksNotifierProvider.select((s) => s.personalBooks));
 });
 
 final allBooksProvider = Provider<List<Book>>((final ref) {
-  final booksState = ref.watch(booksNotifierProvider);
-  return booksState.allBooks;
+  return ref.watch(booksNotifierProvider.select((s) => s.allBooks));
 });
 
 final isBooksFetchingProvider = Provider<bool>((final ref) {
-  final booksState = ref.watch(booksNotifierProvider);
-  return booksState.isFetching;
+  return ref.watch(booksNotifierProvider.select((s) => s.isFetching));
 });

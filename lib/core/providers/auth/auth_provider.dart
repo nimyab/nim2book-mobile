@@ -97,24 +97,36 @@ final authNotifierProvider = NotifierProvider<AuthNotifier, AuthState>(
 );
 
 final isAuthenticatedProvider = Provider<bool>((ref) {
-  final authState = ref.watch(authNotifierProvider);
-  return authState.maybeWhen(authenticated: (_) => true, orElse: () => false);
+  return ref.watch(
+    authNotifierProvider.select((s) {
+      return s.maybeWhen(authenticated: (_) => true, orElse: () => false);
+    }),
+  );
 });
 
 final isVIPProvider = Provider<bool>((ref) {
-  final authState = ref.watch(authNotifierProvider);
-  return authState.maybeWhen(
-    authenticated: (user) => user.isVIP,
-    orElse: () => false,
+  return ref.watch(
+    authNotifierProvider.select((s) {
+      return s.maybeWhen(
+        authenticated: (user) => user.isVIP,
+        orElse: () => false,
+      );
+    }),
   );
 });
 
 final isAuthLoadingProvider = Provider<bool>((ref) {
-  final authState = ref.watch(authNotifierProvider);
-  return authState.maybeWhen(loading: () => true, orElse: () => false);
+  return ref.watch(
+    authNotifierProvider.select((s) {
+      return s.maybeWhen(loading: () => true, orElse: () => false);
+    }),
+  );
 });
 
 final userProvider = Provider<User?>((ref) {
-  final authState = ref.watch(authNotifierProvider);
-  return authState.maybeWhen(authenticated: (user) => user, orElse: () => null);
+  return ref.watch(
+    authNotifierProvider.select((s) {
+      return s.maybeWhen(authenticated: (user) => user, orElse: () => null);
+    }),
+  );
 });

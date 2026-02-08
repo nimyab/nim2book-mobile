@@ -88,13 +88,27 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
     final chapters = ref.watch(
       loadingBookNotifierProvider(bookId).select((s) => s.chapters),
     );
+    final sidePadding = ref.watch(
+      readingSettingsNotifierProvider.select((s) => s.sidePadding),
+    );
+    final paragraphSpacing = ref.watch(
+      readingSettingsNotifierProvider.select((s) => s.paragraphSpacing),
+    );
+    final fontSize = ref.watch(
+      readingSettingsNotifierProvider.select((s) => s.fontSize),
+    );
 
-    final settingsState = ref.watch(readingSettingsNotifierProvider);
-    final sidePadding = settingsState.sidePadding;
-    final paragraphSpacing = settingsState.paragraphSpacing;
-    final fontSize = settingsState.fontSize;
-    final readingState = ref.watch(bookReadingNotifierProvider(bookId));
-    final currentChapterIndex = readingState.currentChapterIndex;
+    final currentChapterIndex = ref.watch(
+      bookReadingNotifierProvider(bookId).select((s) => s.currentChapterIndex),
+    );
+    final selectedParagraphIndex = ref.watch(
+      bookReadingNotifierProvider(
+        bookId,
+      ).select((s) => s.selectedParagraphIndex),
+    );
+    final selectedWordIndex = ref.watch(
+      bookReadingNotifierProvider(bookId).select((s) => s.selectedWordIndex),
+    );
 
     if (chapters.isEmpty || currentChapterIndex >= chapters.length) {
       return const Center(child: Text('Chapter not found'));
@@ -110,8 +124,8 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
     final paragraphCount = currentChapter.content.length;
     final chapterTitle = currentChapter.title;
 
-    final selectedParagraph = readingState.selectedParagraphIndex ?? -1;
-    final hasWordSelected = readingState.selectedWordIndex != null;
+    final selectedParagraph = selectedParagraphIndex ?? -1;
+    final hasWordSelected = selectedWordIndex != null;
     // Не скроллим оригинальный текст при выборе слова, только при выборе абзаца
     if (!hasWordSelected &&
         selectedParagraph >= 0 &&
@@ -201,9 +215,8 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
                 ),
                 paragraph: currentChapter.content[paragraphIndex],
                 paragraphIndex: paragraphIndex,
-                selectedParagraphIndex:
-                    readingState.selectedParagraphIndex ?? -1,
-                selectedWordIndex: readingState.selectedWordIndex ?? -1,
+                selectedParagraphIndex: selectedParagraphIndex ?? -1,
+                selectedWordIndex: selectedWordIndex ?? -1,
                 bookId: bookId,
               ),
             ),

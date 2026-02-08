@@ -170,7 +170,7 @@ class BookReadingNotifier extends Notifier<BookReadingState> {
 
 // Family provider for book reading with bookId parameter only
 // Chapters are retrieved from loadingBookNotifierProvider to avoid parameter mutation
-final bookReadingNotifierProvider =
-    NotifierProvider.family<BookReadingNotifier, BookReadingState, String>(
+final bookReadingNotifierProvider = NotifierProvider.autoDispose
+    .family<BookReadingNotifier, BookReadingState, String>(
       BookReadingNotifier.new,
     );

@@ -75,7 +75,7 @@ class LoadingBookNotifier extends Notifier<LoadingBookState> {
   }
 }
 
-final loadingBookNotifierProvider =
-    NotifierProvider.family<LoadingBookNotifier, LoadingBookState, String>(
+final loadingBookNotifierProvider = NotifierProvider.autoDispose
+    .family<LoadingBookNotifier, LoadingBookState, String>(
       LoadingBookNotifier.new,
     );
