@@ -13,7 +13,7 @@ class BookmarkButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final savedCards = ref.watch(dictionaryCardsProvider);
-    final dictionaryProvider = ref.watch(dictionaryNotifierProvider.notifier);
+    final dictionaryProvider = ref.read(dictionaryNotifierProvider.notifier);
     final isInDict = savedCards.any(
       (card) =>
           card.wordData.text == phrase &&

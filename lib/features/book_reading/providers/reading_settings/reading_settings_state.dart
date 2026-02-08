@@ -8,8 +8,8 @@ abstract class ReadingSettingsState with _$ReadingSettingsState {
   const factory ReadingSettingsState({
     @Default('System') final String fontFamily,
     @Default(24.0) final double fontSize,
-    @Default(Colors.white) final Color backgroundColor,
-    @Default(Colors.black) final Color textColor,
+    @Default(Colors.black) final Color backgroundColor,
+    @Default(Colors.white) final Color textColor,
     @Default(false) final bool isTranslatedVisible,
     @Default(false) final bool isFullscreen,
     @Default(-1) final int lastSelectionParagraphIndex,

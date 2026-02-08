@@ -75,9 +75,11 @@ class BookReadingNotifier extends Notifier<BookReadingState> {
     );
 
     // Preload current and adjacent chapters
-    ref
-        .read(loadingBookNotifierProvider(bookId).notifier)
-        .preloadChapters(currentIndex);
+    unawaited(
+      ref
+          .read(loadingBookNotifierProvider(bookId).notifier)
+          .preloadChapters(currentIndex),
+    );
   }
 
   void setChapters(final List<ChapterAlignNode?> chapters) {
@@ -123,24 +125,10 @@ class BookReadingNotifier extends Notifier<BookReadingState> {
     }
   }
 
-  void selectParagraph(final int paragraphIndex) {
-    state = state.copyWith(
-      selectedParagraphIndex: paragraphIndex,
-      selectedWordIndex: null,
-    );
-  }
-
   void selectWord(final int paragraphIndex, final int wordIndex) {
     state = state.copyWith(
       selectedParagraphIndex: paragraphIndex,
       selectedWordIndex: wordIndex,
-    );
-  }
-
-  void clearSelection() {
-    state = state.copyWith(
-      selectedParagraphIndex: null,
-      selectedWordIndex: null,
     );
   }
 

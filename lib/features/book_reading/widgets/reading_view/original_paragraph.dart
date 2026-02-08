@@ -50,6 +50,9 @@ class _OriginalParagraphState extends ConsumerState<OriginalParagraph> {
       ref
           .read(bookReadingNotifierProvider(widget.bookId).notifier)
           .selectWord(widget.paragraphIndex, wordIndex);
+      ref
+          .read(readingSettingsNotifierProvider.notifier)
+          .setTranslatedVisible(value: true);
     } else {
       // Извлекаем текст слова из оригинальной строки
       final wordAlign = widget.paragraph.aw[wordIndex];

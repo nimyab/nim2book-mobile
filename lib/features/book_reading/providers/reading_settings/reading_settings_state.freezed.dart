@@ -221,7 +221,7 @@ return $default(_that.fontFamily,_that.fontSize,_that.backgroundColor,_that.text
 
 
 class _ReadingSettingsState implements ReadingSettingsState {
-  const _ReadingSettingsState({this.fontFamily = 'System', this.fontSize = 24.0, this.backgroundColor = Colors.white, this.textColor = Colors.black, this.isTranslatedVisible = false, this.isFullscreen = false, this.lastSelectionParagraphIndex = -1, this.lastSelectionWordIndex = -1, this.lineHeight = 1.3, this.sidePadding = 10.0, this.firstLineIndentEm = 1.5, this.paragraphSpacing = 7.0, this.textAlign = TextAlign.justify, this.translatedFontSize = 20.0, this.translatedFontFamily = 'System', this.translatedVerticalPadding = 5.0});
+  const _ReadingSettingsState({this.fontFamily = 'System', this.fontSize = 24.0, this.backgroundColor = Colors.black, this.textColor = Colors.white, this.isTranslatedVisible = false, this.isFullscreen = false, this.lastSelectionParagraphIndex = -1, this.lastSelectionWordIndex = -1, this.lineHeight = 1.3, this.sidePadding = 10.0, this.firstLineIndentEm = 1.5, this.paragraphSpacing = 7.0, this.textAlign = TextAlign.justify, this.translatedFontSize = 20.0, this.translatedFontFamily = 'System', this.translatedVerticalPadding = 5.0});
   
 
 @override@JsonKey() final  String fontFamily;
