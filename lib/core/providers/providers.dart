@@ -41,68 +41,68 @@ final tokenServiceProvider = Provider<TokenService>((ref) {
 
 // ApiClient provider
 final apiClientProvider = Provider<ApiClient>((ref) {
-  final tokenService = ref.watch(tokenServiceProvider);
-  final env = ref.watch(envProvider);
-  final talker = ref.watch(talkerProvider);
+  final tokenService = ref.read(tokenServiceProvider);
+  final env = ref.read(envProvider);
+  final talker = ref.read(talkerProvider);
   return ApiClient(tokenService: tokenService, env: env, talker: talker);
 });
 
 // BookService provider
 final bookServiceProvider = Provider<BookService>((ref) {
-  final talker = ref.watch(talkerProvider);
-  final apiClient = ref.watch(apiClientProvider);
-  final sharedPreferences = ref.watch(sharedPreferencesProvider);
+  final talker = ref.read(talkerProvider);
+  final apiClient = ref.read(apiClientProvider);
+  final sharedPreferences = ref.read(sharedPreferencesProvider);
   return BookService(talker, apiClient, sharedPreferences);
 });
 
 // LocaleService provider
 final localeServiceProvider = Provider<LocaleService>((ref) {
-  final sharedPreferences = ref.watch(sharedPreferencesProvider);
+  final sharedPreferences = ref.read(sharedPreferencesProvider);
   return LocaleService(sharedPreferences);
 });
 
 // ThemeService provider
 final themeServiceProvider = Provider<ThemeService>((ref) {
-  final sharedPreferences = ref.watch(sharedPreferencesProvider);
+  final sharedPreferences = ref.read(sharedPreferencesProvider);
   return ThemeService(sharedPreferences);
 });
 
 // FcmTokenService provider
 final fcmTokenServiceProvider = Provider<FcmTokenService>((ref) {
-  final apiClient = ref.watch(apiClientProvider);
-  final talker = ref.watch(talkerProvider);
+  final apiClient = ref.read(apiClientProvider);
+  final talker = ref.read(talkerProvider);
   return FcmTokenService(apiClient, talker);
 });
 
 // DictionaryService provider
 final dictionaryServiceProvider = Provider<DictionaryService>((ref) {
-  final talker = ref.watch(talkerProvider);
-  final apiClient = ref.watch(apiClientProvider);
-  final database = ref.watch(databaseProvider);
+  final talker = ref.read(talkerProvider);
+  final apiClient = ref.read(apiClientProvider);
+  final database = ref.read(databaseProvider);
   return DictionaryService(talker, apiClient, database);
 });
 
 // StatisticService provider
 // todo: пока этот провайдер не нужен, так как будет переписываться работа с карточками
 // final statisticServiceProvider = Provider<StatisticService>((ref) {
-//   final sharedPreferences = ref.watch(sharedPreferencesProvider);
+//   final sharedPreferences = ref.read(sharedPreferencesProvider);
 //   return StatisticService(sharedPreferences);
 // });
 
 // ReadingSettingsService provider
 final readingSettingsServiceProvider = Provider<ReadingSettingsService>((ref) {
-  final sharedPreferences = ref.watch(sharedPreferencesProvider);
+  final sharedPreferences = ref.read(sharedPreferencesProvider);
   return ReadingSettingsService(sharedPreferences);
 });
 
 // TtsService provider
 final ttsServiceProvider = Provider<TtsService>((ref) {
-  final talker = ref.watch(talkerProvider);
+  final talker = ref.read(talkerProvider);
   return TtsService(talker);
 });
 
 // OnboardingService provider
 final onboardingServiceProvider = Provider<OnboardingService>((ref) {
-  final sharedPreferences = ref.watch(sharedPreferencesProvider);
+  final sharedPreferences = ref.read(sharedPreferencesProvider);
   return OnboardingService(sharedPreferences);
 });

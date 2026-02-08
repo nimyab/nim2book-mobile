@@ -86,13 +86,24 @@ class _OriginalParagraphState extends ConsumerState<OriginalParagraph> {
 
   @override
   Widget build(final BuildContext context) {
-    final settingsState = ref.watch(readingSettingsNotifierProvider);
-    final fontFamily = settingsState.fontFamily;
-    final fontSize = settingsState.fontSize;
-    final lineHeight = settingsState.lineHeight;
-    final textColor = settingsState.textColor;
-    final textAlign = settingsState.textAlign;
-    final firstLineIndentEm = settingsState.firstLineIndentEm;
+    final fontFamily = ref.watch(
+      readingSettingsNotifierProvider.select((s) => s.fontFamily),
+    );
+    final fontSize = ref.watch(
+      readingSettingsNotifierProvider.select((s) => s.fontSize),
+    );
+    final lineHeight = ref.watch(
+      readingSettingsNotifierProvider.select((s) => s.lineHeight),
+    );
+    final textColor = ref.watch(
+      readingSettingsNotifierProvider.select((s) => s.textColor),
+    );
+    final textAlign = ref.watch(
+      readingSettingsNotifierProvider.select((s) => s.textAlign),
+    );
+    final firstLineIndentEm = ref.watch(
+      readingSettingsNotifierProvider.select((s) => s.firstLineIndentEm),
+    );
     final readingColors = Theme.of(context).extension<BookReadingColors>()!;
 
     final baseStyle = TextStyle(
