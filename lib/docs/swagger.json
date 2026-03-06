@@ -7,7 +7,7 @@
     },
     "basePath": "/api/v1",
     "paths": {
-        "/auth/google-login": {
+        "/auth/google": {
             "post": {
                 "consumes": [
                     "application/json"
@@ -157,7 +157,7 @@
                 }
             }
         },
-        "/book": {
+        "/books": {
             "get": {
                 "produces": [
                     "application/json"
@@ -203,7 +203,7 @@
                 }
             }
         },
-        "/book/get-chapter/{path}": {
+        "/books/{book_id}/chapters/{chapter_number}": {
             "get": {
                 "produces": [
                     "application/json"
@@ -211,27 +211,27 @@
                 "tags": [
                     "book"
                 ],
-                "summary": "Get book chapter",
+                "summary": "Get chapter content",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "Chapter path",
                         "name": "path",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Chapter content",
                         "schema": {
-                            "$ref": "#/definitions/domain.ChapterAlignNode"
+                            "type": "string"
                         }
                     }
                 }
             }
         },
-        "/book/{id}": {
+        "/books/{id}": {
             "get": {
                 "produces": [
                     "application/json"
@@ -341,7 +341,7 @@
                 }
             }
         },
-        "/fcm-token/add": {
+        "/fcm-tokens": {
             "post": {
                 "security": [
                     {
@@ -357,11 +357,11 @@
                 "tags": [
                     "fcm-token"
                 ],
-                "summary": "Add fcm token for send notifications",
+                "summary": "Add FCM token",
                 "parameters": [
                     {
-                        "description": "body",
-                        "name": "data",
+                        "description": "FCM token",
+                        "name": "input",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -379,7 +379,7 @@
                 }
             }
         },
-        "/fcm-token/delete": {
+        "/fcm-tokens/{token}": {
             "delete": {
                 "security": [
                     {
@@ -392,11 +392,11 @@
                 "tags": [
                     "fcm-token"
                 ],
-                "summary": "Delete fcm token",
+                "summary": "Delete FCM token",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "fcm token",
+                        "description": "FCM token",
                         "name": "token",
                         "in": "query",
                         "required": true
@@ -412,7 +412,7 @@
                 }
             }
         },
-        "/file/public": {
+        "/files/public": {
             "get": {
                 "tags": [
                     "file"
@@ -437,7 +437,7 @@
                 }
             }
         },
-        "/genre": {
+        "/genres": {
             "get": {
                 "produces": [
                     "application/json"
@@ -492,7 +492,7 @@
                 }
             }
         },
-        "/genre/{id}": {
+        "/genres/{id}": {
             "get": {
                 "produces": [
                     "application/json"
@@ -515,49 +515,6 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/get_genre.Output"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "genre"
-                ],
-                "summary": "Update genre",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Genre id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Genre data",
-                        "name": "input",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/update_genre.Input"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/update_genre.Output"
                         }
                     }
                 }
@@ -594,7 +551,7 @@
                 }
             }
         },
-        "/notification/test": {
+        "/notifications": {
             "post": {
                 "security": [
                     {
@@ -632,7 +589,7 @@
                 }
             }
         },
-        "/personal-user-book": {
+        "/personal-user-books": {
             "get": {
                 "security": [
                     {
@@ -643,31 +600,31 @@
                     "application/json"
                 ],
                 "tags": [
-                    "personal_user_book"
+                    "personal-user-book"
                 ],
                 "summary": "Get personal user books",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Author filter",
+                        "description": "Author",
                         "name": "author",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "Title filter",
+                        "description": "Title",
                         "name": "title",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "Genre ID filter",
+                        "description": "Genre ID",
                         "name": "genreId",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "description": "Page number",
+                        "description": "Page",
                         "name": "page",
                         "in": "query",
                         "required": true
@@ -679,38 +636,11 @@
                         "schema": {
                             "$ref": "#/definitions/get_personal_user_books.Output"
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
                     }
                 }
             }
         },
-        "/personal-user-book/{id}": {
+        "/personal-user-books/{id}": {
             "get": {
                 "security": [
                     {
@@ -721,9 +651,9 @@
                     "application/json"
                 ],
                 "tags": [
-                    "personal_user_book"
+                    "personal-user-book"
                 ],
-                "summary": "Get personal user book by ID",
+                "summary": "Get personal user book",
                 "parameters": [
                     {
                         "type": "string",
@@ -739,51 +669,6 @@
                         "schema": {
                             "$ref": "#/definitions/get_personal_user_book.Output"
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
                     }
                 }
             },
@@ -793,38 +678,41 @@
                         "BearerAuth": []
                     }
                 ],
+                "consumes": [
+                    "multipart/form-data"
+                ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "personal_user_book"
+                    "personal-user-book"
                 ],
                 "summary": "Update personal user book",
                 "parameters": [
                     {
-                        "type": "file",
-                        "description": "Cover file",
-                        "name": "cover",
-                        "in": "formData"
+                        "type": "string",
+                        "description": "Book ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     },
                     {
                         "type": "string",
-                        "description": "Author book",
+                        "description": "Author",
                         "name": "author",
                         "in": "formData"
                     },
                     {
                         "type": "string",
-                        "description": "Title book",
+                        "description": "Title",
                         "name": "title",
                         "in": "formData"
                     },
                     {
-                        "type": "string",
-                        "description": "Book id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
+                        "type": "file",
+                        "description": "Cover",
+                        "name": "cover",
+                        "in": "formData"
                     }
                 ],
                 "responses": {
@@ -832,51 +720,6 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/update_personal_user_book.Output"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
                         }
                     }
                 }
@@ -898,25 +741,25 @@
                 "tags": [
                     "translate"
                 ],
-                "summary": "Translate book to public library. Only administrators can translate books to public access",
+                "summary": "Перевести книгу",
                 "parameters": [
                     {
                         "type": "file",
-                        "description": "Upload file",
+                        "description": "Файл книги",
                         "name": "file",
                         "in": "formData",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "description": "Source lang",
+                        "description": "Исходный язык",
                         "name": "from",
                         "in": "formData",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "description": "Target lang",
+                        "description": "Целевой язык",
                         "name": "to",
                         "in": "formData",
                         "required": true
@@ -948,25 +791,25 @@
                 "tags": [
                     "translate"
                 ],
-                "summary": "Translate personal user book. Users can translate books to their personal library",
+                "summary": "Перевести личную книгу пользователя",
                 "parameters": [
                     {
                         "type": "file",
-                        "description": "Upload file",
+                        "description": "Файл книги",
                         "name": "file",
                         "in": "formData",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "description": "Source lang",
+                        "description": "Исходный язык",
                         "name": "from",
                         "in": "formData",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "description": "Target lang",
+                        "description": "Целевой язык",
                         "name": "to",
                         "in": "formData",
                         "required": true
@@ -976,13 +819,13 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/translate_personal_user_book.Output"
+                            "$ref": "#/definitions/translate_personal_book.Output"
                         }
                     }
                 }
             }
         },
-        "/user/me": {
+        "/users/me": {
             "get": {
                 "security": [
                     {
@@ -995,7 +838,7 @@
                 "tags": [
                     "user"
                 ],
-                "summary": "Get user info",
+                "summary": "Get current user",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1006,12 +849,15 @@
                 }
             }
         },
-        "/user/metadata": {
+        "/users/metadata": {
             "put": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
+                ],
+                "consumes": [
+                    "application/json"
                 ],
                 "produces": [
                     "application/json"
@@ -1022,7 +868,7 @@
                 "summary": "Update user metadata",
                 "parameters": [
                     {
-                        "description": "Input data",
+                        "description": "Metadata",
                         "name": "input",
                         "in": "body",
                         "required": true,
@@ -1099,19 +945,68 @@
                 }
             }
         },
+        "domain.Author": {
+            "type": "object",
+            "properties": {
+                "books": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Book"
+                    }
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "personalBooks": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.PersonalBook"
+                    }
+                }
+            }
+        },
+        "domain.BasicAccount": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "isVerified": {
+                    "type": "boolean"
+                },
+                "verifyLink": {
+                    "type": "string"
+                }
+            }
+        },
         "domain.Book": {
             "type": "object",
             "properties": {
                 "author": {
-                    "type": "string"
+                    "$ref": "#/definitions/domain.Author"
                 },
-                "chapterPaths": {
+                "bookChapters": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/domain.BookChapter"
                     }
                 },
-                "cover": {
+                "coverUrl": {
+                    "type": "string"
+                },
+                "createdAt": {
                     "type": "string"
                 },
                 "genres": {
@@ -1123,19 +1018,31 @@
                 "id": {
                     "type": "string"
                 },
+                "originalLang": {
+                    "type": "string"
+                },
+                "processStatus": {
+                    "$ref": "#/definitions/domain.ProcessStatus"
+                },
                 "title": {
+                    "type": "string"
+                },
+                "translatedLang": {
                     "type": "string"
                 }
             }
         },
-        "domain.ChapterAlignNode": {
+        "domain.BookChapter": {
             "type": "object",
             "properties": {
-                "content": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/domain.ParagraphAlignNode"
-                    }
+                "book": {
+                    "$ref": "#/definitions/domain.Book"
+                },
+                "contentURL": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
                 },
                 "id": {
                     "type": "string"
@@ -1209,36 +1116,46 @@
                 }
             }
         },
-        "domain.EmailPasswordAccount": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                }
-            }
-        },
         "domain.Genre": {
             "type": "object",
             "properties": {
+                "books": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Book"
+                    }
+                },
+                "createdAt": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },
                 "name": {
                     "type": "string"
+                },
+                "personalBooks": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.PersonalBook"
+                    }
                 }
             }
         },
         "domain.GoogleAccount": {
             "type": "object",
             "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
                 "email": {
                     "type": "string"
                 },
                 "emailVerified": {
                     "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
                 },
                 "name": {
                     "type": "string"
@@ -1255,36 +1172,16 @@
             "type": "object",
             "additionalProperties": {}
         },
-        "domain.ParagraphAlignNode": {
-            "type": "object",
-            "properties": {
-                "aw": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/domain.WordAlignNode"
-                    }
-                },
-                "op": {
-                    "type": "string"
-                },
-                "tp": {
-                    "type": "string"
-                }
-            }
-        },
-        "domain.PersonalUserBook": {
+        "domain.PersonalBook": {
             "type": "object",
             "properties": {
                 "author": {
+                    "$ref": "#/definitions/domain.Author"
+                },
+                "coverUrl": {
                     "type": "string"
                 },
-                "chapterPaths": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "cover": {
+                "createdAt": {
                     "type": "string"
                 },
                 "genres": {
@@ -1296,19 +1193,76 @@
                 "id": {
                     "type": "string"
                 },
+                "originalLang": {
+                    "type": "string"
+                },
+                "personalBookChapters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.PersonalBookChapter"
+                    }
+                },
+                "processStatus": {
+                    "$ref": "#/definitions/domain.ProcessStatus"
+                },
                 "title": {
                     "type": "string"
                 },
-                "userId": {
+                "translatedLang": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/domain.User"
+                }
+            }
+        },
+        "domain.PersonalBookChapter": {
+            "type": "object",
+            "properties": {
+                "contentUrl": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "order": {
+                    "type": "integer"
+                },
+                "personalBook": {
+                    "$ref": "#/definitions/domain.PersonalBook"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "translatedTitle": {
                     "type": "string"
                 }
             }
         },
+        "domain.ProcessStatus": {
+            "type": "string",
+            "enum": [
+                "in_progress",
+                "completed",
+                "failed"
+            ],
+            "x-enum-varnames": [
+                "ProcessStatusInProgress",
+                "ProcessStatusCompleted",
+                "ProcessStatusFailed"
+            ]
+        },
         "domain.User": {
             "type": "object",
             "properties": {
-                "emailPasswordAccount": {
-                    "$ref": "#/definitions/domain.EmailPasswordAccount"
+                "basicAccount": {
+                    "$ref": "#/definitions/domain.BasicAccount"
+                },
+                "createdAt": {
+                    "type": "string"
                 },
                 "googleAccount": {
                     "$ref": "#/definitions/domain.GoogleAccount"
@@ -1325,27 +1279,10 @@
                 "metadata": {
                     "$ref": "#/definitions/domain.JsonB"
                 },
-                "personalUserBooks": {
+                "personalBooks": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.PersonalUserBook"
-                    }
-                }
-            }
-        },
-        "domain.WordAlignNode": {
-            "type": "object",
-            "properties": {
-                "iow": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                },
-                "itw": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
+                        "$ref": "#/definitions/domain.PersonalBook"
                     }
                 }
             }
@@ -1392,7 +1329,7 @@
             "type": "object",
             "properties": {
                 "book": {
-                    "$ref": "#/definitions/domain.PersonalUserBook"
+                    "$ref": "#/definitions/domain.PersonalBook"
                 }
             }
         },
@@ -1402,7 +1339,7 @@
                 "books": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.PersonalUserBook"
+                        "$ref": "#/definitions/domain.PersonalBook"
                     }
                 }
             }
@@ -1475,8 +1412,7 @@
             "required": [
                 "fromLang",
                 "text",
-                "toLang",
-                "ui"
+                "toLang"
             ],
             "properties": {
                 "fromLang": {
@@ -1486,9 +1422,6 @@
                     "type": "string"
                 },
                 "toLang": {
-                    "type": "string"
-                },
-                "ui": {
                     "type": "string"
                 }
             }
@@ -1599,11 +1532,11 @@
                 }
             }
         },
-        "translate_personal_user_book.Output": {
+        "translate_personal_book.Output": {
             "type": "object",
             "properties": {
                 "book": {
-                    "$ref": "#/definitions/domain.PersonalUserBook"
+                    "$ref": "#/definitions/domain.PersonalBook"
                 },
                 "messageAboutTranslate": {
                     "type": "string"
@@ -1618,36 +1551,11 @@
                 }
             }
         },
-        "update_genre.Input": {
-            "type": "object",
-            "required": [
-                "id",
-                "name"
-            ],
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 1
-                }
-            }
-        },
-        "update_genre.Output": {
-            "type": "object",
-            "properties": {
-                "genre": {
-                    "$ref": "#/definitions/domain.Genre"
-                }
-            }
-        },
         "update_personal_user_book.Output": {
             "type": "object",
             "properties": {
                 "book": {
-                    "$ref": "#/definitions/domain.PersonalUserBook"
+                    "$ref": "#/definitions/domain.PersonalBook"
                 }
             }
         }

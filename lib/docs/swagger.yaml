@@ -36,15 +36,47 @@ definitions:
       success:
         type: boolean
     type: object
+  domain.Author:
+    properties:
+      books:
+        items:
+          $ref: '#/definitions/domain.Book'
+        type: array
+      createdAt:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      personalBooks:
+        items:
+          $ref: '#/definitions/domain.PersonalBook'
+        type: array
+    type: object
+  domain.BasicAccount:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      isVerified:
+        type: boolean
+      verifyLink:
+        type: string
+    type: object
   domain.Book:
     properties:
       author:
-        type: string
-      chapterPaths:
+        $ref: '#/definitions/domain.Author'
+      bookChapters:
         items:
-          type: string
+          $ref: '#/definitions/domain.BookChapter'
         type: array
-      cover:
+      coverUrl:
+        type: string
+      createdAt:
         type: string
       genres:
         items:
@@ -52,15 +84,23 @@ definitions:
         type: array
       id:
         type: string
+      originalLang:
+        type: string
+      processStatus:
+        $ref: '#/definitions/domain.ProcessStatus'
       title:
         type: string
+      translatedLang:
+        type: string
     type: object
-  domain.ChapterAlignNode:
+  domain.BookChapter:
     properties:
-      content:
-        items:
-          $ref: '#/definitions/domain.ParagraphAlignNode'
-        type: array
+      book:
+        $ref: '#/definitions/domain.Book'
+      contentURL:
+        type: string
+      createdAt:
+        type: string
       id:
         type: string
       order:
@@ -108,26 +148,33 @@ definitions:
           type: string
         type: array
     type: object
-  domain.EmailPasswordAccount:
-    properties:
-      email:
-        type: string
-      id:
-        type: string
-    type: object
   domain.Genre:
     properties:
+      books:
+        items:
+          $ref: '#/definitions/domain.Book'
+        type: array
+      createdAt:
+        type: string
       id:
         type: string
       name:
         type: string
+      personalBooks:
+        items:
+          $ref: '#/definitions/domain.PersonalBook'
+        type: array
     type: object
   domain.GoogleAccount:
     properties:
+      createdAt:
+        type: string
       email:
         type: string
       emailVerified:
         type: boolean
+      id:
+        type: string
       name:
         type: string
       picture:
@@ -138,26 +185,13 @@ definitions:
   domain.JsonB:
     additionalProperties: {}
     type: object
-  domain.ParagraphAlignNode:
-    properties:
-      aw:
-        items:
-          $ref: '#/definitions/domain.WordAlignNode'
-        type: array
-      op:
-        type: string
-      tp:
-        type: string
-    type: object
-  domain.PersonalUserBook:
+  domain.PersonalBook:
     properties:
       author:
+        $ref: '#/definitions/domain.Author'
+      coverUrl:
         type: string
-      chapterPaths:
-        items:
-          type: string
-        type: array
-      cover:
+      createdAt:
         type: string
       genres:
         items:
@@ -165,15 +199,54 @@ definitions:
         type: array
       id:
         type: string
+      originalLang:
+        type: string
+      personalBookChapters:
+        items:
+          $ref: '#/definitions/domain.PersonalBookChapter'
+        type: array
+      processStatus:
+        $ref: '#/definitions/domain.ProcessStatus'
       title:
         type: string
-      userId:
+      translatedLang:
+        type: string
+      user:
+        $ref: '#/definitions/domain.User'
+    type: object
+  domain.PersonalBookChapter:
+    properties:
+      contentUrl:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      order:
+        type: integer
+      personalBook:
+        $ref: '#/definitions/domain.PersonalBook'
+      title:
+        type: string
+      translatedTitle:
         type: string
     type: object
+  domain.ProcessStatus:
+    enum:
+    - in_progress
+    - completed
+    - failed
+    type: string
+    x-enum-varnames:
+    - ProcessStatusInProgress
+    - ProcessStatusCompleted
+    - ProcessStatusFailed
   domain.User:
     properties:
-      emailPasswordAccount:
-        $ref: '#/definitions/domain.EmailPasswordAccount'
+      basicAccount:
+        $ref: '#/definitions/domain.BasicAccount'
+      createdAt:
+        type: string
       googleAccount:
         $ref: '#/definitions/domain.GoogleAccount'
       id:
@@ -184,20 +257,9 @@ definitions:
         type: boolean
       metadata:
         $ref: '#/definitions/domain.JsonB'
-      personalUserBooks:
+      personalBooks:
         items:
-          $ref: '#/definitions/domain.PersonalUserBook'
-        type: array
-    type: object
-  domain.WordAlignNode:
-    properties:
-      iow:
-        items:
-          type: integer
-        type: array
-      itw:
-        items:
-          type: integer
+          $ref: '#/definitions/domain.PersonalBook'
         type: array
     type: object
   get_book.Output:
@@ -227,13 +289,13 @@ definitions:
   get_personal_user_book.Output:
     properties:
       book:
-        $ref: '#/definitions/domain.PersonalUserBook'
+        $ref: '#/definitions/domain.PersonalBook'
     type: object
   get_personal_user_books.Output:
     properties:
       books:
         items:
-          $ref: '#/definitions/domain.PersonalUserBook'
+          $ref: '#/definitions/domain.PersonalBook'
         type: array
     type: object
   google_login.Input:
@@ -285,13 +347,10 @@ definitions:
         type: string
       toLang:
         type: string
-      ui:
-        type: string
     required:
     - fromLang
     - text
     - toLang
-    - ui
     type: object
   lookup.Output:
     properties:
@@ -361,10 +420,10 @@ definitions:
       messageAboutTranslate:
         type: string
     type: object
-  translate_personal_user_book.Output:
+  translate_personal_book.Output:
     properties:
       book:
-        $ref: '#/definitions/domain.PersonalUserBook'
+        $ref: '#/definitions/domain.PersonalBook'
       messageAboutTranslate:
         type: string
     type: object
@@ -373,27 +432,10 @@ definitions:
       book:
         $ref: '#/definitions/domain.Book'
     type: object
-  update_genre.Input:
-    properties:
-      id:
-        type: string
-      name:
-        maxLength: 100
-        minLength: 1
-        type: string
-    required:
-    - id
-    - name
-    type: object
-  update_genre.Output:
-    properties:
-      genre:
-        $ref: '#/definitions/domain.Genre'
-    type: object
   update_personal_user_book.Output:
     properties:
       book:
-        $ref: '#/definitions/domain.PersonalUserBook'
+        $ref: '#/definitions/domain.PersonalBook'
     type: object
 externalDocs:
   description: OpenAPI
@@ -403,7 +445,7 @@ info:
   title: Nim2Book api
   version: "1.0"
 paths:
-  /auth/google-login:
+  /auth/google:
     post:
       consumes:
       - application/json
@@ -498,7 +540,7 @@ paths:
       summary: Register user
       tags:
       - auth
-  /book:
+  /books:
     get:
       parameters:
       - description: Author filter
@@ -528,7 +570,25 @@ paths:
       summary: Get books
       tags:
       - book
-  /book/{id}:
+  /books/{book_id}/chapters/{chapter_number}:
+    get:
+      parameters:
+      - description: Chapter path
+        in: query
+        name: path
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Chapter content
+          schema:
+            type: string
+      summary: Get chapter content
+      tags:
+      - book
+  /books/{id}:
     get:
       parameters:
       - description: Book id
@@ -577,24 +637,6 @@ paths:
       summary: Update book
       tags:
       - book
-  /book/get-chapter/{path}:
-    get:
-      parameters:
-      - description: Chapter path
-        in: path
-        name: path
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/domain.ChapterAlignNode'
-      summary: Get book chapter
-      tags:
-      - book
   /dictionary/lookup:
     post:
       consumes:
@@ -616,14 +658,14 @@ paths:
       summary: Get list translate from dictionary
       tags:
       - dictionary
-  /fcm-token/add:
+  /fcm-tokens:
     post:
       consumes:
       - application/json
       parameters:
-      - description: body
+      - description: FCM token
         in: body
-        name: data
+        name: input
         required: true
         schema:
           $ref: '#/definitions/add_fcm_token.Input'
@@ -636,13 +678,13 @@ paths:
             $ref: '#/definitions/add_fcm_token.Output'
       security:
       - BearerAuth: []
-      summary: Add fcm token for send notifications
+      summary: Add FCM token
       tags:
       - fcm-token
-  /fcm-token/delete:
+  /fcm-tokens/{token}:
     delete:
       parameters:
-      - description: fcm token
+      - description: FCM token
         in: query
         name: token
         required: true
@@ -656,10 +698,10 @@ paths:
             $ref: '#/definitions/delete_fcm_token.Output'
       security:
       - BearerAuth: []
-      summary: Delete fcm token
+      summary: Delete FCM token
       tags:
       - fcm-token
-  /file/public:
+  /files/public:
     get:
       parameters:
       - description: path
@@ -675,7 +717,7 @@ paths:
       summary: Get file data
       tags:
       - file
-  /genre:
+  /genres:
     get:
       produces:
       - application/json
@@ -709,7 +751,7 @@ paths:
       summary: Create genre
       tags:
       - genre
-  /genre/{id}:
+  /genres/{id}:
     delete:
       parameters:
       - description: Genre id
@@ -746,34 +788,7 @@ paths:
       summary: Get genre by id
       tags:
       - genre
-    put:
-      consumes:
-      - application/json
-      parameters:
-      - description: Genre id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Genre data
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/update_genre.Input'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/update_genre.Output'
-      security:
-      - BearerAuth: []
-      summary: Update genre
-      tags:
-      - genre
-  /notification/test:
+  /notifications:
     post:
       consumes:
       - application/json
@@ -796,22 +811,22 @@ paths:
       summary: Notification test
       tags:
       - notification
-  /personal-user-book:
+  /personal-user-books:
     get:
       parameters:
-      - description: Author filter
+      - description: Author
         in: query
         name: author
         type: string
-      - description: Title filter
+      - description: Title
         in: query
         name: title
         type: string
-      - description: Genre ID filter
+      - description: Genre ID
         in: query
         name: genreId
         type: string
-      - description: Page number
+      - description: Page
         in: query
         name: page
         required: true
@@ -823,30 +838,12 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/get_personal_user_books.Output'
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "401":
-          description: Unauthorized
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
       security:
       - BearerAuth: []
       summary: Get personal user books
       tags:
-      - personal_user_book
-  /personal-user-book/{id}:
+      - personal-user-book
+  /personal-user-books/{id}:
     get:
       parameters:
       - description: Book ID
@@ -861,60 +858,32 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/get_personal_user_book.Output'
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "401":
-          description: Unauthorized
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "403":
-          description: Forbidden
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
       security:
       - BearerAuth: []
-      summary: Get personal user book by ID
+      summary: Get personal user book
       tags:
-      - personal_user_book
+      - personal-user-book
     put:
+      consumes:
+      - multipart/form-data
       parameters:
-      - description: Cover file
-        in: formData
-        name: cover
-        type: file
-      - description: Author book
-        in: formData
-        name: author
-        type: string
-      - description: Title book
-        in: formData
-        name: title
-        type: string
-      - description: Book id
+      - description: Book ID
         in: path
         name: id
         required: true
         type: string
+      - description: Author
+        in: formData
+        name: author
+        type: string
+      - description: Title
+        in: formData
+        name: title
+        type: string
+      - description: Cover
+        in: formData
+        name: cover
+        type: file
       produces:
       - application/json
       responses:
@@ -922,57 +891,27 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/update_personal_user_book.Output'
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "401":
-          description: Unauthorized
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "403":
-          description: Forbidden
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
       security:
       - BearerAuth: []
       summary: Update personal user book
       tags:
-      - personal_user_book
+      - personal-user-book
   /translate/book:
     post:
       consumes:
       - multipart/form-data
       parameters:
-      - description: Upload file
+      - description: Файл книги
         in: formData
         name: file
         required: true
         type: file
-      - description: Source lang
+      - description: Исходный язык
         in: formData
         name: from
         required: true
         type: string
-      - description: Target lang
+      - description: Целевой язык
         in: formData
         name: to
         required: true
@@ -986,8 +925,7 @@ paths:
             $ref: '#/definitions/translate_book.Output'
       security:
       - BearerAuth: []
-      summary: Translate book to public library. Only administrators can translate
-        books to public access
+      summary: Перевести книгу
       tags:
       - translate
   /translate/personal-user-book:
@@ -995,17 +933,17 @@ paths:
       consumes:
       - multipart/form-data
       parameters:
-      - description: Upload file
+      - description: Файл книги
         in: formData
         name: file
         required: true
         type: file
-      - description: Source lang
+      - description: Исходный язык
         in: formData
         name: from
         required: true
         type: string
-      - description: Target lang
+      - description: Целевой язык
         in: formData
         name: to
         required: true
@@ -1016,14 +954,13 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/translate_personal_user_book.Output'
+            $ref: '#/definitions/translate_personal_book.Output'
       security:
       - BearerAuth: []
-      summary: Translate personal user book. Users can translate books to their personal
-        library
+      summary: Перевести личную книгу пользователя
       tags:
       - translate
-  /user/me:
+  /users/me:
     get:
       produces:
       - application/json
@@ -1034,13 +971,15 @@ paths:
             $ref: '#/definitions/me.Output'
       security:
       - BearerAuth: []
-      summary: Get user info
+      summary: Get current user
       tags:
       - user
-  /user/metadata:
+  /users/metadata:
     put:
+      consumes:
+      - application/json
       parameters:
-      - description: Input data
+      - description: Metadata
         in: body
         name: input
         required: true
