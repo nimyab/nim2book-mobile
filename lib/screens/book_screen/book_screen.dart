@@ -62,8 +62,8 @@ class _BookScreenState extends ConsumerState<BookScreen> {
         ? savedBooks.any((final b) => b.id == currentBook.id)
         : false;
 
-    final coverUrl = currentBook?.cover != null
-        ? '${env.apiBaseUrl}/api/v1/file/public?path=${Uri.encodeComponent(currentBook!.cover!)}'
+    final coverUrl = currentBook?.coverUrl != null
+        ? '${env.apiBaseUrl}/files/public?path=${Uri.encodeComponent(currentBook!.coverUrl!)}'
         : null;
 
     final Widget coverHero = Hero(
@@ -118,7 +118,7 @@ class _BookScreenState extends ConsumerState<BookScreen> {
                 textAlign: TextAlign.center,
               ),
               Text(
-                '${l10n.author}: ${currentBook.author}',
+                '${l10n.author}: ${currentBook.author?.name}',
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w400,

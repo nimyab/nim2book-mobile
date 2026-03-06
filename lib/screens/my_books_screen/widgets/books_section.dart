@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
+import 'package:nim2book_mobile_flutter/core/models/book_chapter/book_chapter.dart';
 import 'package:nim2book_mobile_flutter/core/models/personal_user_book/personal_user_book.dart';
 import 'package:nim2book_mobile_flutter/core/router/router.dart';
 import 'package:nim2book_mobile_flutter/screens/my_books_screen/widgets/add_book_card.dart';
@@ -93,9 +94,21 @@ class BooksSection extends StatelessWidget {
       id: personalBook.id,
       title: personalBook.title,
       author: personalBook.author,
-      chapterPaths: personalBook.chapterPaths,
-      cover: personalBook.cover,
+      bookChapters: personalBook.personalBookChapters?.map((chapter) {
+        return BookChapter(
+          id: chapter.id,
+          order: chapter.order,
+          title: chapter.title,
+          translatedTitle: chapter.translatedTitle,
+          contentURL: chapter.contentUrl,
+          createdAt: chapter.createdAt,
+        );
+      }).toList(),
+      coverUrl: personalBook.coverUrl,
       genres: personalBook.genres,
+      originalLang: personalBook.originalLang,
+      translatedLang: personalBook.translatedLang,
+      createdAt: personalBook.createdAt,
     );
 
     return SizedBox(

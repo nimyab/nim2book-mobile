@@ -14,7 +14,6 @@ import 'package:drift/extensions/json1.dart';
 
 const _fromLang = 'en';
 const _toLang = 'ru';
-const _ui = 'ru';
 
 // Top-level functions for compute isolates
 Map<String, dynamic> _encodeCardData(Map<String, dynamic> params) {
@@ -142,7 +141,6 @@ class DictionaryService {
           text: word,
           fromLang: _fromLang,
           toLang: _toLang,
-          ui: _ui,
         ),
       );
       return response.words;

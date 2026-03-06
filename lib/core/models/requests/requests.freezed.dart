@@ -1336,7 +1336,7 @@ as String,
 /// @nodoc
 mixin _$LookupRequest {
 
- String get text; String get fromLang; String get toLang; String get ui;
+ String get text; String get fromLang; String get toLang;
 /// Create a copy of LookupRequest
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1349,16 +1349,16 @@ $LookupRequestCopyWith<LookupRequest> get copyWith => _$LookupRequestCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LookupRequest&&(identical(other.text, text) || other.text == text)&&(identical(other.fromLang, fromLang) || other.fromLang == fromLang)&&(identical(other.toLang, toLang) || other.toLang == toLang)&&(identical(other.ui, ui) || other.ui == ui));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LookupRequest&&(identical(other.text, text) || other.text == text)&&(identical(other.fromLang, fromLang) || other.fromLang == fromLang)&&(identical(other.toLang, toLang) || other.toLang == toLang));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,text,fromLang,toLang,ui);
+int get hashCode => Object.hash(runtimeType,text,fromLang,toLang);
 
 @override
 String toString() {
-  return 'LookupRequest(text: $text, fromLang: $fromLang, toLang: $toLang, ui: $ui)';
+  return 'LookupRequest(text: $text, fromLang: $fromLang, toLang: $toLang)';
 }
 
 
@@ -1369,7 +1369,7 @@ abstract mixin class $LookupRequestCopyWith<$Res>  {
   factory $LookupRequestCopyWith(LookupRequest value, $Res Function(LookupRequest) _then) = _$LookupRequestCopyWithImpl;
 @useResult
 $Res call({
- String text, String fromLang, String toLang, String ui
+ String text, String fromLang, String toLang
 });
 
 
@@ -1386,12 +1386,11 @@ class _$LookupRequestCopyWithImpl<$Res>
 
 /// Create a copy of LookupRequest
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? text = null,Object? fromLang = null,Object? toLang = null,Object? ui = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? text = null,Object? fromLang = null,Object? toLang = null,}) {
   return _then(_self.copyWith(
 text: null == text ? _self.text : text // ignore: cast_nullable_to_non_nullable
 as String,fromLang: null == fromLang ? _self.fromLang : fromLang // ignore: cast_nullable_to_non_nullable
 as String,toLang: null == toLang ? _self.toLang : toLang // ignore: cast_nullable_to_non_nullable
-as String,ui: null == ui ? _self.ui : ui // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -1477,10 +1476,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String text,  String fromLang,  String toLang,  String ui)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String text,  String fromLang,  String toLang)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LookupRequest() when $default != null:
-return $default(_that.text,_that.fromLang,_that.toLang,_that.ui);case _:
+return $default(_that.text,_that.fromLang,_that.toLang);case _:
   return orElse();
 
 }
@@ -1498,10 +1497,10 @@ return $default(_that.text,_that.fromLang,_that.toLang,_that.ui);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String text,  String fromLang,  String toLang,  String ui)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String text,  String fromLang,  String toLang)  $default,) {final _that = this;
 switch (_that) {
 case _LookupRequest():
-return $default(_that.text,_that.fromLang,_that.toLang,_that.ui);case _:
+return $default(_that.text,_that.fromLang,_that.toLang);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1518,10 +1517,10 @@ return $default(_that.text,_that.fromLang,_that.toLang,_that.ui);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String text,  String fromLang,  String toLang,  String ui)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String text,  String fromLang,  String toLang)?  $default,) {final _that = this;
 switch (_that) {
 case _LookupRequest() when $default != null:
-return $default(_that.text,_that.fromLang,_that.toLang,_that.ui);case _:
+return $default(_that.text,_that.fromLang,_that.toLang);case _:
   return null;
 
 }
@@ -1533,13 +1532,12 @@ return $default(_that.text,_that.fromLang,_that.toLang,_that.ui);case _:
 @JsonSerializable()
 
 class _LookupRequest implements LookupRequest {
-  const _LookupRequest({required this.text, required this.fromLang, required this.toLang, required this.ui});
+  const _LookupRequest({required this.text, required this.fromLang, required this.toLang});
   factory _LookupRequest.fromJson(Map<String, dynamic> json) => _$LookupRequestFromJson(json);
 
 @override final  String text;
 @override final  String fromLang;
 @override final  String toLang;
-@override final  String ui;
 
 /// Create a copy of LookupRequest
 /// with the given fields replaced by the non-null parameter values.
@@ -1554,16 +1552,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LookupRequest&&(identical(other.text, text) || other.text == text)&&(identical(other.fromLang, fromLang) || other.fromLang == fromLang)&&(identical(other.toLang, toLang) || other.toLang == toLang)&&(identical(other.ui, ui) || other.ui == ui));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LookupRequest&&(identical(other.text, text) || other.text == text)&&(identical(other.fromLang, fromLang) || other.fromLang == fromLang)&&(identical(other.toLang, toLang) || other.toLang == toLang));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,text,fromLang,toLang,ui);
+int get hashCode => Object.hash(runtimeType,text,fromLang,toLang);
 
 @override
 String toString() {
-  return 'LookupRequest(text: $text, fromLang: $fromLang, toLang: $toLang, ui: $ui)';
+  return 'LookupRequest(text: $text, fromLang: $fromLang, toLang: $toLang)';
 }
 
 
@@ -1574,7 +1572,7 @@ abstract mixin class _$LookupRequestCopyWith<$Res> implements $LookupRequestCopy
   factory _$LookupRequestCopyWith(_LookupRequest value, $Res Function(_LookupRequest) _then) = __$LookupRequestCopyWithImpl;
 @override @useResult
 $Res call({
- String text, String fromLang, String toLang, String ui
+ String text, String fromLang, String toLang
 });
 
 
@@ -1591,12 +1589,11 @@ class __$LookupRequestCopyWithImpl<$Res>
 
 /// Create a copy of LookupRequest
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? text = null,Object? fromLang = null,Object? toLang = null,Object? ui = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? text = null,Object? fromLang = null,Object? toLang = null,}) {
   return _then(_LookupRequest(
 text: null == text ? _self.text : text // ignore: cast_nullable_to_non_nullable
 as String,fromLang: null == fromLang ? _self.fromLang : fromLang // ignore: cast_nullable_to_non_nullable
 as String,toLang: null == toLang ? _self.toLang : toLang // ignore: cast_nullable_to_non_nullable
-as String,ui: null == ui ? _self.ui : ui // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

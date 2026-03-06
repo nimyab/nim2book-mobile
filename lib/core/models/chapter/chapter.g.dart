@@ -13,7 +13,7 @@ _ChapterAlignNode _$ChapterAlignNodeFromJson(Map<String, dynamic> json) =>
       translatedTitle: json['translatedTitle'] as String,
       order: (json['order'] as num).toInt(),
       content: (json['content'] as List<dynamic>)
-          .map((e) => ParagraphAlignNode.fromJson(e as Map<String, dynamic>))
+          .map((e) => ContentNode.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -25,6 +25,37 @@ Map<String, dynamic> _$ChapterAlignNodeToJson(_ChapterAlignNode instance) =>
       'order': instance.order,
       'content': instance.content,
     };
+
+ContentNodeParagraph _$ContentNodeParagraphFromJson(
+  Map<String, dynamic> json,
+) => ContentNodeParagraph(
+  paragraphAlignNode: ParagraphAlignNode.fromJson(
+    json['pan'] as Map<String, dynamic>,
+  ),
+  $type: json['type'] as String?,
+);
+
+Map<String, dynamic> _$ContentNodeParagraphToJson(
+  ContentNodeParagraph instance,
+) => <String, dynamic>{
+  'pan': instance.paragraphAlignNode,
+  'type': instance.$type,
+};
+
+ContentNodeImage _$ContentNodeImageFromJson(Map<String, dynamic> json) =>
+    ContentNodeImage(
+      imageNode: ImageNode.fromJson(json['in'] as Map<String, dynamic>),
+      $type: json['type'] as String?,
+    );
+
+Map<String, dynamic> _$ContentNodeImageToJson(ContentNodeImage instance) =>
+    <String, dynamic>{'in': instance.imageNode, 'type': instance.$type};
+
+_ImageNode _$ImageNodeFromJson(Map<String, dynamic> json) =>
+    _ImageNode(path: json['path'] as String, alt: json['alt'] as String);
+
+Map<String, dynamic> _$ImageNodeToJson(_ImageNode instance) =>
+    <String, dynamic>{'path': instance.path, 'alt': instance.alt};
 
 _ParagraphAlignNode _$ParagraphAlignNodeFromJson(Map<String, dynamic> json) =>
     _ParagraphAlignNode(

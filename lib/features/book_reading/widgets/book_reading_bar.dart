@@ -37,7 +37,13 @@ class BookReadingBar extends ConsumerWidget implements PreferredSizeWidget {
             readingState.currentChapterIndex >= chapters.length)
         ? null
         : chapters[readingState.currentChapterIndex];
-    final chapterTitle = currentChapter?.title ?? 'Loading...';
+    final bookChapter =
+        (book.bookChapters == null ||
+            readingState.currentChapterIndex >= book.bookChapters!.length)
+        ? null
+        : book.bookChapters![readingState.currentChapterIndex];
+    final chapterTitle =
+        bookChapter?.title ?? currentChapter?.title ?? 'Loading...';
 
     return AppBar(
       centerTitle: false,

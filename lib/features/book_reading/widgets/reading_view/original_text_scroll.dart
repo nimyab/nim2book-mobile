@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/book_reading/book_reading_provider.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/loading_book/loading_book_provider.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/reading_settings/reading_settings_provider.dart';
@@ -202,22 +203,39 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
           }
 
           final paragraphIndex = index - 1;
-          return Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: sidePadding,
-              vertical: paragraphSpacing,
-            ),
-            child: Container(
-              key: _keyForParagraph(paragraphIndex),
-              child: OriginalParagraph(
-                key: ValueKey(
-                  'chapter_${currentChapterIndex}_paragraph_$paragraphIndex',
+          final contentNode = currentChapter.content[paragraphIndex];
+
+          return contentNode.map(
+            paragraph: (final pNode) => Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: sidePadding,
+                vertical: paragraphSpacing,
+              ),
+              child: Container(
+                key: _keyForParagraph(paragraphIndex),
+                child: OriginalParagraph(
+                  key: ValueKey(
+                    'chapter_${currentChapterIndex}_paragraph_$paragraphIndex',
+                  ),
+                  paragraph: pNode.paragraphAlignNode,
+                  paragraphIndex: paragraphIndex,
+                  selectedParagraphIndex: selectedParagraphIndex ?? -1,
+                  selectedWordIndex: selectedWordIndex ?? -1,
+                  bookId: bookId,
                 ),
-                paragraph: currentChapter.content[paragraphIndex],
-                paragraphIndex: paragraphIndex,
-                selectedParagraphIndex: selectedParagraphIndex ?? -1,
-                selectedWordIndex: selectedWordIndex ?? -1,
-                bookId: bookId,
+              ),
+            ),
+            image: (final iNode) => Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: sidePadding,
+                vertical: paragraphSpacing,
+              ),
+              child: Image.network(
+                iNode.imageNode.path,
+                semanticLabel: iNode.imageNode.alt,
+                errorBuilder: (final context, final error, final stackTrace) {
+                  return const SizedBox.shrink();
+                },
               ),
             ),
           );

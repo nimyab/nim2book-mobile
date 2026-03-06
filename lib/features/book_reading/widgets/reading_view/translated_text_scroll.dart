@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/book_reading/book_reading_provider.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/loading_book/loading_book_provider.dart';
@@ -60,10 +61,17 @@ class _TranslatedTextScrollState extends ConsumerState<TranslatedTextScroll> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    final selectedWordNode =
-        selectedWordIndex == null || selectedParagraphIndex == null
-        ? null
-        : currentChapter.content[selectedParagraphIndex].aw[selectedWordIndex];
+    WordAlignNode? selectedWordNode;
+    if (selectedWordIndex != null && selectedParagraphIndex != null) {
+      final node = currentChapter.content[selectedParagraphIndex];
+      node.mapOrNull(
+        paragraph: (final p) {
+          if (selectedWordIndex < p.paragraphAlignNode.aw.length) {
+            selectedWordNode = p.paragraphAlignNode.aw[selectedWordIndex];
+          }
+        },
+      );
+    }
 
     final baseStyle = TextStyle(
       fontSize: translatedFontSize,
@@ -108,81 +116,91 @@ class _TranslatedTextScrollState extends ConsumerState<TranslatedTextScroll> {
           scrollDirection: Axis.horizontal,
           itemCount: currentChapter.content.length,
           itemBuilder: (final context, final index) {
-            final paragraph = currentChapter.content[index];
+            final contentNode = currentChapter.content[index];
 
-            if (index == selectedParagraphIndex && selectedWordNode != null) {
-              final selectedWordKey = GlobalKey();
-              final needEnsure =
-                  _lastEnsuredParagraph != selectedParagraphIndex ||
-                  _lastEnsuredWord != selectedWordIndex;
-              if (needEnsure) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  final selectedWordContext = selectedWordKey.currentContext;
-                  if (selectedWordContext != null) {
-                    Scrollable.ensureVisible(
-                      selectedWordContext,
-                      duration: const Duration(milliseconds: 300),
-                      alignment: 0.5,
-                      curve: Curves.easeInOut,
-                    );
+            return contentNode.map(
+              paragraph: (final pNode) {
+                final paragraph = pNode.paragraphAlignNode;
+                if (index == selectedParagraphIndex &&
+                    selectedWordNode != null &&
+                    selectedWordNode!.itw.length >= 2) {
+                  final selectedWordKey = GlobalKey();
+                  final needEnsure =
+                      _lastEnsuredParagraph != selectedParagraphIndex ||
+                      _lastEnsuredWord != selectedWordIndex;
+                  if (needEnsure) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      final selectedWordContext =
+                          selectedWordKey.currentContext;
+                      if (selectedWordContext != null) {
+                        Scrollable.ensureVisible(
+                          selectedWordContext,
+                          duration: const Duration(milliseconds: 300),
+                          alignment: 0.5,
+                          curve: Curves.easeInOut,
+                        );
+                      }
+                    });
+                    _lastEnsuredParagraph = selectedParagraphIndex;
+                    _lastEnsuredWord = selectedWordIndex;
                   }
-                });
-                _lastEnsuredParagraph = selectedParagraphIndex;
-                _lastEnsuredWord = selectedWordIndex;
-              }
 
-              return Center(
-                child: RichText(
-                  textScaler: const TextScaler.linear(1.0),
-                  textAlign: TextAlign.left,
-                  text: TextSpan(
-                    children: [
-                      WidgetSpan(
-                        child: Text(
-                          paragraph.tp.substring(0, selectedWordNode.itw[0]),
-                          style: textStyle,
-                          textScaler: const TextScaler.linear(1.0),
-                        ),
-                      ),
-
-                      WidgetSpan(
-                        child: Container(
-                          key: selectedWordKey,
-                          child: Text(
-                            paragraph.tp.substring(
-                              selectedWordNode.itw[0],
-                              selectedWordNode.itw[1],
+                  return Center(
+                    child: RichText(
+                      textScaler: const TextScaler.linear(1.0),
+                      textAlign: TextAlign.left,
+                      text: TextSpan(
+                        children: [
+                          WidgetSpan(
+                            child: Text(
+                              paragraph.tp.substring(
+                                0,
+                                selectedWordNode!.itw[0],
+                              ),
+                              style: textStyle,
+                              textScaler: const TextScaler.linear(1.0),
                             ),
-                            style: textStyle.copyWith(
-                              backgroundColor:
-                                  readingColors.highlightBackgroundColor,
-                              color: readingColors.highlightTextColor,
-                            ),
-                            textScaler: const TextScaler.linear(1.0),
                           ),
-                        ),
+                          WidgetSpan(
+                            child: Container(
+                              key: selectedWordKey,
+                              child: Text(
+                                paragraph.tp.substring(
+                                  selectedWordNode!.itw[0],
+                                  selectedWordNode!.itw[1],
+                                ),
+                                style: textStyle.copyWith(
+                                  backgroundColor:
+                                      readingColors.highlightBackgroundColor,
+                                  color: readingColors.highlightTextColor,
+                                ),
+                                textScaler: const TextScaler.linear(1.0),
+                              ),
+                            ),
+                          ),
+                          WidgetSpan(
+                            child: Text(
+                              paragraph.tp.substring(selectedWordNode!.itw[1]),
+                              style: textStyle,
+                              textScaler: const TextScaler.linear(1.0),
+                            ),
+                          ),
+                        ],
                       ),
-
-                      WidgetSpan(
-                        child: Text(
-                          paragraph.tp.substring(selectedWordNode.itw[1]),
-                          style: textStyle,
-                          textScaler: const TextScaler.linear(1.0),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            } else {
-              return Center(
-                child: Text(
-                  paragraph.tp,
-                  style: textStyle,
-                  textScaler: const TextScaler.linear(1.0),
-                ),
-              );
-            }
+                    ),
+                  );
+                } else {
+                  return Center(
+                    child: Text(
+                      paragraph.tp,
+                      style: textStyle,
+                      textScaler: const TextScaler.linear(1.0),
+                    ),
+                  );
+                }
+              },
+              image: (final iNode) => const SizedBox.shrink(),
+            );
           },
         ),
       ),

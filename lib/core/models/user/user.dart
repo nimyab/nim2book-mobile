@@ -5,42 +5,47 @@ part 'user.freezed.dart';
 part 'user.g.dart';
 
 @freezed
-abstract class GoogleAccount with _$GoogleAccount {
+sealed class GoogleAccount with _$GoogleAccount {
   const factory GoogleAccount({
-    required final String sub,
-    required final String email,
-    required final String name,
-    required final bool emailVerified,
-    final String? picture,
+    required String id,
+    required String sub,
+    required String email,
+    required String name,
+    required bool emailVerified,
+    required String createdAt,
+    String? picture,
   }) = _GoogleAccount;
 
-  factory GoogleAccount.fromJson(final Map<String, dynamic> json) =>
+  factory GoogleAccount.fromJson(Map<String, dynamic> json) =>
       _$GoogleAccountFromJson(json);
 }
 
 @freezed
-abstract class EmailPasswordAccount with _$EmailPasswordAccount {
-  const factory EmailPasswordAccount({
-    required final String id,
-    required final String email,
-  }) = _EmailPasswordAccount;
+sealed class BasicAccount with _$BasicAccount {
+  const factory BasicAccount({
+    required String id,
+    required String email,
+    required bool isVerified,
+    required String createdAt,
+    String? verifyLink,
+  }) = _BasicAccount;
 
-  factory EmailPasswordAccount.fromJson(final Map<String, dynamic> json) =>
-      _$EmailPasswordAccountFromJson(json);
+  factory BasicAccount.fromJson(Map<String, dynamic> json) =>
+      _$BasicAccountFromJson(json);
 }
 
 @freezed
-abstract class User with _$User {
+sealed class User with _$User {
   const factory User({
-    required final String id,
-    required final bool isAdmin,
-    required final bool isVIP,
-    final GoogleAccount? googleAccount,
-    final EmailPasswordAccount? emailPasswordAccount,
-    final Map<String, dynamic>? metadata,
-    final List<PersonalUserBook>? personalUserBooks,
+    required String id,
+    required bool isAdmin,
+    required bool isVIP,
+    required String createdAt,
+    GoogleAccount? googleAccount,
+    BasicAccount? basicAccount,
+    Map<String, dynamic>? metadata,
+    List<PersonalUserBook>? personalBooks,
   }) = _User;
 
-  factory User.fromJson(final Map<String, dynamic> json) =>
-      _$UserFromJson(json);
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }

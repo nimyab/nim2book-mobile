@@ -47,7 +47,6 @@ _LookupRequest _$LookupRequestFromJson(Map<String, dynamic> json) =>
       text: json['text'] as String,
       fromLang: json['fromLang'] as String,
       toLang: json['toLang'] as String,
-      ui: json['ui'] as String,
     );
 
 Map<String, dynamic> _$LookupRequestToJson(_LookupRequest instance) =>
@@ -55,7 +54,6 @@ Map<String, dynamic> _$LookupRequestToJson(_LookupRequest instance) =>
       'text': instance.text,
       'fromLang': instance.fromLang,
       'toLang': instance.toLang,
-      'ui': instance.ui,
     };
 
 _CreateGenreRequest _$CreateGenreRequestFromJson(Map<String, dynamic> json) =>

@@ -70,8 +70,8 @@ class _AddBookScreenState extends ConsumerState<AddBookScreen> {
       if (response.book != null) {
         final book = response.book!;
         final apiBaseUrl = ref.read(envProvider).apiBaseUrl;
-        final coverUrl = book.cover != null
-            ? '$apiBaseUrl/api/v1/file/public?path=${Uri.encodeComponent(book.cover!)}'
+        final coverUrl = book.coverUrl != null
+            ? '$apiBaseUrl/files/public?path=${Uri.encodeComponent(book.coverUrl!)}'
             : null;
         if (coverUrl != null) {
           await precacheImage(CachedNetworkImageProvider(coverUrl), context);

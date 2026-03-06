@@ -12,10 +12,10 @@ class ChapterListTab extends ConsumerWidget {
   Widget build(final BuildContext context, WidgetRef ref) {
     final bookId = this.bookId;
 
-    // Get chapters from loading provider
-    final chapters = ref.watch(
-      loadingBookNotifierProvider(bookId).select((s) => s.chapters),
-    );
+    // Get book and chapters from loading provider
+    final loadingState = ref.watch(loadingBookNotifierProvider(bookId));
+    final chapters = loadingState.chapters;
+    final book = loadingState.book;
 
     final readingState = ref.watch(bookReadingNotifierProvider(bookId));
     final theme = Theme.of(context);
@@ -25,8 +25,11 @@ class ChapterListTab extends ConsumerWidget {
       separatorBuilder: (_, final __) => const Divider(height: 1),
       itemBuilder: (final ctx, final index) {
         final chapter = chapters[index];
-        final title = chapter?.title ?? 'Loading...';
+        final bookChapter = book?.bookChapters?[index];
+        final title =
+            bookChapter?.title ?? chapter?.title ?? 'Chapter ${index + 1}';
         final isCurrent = index == readingState.currentChapterIndex;
+
         return ListTile(
           tileColor: isCurrent
               ? theme.colorScheme.primary.withValues(alpha: 0.15)
@@ -39,14 +42,12 @@ class ChapterListTab extends ConsumerWidget {
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
               : null,
-          onTap: chapter == null
-              ? null
-              : () {
-                  Navigator.of(context).pop();
-                  ref
-                      .read(bookReadingNotifierProvider(bookId).notifier)
-                      .goToChapter(index);
-                },
+          onTap: () {
+            Navigator.of(context).pop();
+            ref
+                .read(bookReadingNotifierProvider(bookId).notifier)
+                .goToChapter(index);
+          },
         );
       },
     );

@@ -26,7 +26,7 @@ class LoadingBookNotifier extends Notifier<LoadingBookState> {
 
       // Don't load chapters here - they will be loaded lazily on demand
       state = state.copyWith(
-        chapters: List.filled(book.chapterPaths.length, null),
+        chapters: List.filled(book.bookChapters?.length ?? 0, null),
         progress: 0.0,
       );
     } finally {
@@ -38,8 +38,9 @@ class LoadingBookNotifier extends Notifier<LoadingBookState> {
   Future<void> ensureChapterLoaded(int chapterIndex) async {
     final book = state.book;
     if (book == null ||
+        book.bookChapters == null ||
         chapterIndex < 0 ||
-        chapterIndex >= book.chapterPaths.length) {
+        chapterIndex >= (book.bookChapters?.length ?? 0)) {
       return;
     }
 
@@ -48,7 +49,7 @@ class LoadingBookNotifier extends Notifier<LoadingBookState> {
       return;
     }
 
-    final path = book.chapterPaths[chapterIndex];
+    final path = book.bookChapters![chapterIndex].contentURL;
     final chapter = await _bookService.getChapter(path);
     if (chapter != null) {
       final updatedChapters = List<ChapterAlignNode?>.from(state.chapters);
@@ -60,9 +61,9 @@ class LoadingBookNotifier extends Notifier<LoadingBookState> {
   /// Preload current chapter and adjacent chapters for smooth navigation
   Future<void> preloadChapters(int currentIndex) async {
     final book = state.book;
-    if (book == null) return;
+    if (book == null || book.bookChapters == null) return;
 
-    final chapterCount = book.chapterPaths.length;
+    final chapterCount = book.bookChapters!.length;
 
     // Load current, previous and next chapters in parallel
     final indicesToLoad = <int>[

@@ -4,21 +4,48 @@ part 'chapter.freezed.dart';
 part 'chapter.g.dart';
 
 @freezed
-abstract class ChapterAlignNode with _$ChapterAlignNode {
+sealed class ChapterAlignNode with _$ChapterAlignNode {
   const factory ChapterAlignNode({
     required final String id,
     required final String title,
     required final String translatedTitle,
     required final int order,
-    required final List<ParagraphAlignNode> content,
+    required final List<ContentNode> content,
   }) = _ChapterAlignNode;
 
   factory ChapterAlignNode.fromJson(final Map<String, dynamic> json) =>
       _$ChapterAlignNodeFromJson(json);
 }
 
+@Freezed(unionKey: 'type')
+sealed class ContentNode with _$ContentNode {
+  @FreezedUnionValue('paragraph')
+  const factory ContentNode.paragraph({
+    @JsonKey(name: 'pan') required ParagraphAlignNode paragraphAlignNode,
+  }) = ContentNodeParagraph;
+
+  @FreezedUnionValue('image')
+  const factory ContentNode.image({
+    @JsonKey(name: 'in') required ImageNode imageNode,
+  }) = ContentNodeImage;
+
+  factory ContentNode.fromJson(final Map<String, dynamic> json) =>
+      _$ContentNodeFromJson(json);
+}
+
 @freezed
-abstract class ParagraphAlignNode with _$ParagraphAlignNode {
+sealed class ImageNode with _$ImageNode {
+  const factory ImageNode({
+    required final String path,
+    required final String alt,
+  }) = _ImageNode;
+
+  factory ImageNode.fromJson(final Map<String, dynamic> json) =>
+      _$ImageNodeFromJson(json);
+}
+
+@freezed
+sealed class ParagraphAlignNode with _$ParagraphAlignNode {
   const factory ParagraphAlignNode({
     required final String op,
     required final String tp,
@@ -30,7 +57,7 @@ abstract class ParagraphAlignNode with _$ParagraphAlignNode {
 }
 
 @freezed
-abstract class WordAlignNode with _$WordAlignNode {
+sealed class WordAlignNode with _$WordAlignNode {
   const factory WordAlignNode({
     required final List<int> iow,
     required final List<int> itw,

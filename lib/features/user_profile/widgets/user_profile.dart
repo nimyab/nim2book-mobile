@@ -35,7 +35,7 @@ class UserProfile extends ConsumerWidget {
                       ),
                     ),
                     Text(
-                      '${l10n.email}: ${user?.emailPasswordAccount?.email ?? user?.googleAccount?.email ?? l10n.notAvailable}',
+                      '${l10n.email}: ${user?.basicAccount?.email ?? user?.googleAccount?.email ?? l10n.notAvailable}',
                     ),
                   ],
                 ),

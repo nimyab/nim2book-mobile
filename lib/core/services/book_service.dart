@@ -189,11 +189,14 @@ class BookService {
 
   Future<void> _cleanupBookCache(final Book book) async {
     try {
-      for (final path in book.chapterPaths) {
-        final key = _chapterKey(path);
-        final removed = await _sharedPreferences.remove(key);
-        if (!removed) {
-          _logger.warning('Failed to remove cached chapter for path $path');
+      if (book.bookChapters != null) {
+        for (final chapter in book.bookChapters!) {
+          final path = chapter.contentURL;
+          final key = _chapterKey(path);
+          final removed = await _sharedPreferences.remove(key);
+          if (!removed) {
+            _logger.warning('Failed to remove cached chapter for path $path');
+          }
         }
       }
 
