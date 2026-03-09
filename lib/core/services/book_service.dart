@@ -95,10 +95,12 @@ class BookService {
       );
       final books = response.books;
       // Cache asynchronously without blocking
-      compute(
-        (List<Map<String, dynamic>> booksList) => jsonEncode(booksList),
-        books.map((final b) => b.toJson()).toList(),
-      ).then((encoded) => _sharedPreferences.setString(cacheKey, encoded));
+      unawaited(
+        compute(
+          (List<Map<String, dynamic>> booksList) => jsonEncode(booksList),
+          books.map((final b) => b.toJson()).toList(),
+        ).then((encoded) => _sharedPreferences.setString(cacheKey, encoded)),
+      );
       return books;
     } catch (e) {
       _logger.error('Error fetching books: $e');
