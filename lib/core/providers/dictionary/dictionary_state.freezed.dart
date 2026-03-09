@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DictionaryState {
 
- List<DictionaryCard> get savedCards;
+ List<DictionaryCard> get savedCards; String? get errorMessage;
 /// Create a copy of DictionaryState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $DictionaryStateCopyWith<DictionaryState> get copyWith => _$DictionaryStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DictionaryState&&const DeepCollectionEquality().equals(other.savedCards, savedCards));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DictionaryState&&const DeepCollectionEquality().equals(other.savedCards, savedCards)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(savedCards));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(savedCards),errorMessage);
 
 @override
 String toString() {
-  return 'DictionaryState(savedCards: $savedCards)';
+  return 'DictionaryState(savedCards: $savedCards, errorMessage: $errorMessage)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $DictionaryStateCopyWith<$Res>  {
   factory $DictionaryStateCopyWith(DictionaryState value, $Res Function(DictionaryState) _then) = _$DictionaryStateCopyWithImpl;
 @useResult
 $Res call({
- List<DictionaryCard> savedCards
+ List<DictionaryCard> savedCards, String? errorMessage
 });
 
 
@@ -62,10 +62,11 @@ class _$DictionaryStateCopyWithImpl<$Res>
 
 /// Create a copy of DictionaryState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? savedCards = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? savedCards = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 savedCards: null == savedCards ? _self.savedCards : savedCards // ignore: cast_nullable_to_non_nullable
-as List<DictionaryCard>,
+as List<DictionaryCard>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -147,10 +148,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<DictionaryCard> savedCards)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<DictionaryCard> savedCards,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DictionaryState() when $default != null:
-return $default(_that.savedCards);case _:
+return $default(_that.savedCards,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -168,10 +169,10 @@ return $default(_that.savedCards);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<DictionaryCard> savedCards)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<DictionaryCard> savedCards,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _DictionaryState():
-return $default(_that.savedCards);}
+return $default(_that.savedCards,_that.errorMessage);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -185,10 +186,10 @@ return $default(_that.savedCards);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<DictionaryCard> savedCards)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<DictionaryCard> savedCards,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _DictionaryState() when $default != null:
-return $default(_that.savedCards);case _:
+return $default(_that.savedCards,_that.errorMessage);case _:
   return null;
 
 }
@@ -200,7 +201,7 @@ return $default(_that.savedCards);case _:
 
 
 class _DictionaryState implements DictionaryState {
-  const _DictionaryState({final  List<DictionaryCard> savedCards = const []}): _savedCards = savedCards;
+  const _DictionaryState({final  List<DictionaryCard> savedCards = const [], this.errorMessage}): _savedCards = savedCards;
   
 
  final  List<DictionaryCard> _savedCards;
@@ -210,6 +211,7 @@ class _DictionaryState implements DictionaryState {
   return EqualUnmodifiableListView(_savedCards);
 }
 
+@override final  String? errorMessage;
 
 /// Create a copy of DictionaryState
 /// with the given fields replaced by the non-null parameter values.
@@ -221,16 +223,16 @@ _$DictionaryStateCopyWith<_DictionaryState> get copyWith => __$DictionaryStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DictionaryState&&const DeepCollectionEquality().equals(other._savedCards, _savedCards));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DictionaryState&&const DeepCollectionEquality().equals(other._savedCards, _savedCards)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_savedCards));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_savedCards),errorMessage);
 
 @override
 String toString() {
-  return 'DictionaryState(savedCards: $savedCards)';
+  return 'DictionaryState(savedCards: $savedCards, errorMessage: $errorMessage)';
 }
 
 
@@ -241,7 +243,7 @@ abstract mixin class _$DictionaryStateCopyWith<$Res> implements $DictionaryState
   factory _$DictionaryStateCopyWith(_DictionaryState value, $Res Function(_DictionaryState) _then) = __$DictionaryStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<DictionaryCard> savedCards
+ List<DictionaryCard> savedCards, String? errorMessage
 });
 
 
@@ -258,10 +260,11 @@ class __$DictionaryStateCopyWithImpl<$Res>
 
 /// Create a copy of DictionaryState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? savedCards = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? savedCards = null,Object? errorMessage = freezed,}) {
   return _then(_DictionaryState(
 savedCards: null == savedCards ? _self._savedCards : savedCards // ignore: cast_nullable_to_non_nullable
-as List<DictionaryCard>,
+as List<DictionaryCard>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

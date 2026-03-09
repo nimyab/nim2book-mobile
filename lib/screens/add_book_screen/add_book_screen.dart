@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/providers/book/books_provider.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
+import 'package:nim2book_mobile_flutter/core/router/app_routes.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 class AddBookScreen extends ConsumerStatefulWidget {
@@ -199,7 +200,7 @@ class _AddBookScreenState extends ConsumerState<AddBookScreen> {
                         ref
                             .read(booksNotifierProvider.notifier)
                             .getPersonalBooks();
-                        context.go('/my-books');
+                        context.go(AppRoutes.myBooks);
                       });
                     },
               style: FilledButton.styleFrom(

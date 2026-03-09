@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nim2book_mobile_flutter/core/providers/dictionary/dictionary_provider.dart';
 import 'package:nim2book_mobile_flutter/core/models/learning/learning_mode.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/learning_session_content.dart';
@@ -23,6 +24,17 @@ class LearningSessionScreen extends ConsumerWidget {
 
   @override
   Widget build(final BuildContext context, WidgetRef ref) {
+    ref.listen<String?>(
+      dictionaryNotifierProvider.select((s) => s.errorMessage),
+      (previous, next) {
+        if (next != null && next != previous) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(next)),
+          );
+        }
+      },
+    );
+
     return Scaffold(
       appBar: AppBar(title: Text(_getTitle(context)), centerTitle: true),
       body: LearningSessionContent(mode: mode),

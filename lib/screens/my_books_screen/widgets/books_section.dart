@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
 import 'package:nim2book_mobile_flutter/core/models/book_chapter/book_chapter.dart';
 import 'package:nim2book_mobile_flutter/core/models/personal_user_book/personal_user_book.dart';
+import 'package:nim2book_mobile_flutter/core/router/app_routes.dart';
 import 'package:nim2book_mobile_flutter/core/router/router.dart';
 import 'package:nim2book_mobile_flutter/screens/my_books_screen/widgets/add_book_card.dart';
 import 'package:nim2book_mobile_flutter/screens/my_books_screen/widgets/vertical_book_card.dart';
@@ -76,7 +77,7 @@ class BooksSection extends StatelessWidget {
         book: book,
         heroTag: tag,
         onTap: () => context.push(
-          '/book/${book.id}',
+          AppRoutes.bookPath(book.id),
           extra: BookRouteExtra(heroTag: tag, book: book),
         ),
       ),
@@ -118,7 +119,7 @@ class BooksSection extends StatelessWidget {
         book: bookForCard,
         heroTag: tag,
         onTap: () => context.push(
-          '/book/${personalBook.id}',
+          AppRoutes.bookPath(personalBook.id),
           extra: BookRouteExtra(heroTag: tag, book: bookForCard),
         ),
       ),

@@ -20,12 +20,14 @@ class BooksNotifier extends Notifier<BooksState> {
   }
 
   Future<void> initialize() async {
-    state = state.copyWith(isFetching: true);
+    state = state.copyWith(isFetching: true, errorMessage: null);
 
     try {
       await getMyBooks();
       await getPersonalBooks();
       await getBooks(null, null, 1);
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString());
     } finally {
       state = state.copyWith(isFetching: false);
     }
@@ -37,18 +39,26 @@ class BooksNotifier extends Notifier<BooksState> {
     final int page,
   ) async {
     if (page == 1) {
-      state = state.copyWith(allBooks: [], isFetching: true);
+      state = state.copyWith(allBooks: [], isFetching: true, errorMessage: null);
     }
-    final books = await _bookService.getBooks(author, title, page);
-    if (books.isNotEmpty) {
-      final updated = List<Book>.from(state.allBooks)..addAll(books);
-      state = state.copyWith(allBooks: updated);
+    try {
+      final books = await _bookService.getBooks(author, title, page);
+      if (books.isNotEmpty) {
+        final updated = List<Book>.from(state.allBooks)..addAll(books);
+        state = state.copyWith(allBooks: updated);
+      }
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString());
+    } finally {
+      if (page == 1) {
+        state = state.copyWith(isFetching: false);
+      }
     }
   }
 
   Future<void> searchBooks(final String query) async {
     try {
-      state = state.copyWith(isFetching: true);
+      state = state.copyWith(isFetching: true, errorMessage: null);
 
       final q = query.trim();
       if (q.isEmpty) {
@@ -69,14 +79,20 @@ class BooksNotifier extends Notifier<BooksState> {
       }
 
       state = state.copyWith(allBooks: map.values.toList());
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString());
     } finally {
       state = state.copyWith(isFetching: false);
     }
   }
 
   Future<void> getMyBooks() async {
-    final savedBooks = await _bookService.getAddedBooks();
-    state = state.copyWith(savedBooks: savedBooks);
+    try {
+      final savedBooks = await _bookService.getAddedBooks();
+      state = state.copyWith(savedBooks: savedBooks);
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString());
+    }
   }
 
   Future<void> addMyBook(final Book book) async {
@@ -85,7 +101,14 @@ class BooksNotifier extends Notifier<BooksState> {
     state = state.copyWith(savedBooks: updated);
 
     // Persist without blocking UI
-    unawaited(_bookService.addBook(book));
+    try {
+      await _bookService.addBook(book);
+    } catch (e) {
+      // Revert on error? Or just set error message?
+      // Reverting is better for consistency but complex.
+      // For now, let's just set errorMessage.
+      state = state.copyWith(errorMessage: e.toString());
+    }
   }
 
   Future<void> removeMyBook(final Book book) async {
@@ -95,7 +118,11 @@ class BooksNotifier extends Notifier<BooksState> {
     state = state.copyWith(savedBooks: updated);
 
     // Persist without blocking UI
-    unawaited(_bookService.removeBook(book));
+    try {
+      await _bookService.removeBook(book);
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString());
+    }
   }
 
   Future<void> getPersonalBooks() async {
@@ -103,8 +130,7 @@ class BooksNotifier extends Notifier<BooksState> {
       final response = await _apiClient.getPersonalUserBooks(page: 1);
       state = state.copyWith(personalBooks: response.books);
     } catch (e) {
-      // Handle error silently or log it
-      state = state.copyWith(personalBooks: []);
+      state = state.copyWith(personalBooks: [], errorMessage: e.toString());
     }
   }
 }

@@ -19,42 +19,56 @@ class DictionaryNotifier extends Notifier<DictionaryState> {
   }
 
   Future<void> _loadInitialData() async {
-    final cards = await _dictionaryService.getListDictionaryCard();
-    state = state.copyWith(savedCards: cards);
+    try {
+      final cards = await _dictionaryService.getListDictionaryCard();
+      state = state.copyWith(savedCards: cards, errorMessage: null);
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString());
+    }
   }
 
   Future<bool> saveWord(
     final String word,
     final DictionaryWord wordData,
   ) async {
-    final dictionaryCard = await _dictionaryService.saveWord(wordData);
-    if (dictionaryCard != null) {
-      if (state.savedCards.any(
-        (e) =>
-            e.wordData.text == wordData.text &&
-            e.wordData.partOfSpeech == wordData.partOfSpeech,
-      )) {
-        // Если карточка уже существует, обновляем её
-        final updatedCards = state.savedCards.map((card) {
-          if (card.wordData.text == wordData.text &&
-              card.wordData.partOfSpeech == wordData.partOfSpeech) {
-            return dictionaryCard;
-          }
-          return card;
-        }).toList();
-        state = state.copyWith(savedCards: updatedCards);
-      } else {
-        // Если карточки нет, добавляем её в список
-        final updated = [...state.savedCards, dictionaryCard];
-        state = state.copyWith(savedCards: updated);
+    try {
+      state = state.copyWith(errorMessage: null);
+      final dictionaryCard = await _dictionaryService.saveWord(wordData);
+      
+      if (dictionaryCard != null) {
+        if (state.savedCards.any(
+          (e) =>
+              e.wordData.text == wordData.text &&
+              e.wordData.partOfSpeech == wordData.partOfSpeech,
+        )) {
+          // Если карточка уже существует, обновляем её
+          final updatedCards = state.savedCards.map((card) {
+            if (card.wordData.text == wordData.text &&
+                card.wordData.partOfSpeech == wordData.partOfSpeech) {
+              return dictionaryCard;
+            }
+            return card;
+          }).toList();
+          state = state.copyWith(savedCards: updatedCards);
+        } else {
+          // Если карточки нет, добавляем её в список
+          final updated = [...state.savedCards, dictionaryCard];
+          state = state.copyWith(savedCards: updated);
+        }
+        return true;
       }
+      return false;
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString());
+      return false;
     }
-    return dictionaryCard != null;
   }
 
   Future<bool> deleteWord(final String word, final String partOfSpeech) async {
-    final ok = await _dictionaryService.deleteWord(word, partOfSpeech);
-    if (ok) {
+    try {
+      state = state.copyWith(errorMessage: null);
+      await _dictionaryService.deleteWord(word, partOfSpeech);
+      
       final updated = state.savedCards
           .where(
             (card) =>
@@ -63,8 +77,11 @@ class DictionaryNotifier extends Notifier<DictionaryState> {
           )
           .toList();
       state = state.copyWith(savedCards: updated);
+      return true;
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString());
+      return false;
     }
-    return ok;
   }
 
   Future<List<DictionaryWord>?> getWordLocalFirst(final String word) async {
@@ -89,17 +106,35 @@ class DictionaryNotifier extends Notifier<DictionaryState> {
     required DictionaryCard card,
     required Rating rating,
   }) async {
-    return _dictionaryService.reviewCard(card: card, rating: rating);
+    try {
+      state = state.copyWith(errorMessage: null);
+      return await _dictionaryService.reviewCard(card: card, rating: rating);
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString());
+      rethrow;
+    }
   }
 
   /// Сбросить состояние карточки (вернуть к начальному состоянию)
   Future<void> resetCard(DictionaryCard card) async {
-    return _dictionaryService.resetCard(card);
+    try {
+      state = state.copyWith(errorMessage: null);
+      await _dictionaryService.resetCard(card);
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString());
+      rethrow;
+    }
   }
 
   /// Получить одну карточку для повторения, которая должна быть повторена первой
   Future<DictionaryCard?> getDueCard(LearningMode mode) async {
-    return _dictionaryService.getDueCard(mode);
+    try {
+      state = state.copyWith(errorMessage: null);
+      return await _dictionaryService.getDueCard(mode);
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString());
+      rethrow;
+    }
   }
 }
 

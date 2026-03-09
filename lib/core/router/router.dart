@@ -20,6 +20,8 @@ import 'package:nim2book_mobile_flutter/screens/settings_screen/settings_screen.
 import 'package:nim2book_mobile_flutter/widgets/main_scaffold.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
+import 'package:nim2book_mobile_flutter/core/router/app_routes.dart';
+
 class BookRouteExtra {
   final String? heroTag;
   final Book? book;
@@ -40,39 +42,40 @@ final routerProvider = Provider<GoRouter>((ref) {
   final authListenable = ref.watch(authStateListenableProvider);
 
   return GoRouter(
-    initialLocation: '/my-books',
+    initialLocation: AppRoutes.myBooks,
     navigatorKey: _rootNavigatorKey,
     observers: [TalkerRouteObserver(talker)],
     refreshListenable: authListenable,
     redirect: (context, state) {
       final authState = ref.read(authNotifierProvider);
-      final isLoginRoute = state.uri.path == '/login';
+      final isLoginRoute = state.uri.path == AppRoutes.login;
 
       return authState.when(
         authenticated: (user) {
-          if (isLoginRoute) return '/my-books';
+          if (isLoginRoute) return AppRoutes.myBooks;
           return null;
         },
         loading: () => null,
         unauthenticated: () {
-          if (!isLoginRoute) return '/login';
+          if (!isLoginRoute) return AppRoutes.login;
           return null;
         },
         start: () {
-          if (!isLoginRoute) return '/login';
+          if (!isLoginRoute) return AppRoutes.login;
           return null;
         },
+        error: (_) => null,
       );
     },
     routes: [
       GoRoute(
-        path: '/login',
+        path: AppRoutes.login,
         name: 'login',
         builder: (final context, final state) => const LoginScreen(),
       ),
 
       GoRoute(
-        path: '/register',
+        path: AppRoutes.register,
         name: 'register',
         builder: (final context, final state) => const RegisterScreen(),
       ),
@@ -85,7 +88,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/my-books',
+                path: AppRoutes.myBooks,
                 name: 'my-books',
                 builder: (final context, final state) => const MyBooksScreen(),
               ),
@@ -94,7 +97,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/books',
+                path: AppRoutes.books,
                 name: 'books',
                 builder: (final context, final state) => const BooksScreen(),
               ),
@@ -103,7 +106,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/learning',
+                path: AppRoutes.learning,
                 name: 'learning-shell',
                 builder: (final context, final state) => const LearningScreen(),
               ),
@@ -112,7 +115,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/settings',
+                path: AppRoutes.settings,
                 name: 'settings',
                 builder: (final context, final state) => const SettingsScreen(),
               ),
@@ -122,24 +125,24 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
 
       GoRoute(
-        path: '/learning-session',
+        path: AppRoutes.learningSession,
         name: 'learning-session',
-        redirect: (_, __) => '/learning-session/mixed',
+        redirect: (_, __) => '${AppRoutes.learningSession}/${AppRoutes.learningSessionMixed}',
         routes: [
           GoRoute(
-            path: 'new',
+            path: AppRoutes.learningSessionNew,
             name: 'learning-session-new',
             builder: (final context, final state) =>
                 const LearningSessionScreen(mode: LearningMode.newOnly),
           ),
           GoRoute(
-            path: 'review',
+            path: AppRoutes.learningSessionReview,
             name: 'learning-session-review',
             builder: (final context, final state) =>
                 const LearningSessionScreen(mode: LearningMode.reviewOnly),
           ),
           GoRoute(
-            path: 'mixed',
+            path: AppRoutes.learningSessionMixed,
             name: 'learning-session-mixed',
             builder: (final context, final state) =>
                 const LearningSessionScreen(mode: LearningMode.mixed),
@@ -148,7 +151,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
 
       GoRoute(
-        path: '/book/:bookId',
+        path: AppRoutes.book,
         name: 'book',
         builder: (final context, final state) {
           final bookId = state.pathParameters['bookId']!;
@@ -173,7 +176,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
 
       GoRoute(
-        path: '/reading/:bookId',
+        path: AppRoutes.reading,
         name: 'reading',
         builder: (final context, final state) {
           final bookId = state.pathParameters['bookId']!;
@@ -182,13 +185,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
 
       GoRoute(
-        path: '/add-book',
+        path: AppRoutes.addBook,
         name: 'add-book',
         builder: (final context, final state) => const AddBookScreen(),
       ),
 
       GoRoute(
-        path: '/dictionary',
+        path: AppRoutes.dictionary,
         name: 'dictionary',
         builder: (final context, final state) => const DictionaryScreen(),
       ),

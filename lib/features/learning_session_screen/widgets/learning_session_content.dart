@@ -30,6 +30,10 @@ class _LearningSessionContentState
       learningSessionNotifierProvider((mode: widget.mode)).notifier,
     );
 
+    if (sessionState.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     if (sessionState.currentCard == null) {
       return Center(
         child: Text(
@@ -45,9 +49,6 @@ class _LearningSessionContentState
         ),
       );
     }
-
-    // Заглушка чтобы ничего не отображалось, пока загружается карточка.
-    if (sessionState.isLoading) return const Center();
 
     final currentCard = sessionState.currentCard!;
 

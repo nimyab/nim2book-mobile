@@ -61,6 +61,7 @@ class BookService {
       return book;
     } catch (e) {
       _logger.error('Error fetching book with ID $bookId: $e');
+      if (cachedBook == null) rethrow;
       return cachedBook;
     }
   }
@@ -101,6 +102,7 @@ class BookService {
       return books;
     } catch (e) {
       _logger.error('Error fetching books: $e');
+      if (cached.isEmpty) rethrow;
       return cached;
     }
   }

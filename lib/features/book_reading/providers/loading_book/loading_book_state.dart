@@ -11,5 +11,6 @@ abstract class LoadingBookState with _$LoadingBookState {
     @Default([]) final List<ChapterAlignNode?> chapters,
     @Default(0.0) final double progress,
     @Default(false) final bool isLoading,
+    final String? errorMessage,
   }) = _LoadingBookState;
 }

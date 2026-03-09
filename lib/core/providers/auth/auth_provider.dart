@@ -1,10 +1,13 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/models/user/user.dart';
 import 'package:nim2book_mobile_flutter/core/providers/auth/auth_state.dart';
+export 'package:nim2book_mobile_flutter/core/providers/auth/auth_state.dart';
+
 import 'package:nim2book_mobile_flutter/core/models/requests/requests.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/core/services/fmc_token_service.dart';
@@ -42,8 +45,8 @@ class AuthNotifier extends Notifier<AuthState> {
       state = AuthState.authenticated(user: response.user);
       unawaited(_fcmTokenService.addFcmToken());
       return true;
-    } catch (_) {
-      state = const AuthState.unauthenticated();
+    } catch (e) {
+      state = AuthState.error(message: _getErrorMessage(e));
       return false;
     }
   }
@@ -57,8 +60,8 @@ class AuthNotifier extends Notifier<AuthState> {
       state = AuthState.authenticated(user: response.user);
       unawaited(_fcmTokenService.addFcmToken());
       return true;
-    } catch (_) {
-      state = const AuthState.unauthenticated();
+    } catch (e) {
+      state = AuthState.error(message: _getErrorMessage(e));
       return false;
     }
   }
@@ -83,12 +86,25 @@ class AuthNotifier extends Notifier<AuthState> {
       final response = await _apiClient.register(
         RegisterRequest(email: email, password: password),
       );
-      return response.success;
-    } catch (_) {
-      return false;
-    } finally {
+      // Registration successful, go to login (unauthenticated)
       state = const AuthState.unauthenticated();
+      return response.success;
+    } catch (e) {
+      state = AuthState.error(message: _getErrorMessage(e));
+      return false;
     }
+  }
+
+  String _getErrorMessage(Object error) {
+    if (error is DioException) {
+      // Extract message from backend response if available
+      if (error.response?.data is Map &&
+          (error.response?.data as Map).containsKey('message')) {
+        return (error.response?.data as Map)['message'].toString();
+      }
+      return error.message ?? 'An unknown error occurred';
+    }
+    return error.toString();
   }
 }
 

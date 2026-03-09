@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/providers/auth/auth_provider.dart';
+import 'package:nim2book_mobile_flutter/core/router/app_routes.dart';
 import 'package:nim2book_mobile_flutter/features/user_profile/widgets/user_profile.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/widgets/language_switcher.dart';
@@ -42,7 +43,7 @@ class SettingsScreen extends ConsumerWidget {
                           ElevatedButton(
                             onPressed: isAuthLoading
                                 ? null
-                                : () => context.push('/login'),
+                                : () => context.push(AppRoutes.login),
                             child: isAuthLoading
                                 ? const CircularProgressIndicator(
                                     padding: EdgeInsets.all(10),

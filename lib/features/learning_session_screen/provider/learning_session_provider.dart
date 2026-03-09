@@ -20,8 +20,14 @@ class LearningSessionNotifier extends Notifier<LearningSessionState> {
   }
 
   Future<void> _loadFirstCard() async {
-    final currentCard = await _dictionaryNotifier.getDueCard(mode);
-    state = state.copyWith(currentCard: currentCard, isLoading: false);
+    try {
+      final currentCard = await _dictionaryNotifier.getDueCard(mode);
+      state = state.copyWith(currentCard: currentCard, isLoading: false);
+    } catch (_) {
+      // Error is handled by DictionaryNotifier state (errorMessage)
+      // Just stop loading
+      state = state.copyWith(isLoading: false);
+    }
   }
 
   void toggleTranslation() {
@@ -32,32 +38,40 @@ class LearningSessionNotifier extends Notifier<LearningSessionState> {
 
   Future<void> handleKnow() async {
     if (state.currentCard == null) return;
-    state = state.copyWith(isLoading: true);
-    await _dictionaryNotifier.reviewCard(
-      card: state.currentCard!,
-      rating: Rating.good,
-    );
-    final newCard = await _dictionaryNotifier.getDueCard(mode);
-    state = state.copyWith(
-      currentCard: newCard,
-      showTranslation: false,
-      isLoading: false,
-    );
+    try {
+      state = state.copyWith(isLoading: true);
+      await _dictionaryNotifier.reviewCard(
+        card: state.currentCard!,
+        rating: Rating.good,
+      );
+      final newCard = await _dictionaryNotifier.getDueCard(mode);
+      state = state.copyWith(
+        currentCard: newCard,
+        showTranslation: false,
+        isLoading: false,
+      );
+    } catch (_) {
+      state = state.copyWith(isLoading: false);
+    }
   }
 
   Future<void> handleDontKnow() async {
     if (state.currentCard == null) return;
-    state = state.copyWith(isLoading: true);
-    await _dictionaryNotifier.reviewCard(
-      card: state.currentCard!,
-      rating: Rating.again,
-    );
-    final newCard = await _dictionaryNotifier.getDueCard(mode);
-    state = state.copyWith(
-      currentCard: newCard,
-      showTranslation: false,
-      isLoading: false,
-    );
+    try {
+      state = state.copyWith(isLoading: true);
+      await _dictionaryNotifier.reviewCard(
+        card: state.currentCard!,
+        rating: Rating.again,
+      );
+      final newCard = await _dictionaryNotifier.getDueCard(mode);
+      state = state.copyWith(
+        currentCard: newCard,
+        showTranslation: false,
+        isLoading: false,
+      );
+    } catch (_) {
+      state = state.copyWith(isLoading: false);
+    }
   }
 }
 

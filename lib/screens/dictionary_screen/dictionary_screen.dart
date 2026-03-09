@@ -12,6 +12,17 @@ class DictionaryScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<String?>(
+      dictionaryNotifierProvider.select((s) => s.errorMessage),
+      (previous, next) {
+        if (next != null && next != previous) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(next)),
+          );
+        }
+      },
+    );
+
     final l10n = AppLocalizations.of(context)!;
     final savedCards = ref.watch(dictionaryCardsProvider);
 

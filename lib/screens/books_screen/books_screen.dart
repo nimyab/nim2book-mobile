@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/providers/auth/auth_provider.dart';
 import 'package:nim2book_mobile_flutter/core/providers/book/books_provider.dart';
+import 'package:nim2book_mobile_flutter/core/router/app_routes.dart';
 import 'package:nim2book_mobile_flutter/core/router/router.dart';
 import 'package:nim2book_mobile_flutter/features/books/widgets/book_card.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
@@ -48,6 +49,17 @@ class _BooksScreenState extends ConsumerState<BooksScreen> {
 
   @override
   Widget build(final BuildContext context) {
+    ref.listen<String?>(
+      booksNotifierProvider.select((s) => s.errorMessage),
+      (previous, next) {
+        if (next != null && next != previous) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(next)),
+          );
+        }
+      },
+    );
+
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final isAuthenticated = ref.watch(isAuthenticatedProvider);
@@ -101,7 +113,7 @@ class _BooksScreenState extends ConsumerState<BooksScreen> {
                                 book: book,
                                 heroTag: tag,
                                 onTap: () => context.push(
-                                  '/book/${book.id}',
+                                  AppRoutes.bookPath(book.id),
                                   extra: BookRouteExtra(
                                     heroTag: tag,
                                     book: book,
@@ -122,7 +134,7 @@ class _BooksScreenState extends ConsumerState<BooksScreen> {
                   message: l10n.add,
                   child: ElevatedButton(
                     onPressed: isVIP
-                        ? () => context.push('/add-book')
+                        ? () => context.push(AppRoutes.addBook)
                         : () {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text(l10n.addingBooksVipOnly)),

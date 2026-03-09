@@ -7,8 +7,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:nim2book_mobile_flutter/core/database/database.dart';
 import 'package:nim2book_mobile_flutter/core/env/env.dart';
-import 'package:nim2book_mobile_flutter/core/providers/auth/auth_provider.dart';
-import 'package:nim2book_mobile_flutter/core/providers/book/books_provider.dart';
 import 'package:nim2book_mobile_flutter/core/providers/locale/locale_provider.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/core/providers/theme/theme_provider.dart';
@@ -21,6 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:talker_riverpod_logger/talker_riverpod_logger.dart';
+import 'package:nim2book_mobile_flutter/widgets/app_startup_widget.dart';
 
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -85,35 +84,27 @@ class Nim2BookApp extends ConsumerStatefulWidget {
 
 class _Nim2BookAppState extends ConsumerState<Nim2BookApp> {
   @override
-  void initState() {
-    super.initState();
-
-    // Initialize auth and books sequentially to avoid rebuild cascade
-    Future.microtask(() async {
-      await ref.read(authNotifierProvider.notifier).initialize();
-      await ref.read(booksNotifierProvider.notifier).initialize();
-      // Dictionary notifier initializes itself in build()
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final router = ref.watch(routerProvider);
-    final themeMode = ref.watch(
-      themeNotifierProvider.select((state) => state.themeMode),
-    );
-    final locale = ref.watch(
-      localeNotifierProvider.select((state) => state.currentLocale),
-    );
+    return AppStartupWidget(
+      onLoaded: (context) {
+        final router = ref.watch(routerProvider);
+        final themeMode = ref.watch(
+          themeNotifierProvider.select((state) => state.themeMode),
+        );
+        final locale = ref.watch(
+          localeNotifierProvider.select((state) => state.currentLocale),
+        );
 
-    return MaterialApp.router(
-      routerConfig: router,
-      theme: AppThemes.lightTheme,
-      darkTheme: AppThemes.darkTheme,
-      themeMode: themeMode,
-      locale: locale,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
+        return MaterialApp.router(
+          routerConfig: router,
+          theme: AppThemes.lightTheme,
+          darkTheme: AppThemes.darkTheme,
+          themeMode: themeMode,
+          locale: locale,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        );
+      },
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/providers/dictionary/dictionary_provider.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/core/providers/statistics/statistics_provider.dart';
+import 'package:nim2book_mobile_flutter/core/router/app_routes.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
 
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
@@ -22,6 +23,17 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
 
   @override
   Widget build(final BuildContext context) {
+    ref.listen<String?>(
+      dictionaryNotifierProvider.select((s) => s.errorMessage),
+      (previous, next) {
+        if (next != null && next != previous) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(next)),
+          );
+        }
+      },
+    );
+
     final l10n = AppLocalizations.of(context)!;
     final savedCards = ref.watch(dictionaryCardsProvider);
     final theme = Theme.of(context);
@@ -86,7 +98,7 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
               child: ListTile(
                 leading: const Icon(Icons.menu_book_outlined),
                 title: Text(l10n.dictionary),
-                onTap: () => context.push('/dictionary'),
+                onTap: () => context.push(AppRoutes.dictionary),
               ),
             ),
 
@@ -113,7 +125,7 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
                     );
                     return;
                   }
-                  context.push('/learning-session/new');
+                  context.push(AppRoutes.learningSessionNewPath);
                 },
               ),
             ),
@@ -139,7 +151,7 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
                     );
                     return;
                   }
-                  context.push('/learning-session/review');
+                  context.push(AppRoutes.learningSessionReviewPath);
                 },
               ),
             ),
@@ -149,7 +161,7 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
                 leading: const Icon(Icons.auto_awesome_motion_outlined),
                 title: Text(l10n.mixedMode),
                 onTap: () {
-                  context.push('/learning-session/mixed');
+                  context.push(AppRoutes.learningSessionMixedPath);
                 },
               ),
             ),

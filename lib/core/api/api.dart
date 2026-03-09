@@ -56,8 +56,11 @@ class ApiClient {
           handler.next(options);
         },
         onError: (final error, final handler) async {
+          final isRefreshRequest =
+              error.requestOptions.uri.toString().contains('/auth/refresh');
           if (error.response?.statusCode == 401 &&
-              _tokenService.refreshToken != null) {
+              _tokenService.refreshToken != null &&
+              !isRefreshRequest) {
             // If refresh is already in progress, wait for it to complete
             if (_isRefreshing && _refreshCompleter != null) {
               try {
@@ -91,7 +94,14 @@ class ApiClient {
               handler.resolve(response);
             } catch (refreshError) {
               _refreshCompleter!.completeError(refreshError);
-              await _tokenService.clearTokens();
+
+              // Only clear tokens if it's an auth error (401/403)
+              // Don't clear on network errors or server errors
+              if (refreshError is DioException &&
+                  (refreshError.response?.statusCode == 401 ||
+                      refreshError.response?.statusCode == 403)) {
+                await _tokenService.clearTokens();
+              }
               handler.next(error);
             } finally {
               _isRefreshing = false;

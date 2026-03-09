@@ -65,11 +65,22 @@ class _BookReadingState extends ConsumerState<BookReading>
 
   @override
   Widget build(final BuildContext context) {
+    ref.listen<String?>(
+      loadingBookNotifierProvider(widget.bookId).select((s) => s.errorMessage),
+      (previous, next) {
+        if (next != null && next != previous) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(next)),
+          );
+        }
+      },
+    );
+
     final l10n = AppLocalizations.of(context)!;
     final loadingState = ref.watch(loadingBookNotifierProvider(widget.bookId));
     final book = loadingState.book;
 
-    if (loadingState.isLoading) {
+    if (loadingState.isLoading && book == null) {
       return Scaffold(
         appBar: AppBar(),
         body: Center(
@@ -83,7 +94,11 @@ class _BookReadingState extends ConsumerState<BookReading>
     if (book == null || loadingState.chapters.isEmpty) {
       return Scaffold(
         appBar: AppBar(),
-        body: Center(child: Text(l10n.bookLoadFailed)),
+        body: Center(
+          child: Text(
+            loadingState.errorMessage ?? l10n.bookLoadFailed,
+          ),
+        ),
       );
     }
 

@@ -11,5 +11,6 @@ sealed class BooksState with _$BooksState {
     @Default([]) final List<Book> savedBooks,
     @Default([]) final List<PersonalUserBook> personalBooks,
     @Default(false) final bool isFetching,
+    final String? errorMessage,
   }) = _BooksState;
 }
