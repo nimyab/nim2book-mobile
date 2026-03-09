@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/book_reading/book_reading_state.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/loading_book/loading_book_provider.dart';
@@ -20,11 +19,6 @@ class BookReadingNotifier extends Notifier<BookReadingState> {
   BookReadingState build() {
     _prefs = ref.read(sharedPreferencesProvider);
 
-    // Get chapters from loading provider to avoid parameter mutation
-    final chapters = ref.watch(
-      loadingBookNotifierProvider(bookId).select((s) => s.chapters),
-    );
-
     // Cancel debounce timer when provider is disposed
     ref.onDispose(() {
       _saveDebounceTimer?.cancel();
@@ -32,7 +26,6 @@ class BookReadingNotifier extends Notifier<BookReadingState> {
 
     return BookReadingState(
       bookId: bookId,
-      chapters: chapters,
       currentChapterIndex: 0,
       selectedParagraphIndex: null,
       selectedWordIndex: null,
@@ -53,22 +46,11 @@ class BookReadingNotifier extends Notifier<BookReadingState> {
     );
   }
 
-  void setChapters(final List<ChapterAlignNode?> chapters) {
-    state = state.copyWith(chapters: chapters);
-  }
-
-  int get totalChapters => state.chapters.length;
-
-  ChapterAlignNode? get currentChapter {
-    if (state.chapters.isEmpty ||
-        state.currentChapterIndex >= state.chapters.length) {
-      return null;
-    }
-    return state.chapters[state.currentChapterIndex];
-  }
-
   void goToChapter(final int index) {
-    if (index < 0 || index >= state.chapters.length) return;
+    final total = ref.read(
+      loadingBookNotifierProvider(bookId).select((s) => s.chapters.length),
+    );
+    if (index < 0 || index >= total) return;
     if (state.currentChapterIndex == index &&
         state.selectedParagraphIndex == null &&
         state.selectedWordIndex == null) {
@@ -84,7 +66,10 @@ class BookReadingNotifier extends Notifier<BookReadingState> {
 
   void goToNextChapter() {
     final next = state.currentChapterIndex + 1;
-    if (next < state.chapters.length) {
+    final total = ref.read(
+      loadingBookNotifierProvider(bookId).select((s) => s.chapters.length),
+    );
+    if (next < total) {
       goToChapter(next);
     }
   }
