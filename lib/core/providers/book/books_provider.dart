@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/models/personal_user_book/personal_user_book.dart';
+import 'package:nim2book_mobile_flutter/core/providers/auth/auth_provider.dart';
 import 'package:nim2book_mobile_flutter/core/providers/book/books_state.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
@@ -24,7 +25,12 @@ class BooksNotifier extends Notifier<BooksState> {
 
     try {
       await getMyBooks();
-      await getPersonalBooks();
+      final isAuthenticated = ref.read(isAuthenticatedProvider);
+      if (isAuthenticated) {
+        await getPersonalBooks();
+      } else {
+        state = state.copyWith(personalBooks: []);
+      }
       await getBooks(null, null, 1);
     } catch (e) {
       state = state.copyWith(errorMessage: e.toString());

@@ -9,7 +9,7 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
-  String get appTitle => 'Nim2Book';
+  String get vipRequired => 'Эта функция доступна только для VIP пользователей';
 
   @override
   String get login => 'Войти';
@@ -27,15 +27,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get password => 'Пароль';
 
   @override
-  String get confirmPassword => 'Подтвердите пароль';
-
-  @override
-  String get firstName => 'Имя';
-
-  @override
-  String get lastName => 'Фамилия';
-
-  @override
   String get books => 'Книги';
 
   @override
@@ -46,13 +37,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get settings => 'Настройки';
-
-  @override
-  String get dailyNewWordsLimit => 'Лимит новых слов в день';
-
-  @override
-  String get dailyLimitReached =>
-      'Дневной лимит исчерпан. Возвращайтесь завтра или повторите изученные слова.';
 
   @override
   String get theme => 'Тема';
@@ -76,25 +60,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get search => 'Поиск';
 
   @override
-  String get loading => 'Загрузка...';
-
-  @override
-  String get error => 'Ошибка';
-
-  @override
-  String get retry => 'Повторить';
-
-  @override
   String get cancel => 'Отмена';
 
   @override
-  String get save => 'Сохранить';
-
-  @override
   String get delete => 'Удалить';
-
-  @override
-  String get edit => 'Редактировать';
 
   @override
   String get add => 'Добавить';
@@ -103,13 +72,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get close => 'Закрыть';
 
   @override
-  String get readingProgress => 'Прогресс чтения';
-
-  @override
   String get chapter => 'Глава';
-
-  @override
-  String get page => 'Страница';
 
   @override
   String get loginFailed => 'Ошибка входа';
@@ -122,9 +85,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get registerButton => 'ЗАРЕГИСТРИРОВАТЬСЯ';
-
-  @override
-  String get noAccountRegisterHere => 'Нет аккаунта? Зарегистрируйтесь здесь';
 
   @override
   String get alreadyHaveAccountLoginHere => 'Уже есть аккаунт? Войдите здесь';
@@ -140,31 +100,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get bookNotFound => 'Книга не найдена';
 
   @override
-  String get offlineMode => 'Автономный режим';
-
-  @override
-  String get offlineModeDesc =>
-      'Использовать только кэшированный контент; сеть отключена';
-
-  @override
-  String get offlineBannerTitle => 'Автономный режим';
-
-  @override
-  String get offlineBannerMessage =>
-      'Сетевые запросы отключены. Доступен только кэшированный контент.';
-
-  @override
-  String get offlineCatalogUnavailable =>
-      'Каталог книг недоступен в автономном режиме';
-
-  @override
   String get author => 'Автор';
 
   @override
   String get addToMyBooks => 'ДОБАВИТЬ В МОИ КНИГИ';
-
-  @override
-  String get addedToMyBooks => 'ДОБАВЛЕНО В МОИ КНИГИ';
 
   @override
   String get readBook => 'Читать';
@@ -174,15 +113,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get translationNotFound => 'Перевод не найден';
-
-  @override
-  String get inDictionary => 'В словаре';
-
-  @override
-  String get examples => 'Примеры';
-
-  @override
-  String get meanings => 'Значения';
 
   @override
   String get posNoun => 'сущ.';
@@ -227,20 +157,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get pleaseSelectFile => 'Пожалуйста, выберите файл';
 
   @override
-  String get bookUploadedSuccessfully => 'Книга успешно загружена';
-
-  @override
   String get fileSelectionError => 'Ошибка при выборе файла';
 
   @override
   String get bookUploadError => 'Ошибка при загрузке книги';
-
-  @override
-  String get addingBooksVipOnly =>
-      'Добавление книг доступно только VIP пользователям';
-
-  @override
-  String get learnWords => 'Изучать слова';
 
   @override
   String get learnNewWords => 'Учить новые слова';
@@ -253,19 +173,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get learning => 'Изучение';
-
-  @override
-  String get showAnswer => 'Показать ответ';
-
-  @override
-  String get nextWord => 'Следующее слово';
-
-  @override
-  String get previousWord => 'Предыдущее слово';
-
-  @override
-  String get noWordsToLearn =>
-      'Нет слов для изучения. Сначала добавьте слова в словарь!';
 
   @override
   String get noNewWordsToday => 'Нет новых слов для изучения сегодня';
@@ -285,19 +192,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get examplesLabel => 'Примеры:';
 
   @override
-  String get noTranslationAvailable => 'Перевод недоступен';
-
-  @override
   String get tapToTranslate => 'Нажмите для перевода';
 
   @override
   String get swipeInstructions => 'Свайп влево: Не знаю • Свайп вправо: Знаю';
-
-  @override
-  String get knowLabel => 'ЗНАЮ';
-
-  @override
-  String get dontKnowLabel => 'НЕ ЗНАЮ';
 
   @override
   String get translate => 'Перевести';
@@ -356,9 +254,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Параллельный перевод (горизонтальный скролл)';
 
   @override
-  String get resetPosition => 'Сброс положения';
-
-  @override
   String get textAlignment => 'Выравнивание текста';
 
   @override
@@ -399,94 +294,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get notAvailable => 'Нет данных';
 
   @override
-  String get hard => 'Сложно';
-
-  @override
-  String get easy => 'Легко';
-
-  @override
   String reviewDueToday(int count) {
     return 'К повторению сегодня: $count';
   }
 
   @override
-  String get statistics => 'Статистика';
-
-  @override
-  String get showStatistics => 'Показать статистику изучения';
-
-  @override
-  String studyStreakDays(int days) {
-    return 'Вы учите слова $days дней';
-  }
-
-  @override
-  String recordStreakDays(int days) {
-    return 'Рекорд $days дней';
-  }
-
-  @override
-  String learnedTodayProgress(int used, int limit) {
-    return 'Выучено сегодня $used/$limit';
-  }
-
-  @override
   String get period => 'Период';
-
-  @override
-  String get period7Days => '7 дней';
-
-  @override
-  String get period30Days => '30 дней';
-
-  @override
-  String get period90Days => '90 дней';
-
-  @override
-  String get periodThisYear => 'Этот год';
-
-  @override
-  String get periodAllTime => 'Все время';
-
-  @override
-  String activeLearningCount(int count) {
-    return 'Сейчас изучается: $count';
-  }
-
-  @override
-  String activeNewTodayCount(int count) {
-    return 'Изучается сейчас: $count новых слов';
-  }
-
-  @override
-  String totalLearnedWords(int count) {
-    return 'Всего выученных слов: $count';
-  }
-
-  @override
-  String totalRepeatedWords(int count) {
-    return 'Всего повторенных слов: $count';
-  }
-
-  @override
-  String totalKnownWords(int count) {
-    return 'Всего уже известных слов: $count';
-  }
-
-  @override
-  String get chartCaption => 'Дни / количество слов';
-
-  @override
-  String get periodStatsHeader => 'За выбранный период';
-
-  @override
-  String get chartAxisDays => 'Дни';
-
-  @override
-  String get chartAxisWords => 'Количество слов';
-
-  @override
-  String get chartLegendPeriod => 'За период';
 
   @override
   String get chartLegendTotal => 'Всего';
@@ -498,24 +311,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get chartLegendRepeated => 'Повторено';
 
   @override
-  String get chartLegendKnown => 'Уже известно';
-
-  @override
-  String periodFirstLearnedWords(int count) {
-    return 'Впервые выучено: $count';
-  }
-
-  @override
-  String periodRepeatedWords(int count) {
-    return 'Повторено: $count';
-  }
-
-  @override
-  String periodBecameKnownWords(int count) {
-    return 'Стали известными: $count';
-  }
-
-  @override
   String get noResults => 'Нет результатов';
 
   @override
@@ -525,37 +320,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get reviewWord => 'Повторение';
 
   @override
-  String wordLevel(int level) {
-    return 'Уровень $level';
-  }
-
-  @override
-  String nextReviewDays(int days) {
-    String _temp0 = intl.Intl.pluralLogic(
-      days,
-      locale: localeName,
-      other: 'дней',
-      few: 'дня',
-      one: 'день',
-    );
-    return 'Следующее повторение: $days $_temp0';
-  }
-
-  @override
   String get pronounce => 'Прослушать';
-
-  @override
-  String get skip => 'Пропустить';
-
-  @override
-  String get onboarding => 'Добро пожаловать';
 
   @override
   String get personalBooks => 'Личные книги';
 
   @override
   String get sharedBooks => 'Общие книги';
-
-  @override
-  String get addedBooks => 'Добавленные книги';
 }

@@ -1,8 +1,8 @@
 {
   "@@locale": "ru",
-  "appTitle": "Nim2Book",
-  "@appTitle": {
-    "description": "The title of the application"
+  "vipRequired": "Эта функция доступна только для VIP пользователей",
+  "@vipRequired": {
+    "description": "Сообщение, показываемое когда пользователь без VIP пытается получить доступ к VIP функции"
   },
   "login": "Войти",
   "@login": {
@@ -24,18 +24,6 @@
   "@password": {
     "description": "Password field label"
   },
-  "confirmPassword": "Подтвердите пароль",
-  "@confirmPassword": {
-    "description": "Confirm password field label"
-  },
-  "firstName": "Имя",
-  "@firstName": {
-    "description": "First name field label"
-  },
-  "lastName": "Фамилия",
-  "@lastName": {
-    "description": "Last name field label"
-  },
   "books": "Книги",
   "@books": {
     "description": "Books tab/screen title"
@@ -51,14 +39,6 @@
   "settings": "Настройки",
   "@settings": {
     "description": "Settings tab/screen title"
-  },
-  "dailyNewWordsLimit": "Лимит новых слов в день",
-  "@dailyNewWordsLimit": {
-    "description": "Метка настройки лимита новых слов в день"
-  },
-  "dailyLimitReached": "Дневной лимит исчерпан. Возвращайтесь завтра или повторите изученные слова.",
-  "@dailyLimitReached": {
-    "description": "Сообщение на экране изучения при достижении дневного лимита новых слов"
   },
   "theme": "Тема",
   "@theme": {
@@ -88,18 +68,6 @@
   "@search": {
     "description": "Search placeholder text"
   },
-  "loading": "Загрузка...",
-  "@loading": {
-    "description": "Loading indicator text"
-  },
-  "error": "Ошибка",
-  "@error": {
-    "description": "Generic error message"
-  },
-  "retry": "Повторить",
-  "@retry": {
-    "description": "Retry button text"
-  },
   "cancel": "Отмена",
   "@cancel": {
     "description": "Cancel button text"
@@ -112,10 +80,6 @@
   "@delete": {
     "description": "Delete button text"
   },
-  "edit": "Редактировать",
-  "@edit": {
-    "description": "Edit button text"
-  },
   "add": "Добавить",
   "@add": {
     "description": "Add button text"
@@ -124,17 +88,9 @@
   "@close": {
     "description": "Close button text"
   },
-  "readingProgress": "Прогресс чтения",
-  "@readingProgress": {
-    "description": "Reading progress label"
-  },
   "chapter": "Глава",
   "@chapter": {
     "description": "Chapter label"
-  },
-  "page": "Страница",
-  "@page": {
-    "description": "Page label"
   },
   "loginFailed": "Ошибка входа",
   "@loginFailed": {
@@ -152,10 +108,6 @@
   "@registerButton": {
     "description": "Register button text (uppercase)"
   },
-  "noAccountRegisterHere": "Нет аккаунта? Зарегистрируйтесь здесь",
-  "@noAccountRegisterHere": {
-    "description": "Link to register screen from login"
-  },
   "alreadyHaveAccountLoginHere": "Уже есть аккаунт? Войдите здесь",
   "@alreadyHaveAccountLoginHere": {
     "description": "Link to login screen from register"
@@ -172,26 +124,6 @@
   "@bookNotFound": {
     "description": "Error message when book is not found"
   },
-  "offlineMode": "Автономный режим",
-  "@offlineMode": {
-    "description": "Заголовок переключателя автономного режима"
-  },
-  "offlineModeDesc": "Использовать только кэшированный контент; сеть отключена",
-  "@offlineModeDesc": {
-    "description": "Описание переключателя автономного режима"
-  },
-  "offlineBannerTitle": "Автономный режим",
-  "@offlineBannerTitle": {
-    "description": "Заголовок баннера при активном автономном режиме"
-  },
-  "offlineBannerMessage": "Сетевые запросы отключены. Доступен только кэшированный контент.",
-  "@offlineBannerMessage": {
-    "description": "Текст баннера при активном автономном режиме"
-  },
-  "offlineCatalogUnavailable": "Каталог книг недоступен в автономном режиме",
-  "@offlineCatalogUnavailable": {
-    "description": "Сообщение, когда каталог книг недоступен автономно"
-  },
   "author": "Автор",
   "@author": {
     "description": "Author label"
@@ -199,10 +131,6 @@
   "addToMyBooks": "ДОБАВИТЬ В МОИ КНИГИ",
   "@addToMyBooks": {
     "description": "Button text to add book to user's library"
-  },
-  "addedToMyBooks": "ДОБАВЛЕНО В МОИ КНИГИ",
-  "@addedToMyBooks": {
-    "description": "Button text when book is already in user's library"
   },
   "readBook": "Читать",
   "@readBook": {
@@ -215,18 +143,6 @@
   "translationNotFound": "Перевод не найден",
   "@translationNotFound": {
     "description": "Message when translation is not available"
-  },
-  "inDictionary": "В словаре",
-  "@inDictionary": {
-    "description": "Label indicating word is in dictionary"
-  },
-  "examples": "Примеры",
-  "@examples": {
-    "description": "Examples label in translation dialog"
-  },
-  "meanings": "Значения",
-  "@meanings": {
-    "description": "Meanings label in translation dialog"
   },
   "posNoun": "сущ.",
   "@posNoun": {
@@ -284,10 +200,6 @@
   "@pleaseSelectFile": {
     "description": "Error message when no file is selected"
   },
-  "bookUploadedSuccessfully": "Книга успешно загружена",
-  "@bookUploadedSuccessfully": {
-    "description": "Success message after book upload"
-  },
   "fileSelectionError": "Ошибка при выборе файла",
   "@fileSelectionError": {
     "description": "Error message when file selection fails"
@@ -295,14 +207,6 @@
   "bookUploadError": "Ошибка при загрузке книги",
   "@bookUploadError": {
     "description": "Error message when book upload fails"
-  },
-  "addingBooksVipOnly": "Добавление книг доступно только VIP пользователям",
-  "@addingBooksVipOnly": {
-    "description": "Message shown to non-VIP users"
-  },
-  "learnWords": "Изучать слова",
-  "@learnWords": {
-    "description": "Button text to start learning words"
   },
   "learnNewWords": "Учить новые слова",
   "@learnNewWords": {
@@ -319,22 +223,6 @@
   "learning": "Изучение",
   "@learning": {
     "description": "Learning screen title"
-  },
-  "showAnswer": "Показать ответ",
-  "@showAnswer": {
-    "description": "Button text to reveal the translation"
-  },
-  "nextWord": "Следующее слово",
-  "@nextWord": {
-    "description": "Button text to go to next word"
-  },
-  "previousWord": "Предыдущее слово",
-  "@previousWord": {
-    "description": "Button text to go to previous word"
-  },
-  "noWordsToLearn": "Нет слов для изучения. Сначала добавьте слова в словарь!",
-  "@noWordsToLearn": {
-    "description": "Message when there are no words in dictionary to learn"
   },
   "noNewWordsToday": "Нет новых слов для изучения сегодня",
   "@noNewWordsToday": {
@@ -364,10 +252,6 @@
   "@examplesLabel": {
     "description": "Label for examples section in word definitions"
   },
-  "noTranslationAvailable": "Перевод недоступен",
-  "@noTranslationAvailable": {
-    "description": "Message when no translation is found for a word"
-  },
   "tapToTranslate": "Нажмите для перевода",
   "@tapToTranslate": {
     "description": "Instruction to tap card to show translation"
@@ -375,14 +259,6 @@
   "swipeInstructions": "Свайп влево: Не знаю • Свайп вправо: Знаю",
   "@swipeInstructions": {
     "description": "Instructions for swiping cards in learning mode"
-  },
-  "knowLabel": "ЗНАЮ",
-  "@knowLabel": {
-    "description": "Label for know action in learning mode (uppercase)"
-  },
-  "dontKnowLabel": "НЕ ЗНАЮ",
-  "@dontKnowLabel": {
-    "description": "Label for don't know action in learning mode (uppercase)"
   },
   "translate": "Перевести",
   "@translate": {
@@ -396,7 +272,6 @@
   "@know": {
     "description": "Know button text"
   },
-
   "menu": "Меню",
   "@menu": {
     "description": "Overflow menu tooltip"
@@ -470,27 +345,34 @@
   "@parallelTranslationHorizontalScroll": {
     "description": "Parallel translation settings title"
   },
-  "resetPosition": "Сброс положения",
-  "@resetPosition": {
-    "description": "Reset position button text"
-  },
   "textAlignment": "Выравнивание текста",
   "@textAlignment": {
     "description": "Label for text alignment setting"
   },
   "alignLeft": "По левому краю",
-  "@alignLeft": {"description": "Align left option"},
+  "@alignLeft": {
+    "description": "Align left option"
+  },
   "alignCenter": "По центру",
-  "@alignCenter": {"description": "Align center option"},
+  "@alignCenter": {
+    "description": "Align center option"
+  },
   "alignRight": "По правому краю",
-  "@alignRight": {"description": "Align right option"},
+  "@alignRight": {
+    "description": "Align right option"
+  },
   "alignJustify": "По ширине",
-  "@alignJustify": {"description": "Align justify option"},
-
+  "@alignJustify": {
+    "description": "Align justify option"
+  },
   "translationVerticalPaddingPx": "Вертикальные отступы перевода: {px} px",
   "@translationVerticalPaddingPx": {
     "description": "Parallel translation vertical padding (top & bottom)",
-    "placeholders": {"px": {"type": "int"}}
+    "placeholders": {
+      "px": {
+        "type": "int"
+      }
+    }
   },
   "translationFont": "Шрифт перевода",
   "@translationFont": {
@@ -499,9 +381,12 @@
   "translationFontSizeValue": "Размер шрифта перевода: {size}",
   "@translationFontSizeValue": {
     "description": "Label for parallel translation font size",
-    "placeholders": {"size": {"type": "int"}}
-  }
-  ,
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
   "enterWordHint": "Введите слово",
   "@enterWordHint": {
     "description": "Подсказка для поля ввода слова"
@@ -517,67 +402,19 @@
   "notAvailable": "Нет данных",
   "@notAvailable": {
     "description": "Текст, указывающий на отсутствие данных"
-  }
-  ,
-  "hard": "Сложно",
-  "@hard": {
-    "description": "Текст кнопки оценки 'сложно'"
-  },
-  "easy": "Легко",
-  "@easy": {
-    "description": "Текст кнопки оценки 'легко'"
   },
   "reviewDueToday": "К повторению сегодня: {count}",
   "@reviewDueToday": {
     "description": "Счётчик элементов, требующих повторения сегодня",
-    "placeholders": {"count": {"type": "int"}}
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
-  "statistics": "Статистика",
-  "@statistics": {"description": "Заголовок экрана статистики"},
-  "showStatistics": "Показать статистику изучения",
-  "@showStatistics": {"description": "Кнопка/ссылка для открытия статистики"},
-  "studyStreakDays": "Вы учите слова {days} дней",
-  "@studyStreakDays": {"description": "Текущий стрик обучения в днях", "placeholders": {"days": {"type": "int"}}},
-  "recordStreakDays": "Рекорд {days} дней",
-  "@recordStreakDays": {"description": "Рекордный стрик в днях", "placeholders": {"days": {"type": "int"}}},
-  "learnedTodayProgress": "Выучено сегодня {used}/{limit}",
-  "@learnedTodayProgress": {"description": "Прогресс выученных новых слов сегодня", "placeholders": {"used": {"type": "int"}, "limit": {"type": "int"}}},
   "period": "Период",
-  "@period": {"description": "Метка выбора периода"},
-  "period7Days": "7 дней",
-  "@period7Days": {"description": "Опция периода 7 дней"},
-  "period30Days": "30 дней",
-  "@period30Days": {"description": "Опция периода 30 дней"},
-  "period90Days": "90 дней",
-  "@period90Days": {"description": "Опция периода 90 дней"},
-  "periodThisYear": "Этот год",
-  "@periodThisYear": {"description": "Опция периода — текущий год"},
-  "periodAllTime": "Все время",
-  "@periodAllTime": {"description": "Опция периода — за всё время"},
-  "activeLearningCount": "Сейчас изучается: {count}",
-  "@activeLearningCount": {"description": "Количество слов, изучающихся сейчас", "placeholders": {"count": {"type": "int"}}},
-  "activeNewTodayCount": "Изучается сейчас: {count} новых слов",
-  "@activeNewTodayCount": {"description": "Количество новых слов, изучаемых сегодня", "placeholders": {"count": {"type": "int"}}},
-  "totalLearnedWords": "Всего выученных слов: {count}",
-  "@totalLearnedWords": {"description": "Всего выученных слов", "placeholders": {"count": {"type": "int"}}},
-  "totalRepeatedWords": "Всего повторенных слов: {count}",
-  "@totalRepeatedWords": {"description": "Всего повторенных слов", "placeholders": {"count": {"type": "int"}}},
-  "totalKnownWords": "Всего уже известных слов: {count}",
-  "@totalKnownWords": {"description": "Всего уже известных слов", "placeholders": {"count": {"type": "int"}}},
-  "chartCaption": "Дни / количество слов",
-  "@chartCaption": {"description": "Подпись к графику"},
-  "periodStatsHeader": "За выбранный период",
-  "chartAxisDays": "Дни",
-  "@chartAxisDays": {
-    "description": "Название оси X для графика статистики"
-  },
-  "chartAxisWords": "Количество слов",
-  "@chartAxisWords": {
-    "description": "Название оси Y для графика статистики"
-  },
-  "chartLegendPeriod": "За период",
-  "@chartLegendPeriod": {
-    "description": "Метка легенды для столбцов периода"
+  "@period": {
+    "description": "Метка выбора периода"
   },
   "chartLegendTotal": "Всего",
   "@chartLegendTotal": {
@@ -591,18 +428,6 @@
   "@chartLegendRepeated": {
     "description": "Метка легенды для серии повторённых слов"
   },
-  "chartLegendKnown": "Уже известно",
-  "@chartLegendKnown": {
-    "description": "Метка легенды для серии уже известных слов"
-  },
-  "@periodStatsHeader": {"description": "Заголовок статистики за выбранный период"},
-  "periodFirstLearnedWords": "Впервые выучено: {count}",
-  "@periodFirstLearnedWords": {"description": "Слова, впервые выученные в период", "placeholders": {"count": {"type": "int"}}},
-  "periodRepeatedWords": "Повторено: {count}",
-  "@periodRepeatedWords": {"description": "Слова, повторенные в период", "placeholders": {"count": {"type": "int"}}},
-  "periodBecameKnownWords": "Стали известными: {count}",
-  "@periodBecameKnownWords": {"description": "Слова, ставшие известными в период", "placeholders": {"count": {"type": "int"}}}
-  ,
   "noResults": "Нет результатов",
   "@noResults": {
     "description": "Отображается, когда поиск не даёт результатов"
@@ -615,35 +440,16 @@
   "@reviewWord": {
     "description": "Метка для повторяемого слова"
   },
-  "wordLevel": "Уровень {level}",
-  "@wordLevel": {
-    "description": "Текущий уровень изучения слова",
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "nextReviewDays": "Следующее повторение: {days} {days, plural, =1{день} few{дня} other{дней}}",
-  "@nextReviewDays": {
-    "description": "Показывает, когда слово будет повторено в следующий раз",
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  }
-  ,
   "pronounce": "Прослушать",
-  "@pronounce": {"description": "Подсказка для кнопки озвучивания текста"},
-  "skip": "Пропустить",
-  "@skip": {"description": "Текст кнопки пропустить на экране onboarding"},
-  "onboarding": "Добро пожаловать",
-  "@onboarding": {"description": "Заголовок экрана onboarding"},
+  "@pronounce": {
+    "description": "Подсказка для кнопки озвучивания текста"
+  },
   "personalBooks": "Личные книги",
-  "@personalBooks": {"description": "Заголовок секции личных книг"},
+  "@personalBooks": {
+    "description": "Заголовок секции личных книг"
+  },
   "sharedBooks": "Общие книги",
-  "@sharedBooks": {"description": "Заголовок секции общих книг"},
-  "addedBooks": "Добавленные книги",
-  "@addedBooks": {"description": "Заголовок секции добавленных книг"}
+  "@sharedBooks": {
+    "description": "Заголовок секции общих книг"
+  }
 }

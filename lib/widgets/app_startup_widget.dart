@@ -10,14 +10,8 @@ final appStartupProvider = FutureProvider<void>((ref) async {
     ref.invalidate(booksNotifierProvider);
   });
 
-  // 1. Initialize Auth
-  final isAuthenticated =
-      await ref.read(authNotifierProvider.notifier).initialize();
-
-  // 2. If authenticated, initialize books
-  if (isAuthenticated) {
-    await ref.read(booksNotifierProvider.notifier).initialize();
-  }
+  await ref.read(authNotifierProvider.notifier).initialize();
+  await ref.read(booksNotifierProvider.notifier).initialize();
 });
 
 class AppStartupWidget extends ConsumerWidget {
@@ -30,11 +24,10 @@ class AppStartupWidget extends ConsumerWidget {
     return appStartupState.when(
       data: (_) => onLoaded(context),
       loading: () => const AppStartupLoadingWidget(),
-      error:
-          (e, st) => AppStartupErrorWidget(
-            message: e.toString(),
-            onRetry: () => ref.invalidate(appStartupProvider),
-          ),
+      error: (e, st) => AppStartupErrorWidget(
+        message: e.toString(),
+        onRetry: () => ref.invalidate(appStartupProvider),
+      ),
     );
   }
 }

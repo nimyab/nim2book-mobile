@@ -27,9 +27,9 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
       dictionaryNotifierProvider.select((s) => s.errorMessage),
       (previous, next) {
         if (next != null && next != previous) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(next)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(next)));
         }
       },
     );

@@ -16,9 +16,9 @@ class DictionaryScreen extends ConsumerWidget {
       dictionaryNotifierProvider.select((s) => s.errorMessage),
       (previous, next) {
         if (next != null && next != previous) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(next)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(next)));
         }
       },
     );

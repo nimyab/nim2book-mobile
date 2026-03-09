@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
 import 'package:nim2book_mobile_flutter/core/models/learning/learning_mode.dart';
-import 'package:nim2book_mobile_flutter/core/providers/auth/auth_provider.dart';
-import 'package:nim2book_mobile_flutter/core/providers/auth/auth_state.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/screens/add_book_screen/add_book_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/book_screen/book_screen.dart';
@@ -31,42 +29,15 @@ class BookRouteExtra {
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
-final authStateListenableProvider = Provider<Listenable>((ref) {
-  return _AuthStateNotifier(ref);
-});
-
 // Provider для роутера
 final routerProvider = Provider<GoRouter>((ref) {
   ref.keepAlive();
   final talker = ref.watch(talkerProvider);
-  final authListenable = ref.watch(authStateListenableProvider);
 
   return GoRouter(
     initialLocation: AppRoutes.myBooks,
     navigatorKey: _rootNavigatorKey,
     observers: [TalkerRouteObserver(talker)],
-    refreshListenable: authListenable,
-    redirect: (context, state) {
-      final authState = ref.read(authNotifierProvider);
-      final isLoginRoute = state.uri.path == AppRoutes.login;
-
-      return authState.when(
-        authenticated: (user) {
-          if (isLoginRoute) return AppRoutes.myBooks;
-          return null;
-        },
-        loading: () => null,
-        unauthenticated: () {
-          if (!isLoginRoute) return AppRoutes.login;
-          return null;
-        },
-        start: () {
-          if (!isLoginRoute) return AppRoutes.login;
-          return null;
-        },
-        error: (_) => null,
-      );
-    },
     routes: [
       GoRoute(
         path: AppRoutes.login,
@@ -187,7 +158,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.addBook,
         name: 'add-book',
-        builder: (final context, final state) => const AddBookScreen(),
+        builder: (final context, final state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final isPublic = extra?['isPublic'] as bool? ?? false;
+          return AddBookScreen(isPublic: isPublic);
+        },
       ),
 
       GoRoute(
@@ -199,11 +174,3 @@ final routerProvider = Provider<GoRouter>((ref) {
   );
 });
 
-// Notifier для обновления роутера при изменении состояния auth
-class _AuthStateNotifier extends ChangeNotifier {
-  _AuthStateNotifier(this._ref) {
-    _ref.listen(authNotifierProvider, (_, __) => notifyListeners());
-  }
-
-  final Ref _ref;
-}

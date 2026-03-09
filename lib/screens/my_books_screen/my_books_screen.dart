@@ -6,6 +6,8 @@ import 'package:nim2book_mobile_flutter/core/router/app_routes.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/screens/my_books_screen/widgets/books_section.dart';
 
+import 'package:nim2book_mobile_flutter/core/providers/auth/auth_provider.dart';
+
 class MyBooksScreen extends ConsumerWidget {
   const MyBooksScreen({super.key});
 
@@ -22,9 +24,11 @@ class MyBooksScreen extends ConsumerWidget {
       },
     );
 
+    final isAuthenticated = ref.watch(isAuthenticatedProvider);
+    final l10n = AppLocalizations.of(context)!;
+
     final savedBooks = ref.watch(savedBooksProvider);
     final personalBooks = ref.watch(personalBooksProvider);
-    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.myBooks)),
@@ -36,7 +40,22 @@ class MyBooksScreen extends ConsumerWidget {
               BooksSection(
                 title: l10n.personalBooks,
                 personalBooks: personalBooks,
-                onAddTap: () => context.push(AppRoutes.addBook),
+                onAddTap: () {
+                  if (!isAuthenticated) {
+                    context.push(AppRoutes.login);
+                    return;
+                  }
+
+                  final isVIP = ref.read(isVIPProvider);
+                  if (!isVIP) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(l10n.vipRequired)),
+                    );
+                    return;
+                  }
+
+                  context.push(AppRoutes.addBook, extra: {'isPublic': false});
+                },
               ),
               BooksSection(
                 title: l10n.sharedBooks,

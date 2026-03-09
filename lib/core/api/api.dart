@@ -33,16 +33,14 @@ class ApiClient {
     _dio.interceptors.add(
       TalkerDioLogger(
         talker: _talker,
-        settings: const TalkerDioLoggerSettings(
+        settings: TalkerDioLoggerSettings(
           printRequestHeaders: true,
-          // responseFilter: (response) {
-          //   final uri = response.realUri.toString();
-          //   final flag =
-          //       uri.contains('/chapters/') ||
-          //       uri.contains('/book') ||
-          //       uri.contains('/personal-user-book');
-          //   return !flag;
-          // },
+          responseFilter: (response) {
+            final uri = response.realUri.toString();
+            final flag =
+                uri.contains('/book') || uri.contains('/personal-user-book');
+            return !flag;
+          },
         ),
       ),
     );
@@ -51,13 +49,16 @@ class ApiClient {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (final options, final handler) {
-          options.headers['Authorization'] =
-              'Bearer ${_tokenService.accessToken}';
+          if (_tokenService.accessToken != null) {
+            options.headers['Authorization'] =
+                'Bearer ${_tokenService.accessToken}';
+          }
           handler.next(options);
         },
         onError: (final error, final handler) async {
-          final isRefreshRequest =
-              error.requestOptions.uri.toString().contains('/auth/refresh');
+          final isRefreshRequest = error.requestOptions.uri.toString().contains(
+            '/auth/refresh',
+          );
           if (error.response?.statusCode == 401 &&
               _tokenService.refreshToken != null &&
               !isRefreshRequest) {

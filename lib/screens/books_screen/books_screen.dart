@@ -49,21 +49,21 @@ class _BooksScreenState extends ConsumerState<BooksScreen> {
 
   @override
   Widget build(final BuildContext context) {
-    ref.listen<String?>(
-      booksNotifierProvider.select((s) => s.errorMessage),
-      (previous, next) {
-        if (next != null && next != previous) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(next)),
-          );
-        }
-      },
-    );
+    ref.listen<String?>(booksNotifierProvider.select((s) => s.errorMessage), (
+      previous,
+      next,
+    ) {
+      if (next != null && next != previous) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(next)));
+      }
+    });
 
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final isAuthenticated = ref.watch(isAuthenticatedProvider);
-    final isVIP = ref.watch(isVIPProvider);
+    final isAdmin = ref.watch(isAdminProvider);
     final allBooks = ref.watch(allBooksProvider);
     final isFetching = ref.watch(isBooksFetchingProvider);
 
@@ -126,20 +126,19 @@ class _BooksScreenState extends ConsumerState<BooksScreen> {
                 ),
               ],
             ),
-            if (isAuthenticated)
+            if (isAuthenticated && isAdmin)
               Positioned(
                 right: 16,
                 bottom: 16,
                 child: Tooltip(
                   message: l10n.add,
                   child: ElevatedButton(
-                    onPressed: isVIP
-                        ? () => context.push(AppRoutes.addBook)
-                        : () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(l10n.addingBooksVipOnly)),
-                            );
-                          },
+                    onPressed: () {
+                      context.push(
+                        AppRoutes.addBook,
+                        extra: {'isPublic': true},
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: theme.colorScheme.surfaceContainer,
                       foregroundColor: theme.colorScheme.primary,

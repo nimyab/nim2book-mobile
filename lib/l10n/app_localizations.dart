@@ -98,11 +98,11 @@ abstract class AppLocalizations {
     Locale('ru'),
   ];
 
-  /// The title of the application
+  /// Message shown when a non-VIP user tries to access a VIP feature
   ///
   /// In en, this message translates to:
-  /// **'Nim2Book'**
-  String get appTitle;
+  /// **'This feature requires VIP status'**
+  String get vipRequired;
 
   /// Login button text
   ///
@@ -134,24 +134,6 @@ abstract class AppLocalizations {
   /// **'Password'**
   String get password;
 
-  /// Confirm password field label
-  ///
-  /// In en, this message translates to:
-  /// **'Confirm Password'**
-  String get confirmPassword;
-
-  /// First name field label
-  ///
-  /// In en, this message translates to:
-  /// **'First Name'**
-  String get firstName;
-
-  /// Last name field label
-  ///
-  /// In en, this message translates to:
-  /// **'Last Name'**
-  String get lastName;
-
   /// Books tab/screen title
   ///
   /// In en, this message translates to:
@@ -175,18 +157,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Settings'**
   String get settings;
-
-  /// Daily new words limit setting label
-  ///
-  /// In en, this message translates to:
-  /// **'Daily new words limit'**
-  String get dailyNewWordsLimit;
-
-  /// Shown on the learning screen when the daily new words limit has been reached
-  ///
-  /// In en, this message translates to:
-  /// **'Daily limit reached. Come back tomorrow or review existing words.'**
-  String get dailyLimitReached;
 
   /// Theme setting label
   ///
@@ -230,47 +200,17 @@ abstract class AppLocalizations {
   /// **'Search'**
   String get search;
 
-  /// Loading indicator text
-  ///
-  /// In en, this message translates to:
-  /// **'Loading...'**
-  String get loading;
-
-  /// Generic error message
-  ///
-  /// In en, this message translates to:
-  /// **'Error'**
-  String get error;
-
-  /// Retry button text
-  ///
-  /// In en, this message translates to:
-  /// **'Retry'**
-  String get retry;
-
   /// Cancel button text
   ///
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
 
-  /// Save button text
-  ///
-  /// In en, this message translates to:
-  /// **'Save'**
-  String get save;
-
   /// Delete button text
   ///
   /// In en, this message translates to:
   /// **'Delete'**
   String get delete;
-
-  /// Edit button text
-  ///
-  /// In en, this message translates to:
-  /// **'Edit'**
-  String get edit;
 
   /// Add button text
   ///
@@ -284,23 +224,11 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get close;
 
-  /// Reading progress label
-  ///
-  /// In en, this message translates to:
-  /// **'Reading Progress'**
-  String get readingProgress;
-
   /// Chapter label
   ///
   /// In en, this message translates to:
   /// **'Chapter'**
   String get chapter;
-
-  /// Page label
-  ///
-  /// In en, this message translates to:
-  /// **'Page'**
-  String get page;
 
   /// Login failed error message
   ///
@@ -326,12 +254,6 @@ abstract class AppLocalizations {
   /// **'REGISTER'**
   String get registerButton;
 
-  /// Link to register screen from login
-  ///
-  /// In en, this message translates to:
-  /// **'No account? Register here'**
-  String get noAccountRegisterHere;
-
   /// Link to login screen from register
   ///
   /// In en, this message translates to:
@@ -356,36 +278,6 @@ abstract class AppLocalizations {
   /// **'Book not found'**
   String get bookNotFound;
 
-  /// Title for offline mode toggle
-  ///
-  /// In en, this message translates to:
-  /// **'Offline mode'**
-  String get offlineMode;
-
-  /// Description for offline mode toggle
-  ///
-  /// In en, this message translates to:
-  /// **'Use cached content only; network disabled'**
-  String get offlineModeDesc;
-
-  /// Banner title shown when offline mode is active
-  ///
-  /// In en, this message translates to:
-  /// **'Offline mode'**
-  String get offlineBannerTitle;
-
-  /// Banner message shown when offline mode is active
-  ///
-  /// In en, this message translates to:
-  /// **'Network requests disabled. Only cached content is available.'**
-  String get offlineBannerMessage;
-
-  /// Message shown when books catalog cannot be loaded offline
-  ///
-  /// In en, this message translates to:
-  /// **'Book catalog is unavailable offline'**
-  String get offlineCatalogUnavailable;
-
   /// Author label
   ///
   /// In en, this message translates to:
@@ -397,12 +289,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'ADD TO MY BOOKS'**
   String get addToMyBooks;
-
-  /// Button text when book is already in user's library
-  ///
-  /// In en, this message translates to:
-  /// **'ADDED TO MY BOOKS'**
-  String get addedToMyBooks;
 
   /// Button text to start reading book
   ///
@@ -421,24 +307,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Translation not found'**
   String get translationNotFound;
-
-  /// Label indicating word is in dictionary
-  ///
-  /// In en, this message translates to:
-  /// **'In dictionary'**
-  String get inDictionary;
-
-  /// Examples label in translation dialog
-  ///
-  /// In en, this message translates to:
-  /// **'Examples'**
-  String get examples;
-
-  /// Meanings label in translation dialog
-  ///
-  /// In en, this message translates to:
-  /// **'Meanings'**
-  String get meanings;
 
   /// Part of speech: noun
   ///
@@ -524,12 +392,6 @@ abstract class AppLocalizations {
   /// **'Please select a file'**
   String get pleaseSelectFile;
 
-  /// Success message after book upload
-  ///
-  /// In en, this message translates to:
-  /// **'Book uploaded successfully'**
-  String get bookUploadedSuccessfully;
-
   /// Error message when file selection fails
   ///
   /// In en, this message translates to:
@@ -541,18 +403,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Book upload error'**
   String get bookUploadError;
-
-  /// Message shown to non-VIP users
-  ///
-  /// In en, this message translates to:
-  /// **'Adding books is available only to VIP users'**
-  String get addingBooksVipOnly;
-
-  /// Button text to start learning words
-  ///
-  /// In en, this message translates to:
-  /// **'Learn Words'**
-  String get learnWords;
 
   /// Card title for learning only new words
   ///
@@ -577,30 +427,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Learning'**
   String get learning;
-
-  /// Button text to reveal the translation
-  ///
-  /// In en, this message translates to:
-  /// **'Show Answer'**
-  String get showAnswer;
-
-  /// Button text to go to next word
-  ///
-  /// In en, this message translates to:
-  /// **'Next Word'**
-  String get nextWord;
-
-  /// Button text to go to previous word
-  ///
-  /// In en, this message translates to:
-  /// **'Previous Word'**
-  String get previousWord;
-
-  /// Message when there are no words in dictionary to learn
-  ///
-  /// In en, this message translates to:
-  /// **'No words to learn. Add some words to your dictionary first!'**
-  String get noWordsToLearn;
 
   /// Message when there are no new words available for learning today
   ///
@@ -632,12 +458,6 @@ abstract class AppLocalizations {
   /// **'Examples:'**
   String get examplesLabel;
 
-  /// Message when no translation is found for a word
-  ///
-  /// In en, this message translates to:
-  /// **'No translation available'**
-  String get noTranslationAvailable;
-
   /// Instruction to tap card to show translation
   ///
   /// In en, this message translates to:
@@ -649,18 +469,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Swipe left: Don\'t know • Swipe right: Know'**
   String get swipeInstructions;
-
-  /// Label for know action in learning mode (uppercase)
-  ///
-  /// In en, this message translates to:
-  /// **'KNOW'**
-  String get knowLabel;
-
-  /// Label for don't know action in learning mode (uppercase)
-  ///
-  /// In en, this message translates to:
-  /// **'DON\'T KNOW'**
-  String get dontKnowLabel;
 
   /// Translate button text
   ///
@@ -752,12 +560,6 @@ abstract class AppLocalizations {
   /// **'Parallel translation (horizontal scroll)'**
   String get parallelTranslationHorizontalScroll;
 
-  /// Reset position button text
-  ///
-  /// In en, this message translates to:
-  /// **'Reset position'**
-  String get resetPosition;
-
   /// Label for text alignment setting
   ///
   /// In en, this message translates to:
@@ -830,149 +632,17 @@ abstract class AppLocalizations {
   /// **'N/A'**
   String get notAvailable;
 
-  /// Hard rating button text
-  ///
-  /// In en, this message translates to:
-  /// **'Hard'**
-  String get hard;
-
-  /// Easy rating button text
-  ///
-  /// In en, this message translates to:
-  /// **'Easy'**
-  String get easy;
-
   /// Counter of items due for review today
   ///
   /// In en, this message translates to:
   /// **'Due today: {count}'**
   String reviewDueToday(int count);
 
-  /// Statistics screen title
-  ///
-  /// In en, this message translates to:
-  /// **'Statistics'**
-  String get statistics;
-
-  /// Button/link to open statistics
-  ///
-  /// In en, this message translates to:
-  /// **'Show learning statistics'**
-  String get showStatistics;
-
-  /// Current learning streak in days
-  ///
-  /// In en, this message translates to:
-  /// **'You are learning words for {days} days'**
-  String studyStreakDays(int days);
-
-  /// Record streak in days
-  ///
-  /// In en, this message translates to:
-  /// **'Record {days} days'**
-  String recordStreakDays(int days);
-
-  /// Progress of learned new words today
-  ///
-  /// In en, this message translates to:
-  /// **'Learned today {used}/{limit}'**
-  String learnedTodayProgress(int used, int limit);
-
   /// Period selection label
   ///
   /// In en, this message translates to:
   /// **'Period'**
   String get period;
-
-  /// 7 days period option
-  ///
-  /// In en, this message translates to:
-  /// **'7 days'**
-  String get period7Days;
-
-  /// 30 days period option
-  ///
-  /// In en, this message translates to:
-  /// **'30 days'**
-  String get period30Days;
-
-  /// 90 days period option
-  ///
-  /// In en, this message translates to:
-  /// **'90 days'**
-  String get period90Days;
-
-  /// This year period option
-  ///
-  /// In en, this message translates to:
-  /// **'This year'**
-  String get periodThisYear;
-
-  /// All time period option
-  ///
-  /// In en, this message translates to:
-  /// **'All time'**
-  String get periodAllTime;
-
-  /// Number of words currently being learned
-  ///
-  /// In en, this message translates to:
-  /// **'Currently learning: {count}'**
-  String activeLearningCount(int count);
-
-  /// Number of new words being studied today
-  ///
-  /// In en, this message translates to:
-  /// **'Studying now: {count} new words'**
-  String activeNewTodayCount(int count);
-
-  /// Total learned words
-  ///
-  /// In en, this message translates to:
-  /// **'Total learned words: {count}'**
-  String totalLearnedWords(int count);
-
-  /// Total repeated words
-  ///
-  /// In en, this message translates to:
-  /// **'Total repeated words: {count}'**
-  String totalRepeatedWords(int count);
-
-  /// Total already known words
-  ///
-  /// In en, this message translates to:
-  /// **'Total already known words: {count}'**
-  String totalKnownWords(int count);
-
-  /// Chart caption
-  ///
-  /// In en, this message translates to:
-  /// **'Days vs. words'**
-  String get chartCaption;
-
-  /// Header for selected period stats
-  ///
-  /// In en, this message translates to:
-  /// **'For selected period'**
-  String get periodStatsHeader;
-
-  /// X-axis title for statistics chart
-  ///
-  /// In en, this message translates to:
-  /// **'Days'**
-  String get chartAxisDays;
-
-  /// Y-axis title for statistics chart
-  ///
-  /// In en, this message translates to:
-  /// **'Number of words'**
-  String get chartAxisWords;
-
-  /// Legend label for period bars
-  ///
-  /// In en, this message translates to:
-  /// **'For period'**
-  String get chartLegendPeriod;
 
   /// Legend label for cumulative line
   ///
@@ -992,30 +662,6 @@ abstract class AppLocalizations {
   /// **'Repeated'**
   String get chartLegendRepeated;
 
-  /// Legend label for already known words series
-  ///
-  /// In en, this message translates to:
-  /// **'Known'**
-  String get chartLegendKnown;
-
-  /// Words learned first time in the period
-  ///
-  /// In en, this message translates to:
-  /// **'First learned: {count}'**
-  String periodFirstLearnedWords(int count);
-
-  /// Words repeated in the period
-  ///
-  /// In en, this message translates to:
-  /// **'Repeated: {count}'**
-  String periodRepeatedWords(int count);
-
-  /// Words that became known in the period
-  ///
-  /// In en, this message translates to:
-  /// **'Became known: {count}'**
-  String periodBecameKnownWords(int count);
-
   /// Displayed when a search yields no results
   ///
   /// In en, this message translates to:
@@ -1034,35 +680,11 @@ abstract class AppLocalizations {
   /// **'Review'**
   String get reviewWord;
 
-  /// Current learning level of the word
-  ///
-  /// In en, this message translates to:
-  /// **'Level {level}'**
-  String wordLevel(int level);
-
-  /// Shows when the word will be reviewed next
-  ///
-  /// In en, this message translates to:
-  /// **'Next review: {days} {days, plural, =1{day} other{days}}'**
-  String nextReviewDays(int days);
-
   /// Tooltip for text-to-speech button
   ///
   /// In en, this message translates to:
   /// **'Pronounce'**
   String get pronounce;
-
-  /// Skip button text on onboarding screen
-  ///
-  /// In en, this message translates to:
-  /// **'Skip'**
-  String get skip;
-
-  /// Onboarding screen title
-  ///
-  /// In en, this message translates to:
-  /// **'Welcome'**
-  String get onboarding;
 
   /// Personal books section title
   ///
@@ -1075,12 +697,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Shared Books'**
   String get sharedBooks;
-
-  /// Added books section title
-  ///
-  /// In en, this message translates to:
-  /// **'Added Books'**
-  String get addedBooks;
 }
 
 class _AppLocalizationsDelegate

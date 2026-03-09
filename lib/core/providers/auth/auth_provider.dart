@@ -131,6 +131,17 @@ final isVIPProvider = Provider<bool>((ref) {
   );
 });
 
+final isAdminProvider = Provider<bool>((ref) {
+  return ref.watch(
+    authNotifierProvider.select((s) {
+      return s.maybeWhen(
+        authenticated: (user) => user.isAdmin,
+        orElse: () => false,
+      );
+    }),
+  );
+});
+
 final isAuthLoadingProvider = Provider<bool>((ref) {
   return ref.watch(
     authNotifierProvider.select((s) {
