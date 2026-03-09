@@ -29,27 +29,34 @@ class _TranslatedTextScrollState extends ConsumerState<TranslatedTextScroll> {
   Widget build(final BuildContext context) {
     final bookId = widget.bookId;
 
-    // Get chapters from loading provider
     final chapters = ref.watch(
       loadingBookNotifierProvider(bookId).select((s) => s.chapters),
     );
-
-    final bookReadingParam = bookId;
-    final settingsState = ref.watch(readingSettingsNotifierProvider);
-    final translatedFontSize = settingsState.translatedFontSize;
-    final translatedFontFamily = settingsState.translatedFontFamily;
-    final translatedVerticalPadding = settingsState.translatedVerticalPadding;
-    final readingState = ref.watch(
-      bookReadingNotifierProvider(bookReadingParam),
+    final translatedFontSize = ref.watch(
+      readingSettingsNotifierProvider.select((s) => s.translatedFontSize),
+    );
+    final translatedFontFamily = ref.watch(
+      readingSettingsNotifierProvider.select((s) => s.translatedFontFamily),
+    );
+    final translatedVerticalPadding = ref.watch(
+      readingSettingsNotifierProvider.select(
+        (s) => s.translatedVerticalPadding,
+      ),
+    );
+    final selectedParagraphIndex = ref.watch(
+      bookReadingNotifierProvider(
+        bookId,
+      ).select((s) => s.selectedParagraphIndex),
+    );
+    final selectedWordIndex = ref.watch(
+      bookReadingNotifierProvider(bookId).select((s) => s.selectedWordIndex),
+    );
+    final currentChapterIndex = ref.watch(
+      bookReadingNotifierProvider(bookId).select((s) => s.currentChapterIndex),
     );
     final theme = Theme.of(context);
     final scrollColors = theme.extension<TranslatedTextScrollColors>()!;
     final readingColors = theme.extension<BookReadingColors>()!;
-
-    final selectedParagraphIndex = readingState.selectedParagraphIndex;
-    final selectedWordIndex = readingState.selectedWordIndex;
-
-    final currentChapterIndex = readingState.currentChapterIndex;
     if (chapters.isEmpty || currentChapterIndex >= chapters.length) {
       return const Center(child: Text('Chapter not found'));
     }

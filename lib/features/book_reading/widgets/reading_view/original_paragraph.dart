@@ -11,16 +11,12 @@ import 'package:nim2book_mobile_flutter/features/translated_dialog/translated_di
 class OriginalParagraph extends ConsumerStatefulWidget {
   final ParagraphAlignNode paragraph;
   final int paragraphIndex;
-  final int selectedParagraphIndex;
-  final int selectedWordIndex;
   final String bookId;
 
   const OriginalParagraph({
     super.key,
     required this.paragraph,
     required this.paragraphIndex,
-    required this.selectedParagraphIndex,
-    required this.selectedWordIndex,
     required this.bookId,
   });
 
@@ -45,8 +41,13 @@ class _OriginalParagraphState extends ConsumerState<OriginalParagraph> {
   }
 
   void _handleWordTap(final int wordIndex) {
-    if (!(widget.selectedParagraphIndex == widget.paragraphIndex &&
-        widget.selectedWordIndex == wordIndex)) {
+    final selection = ref.read(
+      bookReadingNotifierProvider(
+        widget.bookId,
+      ).select((s) => (s.selectedParagraphIndex, s.selectedWordIndex)),
+    );
+
+    if (!(selection.$1 == widget.paragraphIndex && selection.$2 == wordIndex)) {
       ref
           .read(bookReadingNotifierProvider(widget.bookId).notifier)
           .selectWord(widget.paragraphIndex, wordIndex);
@@ -86,6 +87,12 @@ class _OriginalParagraphState extends ConsumerState<OriginalParagraph> {
 
   @override
   Widget build(final BuildContext context) {
+    final selectedWordForParagraph = ref.watch(
+      bookReadingNotifierProvider(widget.bookId).select((s) {
+        if (s.selectedParagraphIndex != widget.paragraphIndex) return -1;
+        return s.selectedWordIndex ?? -1;
+      }),
+    );
     final fontFamily = ref.watch(
       readingSettingsNotifierProvider.select((s) => s.fontFamily),
     );
@@ -173,10 +180,9 @@ class _OriginalParagraphState extends ConsumerState<OriginalParagraph> {
 
         int? selectionStart;
         int? selectionEnd;
-        if (widget.paragraphIndex == widget.selectedParagraphIndex &&
-            widget.selectedWordIndex >= 0 &&
-            widget.selectedWordIndex < widget.paragraph.aw.length) {
-          final wordAlign = widget.paragraph.aw[widget.selectedWordIndex];
+        if (selectedWordForParagraph >= 0 &&
+            selectedWordForParagraph < widget.paragraph.aw.length) {
+          final wordAlign = widget.paragraph.aw[selectedWordForParagraph];
           // Сдвигаем диапазон на символы отступа, чтобы подсветка совпадала.
           selectionStart = wordAlign.iow.first + indentCharCount;
           selectionEnd = wordAlign.iow.last + indentCharCount;

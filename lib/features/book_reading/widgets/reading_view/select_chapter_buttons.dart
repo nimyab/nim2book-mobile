@@ -17,20 +17,22 @@ class SelectChapterButtons extends ConsumerWidget {
       loadingBookNotifierProvider(bookId).select((s) => s.chapters.length),
     );
 
-    final readingState = ref.watch(bookReadingNotifierProvider(bookId));
+    final currentChapterIndex = ref.watch(
+      bookReadingNotifierProvider(bookId).select((s) => s.currentChapterIndex),
+    );
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       spacing: 20,
       children: [
-        if (readingState.currentChapterIndex > 0)
+        if (currentChapterIndex > 0)
           IconButton.filledTonal(
             onPressed: () => ref
                 .read(bookReadingNotifierProvider(bookId).notifier)
                 .goToPreviousChapter(),
             icon: const Icon(Icons.arrow_back),
           ),
-        if (readingState.currentChapterIndex < chaptersLength - 1)
+        if (currentChapterIndex < chaptersLength - 1)
           IconButton.filledTonal(
             onPressed: () => ref
                 .read(bookReadingNotifierProvider(bookId).notifier)

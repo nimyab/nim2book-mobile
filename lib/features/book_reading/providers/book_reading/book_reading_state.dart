@@ -11,7 +11,6 @@ abstract class BookReadingState with _$BookReadingState {
     required final int currentChapterIndex,
     required final int? selectedParagraphIndex,
     required final int? selectedWordIndex,
-    required final Map<int, double> chapterProgress,
     @Default(false) final bool prefsLoaded,
   }) = _BookReadingState;
 }

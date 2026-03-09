@@ -12,12 +12,16 @@ class ChapterListTab extends ConsumerWidget {
   Widget build(final BuildContext context, WidgetRef ref) {
     final bookId = this.bookId;
 
-    // Get book and chapters from loading provider
-    final loadingState = ref.watch(loadingBookNotifierProvider(bookId));
-    final chapters = loadingState.chapters;
-    final book = loadingState.book;
+    final chapters = ref.watch(
+      loadingBookNotifierProvider(bookId).select((s) => s.chapters),
+    );
+    final book = ref.watch(
+      loadingBookNotifierProvider(bookId).select((s) => s.book),
+    );
 
-    final readingState = ref.watch(bookReadingNotifierProvider(bookId));
+    final currentChapterIndex = ref.watch(
+      bookReadingNotifierProvider(bookId).select((s) => s.currentChapterIndex),
+    );
     final theme = Theme.of(context);
 
     return ListView.separated(
@@ -28,7 +32,7 @@ class ChapterListTab extends ConsumerWidget {
         final bookChapter = book?.bookChapters?[index];
         final title =
             bookChapter?.title ?? chapter?.title ?? 'Chapter ${index + 1}';
-        final isCurrent = index == readingState.currentChapterIndex;
+        final isCurrent = index == currentChapterIndex;
 
         return ListTile(
           tileColor: isCurrent

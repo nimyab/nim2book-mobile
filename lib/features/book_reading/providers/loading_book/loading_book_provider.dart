@@ -49,39 +49,42 @@ class LoadingBookNotifier extends Notifier<LoadingBookState> {
       if (bookChapters == null || bookChapters.isEmpty) return;
 
       final total = bookChapters.length;
-      final updatedChapters = List<ChapterAlignNode?>.from(state.chapters);
-
-      // Load in batches to avoid overwhelming the network but still be fast
+      final results = List<ChapterAlignNode?>.filled(total, null);
+      var loadedCount = 0;
       const batchSize = 5;
 
       for (var i = 0; i < total; i += batchSize) {
         final end = (i + batchSize < total) ? i + batchSize : total;
-        final batchFutures = <Future<void>>[];
-
-        try {
-          for (var j = i; j < end; j++) {
-            batchFutures.add(() async {
-              final bookChapter = bookChapters[j];
-              final chapter = await _bookService.getChapter(
-                bookId: book.id,
-                chapterNumber: bookChapter.order,
-                path: bookChapter.contentURL,
-              );
-              updatedChapters[j] = chapter;
-            }());
+        final futures = List.generate(end - i, (final localIndex) async {
+          final chapterIndex = i + localIndex;
+          final bookChapter = bookChapters[chapterIndex];
+          try {
+            return await _bookService
+                .getChapter(
+                  bookId: book.id,
+                  chapterNumber: bookChapter.order,
+                  path: bookChapter.contentURL,
+                )
+                .timeout(const Duration(seconds: 10));
+          } catch (e) {
+            return null;
           }
+        });
 
-          await Future.wait(batchFutures);
-        } catch (e) {
-          state = state.copyWith(errorMessage: 'Error loading chapters: $e');
-          break;
+        final batchResults = await Future.wait(futures);
+        for (
+          var localIndex = 0;
+          localIndex < batchResults.length;
+          localIndex++
+        ) {
+          results[i + localIndex] = batchResults[localIndex];
         }
+        loadedCount += batchResults.length;
 
-        state = state.copyWith(
-          chapters: List.from(updatedChapters),
-          progress: end / total,
-        );
+        state = state.copyWith(progress: loadedCount / total);
       }
+
+      state = state.copyWith(chapters: results, progress: 1.0);
     } catch (e) {
       state = state.copyWith(errorMessage: e.toString());
     }
