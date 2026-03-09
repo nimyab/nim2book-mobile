@@ -31,10 +31,7 @@ class LoadingBookNotifier extends Notifier<LoadingBookState> {
       final totalChapters = book.bookChapters?.length ?? 0;
       final chapters = List<ChapterAlignNode?>.filled(totalChapters, null);
 
-      state = state.copyWith(
-        chapters: chapters,
-        progress: 0.0,
-      );
+      state = state.copyWith(chapters: chapters, progress: 0.0);
 
       if (totalChapters > 0) {
         await _loadAllChapters(book);
@@ -87,35 +84,6 @@ class LoadingBookNotifier extends Notifier<LoadingBookState> {
       }
     } catch (e) {
       state = state.copyWith(errorMessage: e.toString());
-    }
-  }
-
-  /// Load chapter by index if not already loaded
-  Future<void> ensureChapterLoaded(final int chapterIndex) async {
-    final book = state.book;
-    if (book == null ||
-        book.bookChapters == null ||
-        chapterIndex < 0 ||
-        chapterIndex >= (book.bookChapters?.length ?? 0)) {
-      return;
-    }
-
-    // Already loaded?
-    if (state.chapters[chapterIndex] != null) {
-      return;
-    }
-
-    final bookChapter = book.bookChapters![chapterIndex];
-    final path = bookChapter.contentURL;
-    final chapter = await _bookService.getChapter(
-      bookId: book.id,
-      chapterNumber: bookChapter.order,
-      path: path,
-    );
-    if (chapter != null) {
-      final updatedChapters = List<ChapterAlignNode?>.from(state.chapters);
-      updatedChapters[chapterIndex] = chapter;
-      state = state.copyWith(chapters: updatedChapters);
     }
   }
 }

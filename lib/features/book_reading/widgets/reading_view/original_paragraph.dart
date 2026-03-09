@@ -60,7 +60,7 @@ class _OriginalParagraphState extends ConsumerState<OriginalParagraph> {
       final endIndex = wordAlign.iow.last;
       final rawWordText = widget.paragraph.op.substring(startIndex, endIndex);
 
-      final regExp = RegExp(r'^[\\W_]*(.*?)[\\W_]*$');
+      final regExp = RegExp(r'^[\W_]*(.*?)[\W_]*$');
       final match = regExp.firstMatch(rawWordText);
       if (match == null) return;
       final wordText = match.group(1)!;

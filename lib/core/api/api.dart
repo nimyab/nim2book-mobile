@@ -33,16 +33,16 @@ class ApiClient {
     _dio.interceptors.add(
       TalkerDioLogger(
         talker: _talker,
-        settings: TalkerDioLoggerSettings(
+        settings: const TalkerDioLoggerSettings(
           printRequestHeaders: true,
-          responseFilter: (response) {
-            final uri = response.realUri.toString();
-            final flag =
-                uri.contains('/chapters/') ||
-                uri.contains('/book') ||
-                uri.contains('/personal-user-book');
-            return !flag;
-          },
+          // responseFilter: (response) {
+          //   final uri = response.realUri.toString();
+          //   final flag =
+          //       uri.contains('/chapters/') ||
+          //       uri.contains('/book') ||
+          //       uri.contains('/personal-user-book');
+          //   return !flag;
+          // },
         ),
       ),
     );

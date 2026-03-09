@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
+import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/book_reading/book_reading_provider.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/loading_book/loading_book_provider.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/reading_settings/reading_settings_provider.dart';
@@ -84,6 +86,7 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
   @override
   Widget build(final BuildContext context) {
     final bookId = widget.bookId;
+    final env = ref.watch(envProvider);
 
     // Get chapters from loading provider
     final chapters = ref.watch(
@@ -232,8 +235,10 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
               ),
               child: Container(
                 key: _keyForParagraph(paragraphIndex),
-                child: Image.network(
-                  iNode.imageNode.path,
+                child: Image(
+                  image: CachedNetworkImageProvider(
+                    '${env.apiBaseUrl}/files/public?path=${Uri.encodeComponent(iNode.imageNode.path)}',
+                  ),
                   semanticLabel: iNode.imageNode.alt,
                   errorBuilder: (final context, final error, final stackTrace) {
                     return const SizedBox.shrink();
