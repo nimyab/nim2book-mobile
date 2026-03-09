@@ -75,11 +75,11 @@ class BookReadingNotifier extends Notifier<BookReadingState> {
     );
 
     // Preload current and adjacent chapters
-    unawaited(
-      ref
-          .read(loadingBookNotifierProvider(bookId).notifier)
-          .preloadChapters(currentIndex),
-    );
+    // unawaited(
+    //   ref
+    //       .read(loadingBookNotifierProvider(bookId).notifier)
+    //       .preloadChapters(currentIndex),
+    // );
   }
 
   void setChapters(final List<ChapterAlignNode?> chapters) {
@@ -106,9 +106,9 @@ class BookReadingNotifier extends Notifier<BookReadingState> {
     _debouncedPersist();
 
     // Preload adjacent chapters when changing chapter
-    ref
-        .read(loadingBookNotifierProvider(bookId).notifier)
-        .preloadChapters(index);
+    // ref
+    //     .read(loadingBookNotifierProvider(bookId).notifier)
+    //     .preloadChapters(index);
   }
 
   void goToNextChapter() {

@@ -199,7 +199,18 @@ class _TranslatedTextScrollState extends ConsumerState<TranslatedTextScroll> {
                   );
                 }
               },
-              image: (final iNode) => const SizedBox.shrink(),
+              image: (final iNode) => Container(
+                constraints: BoxConstraints(maxHeight: computedHeight),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Image.network(
+                  iNode.imageNode.path,
+                  semanticLabel: iNode.imageNode.alt,
+                  fit: BoxFit.contain,
+                  errorBuilder: (final context, final error, final stackTrace) {
+                    return const SizedBox.shrink();
+                  },
+                ),
+              ),
             );
           },
         ),

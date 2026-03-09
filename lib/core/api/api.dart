@@ -169,9 +169,7 @@ class ApiClient {
   }
 
   Future<LogoutResponse> logout() async {
-    final response = await _dio.post<Map<String, dynamic>>(
-      '/auth/logout',
-    );
+    final response = await _dio.post<Map<String, dynamic>>('/auth/logout');
     final logoutResponse = LogoutResponse.fromJson(response.data!);
 
     // Очищаем токены после logout
@@ -222,12 +220,11 @@ class ApiClient {
     return GetBookResponse.fromJson(response.data!);
   }
 
-  Future<ChapterAlignNode> getChapter(final String path) async {
-    // Assuming contentURL is absolute or relative to base URL
-    // If path is a full URL, Dio might handle it if we pass it correctly?
-    // But here we are using base URL.
-    // If path is just the path part from contentURL
-    final response = await _dio.get<Map<String, dynamic>>(path);
+  Future<ChapterAlignNode> getBookChapter({required final String path}) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      '/books/chapter',
+      queryParameters: {'path': path},
+    );
     return ChapterAlignNode.fromJson(response.data!);
   }
 

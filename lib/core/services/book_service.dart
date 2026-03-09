@@ -53,10 +53,11 @@ class BookService {
       final response = await _apiClient.getBook(bookId);
       final book = response.book;
       // Cache asynchronously without blocking
-      compute(
+      final encodedBook = await compute(
         (Map<String, dynamic> json) => jsonEncode(json),
         book.toJson(),
-      ).then((encoded) => _sharedPreferences.setString(cacheKey, encoded));
+      );
+      await _sharedPreferences.setString(cacheKey, encodedBook);
       return book;
     } catch (e) {
       _logger.error('Error fetching book with ID $bookId: $e');
@@ -150,7 +151,11 @@ class BookService {
     return updated;
   }
 
-  Future<ChapterAlignNode?> getChapter(final String path) async {
+  Future<ChapterAlignNode?> getChapter({
+    required final String bookId,
+    required final int chapterNumber,
+    required final String path,
+  }) async {
     try {
       final chapterKey = _chapterKey(path);
 
@@ -164,7 +169,7 @@ class BookService {
         return ChapterAlignNode.fromJson(chapterJson);
       }
 
-      final chapter = await _apiClient.getChapter(path);
+      final chapter = await _apiClient.getBookChapter(path: path);
 
       // Compress and encode in separate isolate without blocking
       final compressed = await compute(

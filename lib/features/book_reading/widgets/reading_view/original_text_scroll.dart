@@ -230,12 +230,15 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
                 horizontal: sidePadding,
                 vertical: paragraphSpacing,
               ),
-              child: Image.network(
-                iNode.imageNode.path,
-                semanticLabel: iNode.imageNode.alt,
-                errorBuilder: (final context, final error, final stackTrace) {
-                  return const SizedBox.shrink();
-                },
+              child: Container(
+                key: _keyForParagraph(paragraphIndex),
+                child: Image.network(
+                  iNode.imageNode.path,
+                  semanticLabel: iNode.imageNode.alt,
+                  errorBuilder: (final context, final error, final stackTrace) {
+                    return const SizedBox.shrink();
+                  },
+                ),
               ),
             ),
           );
