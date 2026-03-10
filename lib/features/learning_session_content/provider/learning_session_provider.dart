@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fsrs/fsrs.dart';
 import 'package:nim2book_mobile_flutter/core/models/learning/learning_mode.dart';
 import 'package:nim2book_mobile_flutter/core/providers/dictionary/dictionary_provider.dart';
-import 'package:nim2book_mobile_flutter/features/learning_session_screen/provider/learning_session_state.dart';
+import 'package:nim2book_mobile_flutter/features/learning_session_content/provider/learning_session_state.dart';
 
 class LearningSessionNotifier extends Notifier<LearningSessionState> {
   LearningSessionNotifier(this.arg);
