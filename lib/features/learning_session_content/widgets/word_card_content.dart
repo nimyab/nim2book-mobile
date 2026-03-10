@@ -22,8 +22,8 @@ class WordCardContent extends ConsumerWidget {
   Widget build(final BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final frontText = showTranslationOnFront &&
-            card.wordData.translations.isNotEmpty
+    final frontText =
+        showTranslationOnFront && card.wordData.translations.isNotEmpty
         ? card.wordData.translations.first
         : card.wordData.text;
     final showSourceSide = showTranslation && showTranslationOnFront;
@@ -65,9 +65,7 @@ class WordCardContent extends ConsumerWidget {
                             color: theme.colorScheme.primary,
                           ),
                           onPressed: () {
-                            ref
-                                .read(ttsServiceProvider)
-                                .speak(frontText);
+                            ref.read(ttsServiceProvider).speak(frontText);
                           },
                         ),
                       ),
@@ -150,8 +148,9 @@ class WordCardContent extends ConsumerWidget {
                           Text(
                             l10n.examplesLabel,
                             style: theme.textTheme.labelMedium?.copyWith(
-                              color: theme.colorScheme.onSurface
-                                  .withValues(alpha: 0.7),
+                              color: theme.colorScheme.onSurface.withValues(
+                                alpha: 0.7,
+                              ),
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -174,11 +173,11 @@ class WordCardContent extends ConsumerWidget {
                                     const SizedBox(height: 2),
                                     Text(
                                       '→ ${example.translatedText}',
-                                      style:
-                                          theme.textTheme.bodySmall?.copyWith(
-                                        color: theme.colorScheme.onSurface
-                                            .withValues(alpha: 0.7),
-                                      ),
+                                      style: theme.textTheme.bodySmall
+                                          ?.copyWith(
+                                            color: theme.colorScheme.onSurface
+                                                .withValues(alpha: 0.7),
+                                          ),
                                     ),
                                   ],
                                 ],
