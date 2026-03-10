@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:nim2book_mobile_flutter/core/providers/auth/auth_provider.dart';
 import 'package:nim2book_mobile_flutter/core/providers/book/books_provider.dart';
 
@@ -20,6 +21,11 @@ class AppStartupWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<AsyncValue<void>>(appStartupProvider, (previous, next) {
+      if (next is AsyncData<void> || next is AsyncError<void>) {
+        FlutterNativeSplash.remove();
+      }
+    });
     final appStartupState = ref.watch(appStartupProvider);
     return appStartupState.when(
       data: (_) => onLoaded(context),

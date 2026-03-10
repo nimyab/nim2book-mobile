@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/models/user/user.dart';
@@ -31,8 +30,6 @@ class AuthNotifier extends Notifier<AuthState> {
     } catch (_) {
       state = const AuthState.unauthenticated();
       return false;
-    } finally {
-      FlutterNativeSplash.remove();
     }
   }
 
