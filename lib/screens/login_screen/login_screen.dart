@@ -7,6 +7,8 @@ import 'package:nim2book_mobile_flutter/core/providers/auth/auth_provider.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
+import 'package:nim2book_mobile_flutter/core/router/app_routes.dart';
+
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
@@ -31,6 +33,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final isAuthLoading = ref.watch(isAuthLoadingProvider);
     final talker = ref.read(talkerProvider);
     final l10n = AppLocalizations.of(context)!;
+
+    ref.listen(authNotifierProvider, (previous, next) {
+      next.maybeWhen(
+        error: (message) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(message)),
+          );
+        },
+        orElse: () {},
+      );
+    });
 
     return Scaffold(
       body: SafeArea(
@@ -66,7 +79,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   );
                                   return;
                                 }
-                                context.go('/my-books');
+                                context.go(AppRoutes.myBooks);
                               }
                             }
                           } catch (e) {

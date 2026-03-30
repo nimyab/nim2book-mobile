@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PersonalUserBook {
 
- String get id; String get title; String get author; List<String> get chapterPaths; String get userId; String? get cover; List<Genre>? get genres;
+ String get id; String get title; String get originalLang; String get translatedLang; String get createdAt; Author? get author; User? get user; String? get coverUrl; List<Genre>? get genres; List<PersonalBookChapter>? get personalBookChapters; ProcessStatus? get processStatus;
 /// Create a copy of PersonalUserBook
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $PersonalUserBookCopyWith<PersonalUserBook> get copyWith => _$PersonalUserBookCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PersonalUserBook&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.author, author) || other.author == author)&&const DeepCollectionEquality().equals(other.chapterPaths, chapterPaths)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.cover, cover) || other.cover == cover)&&const DeepCollectionEquality().equals(other.genres, genres));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PersonalUserBook&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.originalLang, originalLang) || other.originalLang == originalLang)&&(identical(other.translatedLang, translatedLang) || other.translatedLang == translatedLang)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.author, author) || other.author == author)&&(identical(other.user, user) || other.user == user)&&(identical(other.coverUrl, coverUrl) || other.coverUrl == coverUrl)&&const DeepCollectionEquality().equals(other.genres, genres)&&const DeepCollectionEquality().equals(other.personalBookChapters, personalBookChapters)&&(identical(other.processStatus, processStatus) || other.processStatus == processStatus));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,author,const DeepCollectionEquality().hash(chapterPaths),userId,cover,const DeepCollectionEquality().hash(genres));
+int get hashCode => Object.hash(runtimeType,id,title,originalLang,translatedLang,createdAt,author,user,coverUrl,const DeepCollectionEquality().hash(genres),const DeepCollectionEquality().hash(personalBookChapters),processStatus);
 
 @override
 String toString() {
-  return 'PersonalUserBook(id: $id, title: $title, author: $author, chapterPaths: $chapterPaths, userId: $userId, cover: $cover, genres: $genres)';
+  return 'PersonalUserBook(id: $id, title: $title, originalLang: $originalLang, translatedLang: $translatedLang, createdAt: $createdAt, author: $author, user: $user, coverUrl: $coverUrl, genres: $genres, personalBookChapters: $personalBookChapters, processStatus: $processStatus)';
 }
 
 
@@ -48,11 +48,11 @@ abstract mixin class $PersonalUserBookCopyWith<$Res>  {
   factory $PersonalUserBookCopyWith(PersonalUserBook value, $Res Function(PersonalUserBook) _then) = _$PersonalUserBookCopyWithImpl;
 @useResult
 $Res call({
- String id, String title, String author, List<String> chapterPaths, String userId, String? cover, List<Genre>? genres
+ String id, String title, String originalLang, String translatedLang, String createdAt, Author? author, User? user, String? coverUrl, List<Genre>? genres, List<PersonalBookChapter>? personalBookChapters, ProcessStatus? processStatus
 });
 
 
-
+$AuthorCopyWith<$Res>? get author;$UserCopyWith<$Res>? get user;
 
 }
 /// @nodoc
@@ -65,19 +65,47 @@ class _$PersonalUserBookCopyWithImpl<$Res>
 
 /// Create a copy of PersonalUserBook
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? author = null,Object? chapterPaths = null,Object? userId = null,Object? cover = freezed,Object? genres = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? originalLang = null,Object? translatedLang = null,Object? createdAt = null,Object? author = freezed,Object? user = freezed,Object? coverUrl = freezed,Object? genres = freezed,Object? personalBookChapters = freezed,Object? processStatus = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
-as String,author: null == author ? _self.author : author // ignore: cast_nullable_to_non_nullable
-as String,chapterPaths: null == chapterPaths ? _self.chapterPaths : chapterPaths // ignore: cast_nullable_to_non_nullable
-as List<String>,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
-as String,cover: freezed == cover ? _self.cover : cover // ignore: cast_nullable_to_non_nullable
+as String,originalLang: null == originalLang ? _self.originalLang : originalLang // ignore: cast_nullable_to_non_nullable
+as String,translatedLang: null == translatedLang ? _self.translatedLang : translatedLang // ignore: cast_nullable_to_non_nullable
+as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String,author: freezed == author ? _self.author : author // ignore: cast_nullable_to_non_nullable
+as Author?,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
+as User?,coverUrl: freezed == coverUrl ? _self.coverUrl : coverUrl // ignore: cast_nullable_to_non_nullable
 as String?,genres: freezed == genres ? _self.genres : genres // ignore: cast_nullable_to_non_nullable
-as List<Genre>?,
+as List<Genre>?,personalBookChapters: freezed == personalBookChapters ? _self.personalBookChapters : personalBookChapters // ignore: cast_nullable_to_non_nullable
+as List<PersonalBookChapter>?,processStatus: freezed == processStatus ? _self.processStatus : processStatus // ignore: cast_nullable_to_non_nullable
+as ProcessStatus?,
   ));
 }
+/// Create a copy of PersonalUserBook
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$AuthorCopyWith<$Res>? get author {
+    if (_self.author == null) {
+    return null;
+  }
 
+  return $AuthorCopyWith<$Res>(_self.author!, (value) {
+    return _then(_self.copyWith(author: value));
+  });
+}/// Create a copy of PersonalUserBook
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserCopyWith<$Res>? get user {
+    if (_self.user == null) {
+    return null;
+  }
+
+  return $UserCopyWith<$Res>(_self.user!, (value) {
+    return _then(_self.copyWith(user: value));
+  });
+}
 }
 
 
@@ -121,10 +149,7 @@ return $default(_that);case _:
 final _that = this;
 switch (_that) {
 case _PersonalUserBook():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -159,10 +184,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String author,  List<String> chapterPaths,  String userId,  String? cover,  List<Genre>? genres)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String originalLang,  String translatedLang,  String createdAt,  Author? author,  User? user,  String? coverUrl,  List<Genre>? genres,  List<PersonalBookChapter>? personalBookChapters,  ProcessStatus? processStatus)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PersonalUserBook() when $default != null:
-return $default(_that.id,_that.title,_that.author,_that.chapterPaths,_that.userId,_that.cover,_that.genres);case _:
+return $default(_that.id,_that.title,_that.originalLang,_that.translatedLang,_that.createdAt,_that.author,_that.user,_that.coverUrl,_that.genres,_that.personalBookChapters,_that.processStatus);case _:
   return orElse();
 
 }
@@ -180,13 +205,10 @@ return $default(_that.id,_that.title,_that.author,_that.chapterPaths,_that.userI
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String author,  List<String> chapterPaths,  String userId,  String? cover,  List<Genre>? genres)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String originalLang,  String translatedLang,  String createdAt,  Author? author,  User? user,  String? coverUrl,  List<Genre>? genres,  List<PersonalBookChapter>? personalBookChapters,  ProcessStatus? processStatus)  $default,) {final _that = this;
 switch (_that) {
 case _PersonalUserBook():
-return $default(_that.id,_that.title,_that.author,_that.chapterPaths,_that.userId,_that.cover,_that.genres);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that.id,_that.title,_that.originalLang,_that.translatedLang,_that.createdAt,_that.author,_that.user,_that.coverUrl,_that.genres,_that.personalBookChapters,_that.processStatus);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -200,10 +222,10 @@ return $default(_that.id,_that.title,_that.author,_that.chapterPaths,_that.userI
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String author,  List<String> chapterPaths,  String userId,  String? cover,  List<Genre>? genres)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String originalLang,  String translatedLang,  String createdAt,  Author? author,  User? user,  String? coverUrl,  List<Genre>? genres,  List<PersonalBookChapter>? personalBookChapters,  ProcessStatus? processStatus)?  $default,) {final _that = this;
 switch (_that) {
 case _PersonalUserBook() when $default != null:
-return $default(_that.id,_that.title,_that.author,_that.chapterPaths,_that.userId,_that.cover,_that.genres);case _:
+return $default(_that.id,_that.title,_that.originalLang,_that.translatedLang,_that.createdAt,_that.author,_that.user,_that.coverUrl,_that.genres,_that.personalBookChapters,_that.processStatus);case _:
   return null;
 
 }
@@ -215,21 +237,17 @@ return $default(_that.id,_that.title,_that.author,_that.chapterPaths,_that.userI
 @JsonSerializable()
 
 class _PersonalUserBook implements PersonalUserBook {
-  const _PersonalUserBook({required this.id, required this.title, required this.author, required final  List<String> chapterPaths, required this.userId, this.cover, final  List<Genre>? genres}): _chapterPaths = chapterPaths,_genres = genres;
+  const _PersonalUserBook({required this.id, required this.title, required this.originalLang, required this.translatedLang, required this.createdAt, this.author, this.user, this.coverUrl, final  List<Genre>? genres, final  List<PersonalBookChapter>? personalBookChapters, this.processStatus}): _genres = genres,_personalBookChapters = personalBookChapters;
   factory _PersonalUserBook.fromJson(Map<String, dynamic> json) => _$PersonalUserBookFromJson(json);
 
 @override final  String id;
 @override final  String title;
-@override final  String author;
- final  List<String> _chapterPaths;
-@override List<String> get chapterPaths {
-  if (_chapterPaths is EqualUnmodifiableListView) return _chapterPaths;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_chapterPaths);
-}
-
-@override final  String userId;
-@override final  String? cover;
+@override final  String originalLang;
+@override final  String translatedLang;
+@override final  String createdAt;
+@override final  Author? author;
+@override final  User? user;
+@override final  String? coverUrl;
  final  List<Genre>? _genres;
 @override List<Genre>? get genres {
   final value = _genres;
@@ -239,6 +257,16 @@ class _PersonalUserBook implements PersonalUserBook {
   return EqualUnmodifiableListView(value);
 }
 
+ final  List<PersonalBookChapter>? _personalBookChapters;
+@override List<PersonalBookChapter>? get personalBookChapters {
+  final value = _personalBookChapters;
+  if (value == null) return null;
+  if (_personalBookChapters is EqualUnmodifiableListView) return _personalBookChapters;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
+
+@override final  ProcessStatus? processStatus;
 
 /// Create a copy of PersonalUserBook
 /// with the given fields replaced by the non-null parameter values.
@@ -253,16 +281,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PersonalUserBook&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.author, author) || other.author == author)&&const DeepCollectionEquality().equals(other._chapterPaths, _chapterPaths)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.cover, cover) || other.cover == cover)&&const DeepCollectionEquality().equals(other._genres, _genres));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PersonalUserBook&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.originalLang, originalLang) || other.originalLang == originalLang)&&(identical(other.translatedLang, translatedLang) || other.translatedLang == translatedLang)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.author, author) || other.author == author)&&(identical(other.user, user) || other.user == user)&&(identical(other.coverUrl, coverUrl) || other.coverUrl == coverUrl)&&const DeepCollectionEquality().equals(other._genres, _genres)&&const DeepCollectionEquality().equals(other._personalBookChapters, _personalBookChapters)&&(identical(other.processStatus, processStatus) || other.processStatus == processStatus));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,author,const DeepCollectionEquality().hash(_chapterPaths),userId,cover,const DeepCollectionEquality().hash(_genres));
+int get hashCode => Object.hash(runtimeType,id,title,originalLang,translatedLang,createdAt,author,user,coverUrl,const DeepCollectionEquality().hash(_genres),const DeepCollectionEquality().hash(_personalBookChapters),processStatus);
 
 @override
 String toString() {
-  return 'PersonalUserBook(id: $id, title: $title, author: $author, chapterPaths: $chapterPaths, userId: $userId, cover: $cover, genres: $genres)';
+  return 'PersonalUserBook(id: $id, title: $title, originalLang: $originalLang, translatedLang: $translatedLang, createdAt: $createdAt, author: $author, user: $user, coverUrl: $coverUrl, genres: $genres, personalBookChapters: $personalBookChapters, processStatus: $processStatus)';
 }
 
 
@@ -273,11 +301,11 @@ abstract mixin class _$PersonalUserBookCopyWith<$Res> implements $PersonalUserBo
   factory _$PersonalUserBookCopyWith(_PersonalUserBook value, $Res Function(_PersonalUserBook) _then) = __$PersonalUserBookCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String title, String author, List<String> chapterPaths, String userId, String? cover, List<Genre>? genres
+ String id, String title, String originalLang, String translatedLang, String createdAt, Author? author, User? user, String? coverUrl, List<Genre>? genres, List<PersonalBookChapter>? personalBookChapters, ProcessStatus? processStatus
 });
 
 
-
+@override $AuthorCopyWith<$Res>? get author;@override $UserCopyWith<$Res>? get user;
 
 }
 /// @nodoc
@@ -290,20 +318,48 @@ class __$PersonalUserBookCopyWithImpl<$Res>
 
 /// Create a copy of PersonalUserBook
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? author = null,Object? chapterPaths = null,Object? userId = null,Object? cover = freezed,Object? genres = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? originalLang = null,Object? translatedLang = null,Object? createdAt = null,Object? author = freezed,Object? user = freezed,Object? coverUrl = freezed,Object? genres = freezed,Object? personalBookChapters = freezed,Object? processStatus = freezed,}) {
   return _then(_PersonalUserBook(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
-as String,author: null == author ? _self.author : author // ignore: cast_nullable_to_non_nullable
-as String,chapterPaths: null == chapterPaths ? _self._chapterPaths : chapterPaths // ignore: cast_nullable_to_non_nullable
-as List<String>,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
-as String,cover: freezed == cover ? _self.cover : cover // ignore: cast_nullable_to_non_nullable
+as String,originalLang: null == originalLang ? _self.originalLang : originalLang // ignore: cast_nullable_to_non_nullable
+as String,translatedLang: null == translatedLang ? _self.translatedLang : translatedLang // ignore: cast_nullable_to_non_nullable
+as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String,author: freezed == author ? _self.author : author // ignore: cast_nullable_to_non_nullable
+as Author?,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
+as User?,coverUrl: freezed == coverUrl ? _self.coverUrl : coverUrl // ignore: cast_nullable_to_non_nullable
 as String?,genres: freezed == genres ? _self._genres : genres // ignore: cast_nullable_to_non_nullable
-as List<Genre>?,
+as List<Genre>?,personalBookChapters: freezed == personalBookChapters ? _self._personalBookChapters : personalBookChapters // ignore: cast_nullable_to_non_nullable
+as List<PersonalBookChapter>?,processStatus: freezed == processStatus ? _self.processStatus : processStatus // ignore: cast_nullable_to_non_nullable
+as ProcessStatus?,
   ));
 }
 
+/// Create a copy of PersonalUserBook
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$AuthorCopyWith<$Res>? get author {
+    if (_self.author == null) {
+    return null;
+  }
 
+  return $AuthorCopyWith<$Res>(_self.author!, (value) {
+    return _then(_self.copyWith(author: value));
+  });
+}/// Create a copy of PersonalUserBook
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserCopyWith<$Res>? get user {
+    if (_self.user == null) {
+    return null;
+  }
+
+  return $UserCopyWith<$Res>(_self.user!, (value) {
+    return _then(_self.copyWith(user: value));
+  });
+}
 }
 
 // dart format on

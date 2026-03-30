@@ -19,8 +19,8 @@ class VerticalBookCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final apiBaseUrl = ref.read(envProvider).apiBaseUrl;
-    final coverUrl = book.cover != null
-        ? '$apiBaseUrl/api/v1/file/public?path=${Uri.encodeComponent(book.cover!)}'
+    final coverUrl = book.coverUrl != null
+        ? '$apiBaseUrl/files/public?path=${Uri.encodeComponent(book.coverUrl!)}'
         : null;
 
     return GestureDetector(
@@ -77,7 +77,7 @@ class VerticalBookCard extends ConsumerWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    book.author,
+                    book.author?.name ?? 'Unknown Author',
                     style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

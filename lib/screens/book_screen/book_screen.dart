@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
 import 'package:nim2book_mobile_flutter/core/providers/book/books_provider.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
+import 'package:nim2book_mobile_flutter/core/router/app_routes.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 class BookScreen extends ConsumerStatefulWidget {
@@ -62,8 +63,8 @@ class _BookScreenState extends ConsumerState<BookScreen> {
         ? savedBooks.any((final b) => b.id == currentBook.id)
         : false;
 
-    final coverUrl = currentBook?.cover != null
-        ? '${env.apiBaseUrl}/api/v1/file/public?path=${Uri.encodeComponent(currentBook!.cover!)}'
+    final coverUrl = currentBook?.coverUrl != null
+        ? '${env.apiBaseUrl}/files/public?path=${Uri.encodeComponent(currentBook!.coverUrl!)}'
         : null;
 
     final Widget coverHero = Hero(
@@ -118,7 +119,7 @@ class _BookScreenState extends ConsumerState<BookScreen> {
                 textAlign: TextAlign.center,
               ),
               Text(
-                '${l10n.author}: ${currentBook.author}',
+                '${l10n.author}: ${currentBook.author?.name}',
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w400,
@@ -139,8 +140,9 @@ class _BookScreenState extends ConsumerState<BookScreen> {
                   spacing: 16,
                   children: [
                     FilledButton.icon(
-                      onPressed: () =>
-                          context.push('/reading/${currentBook.id}'),
+                      onPressed: () => context.push(
+                        AppRoutes.readingPath(currentBook.id),
+                      ),
                       icon: const Icon(Icons.menu_book),
                       label: Text(l10n.readBook),
                     ),

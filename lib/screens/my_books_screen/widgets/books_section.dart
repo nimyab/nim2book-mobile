@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
+import 'package:nim2book_mobile_flutter/core/models/book_chapter/book_chapter.dart';
 import 'package:nim2book_mobile_flutter/core/models/personal_user_book/personal_user_book.dart';
+import 'package:nim2book_mobile_flutter/core/providers/auth/auth_provider.dart';
+import 'package:nim2book_mobile_flutter/core/router/app_routes.dart';
 import 'package:nim2book_mobile_flutter/core/router/router.dart';
+import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:nim2book_mobile_flutter/screens/my_books_screen/widgets/add_book_card.dart';
 import 'package:nim2book_mobile_flutter/screens/my_books_screen/widgets/vertical_book_card.dart';
 
-class BooksSection extends StatelessWidget {
+class BooksSection extends ConsumerWidget {
   final String title;
   final List<Book>? books;
   final List<PersonalUserBook>? personalBooks;
@@ -24,7 +29,7 @@ class BooksSection extends StatelessWidget {
        );
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final totalItems = (books?.length ?? personalBooks?.length ?? 0) + 1;
 
     return Column(
@@ -56,6 +61,7 @@ class BooksSection extends StatelessWidget {
               } else {
                 return _buildPersonalBookCard(
                   context,
+                  ref,
                   personalBooks![index - 1],
                 );
               }
@@ -75,7 +81,7 @@ class BooksSection extends StatelessWidget {
         book: book,
         heroTag: tag,
         onTap: () => context.push(
-          '/book/${book.id}',
+          AppRoutes.bookPath(book.id),
           extra: BookRouteExtra(heroTag: tag, book: book),
         ),
       ),
@@ -84,6 +90,7 @@ class BooksSection extends StatelessWidget {
 
   Widget _buildPersonalBookCard(
     BuildContext context,
+    WidgetRef ref,
     PersonalUserBook personalBook,
   ) {
     final tag = 'personal-book-cover-${personalBook.id}-my-books';
@@ -93,9 +100,21 @@ class BooksSection extends StatelessWidget {
       id: personalBook.id,
       title: personalBook.title,
       author: personalBook.author,
-      chapterPaths: personalBook.chapterPaths,
-      cover: personalBook.cover,
+      bookChapters: personalBook.personalBookChapters?.map((chapter) {
+        return BookChapter(
+          id: chapter.id,
+          order: chapter.order,
+          title: chapter.title,
+          translatedTitle: chapter.translatedTitle,
+          contentURL: chapter.contentUrl,
+          createdAt: chapter.createdAt,
+        );
+      }).toList(),
+      coverUrl: personalBook.coverUrl,
       genres: personalBook.genres,
+      originalLang: personalBook.originalLang,
+      translatedLang: personalBook.translatedLang,
+      createdAt: personalBook.createdAt,
     );
 
     return SizedBox(
@@ -104,10 +123,20 @@ class BooksSection extends StatelessWidget {
         key: ValueKey(personalBook.id),
         book: bookForCard,
         heroTag: tag,
-        onTap: () => context.push(
-          '/book/${personalBook.id}',
-          extra: BookRouteExtra(heroTag: tag, book: bookForCard),
-        ),
+        onTap: () {
+          final isVIP = ref.read(isVIPProvider);
+          if (!isVIP) {
+            final l10n = AppLocalizations.of(context)!;
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(l10n.vipRequired)));
+            return;
+          }
+          context.push(
+            AppRoutes.bookPath(personalBook.id),
+            extra: BookRouteExtra(heroTag: tag, book: bookForCard),
+          );
+        },
       ),
     );
   }

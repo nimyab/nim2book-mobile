@@ -58,7 +58,6 @@ abstract class LookupRequest with _$LookupRequest {
     required final String text,
     required final String fromLang,
     required final String toLang,
-    required final String ui,
   }) = _LookupRequest;
 
   factory LookupRequest.fromJson(final Map<String, dynamic> json) =>

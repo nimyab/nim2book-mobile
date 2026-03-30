@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ChapterAlignNode {
 
- String get id; String get title; String get translatedTitle; int get order; List<ParagraphAlignNode> get content;
+ String get id; String get title; String get translatedTitle; int get order; List<ContentNode> get content;
 /// Create a copy of ChapterAlignNode
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $ChapterAlignNodeCopyWith<$Res>  {
   factory $ChapterAlignNodeCopyWith(ChapterAlignNode value, $Res Function(ChapterAlignNode) _then) = _$ChapterAlignNodeCopyWithImpl;
 @useResult
 $Res call({
- String id, String title, String translatedTitle, int order, List<ParagraphAlignNode> content
+ String id, String title, String translatedTitle, int order, List<ContentNode> content
 });
 
 
@@ -72,7 +72,7 @@ as String,title: null == title ? _self.title : title // ignore: cast_nullable_to
 as String,translatedTitle: null == translatedTitle ? _self.translatedTitle : translatedTitle // ignore: cast_nullable_to_non_nullable
 as String,order: null == order ? _self.order : order // ignore: cast_nullable_to_non_nullable
 as int,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
-as List<ParagraphAlignNode>,
+as List<ContentNode>,
   ));
 }
 
@@ -119,10 +119,7 @@ return $default(_that);case _:
 final _that = this;
 switch (_that) {
 case _ChapterAlignNode():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -157,7 +154,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String translatedTitle,  int order,  List<ParagraphAlignNode> content)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String translatedTitle,  int order,  List<ContentNode> content)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ChapterAlignNode() when $default != null:
 return $default(_that.id,_that.title,_that.translatedTitle,_that.order,_that.content);case _:
@@ -178,13 +175,10 @@ return $default(_that.id,_that.title,_that.translatedTitle,_that.order,_that.con
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String translatedTitle,  int order,  List<ParagraphAlignNode> content)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String translatedTitle,  int order,  List<ContentNode> content)  $default,) {final _that = this;
 switch (_that) {
 case _ChapterAlignNode():
-return $default(_that.id,_that.title,_that.translatedTitle,_that.order,_that.content);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that.id,_that.title,_that.translatedTitle,_that.order,_that.content);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -198,7 +192,7 @@ return $default(_that.id,_that.title,_that.translatedTitle,_that.order,_that.con
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String translatedTitle,  int order,  List<ParagraphAlignNode> content)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String translatedTitle,  int order,  List<ContentNode> content)?  $default,) {final _that = this;
 switch (_that) {
 case _ChapterAlignNode() when $default != null:
 return $default(_that.id,_that.title,_that.translatedTitle,_that.order,_that.content);case _:
@@ -213,15 +207,15 @@ return $default(_that.id,_that.title,_that.translatedTitle,_that.order,_that.con
 @JsonSerializable()
 
 class _ChapterAlignNode implements ChapterAlignNode {
-  const _ChapterAlignNode({required this.id, required this.title, required this.translatedTitle, required this.order, required final  List<ParagraphAlignNode> content}): _content = content;
+  const _ChapterAlignNode({required this.id, required this.title, required this.translatedTitle, required this.order, required final  List<ContentNode> content}): _content = content;
   factory _ChapterAlignNode.fromJson(Map<String, dynamic> json) => _$ChapterAlignNodeFromJson(json);
 
 @override final  String id;
 @override final  String title;
 @override final  String translatedTitle;
 @override final  int order;
- final  List<ParagraphAlignNode> _content;
-@override List<ParagraphAlignNode> get content {
+ final  List<ContentNode> _content;
+@override List<ContentNode> get content {
   if (_content is EqualUnmodifiableListView) return _content;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_content);
@@ -261,7 +255,7 @@ abstract mixin class _$ChapterAlignNodeCopyWith<$Res> implements $ChapterAlignNo
   factory _$ChapterAlignNodeCopyWith(_ChapterAlignNode value, $Res Function(_ChapterAlignNode) _then) = __$ChapterAlignNodeCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String title, String translatedTitle, int order, List<ParagraphAlignNode> content
+ String id, String title, String translatedTitle, int order, List<ContentNode> content
 });
 
 
@@ -285,7 +279,617 @@ as String,title: null == title ? _self.title : title // ignore: cast_nullable_to
 as String,translatedTitle: null == translatedTitle ? _self.translatedTitle : translatedTitle // ignore: cast_nullable_to_non_nullable
 as String,order: null == order ? _self.order : order // ignore: cast_nullable_to_non_nullable
 as int,content: null == content ? _self._content : content // ignore: cast_nullable_to_non_nullable
-as List<ParagraphAlignNode>,
+as List<ContentNode>,
+  ));
+}
+
+
+}
+
+ContentNode _$ContentNodeFromJson(
+  Map<String, dynamic> json
+) {
+        switch (json['type']) {
+                  case 'paragraph':
+          return ContentNodeParagraph.fromJson(
+            json
+          );
+                case 'image':
+          return ContentNodeImage.fromJson(
+            json
+          );
+        
+          default:
+            throw CheckedFromJsonException(
+  json,
+  'type',
+  'ContentNode',
+  'Invalid union type "${json['type']}"!'
+);
+        }
+      
+}
+
+/// @nodoc
+mixin _$ContentNode {
+
+
+
+  /// Serializes this ContentNode to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ContentNode);
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ContentNode()';
+}
+
+
+}
+
+/// @nodoc
+class $ContentNodeCopyWith<$Res>  {
+$ContentNodeCopyWith(ContentNode _, $Res Function(ContentNode) __);
+}
+
+
+/// Adds pattern-matching-related methods to [ContentNode].
+extension ContentNodePatterns on ContentNode {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ContentNodeParagraph value)?  paragraph,TResult Function( ContentNodeImage value)?  image,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case ContentNodeParagraph() when paragraph != null:
+return paragraph(_that);case ContentNodeImage() when image != null:
+return image(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ContentNodeParagraph value)  paragraph,required TResult Function( ContentNodeImage value)  image,}){
+final _that = this;
+switch (_that) {
+case ContentNodeParagraph():
+return paragraph(_that);case ContentNodeImage():
+return image(_that);}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ContentNodeParagraph value)?  paragraph,TResult? Function( ContentNodeImage value)?  image,}){
+final _that = this;
+switch (_that) {
+case ContentNodeParagraph() when paragraph != null:
+return paragraph(_that);case ContentNodeImage() when image != null:
+return image(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function(@JsonKey(name: 'pan')  ParagraphAlignNode paragraphAlignNode)?  paragraph,TResult Function(@JsonKey(name: 'in')  ImageNode imageNode)?  image,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case ContentNodeParagraph() when paragraph != null:
+return paragraph(_that.paragraphAlignNode);case ContentNodeImage() when image != null:
+return image(_that.imageNode);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function(@JsonKey(name: 'pan')  ParagraphAlignNode paragraphAlignNode)  paragraph,required TResult Function(@JsonKey(name: 'in')  ImageNode imageNode)  image,}) {final _that = this;
+switch (_that) {
+case ContentNodeParagraph():
+return paragraph(_that.paragraphAlignNode);case ContentNodeImage():
+return image(_that.imageNode);}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function(@JsonKey(name: 'pan')  ParagraphAlignNode paragraphAlignNode)?  paragraph,TResult? Function(@JsonKey(name: 'in')  ImageNode imageNode)?  image,}) {final _that = this;
+switch (_that) {
+case ContentNodeParagraph() when paragraph != null:
+return paragraph(_that.paragraphAlignNode);case ContentNodeImage() when image != null:
+return image(_that.imageNode);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class ContentNodeParagraph implements ContentNode {
+  const ContentNodeParagraph({@JsonKey(name: 'pan') required this.paragraphAlignNode, final  String? $type}): $type = $type ?? 'paragraph';
+  factory ContentNodeParagraph.fromJson(Map<String, dynamic> json) => _$ContentNodeParagraphFromJson(json);
+
+@JsonKey(name: 'pan') final  ParagraphAlignNode paragraphAlignNode;
+
+@JsonKey(name: 'type')
+final String $type;
+
+
+/// Create a copy of ContentNode
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ContentNodeParagraphCopyWith<ContentNodeParagraph> get copyWith => _$ContentNodeParagraphCopyWithImpl<ContentNodeParagraph>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$ContentNodeParagraphToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ContentNodeParagraph&&(identical(other.paragraphAlignNode, paragraphAlignNode) || other.paragraphAlignNode == paragraphAlignNode));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,paragraphAlignNode);
+
+@override
+String toString() {
+  return 'ContentNode.paragraph(paragraphAlignNode: $paragraphAlignNode)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ContentNodeParagraphCopyWith<$Res> implements $ContentNodeCopyWith<$Res> {
+  factory $ContentNodeParagraphCopyWith(ContentNodeParagraph value, $Res Function(ContentNodeParagraph) _then) = _$ContentNodeParagraphCopyWithImpl;
+@useResult
+$Res call({
+@JsonKey(name: 'pan') ParagraphAlignNode paragraphAlignNode
+});
+
+
+$ParagraphAlignNodeCopyWith<$Res> get paragraphAlignNode;
+
+}
+/// @nodoc
+class _$ContentNodeParagraphCopyWithImpl<$Res>
+    implements $ContentNodeParagraphCopyWith<$Res> {
+  _$ContentNodeParagraphCopyWithImpl(this._self, this._then);
+
+  final ContentNodeParagraph _self;
+  final $Res Function(ContentNodeParagraph) _then;
+
+/// Create a copy of ContentNode
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? paragraphAlignNode = null,}) {
+  return _then(ContentNodeParagraph(
+paragraphAlignNode: null == paragraphAlignNode ? _self.paragraphAlignNode : paragraphAlignNode // ignore: cast_nullable_to_non_nullable
+as ParagraphAlignNode,
+  ));
+}
+
+/// Create a copy of ContentNode
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ParagraphAlignNodeCopyWith<$Res> get paragraphAlignNode {
+  
+  return $ParagraphAlignNodeCopyWith<$Res>(_self.paragraphAlignNode, (value) {
+    return _then(_self.copyWith(paragraphAlignNode: value));
+  });
+}
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class ContentNodeImage implements ContentNode {
+  const ContentNodeImage({@JsonKey(name: 'in') required this.imageNode, final  String? $type}): $type = $type ?? 'image';
+  factory ContentNodeImage.fromJson(Map<String, dynamic> json) => _$ContentNodeImageFromJson(json);
+
+@JsonKey(name: 'in') final  ImageNode imageNode;
+
+@JsonKey(name: 'type')
+final String $type;
+
+
+/// Create a copy of ContentNode
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ContentNodeImageCopyWith<ContentNodeImage> get copyWith => _$ContentNodeImageCopyWithImpl<ContentNodeImage>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$ContentNodeImageToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ContentNodeImage&&(identical(other.imageNode, imageNode) || other.imageNode == imageNode));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,imageNode);
+
+@override
+String toString() {
+  return 'ContentNode.image(imageNode: $imageNode)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ContentNodeImageCopyWith<$Res> implements $ContentNodeCopyWith<$Res> {
+  factory $ContentNodeImageCopyWith(ContentNodeImage value, $Res Function(ContentNodeImage) _then) = _$ContentNodeImageCopyWithImpl;
+@useResult
+$Res call({
+@JsonKey(name: 'in') ImageNode imageNode
+});
+
+
+$ImageNodeCopyWith<$Res> get imageNode;
+
+}
+/// @nodoc
+class _$ContentNodeImageCopyWithImpl<$Res>
+    implements $ContentNodeImageCopyWith<$Res> {
+  _$ContentNodeImageCopyWithImpl(this._self, this._then);
+
+  final ContentNodeImage _self;
+  final $Res Function(ContentNodeImage) _then;
+
+/// Create a copy of ContentNode
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? imageNode = null,}) {
+  return _then(ContentNodeImage(
+imageNode: null == imageNode ? _self.imageNode : imageNode // ignore: cast_nullable_to_non_nullable
+as ImageNode,
+  ));
+}
+
+/// Create a copy of ContentNode
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ImageNodeCopyWith<$Res> get imageNode {
+  
+  return $ImageNodeCopyWith<$Res>(_self.imageNode, (value) {
+    return _then(_self.copyWith(imageNode: value));
+  });
+}
+}
+
+
+/// @nodoc
+mixin _$ImageNode {
+
+ String get path; String get alt;
+/// Create a copy of ImageNode
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ImageNodeCopyWith<ImageNode> get copyWith => _$ImageNodeCopyWithImpl<ImageNode>(this as ImageNode, _$identity);
+
+  /// Serializes this ImageNode to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ImageNode&&(identical(other.path, path) || other.path == path)&&(identical(other.alt, alt) || other.alt == alt));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,path,alt);
+
+@override
+String toString() {
+  return 'ImageNode(path: $path, alt: $alt)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ImageNodeCopyWith<$Res>  {
+  factory $ImageNodeCopyWith(ImageNode value, $Res Function(ImageNode) _then) = _$ImageNodeCopyWithImpl;
+@useResult
+$Res call({
+ String path, String alt
+});
+
+
+
+
+}
+/// @nodoc
+class _$ImageNodeCopyWithImpl<$Res>
+    implements $ImageNodeCopyWith<$Res> {
+  _$ImageNodeCopyWithImpl(this._self, this._then);
+
+  final ImageNode _self;
+  final $Res Function(ImageNode) _then;
+
+/// Create a copy of ImageNode
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? path = null,Object? alt = null,}) {
+  return _then(_self.copyWith(
+path: null == path ? _self.path : path // ignore: cast_nullable_to_non_nullable
+as String,alt: null == alt ? _self.alt : alt // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [ImageNode].
+extension ImageNodePatterns on ImageNode {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _ImageNode value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _ImageNode() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _ImageNode value)  $default,){
+final _that = this;
+switch (_that) {
+case _ImageNode():
+return $default(_that);}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _ImageNode value)?  $default,){
+final _that = this;
+switch (_that) {
+case _ImageNode() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String path,  String alt)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _ImageNode() when $default != null:
+return $default(_that.path,_that.alt);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String path,  String alt)  $default,) {final _that = this;
+switch (_that) {
+case _ImageNode():
+return $default(_that.path,_that.alt);}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String path,  String alt)?  $default,) {final _that = this;
+switch (_that) {
+case _ImageNode() when $default != null:
+return $default(_that.path,_that.alt);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _ImageNode implements ImageNode {
+  const _ImageNode({required this.path, required this.alt});
+  factory _ImageNode.fromJson(Map<String, dynamic> json) => _$ImageNodeFromJson(json);
+
+@override final  String path;
+@override final  String alt;
+
+/// Create a copy of ImageNode
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ImageNodeCopyWith<_ImageNode> get copyWith => __$ImageNodeCopyWithImpl<_ImageNode>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$ImageNodeToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ImageNode&&(identical(other.path, path) || other.path == path)&&(identical(other.alt, alt) || other.alt == alt));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,path,alt);
+
+@override
+String toString() {
+  return 'ImageNode(path: $path, alt: $alt)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ImageNodeCopyWith<$Res> implements $ImageNodeCopyWith<$Res> {
+  factory _$ImageNodeCopyWith(_ImageNode value, $Res Function(_ImageNode) _then) = __$ImageNodeCopyWithImpl;
+@override @useResult
+$Res call({
+ String path, String alt
+});
+
+
+
+
+}
+/// @nodoc
+class __$ImageNodeCopyWithImpl<$Res>
+    implements _$ImageNodeCopyWith<$Res> {
+  __$ImageNodeCopyWithImpl(this._self, this._then);
+
+  final _ImageNode _self;
+  final $Res Function(_ImageNode) _then;
+
+/// Create a copy of ImageNode
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? path = null,Object? alt = null,}) {
+  return _then(_ImageNode(
+path: null == path ? _self.path : path // ignore: cast_nullable_to_non_nullable
+as String,alt: null == alt ? _self.alt : alt // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -398,10 +1002,7 @@ return $default(_that);case _:
 final _that = this;
 switch (_that) {
 case _ParagraphAlignNode():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -460,10 +1061,7 @@ return $default(_that.op,_that.tp,_that.aw);case _:
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String op,  String tp,  List<WordAlignNode> aw)  $default,) {final _that = this;
 switch (_that) {
 case _ParagraphAlignNode():
-return $default(_that.op,_that.tp,_that.aw);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that.op,_that.tp,_that.aw);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -672,10 +1270,7 @@ return $default(_that);case _:
 final _that = this;
 switch (_that) {
 case _WordAlignNode():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -734,10 +1329,7 @@ return $default(_that.iow,_that.itw);case _:
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<int> iow,  List<int> itw)  $default,) {final _that = this;
 switch (_that) {
 case _WordAlignNode():
-return $default(_that.iow,_that.itw);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that.iow,_that.itw);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///

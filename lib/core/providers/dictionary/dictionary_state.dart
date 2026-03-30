@@ -7,5 +7,6 @@ part 'dictionary_state.freezed.dart';
 sealed class DictionaryState with _$DictionaryState {
   const factory DictionaryState({
     @Default([]) final List<DictionaryCard> savedCards,
+    final String? errorMessage,
   }) = _DictionaryState;
 }

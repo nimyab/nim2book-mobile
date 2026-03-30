@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
 import 'package:nim2book_mobile_flutter/core/models/learning/learning_mode.dart';
-import 'package:nim2book_mobile_flutter/core/providers/auth/auth_provider.dart';
-import 'package:nim2book_mobile_flutter/core/providers/auth/auth_state.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/screens/add_book_screen/add_book_screen.dart';
 import 'package:nim2book_mobile_flutter/screens/book_screen/book_screen.dart';
@@ -20,6 +18,8 @@ import 'package:nim2book_mobile_flutter/screens/settings_screen/settings_screen.
 import 'package:nim2book_mobile_flutter/widgets/main_scaffold.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
+import 'package:nim2book_mobile_flutter/core/router/app_routes.dart';
+
 class BookRouteExtra {
   final String? heroTag;
   final Book? book;
@@ -29,50 +29,24 @@ class BookRouteExtra {
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
-final authStateListenableProvider = Provider<Listenable>((ref) {
-  return _AuthStateNotifier(ref);
-});
-
 // Provider для роутера
 final routerProvider = Provider<GoRouter>((ref) {
   ref.keepAlive();
   final talker = ref.watch(talkerProvider);
-  final authListenable = ref.watch(authStateListenableProvider);
 
   return GoRouter(
-    initialLocation: '/my-books',
+    initialLocation: AppRoutes.myBooks,
     navigatorKey: _rootNavigatorKey,
     observers: [TalkerRouteObserver(talker)],
-    refreshListenable: authListenable,
-    redirect: (context, state) {
-      final authState = ref.read(authNotifierProvider);
-      final isLoginRoute = state.uri.path == '/login';
-
-      return authState.when(
-        authenticated: (user) {
-          if (isLoginRoute) return '/my-books';
-          return null;
-        },
-        loading: () => null,
-        unauthenticated: () {
-          if (!isLoginRoute) return '/login';
-          return null;
-        },
-        start: () {
-          if (!isLoginRoute) return '/login';
-          return null;
-        },
-      );
-    },
     routes: [
       GoRoute(
-        path: '/login',
+        path: AppRoutes.login,
         name: 'login',
         builder: (final context, final state) => const LoginScreen(),
       ),
 
       GoRoute(
-        path: '/register',
+        path: AppRoutes.register,
         name: 'register',
         builder: (final context, final state) => const RegisterScreen(),
       ),
@@ -85,7 +59,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/my-books',
+                path: AppRoutes.myBooks,
                 name: 'my-books',
                 builder: (final context, final state) => const MyBooksScreen(),
               ),
@@ -94,7 +68,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/books',
+                path: AppRoutes.books,
                 name: 'books',
                 builder: (final context, final state) => const BooksScreen(),
               ),
@@ -103,7 +77,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/learning',
+                path: AppRoutes.learning,
                 name: 'learning-shell',
                 builder: (final context, final state) => const LearningScreen(),
               ),
@@ -112,7 +86,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/settings',
+                path: AppRoutes.settings,
                 name: 'settings',
                 builder: (final context, final state) => const SettingsScreen(),
               ),
@@ -122,24 +96,24 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
 
       GoRoute(
-        path: '/learning-session',
+        path: AppRoutes.learningSession,
         name: 'learning-session',
-        redirect: (_, __) => '/learning-session/mixed',
+        redirect: (_, __) => '${AppRoutes.learningSession}/${AppRoutes.learningSessionMixed}',
         routes: [
           GoRoute(
-            path: 'new',
+            path: AppRoutes.learningSessionNew,
             name: 'learning-session-new',
             builder: (final context, final state) =>
                 const LearningSessionScreen(mode: LearningMode.newOnly),
           ),
           GoRoute(
-            path: 'review',
+            path: AppRoutes.learningSessionReview,
             name: 'learning-session-review',
             builder: (final context, final state) =>
                 const LearningSessionScreen(mode: LearningMode.reviewOnly),
           ),
           GoRoute(
-            path: 'mixed',
+            path: AppRoutes.learningSessionMixed,
             name: 'learning-session-mixed',
             builder: (final context, final state) =>
                 const LearningSessionScreen(mode: LearningMode.mixed),
@@ -148,7 +122,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
 
       GoRoute(
-        path: '/book/:bookId',
+        path: AppRoutes.book,
         name: 'book',
         builder: (final context, final state) {
           final bookId = state.pathParameters['bookId']!;
@@ -173,7 +147,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
 
       GoRoute(
-        path: '/reading/:bookId',
+        path: AppRoutes.reading,
         name: 'reading',
         builder: (final context, final state) {
           final bookId = state.pathParameters['bookId']!;
@@ -182,13 +156,17 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
 
       GoRoute(
-        path: '/add-book',
+        path: AppRoutes.addBook,
         name: 'add-book',
-        builder: (final context, final state) => const AddBookScreen(),
+        builder: (final context, final state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final isPublic = extra?['isPublic'] as bool? ?? false;
+          return AddBookScreen(isPublic: isPublic);
+        },
       ),
 
       GoRoute(
-        path: '/dictionary',
+        path: AppRoutes.dictionary,
         name: 'dictionary',
         builder: (final context, final state) => const DictionaryScreen(),
       ),
@@ -196,11 +174,3 @@ final routerProvider = Provider<GoRouter>((ref) {
   );
 });
 
-// Notifier для обновления роутера при изменении состояния auth
-class _AuthStateNotifier extends ChangeNotifier {
-  _AuthStateNotifier(this._ref) {
-    _ref.listen(authNotifierProvider, (_, __) => notifyListeners());
-  }
-
-  final Ref _ref;
-}

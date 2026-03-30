@@ -14,8 +14,8 @@ class BookCard extends ConsumerWidget {
   @override
   Widget build(final BuildContext context, WidgetRef ref) {
     final apiBaseUrl = ref.read(envProvider).apiBaseUrl;
-    final coverUrl = book.cover != null
-        ? '$apiBaseUrl/api/v1/file/public?path=${Uri.encodeComponent(book.cover!)}'
+    final coverUrl = book.coverUrl != null
+        ? '$apiBaseUrl/files/public?path=${Uri.encodeComponent(book.coverUrl!)}'
         : null;
     return GestureDetector(
       onTap: () async {
@@ -74,7 +74,10 @@ class BookCard extends ConsumerWidget {
                         fontSize: 17,
                       ),
                     ),
-                    Text(book.author, style: const TextStyle(fontSize: 16)),
+                    Text(
+                      book.author?.name ?? 'Unknown',
+                      style: const TextStyle(fontSize: 16),
+                    ),
                   ],
                 ),
               ),

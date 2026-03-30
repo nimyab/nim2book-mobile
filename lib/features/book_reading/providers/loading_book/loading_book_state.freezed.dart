@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LoadingBookState {
 
- Book? get book; List<ChapterAlignNode?> get chapters; double get progress; bool get isLoading;
+ Book? get book; List<ChapterAlignNode?> get chapters; double get progress; bool get isLoading; String? get errorMessage;
 /// Create a copy of LoadingBookState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $LoadingBookStateCopyWith<LoadingBookState> get copyWith => _$LoadingBookStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoadingBookState&&(identical(other.book, book) || other.book == book)&&const DeepCollectionEquality().equals(other.chapters, chapters)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoadingBookState&&(identical(other.book, book) || other.book == book)&&const DeepCollectionEquality().equals(other.chapters, chapters)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,book,const DeepCollectionEquality().hash(chapters),progress,isLoading);
+int get hashCode => Object.hash(runtimeType,book,const DeepCollectionEquality().hash(chapters),progress,isLoading,errorMessage);
 
 @override
 String toString() {
-  return 'LoadingBookState(book: $book, chapters: $chapters, progress: $progress, isLoading: $isLoading)';
+  return 'LoadingBookState(book: $book, chapters: $chapters, progress: $progress, isLoading: $isLoading, errorMessage: $errorMessage)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $LoadingBookStateCopyWith<$Res>  {
   factory $LoadingBookStateCopyWith(LoadingBookState value, $Res Function(LoadingBookState) _then) = _$LoadingBookStateCopyWithImpl;
 @useResult
 $Res call({
- Book? book, List<ChapterAlignNode?> chapters, double progress, bool isLoading
+ Book? book, List<ChapterAlignNode?> chapters, double progress, bool isLoading, String? errorMessage
 });
 
 
@@ -62,13 +62,14 @@ class _$LoadingBookStateCopyWithImpl<$Res>
 
 /// Create a copy of LoadingBookState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? book = freezed,Object? chapters = null,Object? progress = null,Object? isLoading = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? book = freezed,Object? chapters = null,Object? progress = null,Object? isLoading = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 book: freezed == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
 as Book?,chapters: null == chapters ? _self.chapters : chapters // ignore: cast_nullable_to_non_nullable
 as List<ChapterAlignNode?>,progress: null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
 as double,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 /// Create a copy of LoadingBookState
@@ -165,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Book? book,  List<ChapterAlignNode?> chapters,  double progress,  bool isLoading)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Book? book,  List<ChapterAlignNode?> chapters,  double progress,  bool isLoading,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LoadingBookState() when $default != null:
-return $default(_that.book,_that.chapters,_that.progress,_that.isLoading);case _:
+return $default(_that.book,_that.chapters,_that.progress,_that.isLoading,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -186,10 +187,10 @@ return $default(_that.book,_that.chapters,_that.progress,_that.isLoading);case _
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Book? book,  List<ChapterAlignNode?> chapters,  double progress,  bool isLoading)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Book? book,  List<ChapterAlignNode?> chapters,  double progress,  bool isLoading,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _LoadingBookState():
-return $default(_that.book,_that.chapters,_that.progress,_that.isLoading);case _:
+return $default(_that.book,_that.chapters,_that.progress,_that.isLoading,_that.errorMessage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -206,10 +207,10 @@ return $default(_that.book,_that.chapters,_that.progress,_that.isLoading);case _
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Book? book,  List<ChapterAlignNode?> chapters,  double progress,  bool isLoading)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Book? book,  List<ChapterAlignNode?> chapters,  double progress,  bool isLoading,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _LoadingBookState() when $default != null:
-return $default(_that.book,_that.chapters,_that.progress,_that.isLoading);case _:
+return $default(_that.book,_that.chapters,_that.progress,_that.isLoading,_that.errorMessage);case _:
   return null;
 
 }
@@ -221,7 +222,7 @@ return $default(_that.book,_that.chapters,_that.progress,_that.isLoading);case _
 
 
 class _LoadingBookState implements LoadingBookState {
-  const _LoadingBookState({this.book, final  List<ChapterAlignNode?> chapters = const [], this.progress = 0.0, this.isLoading = false}): _chapters = chapters;
+  const _LoadingBookState({this.book, final  List<ChapterAlignNode?> chapters = const [], this.progress = 0.0, this.isLoading = false, this.errorMessage}): _chapters = chapters;
   
 
 @override final  Book? book;
@@ -234,6 +235,7 @@ class _LoadingBookState implements LoadingBookState {
 
 @override@JsonKey() final  double progress;
 @override@JsonKey() final  bool isLoading;
+@override final  String? errorMessage;
 
 /// Create a copy of LoadingBookState
 /// with the given fields replaced by the non-null parameter values.
@@ -245,16 +247,16 @@ _$LoadingBookStateCopyWith<_LoadingBookState> get copyWith => __$LoadingBookStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoadingBookState&&(identical(other.book, book) || other.book == book)&&const DeepCollectionEquality().equals(other._chapters, _chapters)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoadingBookState&&(identical(other.book, book) || other.book == book)&&const DeepCollectionEquality().equals(other._chapters, _chapters)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,book,const DeepCollectionEquality().hash(_chapters),progress,isLoading);
+int get hashCode => Object.hash(runtimeType,book,const DeepCollectionEquality().hash(_chapters),progress,isLoading,errorMessage);
 
 @override
 String toString() {
-  return 'LoadingBookState(book: $book, chapters: $chapters, progress: $progress, isLoading: $isLoading)';
+  return 'LoadingBookState(book: $book, chapters: $chapters, progress: $progress, isLoading: $isLoading, errorMessage: $errorMessage)';
 }
 
 
@@ -265,7 +267,7 @@ abstract mixin class _$LoadingBookStateCopyWith<$Res> implements $LoadingBookSta
   factory _$LoadingBookStateCopyWith(_LoadingBookState value, $Res Function(_LoadingBookState) _then) = __$LoadingBookStateCopyWithImpl;
 @override @useResult
 $Res call({
- Book? book, List<ChapterAlignNode?> chapters, double progress, bool isLoading
+ Book? book, List<ChapterAlignNode?> chapters, double progress, bool isLoading, String? errorMessage
 });
 
 
@@ -282,13 +284,14 @@ class __$LoadingBookStateCopyWithImpl<$Res>
 
 /// Create a copy of LoadingBookState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? book = freezed,Object? chapters = null,Object? progress = null,Object? isLoading = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? book = freezed,Object? chapters = null,Object? progress = null,Object? isLoading = null,Object? errorMessage = freezed,}) {
   return _then(_LoadingBookState(
 book: freezed == book ? _self.book : book // ignore: cast_nullable_to_non_nullable
 as Book?,chapters: null == chapters ? _self._chapters : chapters // ignore: cast_nullable_to_non_nullable
 as List<ChapterAlignNode?>,progress: null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
 as double,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

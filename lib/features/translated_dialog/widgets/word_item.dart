@@ -38,7 +38,7 @@ class WordItem extends StatelessWidget {
                     ),
                   ),
                 ),
-                BookmarkButton(phrase: phrase, word: word),
+                BookmarkButton(word: word),
               ],
             ),
           ),

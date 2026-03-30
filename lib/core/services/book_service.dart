@@ -53,13 +53,15 @@ class BookService {
       final response = await _apiClient.getBook(bookId);
       final book = response.book;
       // Cache asynchronously without blocking
-      compute(
+      final encodedBook = await compute(
         (Map<String, dynamic> json) => jsonEncode(json),
         book.toJson(),
-      ).then((encoded) => _sharedPreferences.setString(cacheKey, encoded));
+      );
+      await _sharedPreferences.setString(cacheKey, encodedBook);
       return book;
     } catch (e) {
       _logger.error('Error fetching book with ID $bookId: $e');
+      if (cachedBook == null) rethrow;
       return cachedBook;
     }
   }
@@ -93,13 +95,16 @@ class BookService {
       );
       final books = response.books;
       // Cache asynchronously without blocking
-      compute(
-        (List<Map<String, dynamic>> booksList) => jsonEncode(booksList),
-        books.map((final b) => b.toJson()).toList(),
-      ).then((encoded) => _sharedPreferences.setString(cacheKey, encoded));
+      unawaited(
+        compute(
+          (List<Map<String, dynamic>> booksList) => jsonEncode(booksList),
+          books.map((final b) => b.toJson()).toList(),
+        ).then((encoded) => _sharedPreferences.setString(cacheKey, encoded)),
+      );
       return books;
     } catch (e) {
       _logger.error('Error fetching books: $e');
+      if (cached.isEmpty) rethrow;
       return cached;
     }
   }
@@ -150,7 +155,11 @@ class BookService {
     return updated;
   }
 
-  Future<ChapterAlignNode?> getChapter(final String path) async {
+  Future<ChapterAlignNode?> getChapter({
+    required final String bookId,
+    required final int chapterNumber,
+    required final String path,
+  }) async {
     try {
       final chapterKey = _chapterKey(path);
 
@@ -164,7 +173,7 @@ class BookService {
         return ChapterAlignNode.fromJson(chapterJson);
       }
 
-      final chapter = await _apiClient.getChapter(path);
+      final chapter = await _apiClient.getBookChapter(path: path);
 
       // Compress and encode in separate isolate without blocking
       final compressed = await compute(
@@ -189,11 +198,14 @@ class BookService {
 
   Future<void> _cleanupBookCache(final Book book) async {
     try {
-      for (final path in book.chapterPaths) {
-        final key = _chapterKey(path);
-        final removed = await _sharedPreferences.remove(key);
-        if (!removed) {
-          _logger.warning('Failed to remove cached chapter for path $path');
+      if (book.bookChapters != null) {
+        for (final chapter in book.bookChapters!) {
+          final path = chapter.contentURL;
+          final key = _chapterKey(path);
+          final removed = await _sharedPreferences.remove(key);
+          if (!removed) {
+            _logger.warning('Failed to remove cached chapter for path $path');
+          }
         }
       }
 

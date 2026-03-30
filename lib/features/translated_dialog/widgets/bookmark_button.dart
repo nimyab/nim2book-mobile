@@ -4,10 +4,9 @@ import 'package:nim2book_mobile_flutter/core/models/dictionary/dictionary.dart';
 import 'package:nim2book_mobile_flutter/core/providers/dictionary/dictionary_provider.dart';
 
 class BookmarkButton extends ConsumerWidget {
-  final String phrase;
   final DictionaryWord word;
 
-  const BookmarkButton({super.key, required this.phrase, required this.word});
+  const BookmarkButton({super.key, required this.word});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -16,7 +15,7 @@ class BookmarkButton extends ConsumerWidget {
     final dictionaryProvider = ref.read(dictionaryNotifierProvider.notifier);
     final isInDict = savedCards.any(
       (card) =>
-          card.wordData.text == phrase &&
+          card.wordData.text == word.text &&
           card.wordData.partOfSpeech == word.partOfSpeech,
     );
 
@@ -30,9 +29,9 @@ class BookmarkButton extends ConsumerWidget {
       constraints: const BoxConstraints(),
       onPressed: () {
         if (isInDict) {
-          dictionaryProvider.deleteWord(phrase, word.partOfSpeech);
+          dictionaryProvider.deleteWord(word.text, word.partOfSpeech);
         } else {
-          dictionaryProvider.saveWord(phrase, word);
+          dictionaryProvider.saveWord(word.text, word);
         }
       },
     );

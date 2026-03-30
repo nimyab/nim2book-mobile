@@ -6,7 +6,13 @@ import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/providers/dictionary/dictionary_provider.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/core/providers/statistics/statistics_provider.dart';
+import 'package:nim2book_mobile_flutter/core/router/app_routes.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
+import 'package:nim2book_mobile_flutter/screens/learning_screen/widgets/dictionary_entry_card.dart';
+import 'package:nim2book_mobile_flutter/screens/learning_screen/widgets/due_now_card.dart';
+import 'package:nim2book_mobile_flutter/screens/learning_screen/widgets/learning_mode_card.dart';
+import 'package:nim2book_mobile_flutter/screens/learning_screen/widgets/period_card.dart';
+import 'package:nim2book_mobile_flutter/screens/learning_screen/widgets/totals_card.dart';
 
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
@@ -22,9 +28,21 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
 
   @override
   Widget build(final BuildContext context) {
+    ref.listen<String?>(
+      dictionaryNotifierProvider.select((s) => s.errorMessage),
+      (previous, next) {
+        if (next != null && next != previous) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(next)));
+        }
+      },
+    );
+
     final l10n = AppLocalizations.of(context)!;
     final savedCards = ref.watch(dictionaryCardsProvider);
     final theme = Theme.of(context);
+    final chartColors = theme.extension<ChartColors>()!;
     final dictionary = ref.watch(dictionaryServiceProvider);
     final statisticState = ref.watch(statisticsNotifierProvider);
     final now = DateTime.now();
@@ -81,201 +99,73 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
         child: ListView(
           padding: const EdgeInsets.all(16.0),
           children: [
-            // Переход в словарь в виде карточки, как и другие кнопки
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.menu_book_outlined),
-                title: Text(l10n.dictionary),
-                onTap: () => context.push('/dictionary'),
-              ),
-            ),
-
-            const SizedBox(height: 8),
-
-            // Карточки режимов обучения
-            Card(
-              child: ListTile(
-                leading: Icon(
-                  Icons.add_circle_outline,
-                  color: hasNew
-                      ? null
-                      : theme.colorScheme.onSurfaceVariant.withValues(
-                          alpha: 0.38,
-                        ),
-                ),
-                title: Text(l10n.learnNewWords),
-                onTap: () {
-                  if (!hasNew) {
-                    final messenger = ScaffoldMessenger.of(context);
-                    messenger.clearSnackBars();
-                    messenger.showSnackBar(
-                      SnackBar(content: Text(l10n.noNewWordsToday)),
-                    );
-                    return;
-                  }
-                  context.push('/learning-session/new');
-                },
-              ),
+            DictionaryEntryCard(
+              l10n: l10n,
+              onTap: () => context.push(AppRoutes.dictionary),
             ),
             const SizedBox(height: 8),
-            Card(
-              child: ListTile(
-                leading: Icon(
-                  Icons.refresh_outlined,
-                  color: hasReview
-                      ? null
-                      : theme.colorScheme.onSurfaceVariant.withValues(
-                          alpha: 0.38,
-                        ),
-                ),
-                title: Text(l10n.reviewWords),
-                subtitle: Text(l10n.reviewDueToday(reviewDueCount)),
-                onTap: () {
-                  if (!hasReview) {
-                    final messenger = ScaffoldMessenger.of(context);
-                    messenger.clearSnackBars();
-                    messenger.showSnackBar(
-                      SnackBar(content: Text(l10n.noReviewWordsDue)),
-                    );
-                    return;
-                  }
-                  context.push('/learning-session/review');
-                },
-              ),
+            LearningModeCard(
+              icon: Icons.add_circle_outline,
+              title: l10n.learnNewWords,
+              enabled: hasNew,
+              theme: theme,
+              onTap: () {
+                if (!hasNew) {
+                  final messenger = ScaffoldMessenger.of(context);
+                  messenger.clearSnackBars();
+                  messenger.showSnackBar(
+                    SnackBar(content: Text(l10n.noNewWordsToday)),
+                  );
+                  return;
+                }
+                context.push(AppRoutes.learningSessionNewPath);
+              },
             ),
             const SizedBox(height: 8),
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.auto_awesome_motion_outlined),
-                title: Text(l10n.mixedMode),
-                onTap: () {
-                  context.push('/learning-session/mixed');
-                },
-              ),
+            LearningModeCard(
+              icon: Icons.refresh_outlined,
+              title: l10n.reviewWords,
+              subtitle: l10n.reviewDueToday(reviewDueCount),
+              enabled: hasReview,
+              theme: theme,
+              onTap: () {
+                if (!hasReview) {
+                  final messenger = ScaffoldMessenger.of(context);
+                  messenger.clearSnackBars();
+                  messenger.showSnackBar(
+                    SnackBar(content: Text(l10n.noReviewWordsDue)),
+                  );
+                  return;
+                }
+                context.push(AppRoutes.learningSessionReviewPath);
+              },
             ),
-
-            // Убраны кнопки "Пролистать слова" и "Автоматический режим"
-            const SizedBox(height: 12),
-
-            const SizedBox(height: 12),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          '${l10n.period}: ',
-                          style: theme.textTheme.titleMedium,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+            const SizedBox(height: 8),
+            LearningModeCard(
+              icon: Icons.auto_awesome_motion_outlined,
+              title: l10n.mixedMode,
+              enabled: true,
+              theme: theme,
+              onTap: () {
+                context.push(AppRoutes.learningSessionMixedPath);
+              },
             ),
-
             const SizedBox(height: 12),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      children: [
-                        Opacity(
-                          opacity: 0.0,
-                          child: Container(
-                            width: 10,
-                            height: 10,
-                            margin: const EdgeInsets.only(right: 8),
-                            decoration: BoxDecoration(
-                              color: Theme.of(
-                                context,
-                              ).extension<ChartColors>()!.learned,
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                          ),
-                        ),
-                        const Expanded(child: SizedBox.shrink()),
-                        SizedBox(
-                          width: 64,
-                          child: Text(
-                            l10n.chartLegendTotal,
-                            textAlign: TextAlign.right,
-                            style: theme.textTheme.titleMedium,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Container(
-                          width: 10,
-                          height: 10,
-                          margin: const EdgeInsets.only(right: 8),
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.primary,
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                        ),
-                        Expanded(
-                          child: Text(
-                            l10n.chartLegendLearned,
-                            style: theme.textTheme.bodyMedium,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 64,
-                          child: Text(
-                            '$learnedTotal',
-                            textAlign: TextAlign.right,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Container(
-                          width: 10,
-                          height: 10,
-                          margin: const EdgeInsets.only(right: 8),
-                          decoration: BoxDecoration(
-                            color: Theme.of(
-                              context,
-                            ).extension<ChartColors>()!.repeated,
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                        ),
-                        Expanded(
-                          child: Text(
-                            l10n.chartLegendRepeated,
-                            style: theme.textTheme.bodyMedium,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 64,
-                          child: Text(
-                            '$repeatedTotal',
-                            textAlign: TextAlign.right,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+            DueNowCard(
+              l10n: l10n,
+              theme: theme,
+              newDueCount: newDueCount,
+              reviewDueCount: reviewDueCount,
+            ),
+            const SizedBox(height: 12),
+            PeriodCard(l10n: l10n, theme: theme),
+            const SizedBox(height: 12),
+            TotalsCard(
+              l10n: l10n,
+              theme: theme,
+              chartColors: chartColors,
+              learnedTotal: learnedTotal,
+              repeatedTotal: repeatedTotal,
             ),
           ],
         ),

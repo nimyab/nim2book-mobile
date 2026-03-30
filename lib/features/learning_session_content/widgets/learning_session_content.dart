@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nim2book_mobile_flutter/core/models/learning/learning_mode.dart';
-import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/word_card.dart';
-import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/word_progress_indicator.dart';
-import 'package:nim2book_mobile_flutter/features/learning_session_screen/provider/learning_session_provider.dart';
+import 'package:nim2book_mobile_flutter/features/learning_session_content/widgets/word_card.dart';
+import 'package:nim2book_mobile_flutter/features/learning_session_content/widgets/word_progress_indicator.dart';
+import 'package:nim2book_mobile_flutter/features/learning_session_content/provider/learning_session_provider.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 class LearningSessionContent extends ConsumerStatefulWidget {
@@ -30,6 +30,10 @@ class _LearningSessionContentState
       learningSessionNotifierProvider((mode: widget.mode)).notifier,
     );
 
+    if (sessionState.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     if (sessionState.currentCard == null) {
       return Center(
         child: Text(
@@ -45,9 +49,6 @@ class _LearningSessionContentState
         ),
       );
     }
-
-    // Заглушка чтобы ничего не отображалось, пока загружается карточка.
-    if (sessionState.isLoading) return const Center();
 
     final currentCard = sessionState.currentCard!;
 

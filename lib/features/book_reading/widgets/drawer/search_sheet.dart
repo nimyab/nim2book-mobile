@@ -78,7 +78,12 @@ class _SearchSheetState extends ConsumerState<SearchSheet> {
         }
         final content = ch.content;
         for (var pi = 0; pi < content.length; pi++) {
-          final p = content[pi];
+          final contentNode = content[pi];
+          final p = contentNode.mapOrNull(
+            paragraph: (final wrapper) => wrapper.paragraphAlignNode,
+          );
+          if (p == null) continue;
+
           final op = p.op.toString();
           final tp = p.tp.toString();
           var idx = op.toLowerCase().indexOf(qLower);

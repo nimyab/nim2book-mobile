@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/providers/auth/auth_provider.dart';
 import 'package:nim2book_mobile_flutter/core/providers/book/books_provider.dart';
+import 'package:nim2book_mobile_flutter/core/router/app_routes.dart';
 import 'package:nim2book_mobile_flutter/core/router/router.dart';
 import 'package:nim2book_mobile_flutter/features/books/widgets/book_card.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
@@ -48,10 +49,21 @@ class _BooksScreenState extends ConsumerState<BooksScreen> {
 
   @override
   Widget build(final BuildContext context) {
+    ref.listen<String?>(booksNotifierProvider.select((s) => s.errorMessage), (
+      previous,
+      next,
+    ) {
+      if (next != null && next != previous) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(next)));
+      }
+    });
+
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final isAuthenticated = ref.watch(isAuthenticatedProvider);
-    final isVIP = ref.watch(isVIPProvider);
+    final isAdmin = ref.watch(isAdminProvider);
     final allBooks = ref.watch(allBooksProvider);
     final isFetching = ref.watch(isBooksFetchingProvider);
 
@@ -101,7 +113,7 @@ class _BooksScreenState extends ConsumerState<BooksScreen> {
                                 book: book,
                                 heroTag: tag,
                                 onTap: () => context.push(
-                                  '/book/${book.id}',
+                                  AppRoutes.bookPath(book.id),
                                   extra: BookRouteExtra(
                                     heroTag: tag,
                                     book: book,
@@ -114,20 +126,19 @@ class _BooksScreenState extends ConsumerState<BooksScreen> {
                 ),
               ],
             ),
-            if (isAuthenticated)
+            if (isAuthenticated && isAdmin)
               Positioned(
                 right: 16,
                 bottom: 16,
                 child: Tooltip(
                   message: l10n.add,
                   child: ElevatedButton(
-                    onPressed: isVIP
-                        ? () => context.push('/add-book')
-                        : () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(l10n.addingBooksVipOnly)),
-                            );
-                          },
+                    onPressed: () {
+                      context.push(
+                        AppRoutes.addBook,
+                        extra: {'isPublic': true},
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: theme.colorScheme.surfaceContainer,
                       foregroundColor: theme.colorScheme.primary,

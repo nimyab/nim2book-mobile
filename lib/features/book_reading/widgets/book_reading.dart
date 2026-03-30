@@ -24,6 +24,7 @@ class _BookReadingState extends ConsumerState<BookReading>
     with TickerProviderStateMixin {
   final ScrollController _translatedController = ScrollController();
   bool _listenersInitialized = false;
+  bool _readingInitScheduled = false;
 
   @override
   void initState() {
@@ -40,21 +41,18 @@ class _BookReadingState extends ConsumerState<BookReading>
     if (_listenersInitialized) return;
     _listenersInitialized = true;
 
-    // Setup listener for selection changes (only once, not in build)
-    ref.listen(bookReadingNotifierProvider(widget.bookId), (
-      previous,
-      current,
-    ) {
-      if (previous?.selectedParagraphIndex != current.selectedParagraphIndex ||
-          previous?.selectedWordIndex != current.selectedWordIndex) {
-        ref
-            .read(readingSettingsNotifierProvider.notifier)
-            .applySelection(
-              current.selectedParagraphIndex,
-              current.selectedWordIndex,
-            );
-      }
-    });
+    ref.listen<(int?, int?)>(
+      bookReadingNotifierProvider(
+        widget.bookId,
+      ).select((s) => (s.selectedParagraphIndex, s.selectedWordIndex)),
+      (previous, current) {
+        if (previous != current) {
+          ref
+              .read(readingSettingsNotifierProvider.notifier)
+              .applySelection(current.$1, current.$2);
+        }
+      },
+    );
   }
 
   @override
@@ -65,53 +63,77 @@ class _BookReadingState extends ConsumerState<BookReading>
 
   @override
   Widget build(final BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final loadingState = ref.watch(loadingBookNotifierProvider(widget.bookId));
-    final book = loadingState.book;
+    ref.listen<String?>(
+      loadingBookNotifierProvider(widget.bookId).select((s) => s.errorMessage),
+      (previous, next) {
+        if (next != null && next != previous) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(next)));
+        }
+      },
+    );
 
-    if (loadingState.isLoading) {
+    final l10n = AppLocalizations.of(context)!;
+    final bookId = widget.bookId;
+    final isLoading = ref.watch(
+      loadingBookNotifierProvider(bookId).select((s) => s.isLoading),
+    );
+    final loadingProgress = ref.watch(
+      loadingBookNotifierProvider(bookId).select((s) => s.progress),
+    );
+    final book = ref.watch(
+      loadingBookNotifierProvider(bookId).select((s) => s.book),
+    );
+    final hasChapters = ref.watch(
+      loadingBookNotifierProvider(bookId).select((s) => s.chapters.isNotEmpty),
+    );
+    final loadingError = ref.watch(
+      loadingBookNotifierProvider(bookId).select((s) => s.errorMessage),
+    );
+
+    if (isLoading) {
       return Scaffold(
         appBar: AppBar(),
         body: Center(
-          child: CircularProgressWithPercentage(
-            progress: loadingState.progress,
-          ),
+          child: CircularProgressWithPercentage(progress: loadingProgress),
         ),
       );
     }
 
-    if (book == null || loadingState.chapters.isEmpty) {
+    if (book == null || !hasChapters) {
       return Scaffold(
         appBar: AppBar(),
-        body: Center(child: Text(l10n.bookLoadFailed)),
+        body: Center(child: Text(loadingError ?? l10n.bookLoadFailed)),
       );
     }
 
-    // Use only bookId as parameter to prevent provider recreation
-    final bookId = widget.bookId;
+    final prefsLoaded = ref.watch(
+      bookReadingNotifierProvider(bookId).select((s) => s.prefsLoaded),
+    );
+    final index = ref.watch(
+      bookReadingNotifierProvider(bookId).select((s) => s.currentChapterIndex),
+    );
+    final isTranslatedVisible = ref.watch(
+      readingSettingsNotifierProvider.select((s) => s.isTranslatedVisible),
+    );
+    final bgColor = ref.watch(
+      readingSettingsNotifierProvider.select((s) => s.backgroundColor),
+    );
 
-    // Watch reading state and settings with select for granular updates
-    final readingState = ref.watch(bookReadingNotifierProvider(bookId));
-    final settingsState = ref.watch(readingSettingsNotifierProvider);
-
-    // Initialize listeners once
     _initializeListeners();
 
-    // Initialize book reading notifier if needed
-    if (!readingState.prefsLoaded) {
+    if (!prefsLoaded && !_readingInitScheduled) {
+      _readingInitScheduled = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.read(bookReadingNotifierProvider(bookId).notifier).initialize();
       });
     }
 
-    final index = readingState.currentChapterIndex;
-    final isTranslatedVisible = settingsState.isTranslatedVisible;
-    final bgColor = settingsState.backgroundColor;
-
     return Scaffold(
       appBar: BookReadingBar(book: book, bookId: widget.bookId),
       endDrawer: ReadingDrawer(bookId: bookId),
-      body: !readingState.prefsLoaded
+      body: !prefsLoaded
           ? ColoredBox(color: bgColor, child: const SizedBox.expand())
           : ColoredBox(
               color: bgColor,

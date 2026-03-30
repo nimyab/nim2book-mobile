@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/providers/auth/auth_provider.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
+import 'package:nim2book_mobile_flutter/core/router/app_routes.dart';
+
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
 
@@ -27,6 +29,17 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     final authNotifier = ref.read(authNotifierProvider.notifier);
     final isAuthLoading = ref.watch(isAuthLoadingProvider);
     final l10n = AppLocalizations.of(context)!;
+
+    ref.listen(authNotifierProvider, (previous, next) {
+      next.maybeWhen(
+        error: (message) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(message)),
+          );
+        },
+        orElse: () {},
+      );
+    });
 
     return Scaffold(
       body: SafeArea(
@@ -77,7 +90,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                             );
                             return;
                           }
-                          context.go('/login');
+                          context.go(AppRoutes.login);
                         }
                       },
                 child: isAuthLoading
@@ -89,7 +102,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     ? null
                     : () {
                         if (context.mounted) {
-                          context.go('/login');
+                          context.go(AppRoutes.login);
                         }
                       },
                 child: Text(l10n.alreadyHaveAccountLoginHere),

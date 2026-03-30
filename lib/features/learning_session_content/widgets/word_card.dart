@@ -1,6 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:nim2book_mobile_flutter/core/models/dictionary_card/dictionary_card.dart';
-import 'package:nim2book_mobile_flutter/features/learning_session_screen/widgets/word_card_content.dart';
+import 'package:nim2book_mobile_flutter/features/learning_session_content/widgets/word_card_content.dart';
 
 class WordCard extends StatefulWidget {
   final DictionaryCard card;
@@ -23,6 +25,7 @@ class WordCard extends StatefulWidget {
 }
 
 class _WordCardState extends State<WordCard> with TickerProviderStateMixin {
+  final Random _random = Random();
   late AnimationController _swipeController;
   late AnimationController _resetController;
 
@@ -32,10 +35,12 @@ class _WordCardState extends State<WordCard> with TickerProviderStateMixin {
   final ValueNotifier<double> _scaleNotifier = ValueNotifier(1.0);
   final ValueNotifier<bool> _isDraggingNotifier = ValueNotifier(false);
   double _initialTouchX = 0.0;
+  late bool _showTranslationOnFront;
 
   @override
   void initState() {
     super.initState();
+    _showTranslationOnFront = _random.nextBool();
     _swipeController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
@@ -44,6 +49,14 @@ class _WordCardState extends State<WordCard> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 200),
       vsync: this,
     );
+  }
+
+  @override
+  void didUpdateWidget(final WordCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.card.wordData.id != widget.card.wordData.id) {
+      _showTranslationOnFront = _random.nextBool();
+    }
   }
 
   @override
@@ -132,6 +145,7 @@ class _WordCardState extends State<WordCard> with TickerProviderStateMixin {
       child: WordCardContent(
         card: widget.card,
         showTranslation: widget.showTranslation,
+        showTranslationOnFront: _showTranslationOnFront,
       ),
     );
 

@@ -7,10 +7,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/providers/book/books_provider.dart';
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
+import 'package:nim2book_mobile_flutter/core/router/app_routes.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 
 class AddBookScreen extends ConsumerStatefulWidget {
-  const AddBookScreen({super.key});
+  final bool isPublic;
+
+  const AddBookScreen({
+    super.key,
+    this.isPublic = false,
+  });
 
   @override
   ConsumerState<AddBookScreen> createState() => _AddBookScreenState();
@@ -59,30 +65,48 @@ class _AddBookScreenState extends ConsumerState<AddBookScreen> {
     });
 
     final apiClient = ref.read(apiClientProvider);
+    final env = ref.read(envProvider);
 
     try {
-      final response = await apiClient.translatePersonalUserBook(
-        file: File(_selectedFile!.path!),
-        from: 'en',
-        to: 'ru',
-      );
-      if (!mounted) return;
-      if (response.book != null) {
-        final book = response.book!;
-        final apiBaseUrl = ref.read(envProvider).apiBaseUrl;
-        final coverUrl = book.cover != null
-            ? '$apiBaseUrl/api/v1/file/public?path=${Uri.encodeComponent(book.cover!)}'
-            : null;
-        if (coverUrl != null) {
-          await precacheImage(CachedNetworkImageProvider(coverUrl), context);
+      String? coverUrl;
+      String? messageAboutTranslate;
+
+      if (widget.isPublic) {
+        final response = await apiClient.translateBook(
+          file: File(_selectedFile!.path!),
+          from: 'en',
+          to: 'ru',
+        );
+        if (response.book != null) {
+          coverUrl = response.book!.coverUrl;
         }
+        messageAboutTranslate = response.messageAboutTranslate;
+      } else {
+        final response = await apiClient.translatePersonalUserBook(
+          file: File(_selectedFile!.path!),
+          from: 'en',
+          to: 'ru',
+        );
+        if (response.book != null) {
+          coverUrl = response.book!.coverUrl;
+        }
+        messageAboutTranslate = response.messageAboutTranslate;
+      }
+
+      if (!mounted) return;
+
+      if (coverUrl != null) {
+        final apiBaseUrl = env.apiBaseUrl;
+        final fullUrl = '$apiBaseUrl/files/public?path=${Uri.encodeComponent(coverUrl)}';
+        await precacheImage(CachedNetworkImageProvider(fullUrl), context);
         callback();
         return;
       }
-      if (response.messageAboutTranslate != null) {
+
+      if (messageAboutTranslate != null) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(response.messageAboutTranslate!)),
+            SnackBar(content: Text(messageAboutTranslate)),
           );
         }
       }
@@ -196,10 +220,17 @@ class _AddBookScreenState extends ConsumerState<AddBookScreen> {
                   ? null
                   : () {
                       _uploadBook(() {
-                        ref
-                            .read(booksNotifierProvider.notifier)
-                            .getPersonalBooks();
-                        context.go('/my-books');
+                        if (widget.isPublic) {
+                          ref
+                              .read(booksNotifierProvider.notifier)
+                              .getBooks(null, null, 1);
+                          context.go(AppRoutes.books);
+                        } else {
+                          ref
+                              .read(booksNotifierProvider.notifier)
+                              .getPersonalBooks();
+                          context.go(AppRoutes.myBooks);
+                        }
                       });
                     },
               style: FilledButton.styleFrom(

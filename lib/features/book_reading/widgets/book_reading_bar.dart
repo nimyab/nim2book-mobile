@@ -26,18 +26,25 @@ class BookReadingBar extends ConsumerWidget implements PreferredSizeWidget {
       loadingBookNotifierProvider(bookId).select((s) => s.chapters),
     );
 
-    final readingState = ref.watch(bookReadingNotifierProvider(bookId));
+    final currentChapterIndex = ref.watch(
+      bookReadingNotifierProvider(bookId).select((s) => s.currentChapterIndex),
+    );
     final theme = Theme.of(context);
     final total = chapters.length;
     final percent = total == 0
         ? 0
-        : (((readingState.currentChapterIndex + 1) / total) * 100).round();
+        : (((currentChapterIndex + 1) / total) * 100).round();
     final currentChapter =
-        (chapters.isEmpty ||
-            readingState.currentChapterIndex >= chapters.length)
+        (chapters.isEmpty || currentChapterIndex >= chapters.length)
         ? null
-        : chapters[readingState.currentChapterIndex];
-    final chapterTitle = currentChapter?.title ?? 'Loading...';
+        : chapters[currentChapterIndex];
+    final bookChapter =
+        (book.bookChapters == null ||
+            currentChapterIndex >= book.bookChapters!.length)
+        ? null
+        : book.bookChapters![currentChapterIndex];
+    final chapterTitle =
+        bookChapter?.title ?? currentChapter?.title ?? 'Loading...';
 
     return AppBar(
       centerTitle: false,

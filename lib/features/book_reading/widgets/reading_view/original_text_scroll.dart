@@ -1,8 +1,12 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
+import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/book_reading/book_reading_provider.dart';
+import 'package:nim2book_mobile_flutter/features/book_reading/providers/chapter_progress/chapter_progress_provider.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/loading_book/loading_book_provider.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/providers/reading_settings/reading_settings_provider.dart';
 import 'package:nim2book_mobile_flutter/features/book_reading/widgets/reading_view/original_paragraph.dart';
@@ -37,16 +41,13 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
   void initState() {
     super.initState();
 
-    // Инициализируем контроллер сразу с нужной позицией, чтобы избежать скачка
     final bookId = widget.bookId;
-    final notifier = ref.read(bookReadingNotifierProvider(bookId).notifier);
     final readingState = ref.read(bookReadingNotifierProvider(bookId));
-    final initialOffset = notifier.getChapterProgress(
-      readingState.currentChapterIndex,
-    );
+    final progressState = ref.read(chapterProgressNotifierProvider(bookId));
+    final initialOffset =
+        progressState[readingState.currentChapterIndex] ?? 0.0;
     _scrollController = ScrollController(initialScrollOffset: initialOffset);
 
-    // Отмечаем как инициализированный после первого фрейма
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
         _isInitialized = true;
@@ -70,12 +71,14 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
     _debounceTimer = Timer(const Duration(milliseconds: 200), () {
       if (_scrollController.hasClients) {
         final bookId = widget.bookId;
-        final notifier = ref.read(bookReadingNotifierProvider(bookId).notifier);
-        final state = ref.read(bookReadingNotifierProvider(bookId));
-        notifier.setChapterProgress(
-          state.currentChapterIndex,
-          _scrollController.offset,
+        final chapterIndex = ref.read(
+          bookReadingNotifierProvider(
+            bookId,
+          ).select((s) => s.currentChapterIndex),
         );
+        ref
+            .read(chapterProgressNotifierProvider(bookId).notifier)
+            .setProgress(chapterIndex, _scrollController.offset);
       }
     });
   }
@@ -83,8 +86,8 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
   @override
   Widget build(final BuildContext context) {
     final bookId = widget.bookId;
+    final env = ref.watch(envProvider);
 
-    // Get chapters from loading provider
     final chapters = ref.watch(
       loadingBookNotifierProvider(bookId).select((s) => s.chapters),
     );
@@ -101,34 +104,27 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
     final currentChapterIndex = ref.watch(
       bookReadingNotifierProvider(bookId).select((s) => s.currentChapterIndex),
     );
-    final selectedParagraphIndex = ref.watch(
-      bookReadingNotifierProvider(
-        bookId,
-      ).select((s) => s.selectedParagraphIndex),
-    );
-    final selectedWordIndex = ref.watch(
-      bookReadingNotifierProvider(bookId).select((s) => s.selectedWordIndex),
+    final selectedParagraphForScroll = ref.watch(
+      bookReadingNotifierProvider(bookId).select((s) {
+        if (s.selectedWordIndex != null) return null;
+        return s.selectedParagraphIndex;
+      }),
     );
 
     if (chapters.isEmpty || currentChapterIndex >= chapters.length) {
       return const Center(child: Text('Chapter not found'));
     }
 
-    // Get current chapter (might be null if not loaded yet)
     final currentChapter = chapters[currentChapterIndex];
 
-    // Show loading while chapter is being loaded
     if (currentChapter == null) {
       return const Center(child: CircularProgressIndicator());
     }
     final paragraphCount = currentChapter.content.length;
     final chapterTitle = currentChapter.title;
 
-    final selectedParagraph = selectedParagraphIndex ?? -1;
-    final hasWordSelected = selectedWordIndex != null;
-    // Не скроллим оригинальный текст при выборе слова, только при выборе абзаца
-    if (!hasWordSelected &&
-        selectedParagraph >= 0 &&
+    final selectedParagraph = selectedParagraphForScroll ?? -1;
+    if (selectedParagraph >= 0 &&
         selectedParagraph != _lastScrolledToParagraph) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final ctx = _paragraphKeys[selectedParagraph]?.currentContext;
@@ -202,22 +198,42 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
           }
 
           final paragraphIndex = index - 1;
-          return Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: sidePadding,
-              vertical: paragraphSpacing,
-            ),
-            child: Container(
-              key: _keyForParagraph(paragraphIndex),
-              child: OriginalParagraph(
-                key: ValueKey(
-                  'chapter_${currentChapterIndex}_paragraph_$paragraphIndex',
+          final contentNode = currentChapter.content[paragraphIndex];
+
+          return contentNode.map(
+            paragraph: (final pNode) => Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: sidePadding,
+                vertical: paragraphSpacing,
+              ),
+              child: Container(
+                key: _keyForParagraph(paragraphIndex),
+                child: OriginalParagraph(
+                  key: ValueKey(
+                    'chapter_${currentChapterIndex}_paragraph_$paragraphIndex',
+                  ),
+                  paragraph: pNode.paragraphAlignNode,
+                  paragraphIndex: paragraphIndex,
+                  bookId: bookId,
                 ),
-                paragraph: currentChapter.content[paragraphIndex],
-                paragraphIndex: paragraphIndex,
-                selectedParagraphIndex: selectedParagraphIndex ?? -1,
-                selectedWordIndex: selectedWordIndex ?? -1,
-                bookId: bookId,
+              ),
+            ),
+            image: (final iNode) => Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: sidePadding,
+                vertical: paragraphSpacing,
+              ),
+              child: Container(
+                key: _keyForParagraph(paragraphIndex),
+                child: Image(
+                  image: CachedNetworkImageProvider(
+                    '${env.apiBaseUrl}/files/public?path=${Uri.encodeComponent(iNode.imageNode.path)}',
+                  ),
+                  semanticLabel: iNode.imageNode.alt,
+                  errorBuilder: (final context, final error, final stackTrace) {
+                    return const SizedBox.shrink();
+                  },
+                ),
               ),
             ),
           );

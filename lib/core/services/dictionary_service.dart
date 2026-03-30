@@ -14,7 +14,6 @@ import 'package:drift/extensions/json1.dart';
 
 const _fromLang = 'en';
 const _toLang = 'ru';
-const _ui = 'ru';
 
 // Top-level functions for compute isolates
 Map<String, dynamic> _encodeCardData(Map<String, dynamic> params) {
@@ -42,11 +41,13 @@ List<DictionaryCard> _decodeCardList(List<Map<String, dynamic>> results) {
 
 class DictionaryService {
   final Talker _logger;
-  final ApiClient _apiClient;
+  final ApiClient? _apiClient;
   final Database _database;
   final _scheduler = Scheduler();
 
   DictionaryService(this._logger, this._apiClient, this._database);
+
+  DictionaryService.background(this._logger, this._database) : _apiClient = null;
 
   Future<DictionaryCard?> saveWord(final DictionaryWord word) async {
     try {
@@ -60,7 +61,7 @@ class DictionaryService {
       _logger.error(
         'Error saving word ${word.text} with pos ${word.partOfSpeech}: $e',
       );
-      return null;
+      rethrow;
     }
   }
 
@@ -88,7 +89,7 @@ class DictionaryService {
         'Error updating card for word ${card.wordData.text} '
         'with pos ${card.wordData.partOfSpeech}: $e',
       );
-      return false;
+      rethrow;
     }
   }
 
@@ -102,7 +103,7 @@ class DictionaryService {
       return true;
     } catch (e) {
       _logger.error('Error deleting word $word with pos $partOfSpeech: $e');
-      return false;
+      rethrow;
     }
   }
 
@@ -137,12 +138,17 @@ class DictionaryService {
 
   Future<List<DictionaryWord>?> getWord(final String word) async {
     try {
-      final response = await _apiClient.lookup(
+      final apiClient = _apiClient;
+      if (apiClient == null) {
+        _logger.warning('Dictionary API client is not available in background mode');
+        return null;
+      }
+
+      final response = await apiClient.lookup(
         LookupRequest(
           text: word,
           fromLang: _fromLang,
           toLang: _toLang,
-          ui: _ui,
         ),
       );
       return response.words;
@@ -192,7 +198,7 @@ class DictionaryService {
       );
     } catch (e) {
       _logger.error('Error retrieving all words: $e');
-      return [];
+      rethrow;
     }
   }
 
@@ -287,7 +293,7 @@ class DictionaryService {
       });
     } catch (e) {
       _logger.error('Error retrieving single due card: $e');
-      return null;
+      rethrow;
     }
   }
 
@@ -302,14 +308,19 @@ class DictionaryService {
     required DictionaryCard card,
     required Rating rating,
   }) async {
-    // Используем Scheduler для расчета следующего повторения
-    final result = _scheduler.reviewCard(card.fsrsCard, rating);
-    final updatedCard = card.copyWith(fsrsCard: result.card);
+    try {
+      // Используем Scheduler для расчета следующего повторения
+      final result = _scheduler.reviewCard(card.fsrsCard, rating);
+      final updatedCard = card.copyWith(fsrsCard: result.card);
 
-    // Сохраняем обновленную карточку
-    await _updateCard(updatedCard);
+      // Сохраняем обновленную карточку
+      await _updateCard(updatedCard);
 
-    return updatedCard;
+      return updatedCard;
+    } catch (e) {
+      _logger.error('Error reviewing card for word ${card.wordData.text}: $e');
+      rethrow;
+    }
   }
 
   // ============================================================

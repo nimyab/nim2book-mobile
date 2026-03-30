@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Genre {
 
- String get id; String get name;
+ String get id; String get name; String get createdAt; List<Book>? get books; List<PersonalUserBook>? get personalBooks;
 /// Create a copy of Genre
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $GenreCopyWith<Genre> get copyWith => _$GenreCopyWithImpl<Genre>(this as Genre, 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Genre&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Genre&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&const DeepCollectionEquality().equals(other.books, books)&&const DeepCollectionEquality().equals(other.personalBooks, personalBooks));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name);
+int get hashCode => Object.hash(runtimeType,id,name,createdAt,const DeepCollectionEquality().hash(books),const DeepCollectionEquality().hash(personalBooks));
 
 @override
 String toString() {
-  return 'Genre(id: $id, name: $name)';
+  return 'Genre(id: $id, name: $name, createdAt: $createdAt, books: $books, personalBooks: $personalBooks)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $GenreCopyWith<$Res>  {
   factory $GenreCopyWith(Genre value, $Res Function(Genre) _then) = _$GenreCopyWithImpl;
 @useResult
 $Res call({
- String id, String name
+ String id, String name, String createdAt, List<Book>? books, List<PersonalUserBook>? personalBooks
 });
 
 
@@ -65,11 +65,14 @@ class _$GenreCopyWithImpl<$Res>
 
 /// Create a copy of Genre
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? createdAt = null,Object? books = freezed,Object? personalBooks = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,
+as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String,books: freezed == books ? _self.books : books // ignore: cast_nullable_to_non_nullable
+as List<Book>?,personalBooks: freezed == personalBooks ? _self.personalBooks : personalBooks // ignore: cast_nullable_to_non_nullable
+as List<PersonalUserBook>?,
   ));
 }
 
@@ -116,10 +119,7 @@ return $default(_that);case _:
 final _that = this;
 switch (_that) {
 case _Genre():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -154,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String createdAt,  List<Book>? books,  List<PersonalUserBook>? personalBooks)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Genre() when $default != null:
-return $default(_that.id,_that.name);case _:
+return $default(_that.id,_that.name,_that.createdAt,_that.books,_that.personalBooks);case _:
   return orElse();
 
 }
@@ -175,13 +175,10 @@ return $default(_that.id,_that.name);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String createdAt,  List<Book>? books,  List<PersonalUserBook>? personalBooks)  $default,) {final _that = this;
 switch (_that) {
 case _Genre():
-return $default(_that.id,_that.name);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that.id,_that.name,_that.createdAt,_that.books,_that.personalBooks);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -195,10 +192,10 @@ return $default(_that.id,_that.name);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String createdAt,  List<Book>? books,  List<PersonalUserBook>? personalBooks)?  $default,) {final _that = this;
 switch (_that) {
 case _Genre() when $default != null:
-return $default(_that.id,_that.name);case _:
+return $default(_that.id,_that.name,_that.createdAt,_that.books,_that.personalBooks);case _:
   return null;
 
 }
@@ -210,11 +207,30 @@ return $default(_that.id,_that.name);case _:
 @JsonSerializable()
 
 class _Genre implements Genre {
-  const _Genre({required this.id, required this.name});
+  const _Genre({required this.id, required this.name, required this.createdAt, final  List<Book>? books, final  List<PersonalUserBook>? personalBooks}): _books = books,_personalBooks = personalBooks;
   factory _Genre.fromJson(Map<String, dynamic> json) => _$GenreFromJson(json);
 
 @override final  String id;
 @override final  String name;
+@override final  String createdAt;
+ final  List<Book>? _books;
+@override List<Book>? get books {
+  final value = _books;
+  if (value == null) return null;
+  if (_books is EqualUnmodifiableListView) return _books;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
+
+ final  List<PersonalUserBook>? _personalBooks;
+@override List<PersonalUserBook>? get personalBooks {
+  final value = _personalBooks;
+  if (value == null) return null;
+  if (_personalBooks is EqualUnmodifiableListView) return _personalBooks;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
+
 
 /// Create a copy of Genre
 /// with the given fields replaced by the non-null parameter values.
@@ -229,16 +245,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Genre&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Genre&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&const DeepCollectionEquality().equals(other._books, _books)&&const DeepCollectionEquality().equals(other._personalBooks, _personalBooks));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name);
+int get hashCode => Object.hash(runtimeType,id,name,createdAt,const DeepCollectionEquality().hash(_books),const DeepCollectionEquality().hash(_personalBooks));
 
 @override
 String toString() {
-  return 'Genre(id: $id, name: $name)';
+  return 'Genre(id: $id, name: $name, createdAt: $createdAt, books: $books, personalBooks: $personalBooks)';
 }
 
 
@@ -249,7 +265,7 @@ abstract mixin class _$GenreCopyWith<$Res> implements $GenreCopyWith<$Res> {
   factory _$GenreCopyWith(_Genre value, $Res Function(_Genre) _then) = __$GenreCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name
+ String id, String name, String createdAt, List<Book>? books, List<PersonalUserBook>? personalBooks
 });
 
 
@@ -266,11 +282,14 @@ class __$GenreCopyWithImpl<$Res>
 
 /// Create a copy of Genre
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? createdAt = null,Object? books = freezed,Object? personalBooks = freezed,}) {
   return _then(_Genre(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,
+as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String,books: freezed == books ? _self._books : books // ignore: cast_nullable_to_non_nullable
+as List<Book>?,personalBooks: freezed == personalBooks ? _self._personalBooks : personalBooks // ignore: cast_nullable_to_non_nullable
+as List<PersonalUserBook>?,
   ));
 }
 
