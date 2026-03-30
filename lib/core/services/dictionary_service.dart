@@ -41,11 +41,13 @@ List<DictionaryCard> _decodeCardList(List<Map<String, dynamic>> results) {
 
 class DictionaryService {
   final Talker _logger;
-  final ApiClient _apiClient;
+  final ApiClient? _apiClient;
   final Database _database;
   final _scheduler = Scheduler();
 
   DictionaryService(this._logger, this._apiClient, this._database);
+
+  DictionaryService.background(this._logger, this._database) : _apiClient = null;
 
   Future<DictionaryCard?> saveWord(final DictionaryWord word) async {
     try {
@@ -136,7 +138,13 @@ class DictionaryService {
 
   Future<List<DictionaryWord>?> getWord(final String word) async {
     try {
-      final response = await _apiClient.lookup(
+      final apiClient = _apiClient;
+      if (apiClient == null) {
+        _logger.warning('Dictionary API client is not available in background mode');
+        return null;
+      }
+
+      final response = await apiClient.lookup(
         LookupRequest(
           text: word,
           fromLang: _fromLang,

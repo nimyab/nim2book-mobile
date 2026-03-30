@@ -84,6 +84,21 @@ class Nim2BookApp extends ConsumerStatefulWidget {
 
 class _Nim2BookAppState extends ConsumerState<Nim2BookApp> {
   @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() async {
+      try {
+        await ref.read(reviewReminderServiceProvider).initialize();
+      } catch (e) {
+        ref.read(talkerProvider).error(
+              'Failed to initialize review reminders: $e',
+            );
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AppStartupWidget(
       onLoaded: (context) {
