@@ -11,6 +11,7 @@ import 'package:nim2book_mobile_flutter/core/providers/locale/locale_provider.da
 import 'package:nim2book_mobile_flutter/core/providers/providers.dart';
 import 'package:nim2book_mobile_flutter/core/providers/theme/theme_provider.dart';
 import 'package:nim2book_mobile_flutter/core/router/router.dart';
+import 'package:nim2book_mobile_flutter/core/workmanager/review_reminder.dart';
 import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
 import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
 import 'package:nim2book_mobile_flutter/firebase_options.dart';
@@ -89,11 +90,11 @@ class _Nim2BookAppState extends ConsumerState<Nim2BookApp> {
 
     Future.microtask(() async {
       try {
-        await ref.read(reviewReminderServiceProvider).initialize();
+        await initializeReviewReminders();
       } catch (e) {
-        ref.read(talkerProvider).error(
-              'Failed to initialize review reminders: $e',
-            );
+        ref
+            .read(talkerProvider)
+            .error('Failed to initialize review reminders: $e');
       }
     });
   }

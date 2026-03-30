@@ -9,7 +9,6 @@ import 'package:nim2book_mobile_flutter/core/services/dictionary_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/locale_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/fmc_token_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/onboarding_service.dart';
-import 'package:nim2book_mobile_flutter/core/services/review_reminder_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/theme_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/token_service.dart';
 import 'package:nim2book_mobile_flutter/core/services/tts_service.dart';
@@ -106,15 +105,4 @@ final ttsServiceProvider = Provider<TtsService>((ref) {
 final onboardingServiceProvider = Provider<OnboardingService>((ref) {
   final sharedPreferences = ref.read(sharedPreferencesProvider);
   return OnboardingService(sharedPreferences);
-});
-
-// ReviewReminderService provider
-final reviewReminderServiceProvider = Provider<ReviewReminderService>((ref) {
-  final talker = ref.read(talkerProvider);
-  final dictionaryService = ref.read(dictionaryServiceProvider);
-
-  return ReviewReminderService(
-    logger: talker,
-    dictionaryService: dictionaryService,
-  );
 });
