@@ -94,7 +94,7 @@ Future<void> initializeReviewReminders() async {
     await Workmanager().registerPeriodicTask(
       _checkDueCardsUniqueWorkName,
       _checkDueCardsTaskName,
-      frequency: const Duration(minutes: 15),
+      frequency: const Duration(hours: 3),
     );
     logger.debug('Review reminders initialized on Android');
     return;
