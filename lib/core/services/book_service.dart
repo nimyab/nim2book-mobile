@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
+import 'package:nim2book_mobile_flutter/core/models/book/book_mappers.dart';
 import 'package:nim2book_mobile_flutter/core/models/chapter/chapter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -61,6 +62,36 @@ class BookService {
       return book;
     } catch (e) {
       _logger.error('Error fetching book with ID $bookId: $e');
+      if (cachedBook == null) rethrow;
+      return cachedBook;
+    }
+  }
+
+  Future<Book?> getPersonalBook(final String bookId) async {
+    final cacheKey = 'personal_book_$bookId';
+
+    Book? cachedBook;
+    try {
+      final raw = _sharedPreferences.getString(cacheKey);
+      if (raw != null) {
+        cachedBook = await compute((String data) {
+          final json = jsonDecode(data) as Map<String, dynamic>;
+          return Book.fromJson(json);
+        }, raw);
+      }
+    } catch (_) {}
+
+    try {
+      final response = await _apiClient.getPersonalUserBook(bookId);
+      final book = response.book.toBook();
+      final encodedBook = await compute(
+        (Map<String, dynamic> json) => jsonEncode(json),
+        book.toJson(),
+      );
+      await _sharedPreferences.setString(cacheKey, encodedBook);
+      return book;
+    } catch (e) {
+      _logger.error('Error fetching personal book with ID $bookId: $e');
       if (cachedBook == null) rethrow;
       return cachedBook;
     }

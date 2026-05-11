@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nim2book_mobile_flutter/core/models/book/book.dart';
-import 'package:nim2book_mobile_flutter/core/models/book_chapter/book_chapter.dart';
+import 'package:nim2book_mobile_flutter/core/models/book/book_mappers.dart';
 import 'package:nim2book_mobile_flutter/core/models/personal_user_book/personal_user_book.dart';
 import 'package:nim2book_mobile_flutter/core/providers/auth/auth_provider.dart';
 import 'package:nim2book_mobile_flutter/core/router/app_routes.dart';
@@ -95,27 +95,7 @@ class BooksSection extends ConsumerWidget {
   ) {
     final tag = 'personal-book-cover-${personalBook.id}-my-books';
 
-    // Convert PersonalUserBook to Book for BookCard
-    final bookForCard = Book(
-      id: personalBook.id,
-      title: personalBook.title,
-      author: personalBook.author,
-      bookChapters: personalBook.personalBookChapters?.map((chapter) {
-        return BookChapter(
-          id: chapter.id,
-          order: chapter.order,
-          title: chapter.title,
-          translatedTitle: chapter.translatedTitle,
-          contentURL: chapter.contentUrl,
-          createdAt: chapter.createdAt,
-        );
-      }).toList(),
-      coverUrl: personalBook.coverUrl,
-      genres: personalBook.genres,
-      originalLang: personalBook.originalLang,
-      translatedLang: personalBook.translatedLang,
-      createdAt: personalBook.createdAt,
-    );
+    final bookForCard = personalBook.toBook();
 
     return SizedBox(
       width: 160,
@@ -133,8 +113,12 @@ class BooksSection extends ConsumerWidget {
             return;
           }
           context.push(
-            AppRoutes.bookPath(personalBook.id),
-            extra: BookRouteExtra(heroTag: tag, book: bookForCard),
+            AppRoutes.bookPath(personalBook.id, isPersonalBook: true),
+            extra: BookRouteExtra(
+              heroTag: tag,
+              book: bookForCard,
+              isPersonalBook: true,
+            ),
           );
         },
       ),

@@ -4,11 +4,16 @@ import 'package:nim2book_mobile_flutter/features/book_reading/widgets/book_readi
 
 class ReadingScreen extends ConsumerWidget {
   final String bookId;
+  final bool isPersonalBook;
 
-  const ReadingScreen({super.key, required this.bookId});
+  const ReadingScreen({
+    super.key,
+    required this.bookId,
+    this.isPersonalBook = false,
+  });
 
   @override
   Widget build(final BuildContext context, WidgetRef ref) {
-    return BookReading(bookId: bookId);
+    return BookReading(bookId: bookId, isPersonalBook: isPersonalBook);
   }
 }

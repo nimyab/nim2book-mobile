@@ -23,8 +23,9 @@ import 'package:nim2book_mobile_flutter/core/router/app_routes.dart';
 class BookRouteExtra {
   final String? heroTag;
   final Book? book;
+  final bool isPersonalBook;
 
-  const BookRouteExtra({this.heroTag, this.book});
+  const BookRouteExtra({this.heroTag, this.book, this.isPersonalBook = false});
 }
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -98,7 +99,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.learningSession,
         name: 'learning-session',
-        redirect: (_, __) => '${AppRoutes.learningSession}/${AppRoutes.learningSessionMixed}',
+        redirect: (_, __) =>
+            '${AppRoutes.learningSession}/${AppRoutes.learningSessionMixed}',
         routes: [
           GoRoute(
             path: AppRoutes.learningSessionNew,
@@ -128,20 +130,25 @@ final routerProvider = Provider<GoRouter>((ref) {
           final bookId = state.pathParameters['bookId']!;
           String? heroTag;
           Book? initialBook;
+          var isPersonalBook = state.uri.queryParameters['personal'] == 'true';
           final extra = state.extra;
           if (extra is String) {
             heroTag = extra;
           } else if (extra is BookRouteExtra) {
             heroTag = extra.heroTag;
             initialBook = extra.book;
+            isPersonalBook = extra.isPersonalBook;
           } else if (extra is Map) {
             heroTag = extra['heroTag'] as String?;
             initialBook = extra['book'] as Book?;
+            isPersonalBook =
+                (extra['isPersonalBook'] as bool?) ?? isPersonalBook;
           }
           return BookScreen(
             bookId: bookId,
             heroTag: heroTag,
             initialBook: initialBook,
+            isPersonalBook: isPersonalBook,
           );
         },
       ),
@@ -151,7 +158,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         name: 'reading',
         builder: (final context, final state) {
           final bookId = state.pathParameters['bookId']!;
-          return ReadingScreen(bookId: bookId);
+          final extra = state.extra;
+          final isPersonalBook =
+              state.uri.queryParameters['personal'] == 'true' ||
+              (extra is Map && extra['isPersonalBook'] == true);
+          return ReadingScreen(bookId: bookId, isPersonalBook: isPersonalBook);
         },
       ),
 
@@ -173,4 +184,3 @@ final routerProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
-

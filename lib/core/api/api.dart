@@ -28,7 +28,12 @@ class ApiClient {
   }) : _tokenService = tokenService,
        _env = env,
        _talker = talker {
-    _dio = Dio(BaseOptions(baseUrl: _env.apiBaseUrl));
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: _env.apiBaseUrl,
+        connectTimeout: const Duration(seconds: 3),
+      ),
+    );
 
     _dio.interceptors.add(
       TalkerDioLogger(

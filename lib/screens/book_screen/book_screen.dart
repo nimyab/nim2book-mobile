@@ -12,12 +12,14 @@ class BookScreen extends ConsumerStatefulWidget {
   final String bookId;
   final String? heroTag;
   final Book? initialBook;
+  final bool isPersonalBook;
 
   const BookScreen({
     super.key,
     required this.bookId,
     this.heroTag,
     this.initialBook,
+    this.isPersonalBook = false,
   });
 
   @override
@@ -30,7 +32,9 @@ class _BookScreenState extends ConsumerState<BookScreen> {
 
   void _loadBook() async {
     final bookService = ref.read(bookServiceProvider);
-    final fetchedBook = await bookService.getBook(widget.bookId);
+    final fetchedBook = widget.isPersonalBook
+        ? await bookService.getPersonalBook(widget.bookId)
+        : await bookService.getBook(widget.bookId);
     if (mounted) {
       setState(() {
         book = fetchedBook;
@@ -59,7 +63,7 @@ class _BookScreenState extends ConsumerState<BookScreen> {
 
     final currentBook = book;
     final isLoading = this.isLoading;
-    final isSavedBook = currentBook != null
+    final isSavedBook = !widget.isPersonalBook && currentBook != null
         ? savedBooks.any((final b) => b.id == currentBook.id)
         : false;
 
@@ -126,7 +130,15 @@ class _BookScreenState extends ConsumerState<BookScreen> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              if (!isSavedBook)
+              if (widget.isPersonalBook)
+                FilledButton.icon(
+                  onPressed: () => context.push(
+                    AppRoutes.readingPath(currentBook.id, isPersonalBook: true),
+                  ),
+                  icon: const Icon(Icons.menu_book),
+                  label: Text(l10n.readBook),
+                )
+              else if (!isSavedBook)
                 ElevatedButton.icon(
                   onPressed: () => ref
                       .read(booksNotifierProvider.notifier)
@@ -140,9 +152,8 @@ class _BookScreenState extends ConsumerState<BookScreen> {
                   spacing: 16,
                   children: [
                     FilledButton.icon(
-                      onPressed: () => context.push(
-                        AppRoutes.readingPath(currentBook.id),
-                      ),
+                      onPressed: () =>
+                          context.push(AppRoutes.readingPath(currentBook.id)),
                       icon: const Icon(Icons.menu_book),
                       label: Text(l10n.readBook),
                     ),

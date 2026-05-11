@@ -7,11 +7,15 @@ import 'package:nim2book_mobile_flutter/features/book_reading/providers/loading_
 import 'package:talker_flutter/talker_flutter.dart';
 
 class LoadingBookNotifier extends Notifier<LoadingBookState> {
-  LoadingBookNotifier(this.bookId);
+  LoadingBookNotifier(this.bookKey);
 
-  final String bookId;
+  final String bookKey;
   late final BookService _bookService;
   late final Talker _logger;
+
+  bool get _isPersonalBook => bookKey.startsWith('personal:');
+  String get _bookId =>
+      _isPersonalBook ? bookKey.substring('personal:'.length) : bookKey;
 
   @override
   LoadingBookState build() {
@@ -24,9 +28,11 @@ class LoadingBookNotifier extends Notifier<LoadingBookState> {
     try {
       state = state.copyWith(isLoading: true, errorMessage: null);
 
-      final book = await _bookService.getBook(bookId);
+      final book = _isPersonalBook
+          ? await _bookService.getPersonalBook(_bookId)
+          : await _bookService.getBook(_bookId);
       if (book == null) {
-        _logger.warning('Book not found: $bookId');
+        _logger.warning('Book not found: $_bookId');
         state = state.copyWith(errorMessage: 'Book not found');
         return;
       }
@@ -41,7 +47,7 @@ class LoadingBookNotifier extends Notifier<LoadingBookState> {
         await _loadAllChapters(book);
       }
     } catch (e) {
-      _logger.error('Failed to load book data for $bookId: $e');
+      _logger.error('Failed to load book data for $_bookId: $e');
       state = state.copyWith(errorMessage: e.toString());
     } finally {
       state = state.copyWith(isLoading: false);

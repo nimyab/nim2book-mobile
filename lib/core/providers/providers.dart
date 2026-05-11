@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nim2book_mobile_flutter/core/providers/auth/auth_provider.dart';
+import 'package:nim2book_mobile_flutter/core/providers/book/books_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:nim2book_mobile_flutter/core/api/api.dart';
@@ -105,4 +107,16 @@ final ttsServiceProvider = Provider<TtsService>((ref) {
 final onboardingServiceProvider = Provider<OnboardingService>((ref) {
   final sharedPreferences = ref.read(sharedPreferencesProvider);
   return OnboardingService(sharedPreferences);
+});
+
+// App startup provider
+final appStartupProvider = FutureProvider<void>((ref) async {
+  ref.onDispose(() {
+    // ensure we invalidate all the providers we depend on
+    ref.invalidate(authNotifierProvider);
+    ref.invalidate(booksNotifierProvider);
+  });
+
+  await ref.read(authNotifierProvider.notifier).initialize();
+  await ref.read(booksNotifierProvider.notifier).initialize();
 });

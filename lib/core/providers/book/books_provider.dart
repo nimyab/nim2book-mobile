@@ -45,7 +45,11 @@ class BooksNotifier extends Notifier<BooksState> {
     final int page,
   ) async {
     if (page == 1) {
-      state = state.copyWith(allBooks: [], isFetching: true, errorMessage: null);
+      state = state.copyWith(
+        allBooks: [],
+        isFetching: true,
+        errorMessage: null,
+      );
     }
     try {
       final books = await _bookService.getBooks(author, title, page);

@@ -14,8 +14,15 @@ abstract class AppRoutes {
   static const addBook = '/add-book';
   static const dictionary = '/dictionary';
 
-  static String bookPath(String bookId) => '/book/$bookId';
-  static String readingPath(String bookId) => '/reading/$bookId';
+  static String bookPath(String bookId, {bool isPersonalBook = false}) {
+    final path = '/book/$bookId';
+    return isPersonalBook ? '$path?personal=true' : path;
+  }
+
+  static String readingPath(String bookId, {bool isPersonalBook = false}) {
+    final path = '/reading/$bookId';
+    return isPersonalBook ? '$path?personal=true' : path;
+  }
 
   static String get learningSessionNewPath =>
       '$learningSession/$learningSessionNew';

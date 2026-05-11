@@ -13,8 +13,13 @@ import 'package:nim2book_mobile_flutter/widgets/circular_progress_with_percentag
 
 class BookReading extends ConsumerStatefulWidget {
   final String bookId;
+  final bool isPersonalBook;
 
-  const BookReading({super.key, required this.bookId});
+  const BookReading({
+    super.key,
+    required this.bookId,
+    this.isPersonalBook = false,
+  });
 
   @override
   ConsumerState<BookReading> createState() => _BookReadingState();
@@ -26,14 +31,15 @@ class _BookReadingState extends ConsumerState<BookReading>
   bool _listenersInitialized = false;
   bool _readingInitScheduled = false;
 
+  String get _readingKey =>
+      widget.isPersonalBook ? 'personal:${widget.bookId}' : widget.bookId;
+
   @override
   void initState() {
     super.initState();
     // Load book data when widget initializes
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref
-          .read(loadingBookNotifierProvider(widget.bookId).notifier)
-          .getBookData();
+      ref.read(loadingBookNotifierProvider(_readingKey).notifier).getBookData();
     });
   }
 
@@ -43,7 +49,7 @@ class _BookReadingState extends ConsumerState<BookReading>
 
     ref.listen<(int?, int?)>(
       bookReadingNotifierProvider(
-        widget.bookId,
+        _readingKey,
       ).select((s) => (s.selectedParagraphIndex, s.selectedWordIndex)),
       (previous, current) {
         if (previous != current) {
@@ -64,7 +70,7 @@ class _BookReadingState extends ConsumerState<BookReading>
   @override
   Widget build(final BuildContext context) {
     ref.listen<String?>(
-      loadingBookNotifierProvider(widget.bookId).select((s) => s.errorMessage),
+      loadingBookNotifierProvider(_readingKey).select((s) => s.errorMessage),
       (previous, next) {
         if (next != null && next != previous) {
           ScaffoldMessenger.of(
@@ -75,7 +81,7 @@ class _BookReadingState extends ConsumerState<BookReading>
     );
 
     final l10n = AppLocalizations.of(context)!;
-    final bookId = widget.bookId;
+    final bookId = _readingKey;
     final isLoading = ref.watch(
       loadingBookNotifierProvider(bookId).select((s) => s.isLoading),
     );
@@ -131,7 +137,7 @@ class _BookReadingState extends ConsumerState<BookReading>
     }
 
     return Scaffold(
-      appBar: BookReadingBar(book: book, bookId: widget.bookId),
+      appBar: BookReadingBar(book: book, bookId: bookId),
       endDrawer: ReadingDrawer(bookId: bookId),
       body: !prefsLoaded
           ? ColoredBox(color: bgColor, child: const SizedBox.expand())

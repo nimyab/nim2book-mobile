@@ -17,14 +17,11 @@ import 'package:nim2book_mobile_flutter/core/themes/app_themes.dart';
 import 'package:nim2book_mobile_flutter/firebase_options.dart';
 import 'package:nim2book_mobile_flutter/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:talker_riverpod_logger/talker_riverpod_logger.dart';
-import 'package:nim2book_mobile_flutter/widgets/app_startup_widget.dart';
 
 void main() async {
-  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  WidgetsFlutterBinding.ensureInitialized();
 
   final database = Database();
 
@@ -101,26 +98,23 @@ class _Nim2BookAppState extends ConsumerState<Nim2BookApp> {
 
   @override
   Widget build(BuildContext context) {
-    return AppStartupWidget(
-      onLoaded: (context) {
-        final router = ref.watch(routerProvider);
-        final themeMode = ref.watch(
-          themeNotifierProvider.select((state) => state.themeMode),
-        );
-        final locale = ref.watch(
-          localeNotifierProvider.select((state) => state.currentLocale),
-        );
+    ref.watch(appStartupProvider);
+    final router = ref.watch(routerProvider);
+    final themeMode = ref.watch(
+      themeNotifierProvider.select((state) => state.themeMode),
+    );
+    final locale = ref.watch(
+      localeNotifierProvider.select((state) => state.currentLocale),
+    );
 
-        return MaterialApp.router(
-          routerConfig: router,
-          theme: AppThemes.lightTheme,
-          darkTheme: AppThemes.darkTheme,
-          themeMode: themeMode,
-          locale: locale,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-        );
-      },
+    return MaterialApp.router(
+      routerConfig: router,
+      theme: AppThemes.lightTheme,
+      darkTheme: AppThemes.darkTheme,
+      themeMode: themeMode,
+      locale: locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
     );
   }
 }
