@@ -30,6 +30,7 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
   late final ScrollController _scrollController;
   Timer? _debounceTimer;
   bool _isInitialized = false;
+  late final int _chapterIndex;
   final Map<int, GlobalKey> _paragraphKeys = {};
   int _lastScrolledToParagraph = -1;
 
@@ -43,9 +44,9 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
 
     final bookId = widget.bookId;
     final readingState = ref.read(bookReadingNotifierProvider(bookId));
+    _chapterIndex = readingState.currentChapterIndex;
     final progressState = ref.read(chapterProgressNotifierProvider(bookId));
-    final initialOffset =
-        progressState[readingState.currentChapterIndex] ?? 0.0;
+    final initialOffset = progressState[_chapterIndex] ?? 0.0;
     _scrollController = ScrollController(initialScrollOffset: initialOffset);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -59,6 +60,7 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
   @override
   void dispose() {
     _debounceTimer?.cancel();
+    _persistScrollPosition(immediately: true);
     _scrollController.removeListener(_saveScrollPosition);
     _scrollController.dispose();
     super.dispose();
@@ -69,18 +71,19 @@ class _OriginalTextScrollState extends ConsumerState<OriginalTextScroll> {
 
     _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 200), () {
-      if (_scrollController.hasClients) {
-        final bookId = widget.bookId;
-        final chapterIndex = ref.read(
-          bookReadingNotifierProvider(
-            bookId,
-          ).select((s) => s.currentChapterIndex),
-        );
-        ref
-            .read(chapterProgressNotifierProvider(bookId).notifier)
-            .setProgress(chapterIndex, _scrollController.offset);
-      }
+      _persistScrollPosition();
     });
+  }
+
+  void _persistScrollPosition({final bool immediately = false}) {
+    if (!_scrollController.hasClients) return;
+    ref
+        .read(chapterProgressNotifierProvider(widget.bookId).notifier)
+        .setProgress(
+          _chapterIndex,
+          _scrollController.offset,
+          persistImmediately: immediately,
+        );
   }
 
   @override
